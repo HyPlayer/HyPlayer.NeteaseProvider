@@ -7,4 +7,5 @@ public static class NeteaseApis
 {
     public static LoginEmailApi LoginEmailApi => new LoginEmailApi();
     public static LoginCellphoneApi LoginCellphoneApi => new LoginCellphoneApi();
+    public static SongDetailApi SongDetailApi => new SongDetailApi();
 }
