@@ -10,7 +10,7 @@ public abstract class ApiContractBase<TRequest, TResponse, TError, TActualReques
     public abstract string Url { get; }
     public abstract HttpMethod Method { get; }
     public abstract Dictionary<string, string> Cookies { get; }
-    public abstract TRequest? Request { get; set; }
+    public TRequest? Request { get; set; }
     public TActualRequest? ActualRequest { get; set; }
     public virtual string? UserAgent { get; } = null;
     public abstract Task MapRequest(TRequest? request);
