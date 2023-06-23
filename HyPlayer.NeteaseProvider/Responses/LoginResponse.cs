@@ -3,7 +3,7 @@ using HyPlayer.NeteaseProvider.Bases;
 
 namespace HyPlayer.NeteaseProvider.Responses;
 
-public class LoginEmailResponse : CodedResponseBase
+public class LoginResponse : CodedResponseBase
 {
     [JsonPropertyName("loginType")] public int LoginType { get; set; }
     [JsonPropertyName("message")] public string Message { get; set; }

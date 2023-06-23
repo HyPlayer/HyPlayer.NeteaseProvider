@@ -2,11 +2,10 @@
 
 public class ExceptionedErrorBase : ErrorResultBase
 {
-
-    public Exception? Exception { get; }
+    public Exception? InnerException { get; }
     
     public ExceptionedErrorBase(int errorCode, string? errorMessage = null, Exception? exception = null) : base(errorCode, errorMessage)
     {
-        Exception = exception;
+        InnerException = exception;
     }
 }

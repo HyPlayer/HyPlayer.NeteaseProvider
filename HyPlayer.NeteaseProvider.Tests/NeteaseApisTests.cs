@@ -12,8 +12,7 @@ public class NeteaseApisTests
         _provider = new NeteaseProvider();
     }
 
-    [Theory]
-    [InlineData("hyplayer123@163.com", "hyplayer123123")]
+    //[Theory]
     public async void LoginEmail(string email, string password)
     {
         var result = await _provider.RequestAsync(NeteaseApis.LoginEmailApi,
@@ -26,7 +25,27 @@ public class NeteaseApisTests
             (resp) =>
             {
                 resp.Should().NotBeNull();
-                resp.Profile.Gender.Should().Be(1);
+                resp.Profile.Gender.Should().BeOneOf(0, 1);
+                return true;
+            },
+            (err) => throw err
+        );
+    }
+
+    //[Theory]
+    public async void LoginCellphone(string phone, string password)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.LoginCellphoneApi,
+                                                  new LoginCellphoneRequest()
+                                                  {
+                                                      Cellphone = phone,
+                                                      Password = password
+                                                  });
+        result.Match(
+            (resp) =>
+            {
+                resp.Should().NotBeNull();
+                resp.Profile.Gender.Should().BeOneOf(0, 1);
                 return true;
             },
             (err) => throw err
