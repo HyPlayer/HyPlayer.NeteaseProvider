@@ -1,9 +1,9 @@
 namespace HyPlayer.NeteaseProvider.Extensions;
 
-public readonly struct Results<TValue,TError>
+public struct Results<TValue,TError>
 {
-    private readonly TValue? _value;
-    private readonly TError? _error;
+    private TValue? _value;
+    private TError? _error;
 
     public bool IsError { get; }
     public bool IsSuccess => !IsError;
@@ -26,6 +26,18 @@ public readonly struct Results<TValue,TError>
     public static Results<TValue, TError> CreateError(TError error) => new(error);
     public static Results<TValue, TError> CreateSuccess(TValue value) => new(value);
     
+    public Results<TValue, TError> WithValue(TValue value)
+    {
+        _value = value;
+        return this;
+    }
+
+    public Results<TValue, TError> WithError(TError error)
+    {
+        _error = error;
+        return this;
+    }
+
     public TResult Match<TResult>(Func<TValue, TResult> success, Func<TError, TResult> error)
         => IsSuccess ? success(_value!) : error(_error!);
 
