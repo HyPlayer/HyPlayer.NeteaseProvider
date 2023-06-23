@@ -31,12 +31,16 @@ public abstract class
         if (!string.IsNullOrWhiteSpace(option.XRealIP))
             requestMessage.Headers.Add("X-Real-IP", option.XRealIP);
         requestMessage.Headers.UserAgent.Clear();
-        requestMessage.Headers.Add("User-Agent",UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent) );
+        requestMessage.Headers.TryAddWithoutValidation("User-Agent", UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent));
+
         var cookies = option.Cookies.ToDictionary(t => t.Key, t => t.Value);
         foreach (var keyValuePair in Cookies)
         {
             cookies[keyValuePair.Key] = keyValuePair.Value;
         }
+
+        if (cookies.Count > 0)
+            requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
 
         var csrfToken = cookies.GetValueOrDefault("__csrf");
         var subDateTime = DateTime.Now.Subtract(new DateTime(1970, 1, 1));
@@ -68,10 +72,10 @@ public abstract class
         if (!string.IsNullOrEmpty(cookies.GetValueOrDefault("MUSIC_A")))
             dataHeader["MUSIC_A"] = cookies.GetValueOrDefault("MUSIC_A");
         ActualRequest ??= (TActualRequest)new EApiActualRequestBase();
-        ActualRequest.Header = JsonSerializer.Serialize(dataHeader);
+        ActualRequest.Header = JsonSerializer.Serialize(dataHeader, option.JsonSerializerOptions);
 
 
-        var json = JsonSerializer.Serialize(ActualRequest);
+        var json = JsonSerializer.Serialize(ActualRequest, option.JsonSerializerOptions);
         var encryptMessage = $"nobody{ApiPath}use{json}md5forencrypt";
         var digest = encryptMessage.ToByteArrayUtf8().ComputeMd5().ToHexStringLower();
         var requestData = $"{ApiPath}-36cd479b6b5-{json}-36cd479b6b5-{digest}";
@@ -119,7 +123,7 @@ public abstract class
 
             try
             {
-                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer));
+                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer), option.JsonSerializerOptions);
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
                 return ret;
             }
@@ -133,7 +137,7 @@ public abstract class
                 aes.Mode = CipherMode.ECB;
                 using var decryptor = aes.CreateDecryptor();
                 buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
-                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer));
+                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer), option.JsonSerializerOptions);
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
                 return ret;
             }

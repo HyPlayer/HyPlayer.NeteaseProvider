@@ -32,7 +32,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         if (!string.IsNullOrWhiteSpace(option.XRealIP))
             requestMessage.Headers.Add("X-Real-IP", option.XRealIP);
         requestMessage.Headers.UserAgent.Clear();
-        requestMessage.Headers.Add("User-Agent",UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent) );
+        requestMessage.Headers.TryAddWithoutValidation("User-Agent", UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent));
         if (Url.Contains("music.163.com"))
             requestMessage.Headers.Referrer = new Uri("https://music.163.com");
         var cookies = option.Cookies.ToDictionary(t => t.Key, t => t.Value);
@@ -40,10 +40,12 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         {
             cookies[keyValuePair.Key] = keyValuePair.Value;
         }
-        requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c=> $"{c.Key}={c.Value}")));
+
+        if (cookies.Count > 0)
+            requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
         ActualRequest ??= (TActualRequest)new WeApiActualRequestBase();
         ActualRequest.CsrfToken = cookies.GetValueOrDefault("__csrf", string.Empty);
-        var json = JsonSerializer.Serialize(ActualRequest);
+        var json = JsonSerializer.Serialize(ActualRequest, option.JsonSerializerOptions);
         byte[] secretKey = new Random().RandomBytes(16);
         secretKey = secretKey.Select(n => (byte)base62[n % 62]).ToArray();
         var paramsData =
@@ -79,7 +81,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         var buffer = await response.Content.ReadAsByteArrayAsync();
         if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
 
-        var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer));
+        var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer), option.JsonSerializerOptions);
         if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
         return ret;
     }
