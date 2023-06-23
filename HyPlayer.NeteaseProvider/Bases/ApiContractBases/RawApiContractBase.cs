@@ -1,34 +1,26 @@
-﻿using System.Net.Http.Headers;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using HyPlayer.NeteaseProvider.Extensions;
 
 namespace HyPlayer.NeteaseProvider.Bases.ApiContractBases;
 
-public abstract class LinuxApiContractBase<TRequest, TResponse, TError, TActualRequest> :
+public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualRequest> :
     ApiContractBase<TRequest, TResponse, TError, TActualRequest>
-    where TActualRequest : LinuxApiActualRequestBase
+    where TActualRequest : RawApiActualRequestBase
     where TError : ErrorResultBase
     where TRequest : RequestBase
-
 {
-    private static readonly byte[] linuxapiKey = "rFgB&h#%2?^eDg:Q"u8.ToArray();
-
-
     public override Task<HttpRequestMessage> GenerateRequestMessageAsync(ProviderOption option)
     {
         var url = Url;
         if (option.DegradeHttp)
             url = url.Replace("https://", "http://");
-        url = Regex.Replace(url, @"\w*api", "api");
-        var requestMessage = new HttpRequestMessage(Method, "https://music.163.com/api/linux/forward");
+        var requestMessage = new HttpRequestMessage(Method, url);
         if (!string.IsNullOrWhiteSpace(option.XRealIP))
             requestMessage.Headers.Add("X-Real-IP", option.XRealIP);
         requestMessage.Headers.UserAgent.Clear();
-        requestMessage.Headers.TryAddWithoutValidation("User-Agent",
-                                                       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36");
+        requestMessage.Headers.TryAddWithoutValidation("User-Agent", UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent));
         if (Url.Contains("music.163.com"))
             requestMessage.Headers.Referrer = new Uri("https://music.163.com");
         var cookies = option.Cookies.ToDictionary(t => t.Key, t => t.Value);
@@ -39,28 +31,12 @@ public abstract class LinuxApiContractBase<TRequest, TResponse, TError, TActualR
 
         if (cookies.Count > 0)
             requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
-
-        var json = JsonSerializer.Serialize(ActualRequest, option.JsonSerializerOptions);
-        var preData = JsonSerializer.Serialize(
-            new Dictionary<string, string>()
-            {
-                { "method", "POST" },
-                { "url", Regex.Replace(url, @"\w*api", "api") },
-                { "params", json }
-            }, option.JsonSerializerOptions);
-        var data = new Dictionary<string, string>()
-                   {
-                       {
-                           "eparams",
-                           AesEncrypt(preData.ToByteArrayUtf8(), CipherMode.ECB, linuxapiKey, null).ToHexStringUpper()
-                       }
-                   };
-        requestMessage.Content = new FormUrlEncodedContent(data);
+        
+        requestMessage.Content = new FormUrlEncodedContent(ActualRequest);
         return Task.FromResult(requestMessage);
     }
 
-    public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(
-        HttpResponseMessage response, ProviderOption option)
+    public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(HttpResponseMessage response, ProviderOption option)
     {
         if (!response.IsSuccessStatusCode)
             return new ErrorResultBase((int)response.StatusCode, $"请求返回 HTTP 代码: {response.StatusCode}");
@@ -82,18 +58,5 @@ public abstract class LinuxApiContractBase<TRequest, TResponse, TError, TActualR
         if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
             return Results<TResponse, ErrorResultBase>.CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
         return ret;
-    }
-
-
-    private static byte[] AesEncrypt(byte[] buffer, CipherMode mode, byte[] key, byte[]? iv = null)
-    {
-        using var aes = Aes.Create();
-        aes.BlockSize = 128;
-        aes.Key = key;
-        if (iv is not null)
-            aes.IV = iv;
-        aes.Mode = mode;
-        using var cryptoTransform = aes.CreateEncryptor();
-        return cryptoTransform.TransformFinalBlock(buffer, 0, buffer.Length);
     }
 }

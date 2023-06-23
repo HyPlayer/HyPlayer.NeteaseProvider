@@ -125,6 +125,8 @@ public abstract class
             {
                 var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer), option.JsonSerializerOptions);
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
+                if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
+                    return Results<TResponse, ErrorResultBase>.CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
                 return ret;
             }
             catch
@@ -139,6 +141,8 @@ public abstract class
                 buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
                 var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer), option.JsonSerializerOptions);
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
+                if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
+                    return Results<TResponse, ErrorResultBase>.CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
                 return ret;
             }
         }

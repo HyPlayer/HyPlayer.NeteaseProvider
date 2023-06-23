@@ -74,9 +74,9 @@ public class NeteaseApisTests
             error => throw error
         );
     }
-    
+
     [Theory]
-    [InlineData("2034742057","1811209786","1953828605")]
+    [InlineData("2034742057", "1811209786", "1953828605")]
     public async void SongDetail_Multiple_Should_HasInfo(params string[] ids)
     {
         var result =
@@ -95,7 +95,7 @@ public class NeteaseApisTests
             error => throw error
         );
     }
-    
+
     [Theory]
     [InlineData("2034742057")]
     public async void SongUrl_Single_Should_ReturnUrl(string id)
@@ -103,7 +103,7 @@ public class NeteaseApisTests
         var result =
             await _provider.RequestAsync(
                 NeteaseApis.SongUrlApi,
-                new ()
+                new()
                 {
                     Id = id,
                     Level = "jymaster"
@@ -119,19 +119,36 @@ public class NeteaseApisTests
             error => throw error
         );
     }
-    
+
     [Theory]
-    [InlineData("2034742057","1811209786","1953828605")]
+    [InlineData("2034742057", "1811209786", "1953828605")]
     public async void SongUrl_Multiple_Should_ReturnUrl(params string[] ids)
     {
         var result =
             await _provider.RequestAsync(
                 NeteaseApis.SongUrlApi,
-                new ()
+                new()
                 {
                     IdList = ids.ToArray(),
                     Level = "jymaster"
                 });
+        result.Match(
+            success => true,
+            error => throw error
+        );
+    }
+
+    [Theory]
+    [InlineData("2778408564")]
+    [InlineData("897784673")]
+    public async void PlaylistDetail_Should_ReturnNormal(string playlistId)
+    {
+        var result = await _provider.RequestAsync(
+            NeteaseApis.PlaylistDetailApi,
+            new()
+            {
+                Id = playlistId
+            });
         result.Match(
             success => true,
             error => throw error
