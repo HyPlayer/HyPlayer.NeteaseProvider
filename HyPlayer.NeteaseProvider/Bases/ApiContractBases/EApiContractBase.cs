@@ -31,8 +31,7 @@ public abstract class
         if (!string.IsNullOrWhiteSpace(option.XRealIP))
             requestMessage.Headers.Add("X-Real-IP", option.XRealIP);
         requestMessage.Headers.UserAgent.Clear();
-        requestMessage.Headers.UserAgent.Add(
-            new ProductInfoHeaderValue(UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent)));
+        requestMessage.Headers.Add("User-Agent",UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent) );
         var cookies = option.Cookies.ToDictionary(t => t.Key, t => t.Value);
         foreach (var keyValuePair in Cookies)
         {
@@ -105,7 +104,7 @@ public abstract class
         }
 
         var buffer = await response.Content.ReadAsByteArrayAsync();
-        if (buffer is null) return new ErrorResultBase(500, "返回体预读取错误");
+        if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
         try
         {
             if (buffer[0] != 0x7B && buffer[1] != 0x22)

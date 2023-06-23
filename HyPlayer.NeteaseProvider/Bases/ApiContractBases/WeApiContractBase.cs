@@ -20,7 +20,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/DDaFt6Rr7iVZMldczhC0JNgTz+SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB\n-----END PUBLIC KEY-----");
 
     private static readonly byte[] presetKey = "0CoJUm6Qyw8W8jud"u8.ToArray();
-
+    private const string base62 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     public override Task<HttpRequestMessage> GenerateRequestMessageAsync(ProviderOption option)
     {
@@ -32,8 +32,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         if (!string.IsNullOrWhiteSpace(option.XRealIP))
             requestMessage.Headers.Add("X-Real-IP", option.XRealIP);
         requestMessage.Headers.UserAgent.Clear();
-        requestMessage.Headers.UserAgent.Add(
-            new ProductInfoHeaderValue(UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent)));
+        requestMessage.Headers.Add("User-Agent",UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent) );
         if (Url.Contains("music.163.com"))
             requestMessage.Headers.Referrer = new Uri("https://music.163.com");
         var cookies = option.Cookies.ToDictionary(t => t.Key, t => t.Value);
@@ -46,6 +45,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         ActualRequest.CsrfToken = cookies.GetValueOrDefault("__csrf", string.Empty);
         var json = JsonSerializer.Serialize(ActualRequest);
         byte[] secretKey = new Random().RandomBytes(16);
+        secretKey = secretKey.Select(n => (byte)base62[n % 62]).ToArray();
         var paramsData =
             AesEncrypt(
                 AesEncrypt(json.ToByteArrayUtf8(), CipherMode.CBC, presetKey, iv).ToBase64String().ToByteArrayUtf8(),
@@ -77,7 +77,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         }
 
         var buffer = await response.Content.ReadAsByteArrayAsync();
-        if (buffer is null) return new ErrorResultBase(500, "返回体预读取错误");
+        if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
 
         var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer));
         if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using HyPlayer.NeteaseProvider.Bases;
+using HyPlayer.NeteaseProvider.Extensions;
 using HyPlayer.PlayCore.Abstraction;
 using HyPlayer.PlayCore.Abstraction.Interfaces.Provider;
 using HyPlayer.PlayCore.Abstraction.Models;
@@ -20,11 +21,25 @@ public class NeteaseProvider : ProviderBase,
 
     public ProviderOption Option { get; set; } = new();
     private readonly NeteaseCloudMusicApiHandler _handler = new();
-    
-    public NeteaseProvider()
+    public override string Name => "网易云音乐";
+    public override string Id => "ncm";
+
+    public Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract)
+        where TError : ErrorResultBase
+        where TActualRequest : ActualRequestBase
+        where TRequest : RequestBase
     {
-        Name = "网易云音乐";
-        Id = "ncm";
+        return _handler.RequestAsync(contract, Option);
+    }
+    
+    public Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest request)
+        where TError : ErrorResultBase
+        where TActualRequest : ActualRequestBase
+        where TRequest : RequestBase
+    {
+        return _handler.RequestAsync(contract, request, Option);
     }
     
     public async Task<List<RawLyricInfo>> GetLyricInfo(SingleSongBase song)

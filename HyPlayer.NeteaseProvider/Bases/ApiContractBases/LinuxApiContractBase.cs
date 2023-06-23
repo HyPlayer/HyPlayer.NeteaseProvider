@@ -27,9 +27,7 @@ public abstract class LinuxApiContractBase<TRequest, TResponse, TError, TActualR
         if (!string.IsNullOrWhiteSpace(option.XRealIP))
             requestMessage.Headers.Add("X-Real-IP", option.XRealIP);
         requestMessage.Headers.UserAgent.Clear();
-        requestMessage.Headers.UserAgent.Add(
-            new ProductInfoHeaderValue(
-                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36"));
+        requestMessage.Headers.Add("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36");
         if (Url.Contains("music.163.com"))
             requestMessage.Headers.Referrer = new Uri("https://music.163.com");
         var cookies = option.Cookies.ToDictionary(t => t.Key, t => t.Value);
@@ -75,7 +73,7 @@ public abstract class LinuxApiContractBase<TRequest, TResponse, TError, TActualR
         }
 
         var buffer = await response.Content.ReadAsByteArrayAsync();
-        if (buffer is null) return new ErrorResultBase(500, "返回体预读取错误");
+        if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
 
         var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer));
         if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
