@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyPlayer.NeteaseProvider", "HyPlayer.NeteaseProvider\HyPlayer.NeteaseProvider.csproj", "{2A1F5677-BCAE-47E5-A681-5B346DED0D3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyPlayer.PlayCore.Abstraction", "HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj", "{5CD18565-4524-4CF1-9DA1-BA1BF80366E6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyPlayer.NeteaseProvider.Tests", "HyPlayer.NeteaseProvider.Tests\HyPlayer.NeteaseProvider.Tests.csproj", "{3F572439-149E-4303-AD35-1586EB27457D}"
 EndProject
 Global
@@ -16,10 +14,6 @@ Global
 		{2A1F5677-BCAE-47E5-A681-5B346DED0D3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A1F5677-BCAE-47E5-A681-5B346DED0D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A1F5677-BCAE-47E5-A681-5B346DED0D3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5CD18565-4524-4CF1-9DA1-BA1BF80366E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5CD18565-4524-4CF1-9DA1-BA1BF80366E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5CD18565-4524-4CF1-9DA1-BA1BF80366E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5CD18565-4524-4CF1-9DA1-BA1BF80366E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F572439-149E-4303-AD35-1586EB27457D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F572439-149E-4303-AD35-1586EB27457D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F572439-149E-4303-AD35-1586EB27457D}.Release|Any CPU.ActiveCfg = Release|Any CPU
