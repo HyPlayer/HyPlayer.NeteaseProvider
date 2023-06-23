@@ -95,4 +95,46 @@ public class NeteaseApisTests
             error => throw error
         );
     }
+    
+    [Theory]
+    [InlineData("2034742057")]
+    public async void SongUrl_Single_Should_ReturnUrl(string id)
+    {
+        var result =
+            await _provider.RequestAsync(
+                NeteaseApis.SongUrlApi,
+                new ()
+                {
+                    Id = id,
+                    Level = "jymaster"
+                });
+        result.Match(
+            success =>
+            {
+                success.SongUrls.Should().NotBeNull();
+                success.SongUrls.Should().HaveCount(1);
+                success.SongUrls![0].Url.Should().NotBeEmpty();
+                return true;
+            },
+            error => throw error
+        );
+    }
+    
+    [Theory]
+    [InlineData("2034742057","1811209786","1953828605")]
+    public async void SongUrl_Multiple_Should_ReturnUrl(params string[] ids)
+    {
+        var result =
+            await _provider.RequestAsync(
+                NeteaseApis.SongUrlApi,
+                new ()
+                {
+                    IdList = ids.ToArray(),
+                    Level = "jymaster"
+                });
+        result.Match(
+            success => true,
+            error => throw error
+        );
+    }
 }

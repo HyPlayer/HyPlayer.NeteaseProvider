@@ -84,7 +84,7 @@ public abstract class
         aes.BlockSize = 128;
         aes.Key = eapiKey;
         aes.Mode = CipherMode.ECB;
-        using var cryptoTransform = aes.CreateDecryptor();
+        using var cryptoTransform = aes.CreateEncryptor();
         var reqDataBytes = requestData.ToByteArrayUtf8();
         var reqBytes = cryptoTransform.TransformFinalBlock(reqDataBytes, 0, reqDataBytes.Length);
         requestMessage.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
@@ -112,7 +112,7 @@ public abstract class
         try
         {
             if (buffer[0] != 0x7B && buffer[1] != 0x22)
-            {
+            { 
                 using var aes = Aes.Create();
                 aes.BlockSize = 128;
                 aes.Key = eapiKey;
@@ -129,8 +129,8 @@ public abstract class
             }
             catch
             {
-                // 别问我为什么这么难看, 原作者就是这么写的, 我也不知道有啥用
-                // 他确实就是这样跑了两遍, 我也只能这么抄过来了
+                // 防止加密后开头刚好是 {
+                //return new ErrorResultBase(500, "JSON 解析错误");
                 using var aes = Aes.Create();
                 aes.BlockSize = 128;
                 aes.Key = eapiKey;
