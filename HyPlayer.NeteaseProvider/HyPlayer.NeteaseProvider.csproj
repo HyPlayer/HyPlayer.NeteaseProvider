@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <PackageReference Include="Depository.Abstraction" Version="1.1.0"/>
+        <PackageReference Include="HyPlayer.PlayCore.Abstraction" Version="0.0.1" />
         <PackageReference Include="System.Text.Json" Version="7.0.3"/>
     </ItemGroup>
 
