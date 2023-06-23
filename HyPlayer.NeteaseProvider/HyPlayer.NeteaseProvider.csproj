@@ -1,17 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
+        <TargetFrameworks>netstandard2.0;net7.0</TargetFrameworks>
     </PropertyGroup>
 
 
     <ItemGroup>
-        <ProjectReference OutputItemType="Analyzer"
-                          ReferenceOutputAssembly="false"
-                          Include="..\HyPlayer.NeteaseProvider.SourceGenerator\HyPlayer.NeteaseProvider.SourceGenerator.csproj"/>
         <ProjectReference Include="..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj"/>
     </ItemGroup>
 
@@ -22,9 +19,5 @@
     </ItemGroup>
 
 
-    <ItemGroup>
-        <Folder Include="Requests\"/>
-        <Folder Include="Responses\"/>
-    </ItemGroup>
 
 </Project>
