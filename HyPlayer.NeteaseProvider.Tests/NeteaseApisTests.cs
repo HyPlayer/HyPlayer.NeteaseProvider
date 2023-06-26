@@ -154,4 +154,22 @@ public class NeteaseApisTests
             error => throw error
         );
     }
+
+    [Theory]
+    [InlineData("1455706958")]
+    [InlineData("1880520974")]
+    public async void Lyric_Should_ReturnNormal(string songId)
+    {
+        var result = await _provider.RequestAsync(
+            NeteaseApis.LyricApi,
+            new LyricRequest()
+            {
+                Id = songId
+            }
+        );
+        result.Match(
+            success => success?.Lyric?.Lyric.Should().NotBeEmpty(),
+            error => throw error
+        );
+    }
 }

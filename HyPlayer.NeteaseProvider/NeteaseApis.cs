@@ -10,4 +10,5 @@ public static class NeteaseApis
     public static SongDetailApi SongDetailApi => new();
     public static SongUrlApi SongUrlApi => new();
     public static PlaylistDetailApi PlaylistDetailApi => new();
+    public static LyricApi LyricApi => new();
 }
