@@ -6,18 +6,19 @@
         <LangVersion>latest</LangVersion>
         <TargetFrameworks>netstandard2.0;net7.0</TargetFrameworks>
     </PropertyGroup>
-
-
-    <ItemGroup>
-        <ProjectReference Include="..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj"/>
-    </ItemGroup>
-
+    
 
     <ItemGroup>
         <PackageReference Include="Depository.Abstraction" Version="1.1.0"/>
-        <PackageReference Include="HyPlayer.PlayCore.Abstraction" Version="0.0.1" />
+        <PackageReference Include="HyPlayer.PlayCore.Abstraction" Version="0.0.3" />
         <PackageReference Include="System.Text.Json" Version="7.0.3"/>
+
+
     </ItemGroup>
+
+
+
+
 
 
 
