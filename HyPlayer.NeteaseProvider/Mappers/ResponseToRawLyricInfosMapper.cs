@@ -1,5 +1,5 @@
-﻿using HyPlayer.NeteaseProvider.Models;
-using HyPlayer.NeteaseProvider.Responses;
+﻿using HyPlayer.NeteaseProvider.ApiContracts;
+using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 
 namespace HyPlayer.NeteaseProvider.Mappers;

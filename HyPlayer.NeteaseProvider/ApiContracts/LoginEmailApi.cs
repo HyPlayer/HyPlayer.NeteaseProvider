@@ -1,9 +1,7 @@
-﻿using HyPlayer.NeteaseProvider.ActualRequests;
+﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseProvider.Bases;
 using HyPlayer.NeteaseProvider.Bases.ApiContractBases;
 using HyPlayer.NeteaseProvider.Extensions;
-using HyPlayer.NeteaseProvider.Requests;
-using HyPlayer.NeteaseProvider.Responses;
 
 namespace HyPlayer.NeteaseProvider.ApiContracts;
 
@@ -36,4 +34,18 @@ public class LoginEmailApi : WeApiContractBase<LoginEmailRequest, LoginResponse,
             Results<LoginResponse, ErrorResultBase>.CreateError
         );
     }
+}
+
+public class LoginEmailActualRequest : WeApiActualRequestBase
+{
+    [JsonPropertyName("username")] public required string Username { get; set; }
+    [JsonPropertyName("password")] public required string Md5Password { get; set; }
+    [JsonPropertyName("rememberLogin")] public bool RememberLogin => true;
+}
+
+public class LoginEmailRequest : RequestBase
+{
+    public required string Email { get; set; }
+    public string? Password { get; set; }
+    public string? Md5Password { get; set; }
 }

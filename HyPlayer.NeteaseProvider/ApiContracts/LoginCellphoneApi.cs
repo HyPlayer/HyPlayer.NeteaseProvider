@@ -1,9 +1,7 @@
-﻿using HyPlayer.NeteaseProvider.ActualRequests;
+﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseProvider.Bases;
 using HyPlayer.NeteaseProvider.Bases.ApiContractBases;
 using HyPlayer.NeteaseProvider.Extensions;
-using HyPlayer.NeteaseProvider.Requests;
-using HyPlayer.NeteaseProvider.Responses;
 
 namespace HyPlayer.NeteaseProvider.ApiContracts;
 
@@ -38,5 +36,40 @@ public class LoginCellphoneApi : WeApiContractBase<LoginCellphoneRequest, LoginR
                 (success) => success.Code != 200 ? new ErrorResultBase(success.Code, success.Message) : success,
                 Results<LoginResponse, ErrorResultBase>.CreateError
             );
+    }
+}
+
+public class LoginCellphoneActualRequest : WeApiActualRequestBase
+{
+    [JsonPropertyName("phone")] public string Phone { get; set; }
+    [JsonPropertyName("countrycode")] public string CountryCode { get; set; } = "86";
+    [JsonPropertyName("password")] public string Md5Password { get; set; }
+    [JsonPropertyName("rememberLogin")] public bool RememberLogin => true;
+}
+
+public class LoginCellphoneRequest : RequestBase
+{
+    public required string Cellphone { get; set; }
+    public string CountryCode { get; set; } = "86";
+    public string? Password { get; set; }
+    public string? Md5Password { get; set; }
+}
+
+public class LoginResponse : CodedResponseBase
+{
+    [JsonPropertyName("loginType")] public int LoginType { get; set; }
+    [JsonPropertyName("message")] public string Message { get; set; }
+    [JsonPropertyName("profile")] public ProfileData Profile { get; set; }
+
+    public class ProfileData
+    {
+        [JsonPropertyName("vipType")] public int VipType { get; set; }
+        [JsonPropertyName("nickname")] public string Nickname { get; set; }
+        [JsonPropertyName("birthday")] public long Birthday { get; set; }
+        [JsonPropertyName("gender")] public int Gender { get; set; }
+        [JsonPropertyName("avatarUrl")] public string AvatarUrl { get; set; }
+        [JsonPropertyName("backgroundUrl")] public string BackgroundUrl { get; set; }
+        [JsonPropertyName("signature")] public string Signature { get; set; }
+        [JsonPropertyName("followed")] public bool? Followed { get; set; }
     }
 }
