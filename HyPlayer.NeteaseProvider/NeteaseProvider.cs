@@ -4,8 +4,6 @@ using HyPlayer.NeteaseProvider.Bases;
 using HyPlayer.NeteaseProvider.Extensions;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.NeteaseProvider.Models;
-using HyPlayer.NeteaseProvider.Requests;
-using HyPlayer.NeteaseProvider.Responses;
 using HyPlayer.PlayCore.Abstraction;
 using HyPlayer.PlayCore.Abstraction.Interfaces.Provider;
 using HyPlayer.PlayCore.Abstraction.Models;
@@ -27,6 +25,24 @@ public class NeteaseProvider : ProviderBase,
     private readonly NeteaseCloudMusicApiHandler _handler = new();
     public override string Name => "网易云音乐";
     public override string Id => "ncm";
+
+    public static NeteaseProvider Instance = null!;
+
+    public NeteaseProvider()
+    {
+        Instance = this;
+    }
+    
+    public override Dictionary<string, string> TypeIdToNameDictionary
+        => new()
+           {
+               { "sg", "歌曲" },
+               { "pl", "歌单" },
+               { "ar", "歌手" },
+               { "al", "专辑" },
+               { "us", "用户" },
+               { "rd", "电台" },
+           };
 
     public Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract)
@@ -93,7 +109,34 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task LikeProvidableItem(string inProviderId, string? targetId)
     {
-        throw new NotImplementedException();
+        if (inProviderId.StartsWith("sg"))
+        {
+            if (targetId is null)
+            {
+                var result = await RequestAsync(
+                    NeteaseApis.LikeApi,
+                    new LikeRequest
+                    {
+                        TrackId = inProviderId.Substring(2),
+                        Like = true
+                    });
+            }
+            else
+            {
+                var result = await RequestAsync(
+                    NeteaseApis.PlaylistTracksEditApi,
+                    new()
+                    {
+                        IsAdd = true,
+                        PlaylistId = targetId,
+                        TrackId = inProviderId.Substring(2)
+                    }
+                );
+            }
+        }
+        else if (inProviderId.StartsWith("pl"))
+        {
+        }
     }
 
     public async Task UnlikeProvidableItem(string inProviderId, string? targetId)
@@ -108,6 +151,22 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task<ProvidableItemBase> GetProvidableItemById(string inProviderId)
     {
+        var typeId = inProviderId.Substring(0, 2);
+        switch (typeId)
+        {
+            case "ns":
+                var result = await RequestAsync(new SongDetailApi(),
+                             new()
+                             {
+                                 Id = inProviderId.Substring(2)
+                             });
+                return result.Match(
+                    success => success.Songs[0].MapToNeteaseMusic(),
+                    error => null
+                );
+                break;
+        }
+
         throw new NotImplementedException();
     }
 
