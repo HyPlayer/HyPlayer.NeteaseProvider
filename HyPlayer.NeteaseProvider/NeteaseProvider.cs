@@ -1,7 +1,6 @@
-using System.Collections.ObjectModel;
-using HyPlayer.NeteaseProvider.ApiContracts;
-using HyPlayer.NeteaseProvider.Bases;
-using HyPlayer.NeteaseProvider.Extensions;
+using HyPlayer.NeteaseApi;
+using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction;
@@ -10,6 +9,7 @@ using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.Songs;
+using Kengwang.Toolkit;
 
 namespace HyPlayer.NeteaseProvider;
 
@@ -21,7 +21,7 @@ public class NeteaseProvider : ProviderBase,
                                IProvidableItemRangeProvidable,
                                ISearchableProvider
 {
-    public ProviderOption Option { get; set; } = new();
+    public ApiHandlerOption Option { get; set; } = new();
     private readonly NeteaseCloudMusicApiHandler _handler = new();
     public override string Name => "网易云音乐";
     public override string Id => "ncm";
@@ -32,7 +32,7 @@ public class NeteaseProvider : ProviderBase,
     {
         Instance = this;
     }
-    
+
     public override Dictionary<string, string> TypeIdToNameDictionary
         => new()
            {
@@ -113,7 +113,7 @@ public class NeteaseProvider : ProviderBase,
         {
             if (targetId is null)
             {
-                var result = await RequestAsync(
+                await RequestAsync(
                     NeteaseApis.LikeApi,
                     new LikeRequest
                     {
@@ -123,7 +123,7 @@ public class NeteaseProvider : ProviderBase,
             }
             else
             {
-                var result = await RequestAsync(
+                await RequestAsync(
                     NeteaseApis.PlaylistTracksEditApi,
                     new()
                     {
@@ -136,7 +136,14 @@ public class NeteaseProvider : ProviderBase,
         }
         else if (inProviderId.StartsWith("pl"))
         {
+            await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
+                               new()
+                               {
+                                   IsSubscribe = true,
+                                   PlaylistId = inProviderId.Substring(2)
+                               });
         }
+        // TODO
     }
 
     public async Task UnlikeProvidableItem(string inProviderId, string? targetId)
@@ -144,33 +151,34 @@ public class NeteaseProvider : ProviderBase,
         throw new NotImplementedException();
     }
 
-    public async Task<ReadOnlyCollection<string>> GetLikedProvidableIds(string typeId)
+    public async Task<List<string>> GetLikedProvidableIds(string typeId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<ProvidableItemBase> GetProvidableItemById(string inProviderId)
+    public async Task<ProvidableItemBase?> GetProvidableItemById(string inProviderId)
     {
         var typeId = inProviderId.Substring(0, 2);
         switch (typeId)
         {
             case "ns":
                 var result = await RequestAsync(new SongDetailApi(),
-                             new()
-                             {
-                                 Id = inProviderId.Substring(2)
-                             });
+                                                new()
+                                                {
+                                                    Id = inProviderId.Substring(2)
+                                                });
                 return result.Match(
-                    success => success.Songs[0].MapToNeteaseMusic(),
+                    success => success.Songs?[0].MapToNeteaseMusic(),
                     error => null
                 );
                 break;
+            // TODO
         }
 
         throw new NotImplementedException();
     }
 
-    public async Task<ReadOnlyCollection<ProvidableItemBase>> GetProvidableItemsRange(List<string> inProviderIds)
+    public async Task<List<ProvidableItemBase>> GetProvidableItemsRange(List<string> inProviderIds)
     {
         throw new NotImplementedException();
     }

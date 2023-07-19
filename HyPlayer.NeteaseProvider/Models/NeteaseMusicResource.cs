@@ -12,10 +12,9 @@ public class NeteaseMusicResource : MusicResourceBase
     public string? MusicType { get; set; }
     public string? Level { get; set; }
 
-    public override Task<object?> GetResource(ResourceQualityTag? qualityTag = null)
+
+    public override Task<object?> GetResource(ResourceQualityTag? qualityTag = null, Type? awaitingType = null)
     {
         return Task.FromResult<object?>(Url);
     }
-
-    public override Type ReturnType => typeof(string);
 }

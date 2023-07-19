@@ -1,4 +1,4 @@
-﻿using HyPlayer.NeteaseProvider.ApiContracts;
+﻿using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 

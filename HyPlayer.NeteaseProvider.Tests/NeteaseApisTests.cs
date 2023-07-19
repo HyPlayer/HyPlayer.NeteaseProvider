@@ -1,5 +1,6 @@
 using FluentAssertions;
-using HyPlayer.NeteaseProvider.ApiContracts;
+using HyPlayer.NeteaseApi;
+using HyPlayer.NeteaseApi.ApiContracts;
 
 namespace HyPlayer.NeteaseProvider.Tests;
 
