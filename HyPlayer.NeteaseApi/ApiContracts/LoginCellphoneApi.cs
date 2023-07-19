@@ -64,6 +64,7 @@ public class LoginResponse : CodedResponseBase
 
     public class ProfileData
     {
+        [JsonPropertyName("userId")] public string? UserId { get; set; }
         [JsonPropertyName("vipType")] public int VipType { get; set; }
         [JsonPropertyName("nickname")] public string? Nickname { get; set; }
         [JsonPropertyName("birthday")] public long Birthday { get; set; }

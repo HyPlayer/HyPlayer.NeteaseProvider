@@ -28,6 +28,8 @@ public class NeteaseProvider : ProviderBase,
 
     public static NeteaseProvider Instance = null!;
 
+    public NeteaseUser? LoginedUser { get; set; }
+
     public NeteaseProvider()
     {
         Instance = this;
@@ -60,6 +62,49 @@ public class NeteaseProvider : ProviderBase,
         where TRequest : RequestBase
     {
         return _handler.RequestAsync(contract, request, Option);
+    }
+
+
+    public async Task<bool> LoginEmail(string email, string password, bool isMd5 = false)
+    {
+        var request = new LoginEmailRequest()
+                      {
+                          Email = email,
+                      };
+        if (isMd5)
+            request.Md5Password = password;
+        else
+            request.Password = password;
+        var result = await RequestAsync(NeteaseApis.LoginEmailApi, request);
+        return result.Match(
+            success =>
+            {
+                LoginedUser = success.Profile?.MapToNeteaseUser();
+                return true;
+            },
+            error => false
+        );
+    }
+
+    public async Task<bool> LoginCellphone(string cellphone, string password, bool isMd5 = false)
+    {
+        var request = new LoginCellphoneRequest()
+                      {
+                          Cellphone = cellphone
+                      };
+        if (isMd5)
+            request.Md5Password = password;
+        else
+            request.Password = password;
+        var result = await RequestAsync(NeteaseApis.LoginCellphoneApi, request);
+        return result.Match(
+            success =>
+            {
+                LoginedUser = success.Profile?.MapToNeteaseUser();
+                return true;
+            },
+            error => false
+        );
     }
 
     public async Task<List<RawLyricInfo>> GetLyricInfo(SingleSongBase song)
@@ -148,31 +193,83 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task UnlikeProvidableItem(string inProviderId, string? targetId)
     {
-        throw new NotImplementedException();
+        if (inProviderId.StartsWith("sg"))
+        {
+            if (targetId is null)
+            {
+                await RequestAsync(
+                    NeteaseApis.LikeApi,
+                    new LikeRequest
+                    {
+                        TrackId = inProviderId.Substring(2),
+                        Like = false
+                    });
+            }
+            else
+            {
+                await RequestAsync(
+                    NeteaseApis.PlaylistTracksEditApi,
+                    new()
+                    {
+                        IsAdd = false,
+                        PlaylistId = targetId,
+                        TrackId = inProviderId.Substring(2)
+                    }
+                );
+            }
+        }
+        else if (inProviderId.StartsWith("pl"))
+        {
+            await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
+                               new()
+                               {
+                                   IsSubscribe = true,
+                                   PlaylistId = inProviderId.Substring(2)
+                               });
+        }
+        // TODO
     }
 
     public async Task<List<string>> GetLikedProvidableIds(string typeId)
     {
-        throw new NotImplementedException();
+        var result = await RequestAsync(NeteaseApis.LikelistApi, new LikelistRequest()
+                                                                 {
+                                                                     Uid = LoginedUser?.Id!
+                                                                 });
+        return result.Match(
+            success => success.TrackIds.ToList(),
+            error => new List<string>());
     }
 
     public async Task<ProvidableItemBase?> GetProvidableItemById(string inProviderId)
     {
         var typeId = inProviderId.Substring(0, 2);
+        // 之后可以对此处逻辑进行拆解
         switch (typeId)
         {
             case "ns":
-                var result = await RequestAsync(new SongDetailApi(),
-                                                new()
-                                                {
-                                                    Id = inProviderId.Substring(2)
-                                                });
-                return result.Match(
+                var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
+                                                    new()
+                                                    {
+                                                        Id = inProviderId.Substring(2)
+                                                    });
+                return songResult.Match(
                     success => success.Songs?[0].MapToNeteaseMusic(),
                     error => null
                 );
                 break;
-            // TODO
+            case "pl":
+                var playlistResult = await RequestAsync(
+                    NeteaseApis.PlaylistDetailApi,
+                    new PlaylistDetailRequest
+                    {
+                        Id = inProviderId.Substring(2)
+                    });
+                return playlistResult.Match(
+                    success => success.Playlist?.MapToNeteasePlaylist(),
+                    error => null
+                );
+                break;
         }
 
         throw new NotImplementedException();
@@ -180,10 +277,31 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task<List<ProvidableItemBase>> GetProvidableItemsRange(List<string> inProviderIds)
     {
+        var grouped = inProviderIds.GroupBy(t => t.Substring(0, 2)).ToList();
+        if (grouped.Count == 1)
+        {
+            // 一种的话直接来吧
+            // 之后可以对此处逻辑进行拆解
+            switch (grouped[0].Key)
+            {
+                case "ns":
+                    var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
+                                                        new()
+                                                        {
+                                                            IdList = inProviderIds.Select(t => t.Substring(2)).ToList()
+                                                        });
+                    return songResult.Match(
+                        success => success.Songs?.Select(t => (ProvidableItemBase)t.MapToNeteaseMusic()).ToList() ??
+                                   new List<ProvidableItemBase>(),
+                        error => new List<ProvidableItemBase>()
+                    );
+            }
+        }
+
         throw new NotImplementedException();
     }
 
-    public async Task<ContainerBase> SearchProvidableItems(string keyword, string typeId)
+    public async Task<ContainerBase?> SearchProvidableItems(string keyword, string typeId)
     {
         throw new NotImplementedException();
     }

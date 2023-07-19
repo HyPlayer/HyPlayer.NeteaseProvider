@@ -4,7 +4,7 @@ using HyPlayer.PlayCore.Abstraction.Models.Songs;
 
 namespace HyPlayer.NeteaseProvider.Models;
 
-public class NeteaseMusic : SingleSongBase, IHasTranslation
+public class NeteaseSong : SingleSongBase, IHasTranslation
 {
     public override string ProviderId => "ncm";
     public override string TypeId => "sg";

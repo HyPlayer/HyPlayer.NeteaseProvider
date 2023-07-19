@@ -39,10 +39,12 @@ public class UserPlaylistResponse : CodedResponseBase
         [JsonPropertyName("coverImgUrl")] public string? CoverUrl { get; set; }
         [JsonPropertyName("playCount")] public int PlayCount { get; set; }
         [JsonPropertyName("subscribedCount")] public int SubscribedCount { get; set; }
+
         [JsonPropertyName("name")] public string? Name { get; set; }
         [JsonPropertyName("id")] public string? Id { get; set; }
         [JsonPropertyName("updateTime")] public long UpdateTime { get; set; }
         [JsonPropertyName("description")] public string? Description { get; set; }
+        [JsonPropertyName("subscribed")] public bool Subscribed { get; set; }
     }
 }
 
