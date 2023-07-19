@@ -1,4 +1,4 @@
-﻿using HyPlayer.NeteaseProvider.ApiContracts;
+﻿using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseProvider.Models;
 
 namespace HyPlayer.NeteaseProvider.Mappers;
@@ -12,7 +12,7 @@ public static class AlbumDataToNeteaseAlbumMapper
                {
                    Name = data.Name!,
                    ActualId = data.Id!,
-                   
+                   PictureUrl = data.PictureUrl
                };
         
     }

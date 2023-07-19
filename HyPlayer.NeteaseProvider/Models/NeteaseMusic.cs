@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
+﻿using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 using HyPlayer.PlayCore.Abstraction.Models.Songs;
 
@@ -19,9 +18,9 @@ public class NeteaseMusic : SingleSongBase, IHasTranslation
 
     public required List<PersonBase>? Artists { get; init; }
 
-    public override Task<ReadOnlyCollection<PersonBase>?> GetCreators()
+    public override Task<List<PersonBase>?> GetCreators()
     {
-        return Task.FromResult<ReadOnlyCollection<PersonBase>?>(new ReadOnlyCollection<PersonBase>(Artists!));
+        return Task.FromResult(Artists);
     }
 
     public string? Translation { get; set; }
