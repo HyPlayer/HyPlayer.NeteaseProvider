@@ -6,9 +6,9 @@ namespace HyPlayer.NeteaseProvider.Mappers;
 
 public static class SongDetailItemToNeteaseMusicMapper
 {
-    public static NeteaseMusic MapToNeteaseMusic(this SongDetailResponse.SongItem item)
+    public static NeteaseSong MapToNeteaseMusic(this SongDetailResponse.SongItem item)
     {
-        return new NeteaseMusic
+        return new NeteaseSong
                {
                    Name = item.Name ?? "未知歌曲",
                    ActualId = item.Id!,
@@ -22,9 +22,9 @@ public static class SongDetailItemToNeteaseMusicMapper
                };
     }
     
-    public static NeteaseMusic MapToNeteaseMusic(this SongItemWithPrivilege item)
+    public static NeteaseSong MapToNeteaseMusic(this SongItemWithPrivilege item)
     {
-        return new NeteaseMusic
+        return new NeteaseSong
                {
                    Name = item.Name ?? "未知歌曲",
                    ActualId = item.Id!,
@@ -33,7 +33,7 @@ public static class SongDetailItemToNeteaseMusicMapper
                        ? item.Artists.Select(ar => ar.Name??"未知歌手").ToList()
                        : new List<string>(),
                    Duration = item.Duration,
-                   Available = item.Privilege.PlayLevel is not (null or "none"),
+                   Available = item.Privilege?.PlayLevel is not (null or "none"),
                    Artists = item.Artists?.Select(ar=>(PersonBase)ar.MapToNeteaseArtist()).ToList()
                };
     }
