@@ -37,10 +37,10 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
 
     public Task<ImageResourceBase?> GetCover()
     {
-        return Task.FromResult<>(new NeteaseImageResource()
-                        {
-                            Url = AvatarUrl
-                        });
+        return Task.FromResult<ImageResourceBase?>(new NeteaseImageResource()
+                                                   {
+                                                       Url = AvatarUrl
+                                                   });
     }
 
     public string? Description { get; set; }

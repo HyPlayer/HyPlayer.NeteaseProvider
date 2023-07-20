@@ -75,7 +75,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
 
     public Task<ImageResourceBase?> GetCover()
     {
-        return Task.FromResult<>(
+        return Task.FromResult<ImageResourceBase?>(
             new NeteaseImageResource
             {
                 Url = _coverUrl,

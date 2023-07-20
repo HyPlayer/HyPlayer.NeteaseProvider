@@ -33,7 +33,7 @@ public class NeteaseAlbum : AlbumBase, IHasCover, IHasTranslation, IHasDescripti
     public string? Description { get; set; }
     public Task<List<PersonBase>?> GetCreators()
     {
-        if (Artists is null) return Task.FromResult<>(null);
+        if (Artists is null) return Task.FromResult<List<PersonBase>?>(null);
         return Task.FromResult(Artists?.Select(ar=>(PersonBase)ar).ToList());
     }
 
