@@ -27,7 +27,7 @@ jobs:
       - name: Build NuGet Packages
         run: |
           dotnet pack HyPlayer.NeteaseApi/HyPlayer.NeteaseApi.csproj -c Release -o Packages/
-          dotnet pack HyPlayer.NeteaseApi/HyPlayer.NeteaseApi.csproj -c Release -o Packages/
+          dotnet pack HyPlayer.NeteaseProvider/HyPlayer.NeteaseProvider.csproj -c Release -o Packages/
 
       - name: Publish Packages to Artifacts
         uses: actions/upload-artifact@v3.1.1
