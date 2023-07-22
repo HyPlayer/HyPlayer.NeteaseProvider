@@ -37,8 +37,9 @@ public class UserPlaylistResponse : CodedResponseBase
         [JsonPropertyName("privacy")] public int Privacy { get; set; }
         [JsonPropertyName("trackCount")] public int TrackCount { get; set; }
         [JsonPropertyName("coverImgUrl")] public string? CoverUrl { get; set; }
-        [JsonPropertyName("playCount")] public int PlayCount { get; set; }
-        [JsonPropertyName("subscribedCount")] public int SubscribedCount { get; set; }
+        [JsonPropertyName("updateFrequency")] public string? UpdateFrequency { get; set; }
+        [JsonPropertyName("playCount")] public long PlayCount { get; set; }
+        [JsonPropertyName("subscribedCount")] public long SubscribedCount { get; set; }
 
         [JsonPropertyName("name")] public string? Name { get; set; }
         [JsonPropertyName("id")] public string? Id { get; set; }

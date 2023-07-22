@@ -173,4 +173,14 @@ public class NeteaseApisTests
             error => throw error
         );
     }
+
+    [Fact]
+    public async void Toplist_Should_ReturnNormal()
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.ToplistApi, new ToplistRequest());
+        result.Match(
+            success => success.List.Should().NotBeEmpty(),
+            error => throw error
+        );
+    }
 }
