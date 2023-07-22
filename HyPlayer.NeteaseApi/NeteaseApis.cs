@@ -17,4 +17,5 @@ public static class NeteaseApis
     public static PlaylistSubscribeApi PlaylistSubscribeApi => new();
     public static UserPlaylistApi UserPlaylistApi => new();
     public static LikelistApi LikelistApi => new();
+    public static ToplistApi ToplistApi => new();
 }

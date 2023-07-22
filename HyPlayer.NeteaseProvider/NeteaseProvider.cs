@@ -52,7 +52,15 @@ public class NeteaseProvider : ProviderBase,
         where TActualRequest : ActualRequestBase
         where TRequest : RequestBase
     {
-        return _handler.RequestAsync(contract, Option);
+        try
+        {
+            return _handler.RequestAsync(contract, Option);
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex)));
+        }
+        
     }
 
     public Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
@@ -61,7 +69,14 @@ public class NeteaseProvider : ProviderBase,
         where TActualRequest : ActualRequestBase
         where TRequest : RequestBase
     {
-        return _handler.RequestAsync(contract, request, Option);
+        try
+        {
+            return _handler.RequestAsync(contract, request, Option);
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex)));
+        }
     }
 
 

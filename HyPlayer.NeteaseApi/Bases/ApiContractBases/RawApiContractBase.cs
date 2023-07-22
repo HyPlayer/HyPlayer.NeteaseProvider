@@ -32,7 +32,8 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
         if (cookies.Count > 0)
             requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
         
-        requestMessage.Content = new FormUrlEncodedContent(ActualRequest);
+        if (ActualRequest is not null)
+            requestMessage.Content = new FormUrlEncodedContent(ActualRequest);
         return Task.FromResult(requestMessage);
     }
 

@@ -21,8 +21,8 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
     public bool Subscribed { get; set; }
     public long UpdateTime { get; set; }
     public int TrackCount { get; set; }
-    public int PlayCount { get; set; }
-    public int SubscribedCount { get; set; }
+    public long PlayCount { get; set; }
+    public long SubscribedCount { get; set; }
 
     public async Task UpdatePlaylistInfo()
     {

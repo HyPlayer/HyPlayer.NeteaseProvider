@@ -7,5 +7,10 @@ public class ErrorResultBase : Exception
         ErrorCode = errorCode;
     }
 
+    public ErrorResultBase(Exception ex) : base(ex.Message)
+    {
+        ErrorCode = -500;
+    }
+
     public int ErrorCode { get; set; }
 }
