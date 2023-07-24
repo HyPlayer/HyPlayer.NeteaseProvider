@@ -4,7 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
-        <Version>0.0.2.2</Version>
+        <Version>0.0.2.3</Version>
         <Title>HyPlayer.NeteaseProvider</Title>
         <Authors>HyPlayer Team</Authors>
         <Description>The NeteaseProvider for HyPlayer</Description>
@@ -19,8 +19,8 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Depository.Abstraction" Version="1.1.0"/>
-        <PackageReference Include="HyPlayer.PlayCore.Abstraction" Version="0.0.11" />
+        <PackageReference Include="Depository.Abstraction" Version="1.2.0" />
+        <PackageReference Include="HyPlayer.PlayCore.Abstraction" Version="0.0.12" />
 
 
     </ItemGroup>
