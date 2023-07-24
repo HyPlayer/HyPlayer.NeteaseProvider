@@ -1,10 +1,11 @@
 ﻿using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
+using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.Songs;
 
 namespace HyPlayer.NeteaseProvider.Models;
 
-public class NeteaseSong : SingleSongBase, IHasTranslation
+public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover
 {
     public override string ProviderId => "ncm";
     public override string TypeId => "sg";
@@ -14,7 +15,7 @@ public class NeteaseSong : SingleSongBase, IHasTranslation
     public string? MvId { get; set; }
     public string? CdName { get; set; }
     public int TrackNumber { get; set; }
-    
+    public string? CoverUrl { get; set; }
 
     public required List<PersonBase>? Artists { get; init; }
 
@@ -24,4 +25,8 @@ public class NeteaseSong : SingleSongBase, IHasTranslation
     }
 
     public string? Translation { get; set; }
+    public Task<ImageResourceBase?> GetCover()
+    {
+        return Task.FromResult<ImageResourceBase?>(new NeteaseImageResource() { Url = CoverUrl });
+    }
 }
