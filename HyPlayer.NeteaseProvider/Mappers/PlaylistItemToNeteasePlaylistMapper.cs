@@ -18,7 +18,8 @@ public static class PlaylistItemToNeteasePlaylistMapper
                    UpdateTime = item.UpdateTime,
                    TrackCount = item.TrackCount,
                    PlayCount = item.PlayCount,
-                   SubscribedCount = item.SubscribedCount
+                   SubscribedCount = item.SubscribedCount,
+                   CoverUrl = item.CoverUrl
                };
     }
 }

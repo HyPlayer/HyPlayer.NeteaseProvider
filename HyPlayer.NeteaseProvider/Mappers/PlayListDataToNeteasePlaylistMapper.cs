@@ -13,7 +13,8 @@ public static class PlayListDataToNeteasePlaylistMapper
                    ActualId = data.Id,
                    Description = data.Description,
                    CreatorList = new List<string>() { data.Creator?.Nickname! },
-                   Creator = data.Creator?.MapToNeteaseUser()
+                   Creator = data.Creator?.MapToNeteaseUser(),
+                   CoverUrl = data.CoverUrl
                };
     }
 }

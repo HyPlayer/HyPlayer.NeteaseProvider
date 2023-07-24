@@ -18,7 +18,8 @@ public static class SongDetailItemToNeteaseMusicMapper
                        : new List<string>(),
                    Duration = item.Duration,
                    Available = true,
-                   Artists = item.Artists?.Select(ar=>(PersonBase)ar.MapToNeteaseArtist()).ToList()
+                   Artists = item.Artists?.Select(ar=>(PersonBase)ar.MapToNeteaseArtist()).ToList(),
+                   CoverUrl = item.Album?.PictureUrl
                };
     }
     
@@ -34,7 +35,8 @@ public static class SongDetailItemToNeteaseMusicMapper
                        : new List<string>(),
                    Duration = item.Duration,
                    Available = item.Privilege?.PlayLevel is not (null or "none"),
-                   Artists = item.Artists?.Select(ar=>(PersonBase)ar.MapToNeteaseArtist()).ToList()
+                   Artists = item.Artists?.Select(ar=>(PersonBase)ar.MapToNeteaseArtist()).ToList(),
+                   CoverUrl = item.Album?.PictureUrl
                };
     }
 }

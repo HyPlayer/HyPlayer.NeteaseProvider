@@ -16,7 +16,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
     public override string TypeId => "pl";
 
     private string[]? _trackIds;
-    private string? _coverUrl;
+    public string? CoverUrl;
     public NeteaseUser? Creator;
     public bool Subscribed { get; set; }
     public long UpdateTime { get; set; }
@@ -35,7 +35,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
         results.Match(
             success =>
             {
-                _coverUrl = success.Playlist?.CoverUrl;
+                CoverUrl = success.Playlist?.CoverUrl;
                 Description = success.Playlist?.Description;
                 if (!string.IsNullOrEmpty(success.Playlist?.Name))
                     Name = success.Playlist?.Name!;
@@ -78,7 +78,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
         return Task.FromResult<ImageResourceBase?>(
             new NeteaseImageResource
             {
-                Url = _coverUrl,
+                Url = CoverUrl,
             });
     }
 
