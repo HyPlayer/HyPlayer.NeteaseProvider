@@ -4,19 +4,23 @@ using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
-public class ArtistSongsApi : WeApiContractBase<ArtistSongsRequest, ArtistSongsResponse, ErrorResultBase, ArtistSongsActualRequest>
+public class ArtistSongsApi : WeApiContractBase<ArtistSongsRequest, ArtistSongsResponse, ErrorResultBase,
+    ArtistSongsActualRequest>
 {
     public override string Url => "https://music.163.com/api/v1/artist/songs";
     public override HttpMethod Method => HttpMethod.Post;
-    public override async Task MapRequest(ArtistSongsRequest request)
+
+    public override Task MapRequest(ArtistSongsRequest? request)
     {
-        ActualRequest = new ArtistSongsActualRequest
-                        {
-                            Id = request.ArtistId,
-                            OrderType = request.OrderType,
-                            Offset = request.Offset,
-                            Limit = request.Limit
-                        };
+        if (request is not null)
+            ActualRequest = new ArtistSongsActualRequest
+                            {
+                                Id = request.ArtistId,
+                                OrderType = request.OrderType,
+                                Offset = request.Offset,
+                                Limit = request.Limit
+                            };
+        return Task.CompletedTask;
     }
 }
 
@@ -28,7 +32,6 @@ public class ArtistSongsActualRequest : WeApiActualRequestBase
     [JsonPropertyName("order")] public string OrderType { get; set; } = "hot";
     [JsonPropertyName("offset")] public int Offset { get; set; } = 0;
     [JsonPropertyName("limit")] public int Limit { get; set; } = 100;
-
 }
 
 public class ArtistSongsRequest : RequestBase

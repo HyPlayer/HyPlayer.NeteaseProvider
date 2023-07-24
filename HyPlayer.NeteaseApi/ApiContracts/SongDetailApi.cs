@@ -8,8 +8,9 @@ public class SongDetailApi : WeApiContractBase<SongDetailRequest, SongDetailResp
 {
     public override string Url => "https://music.163.com/weapi/v3/song/detail";
     public override HttpMethod Method => HttpMethod.Post;
-    public override Task MapRequest(SongDetailRequest request)
+    public override Task MapRequest(SongDetailRequest? request)
     {
+        if (request is null) return Task.CompletedTask;
         var requestIds = string.IsNullOrWhiteSpace(request.Id)
             ? $"[{string.Join(",", request.IdList.Select(id => $$"""{"id":'{{id}}'}"""))}]"
             : $$"""[{"id": '{{request.Id}}'}]""";

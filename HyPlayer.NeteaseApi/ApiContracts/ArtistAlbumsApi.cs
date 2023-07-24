@@ -4,7 +4,8 @@ using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
-public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbumsResponse, ErrorResultBase, ArtistAlbumsActualRequest>
+public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbumsResponse, ErrorResultBase,
+    ArtistAlbumsActualRequest>
 {
     public override string Url => "https://music.163.com/weapi/artist/albums/";
     public override HttpMethod Method => HttpMethod.Post;
@@ -16,13 +17,15 @@ public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbu
         return req;
     }
 
-    public override async Task MapRequest(ArtistAlbumsRequest request)
+    public override Task MapRequest(ArtistAlbumsRequest? request)
     {
-        ActualRequest = new ArtistAlbumsActualRequest
-                        {
-                            Limit = request.Limit,
-                            Offset = request.Start
-                        };
+        if (request is not null)
+            ActualRequest = new ArtistAlbumsActualRequest
+                            {
+                                Limit = request.Limit,
+                                Offset = request.Start
+                            };
+        return Task.CompletedTask;
     }
 }
 

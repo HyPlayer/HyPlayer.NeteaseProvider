@@ -13,7 +13,7 @@ public abstract class ApiContractBase<TRequest, TResponse, TError, TActualReques
     public TRequest? Request { get; set; }
     public TActualRequest? ActualRequest { get; set; }
     public virtual string? UserAgent { get; } = null;
-    public abstract Task MapRequest(TRequest request);
+    public abstract Task MapRequest(TRequest? request);
     public abstract Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option);
 
     public abstract Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(

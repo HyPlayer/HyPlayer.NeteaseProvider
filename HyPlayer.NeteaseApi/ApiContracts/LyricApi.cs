@@ -9,12 +9,13 @@ public class LyricApi : EApiContractBase<LyricRequest, LyricResponse, ErrorResul
     public override string Url => "https://interface3.music.163.com/eapi/song/lyric/v1";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(LyricRequest request)
+    public override Task MapRequest(LyricRequest? request)
     {
-        ActualRequest = new()
-                        {
-                            Id = request.Id
-                        };
+        if (request is not null)
+            ActualRequest = new()
+                            {
+                                Id = request.Id
+                            };
         return Task.CompletedTask;
     }
 
@@ -41,7 +42,6 @@ public class LyricRequest : RequestBase
 
 public class LyricResponse : CodedResponseBase
 {
-
     [JsonPropertyName("transUser")] public LyricUserInfo? TranslationUser { get; set; }
     [JsonPropertyName("lyricUser")] public LyricUserInfo? LyricUser { get; set; }
     [JsonPropertyName("lrc")] public LyricInfo? Lyric { get; set; }
@@ -52,8 +52,7 @@ public class LyricResponse : CodedResponseBase
     [JsonPropertyName("yrc")] public LyricInfo? YunLyric { get; set; }
     [JsonPropertyName("ytlrc")] public LyricInfo? YunTranslationLyric { get; set; }
     [JsonPropertyName("yromalrc")] public LyricInfo? YunRomajiLyric { get; set; }
-    
-    
+
 
     public class LyricInfo
     {

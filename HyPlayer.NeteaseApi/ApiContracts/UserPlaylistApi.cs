@@ -4,18 +4,22 @@ using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
-public class UserPlaylistApi : WeApiContractBase<UserPlaylistRequest,UserPlaylistResponse,ErrorResultBase, UserPlaylistActualRequest>
+public class UserPlaylistApi : WeApiContractBase<UserPlaylistRequest, UserPlaylistResponse, ErrorResultBase,
+    UserPlaylistActualRequest>
 {
     public override string Url => "https://music.163.com/api/user/playlist";
     public override HttpMethod Method => HttpMethod.Post;
-    public override async Task MapRequest(UserPlaylistRequest request)
+
+    public override Task MapRequest(UserPlaylistRequest? request)
     {
-        ActualRequest = new UserPlaylistActualRequest
-                        {
-                            Uid = request.Uid,
-                            Limit = request.Limit,
-                            Offset = request.Offset
-                        };
+        if (request is not null)
+            ActualRequest = new UserPlaylistActualRequest
+                            {
+                                Uid = request.Uid,
+                                Limit = request.Limit,
+                                Offset = request.Offset
+                            };
+        return Task.CompletedTask;
     }
 }
 
@@ -54,5 +58,5 @@ public class UserPlaylistActualRequest : WeApiActualRequestBase
     [JsonPropertyName("uid")] public string Uid { get; set; }
     [JsonPropertyName("limit")] public int Limit { get; set; } = 30;
     [JsonPropertyName("offset")] public int Offset { get; set; }
-    [JsonPropertyName("includeVideo")] public bool IncludeVideo  => true;
+    [JsonPropertyName("includeVideo")] public bool IncludeVideo => true;
 }

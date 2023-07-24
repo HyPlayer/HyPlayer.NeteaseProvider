@@ -8,13 +8,15 @@ public class LikeApi : WeApiContractBase<LikeRequest, LikeResponse, ErrorResultB
 {
     public override string Url => "https://music.163.com/api/radio/like";
     public override HttpMethod Method => HttpMethod.Post;
-    public override Task MapRequest(LikeRequest request)
+
+    public override Task MapRequest(LikeRequest? request)
     {
-        ActualRequest = new LikeActualRequest
-                        {
-                            TrackId = request.TrackId,
-                            Like = request.Like
-                        };
+        if (request is not null)
+            ActualRequest = new LikeActualRequest
+                            {
+                                TrackId = request.TrackId,
+                                Like = request.Like
+                            };
         return Task.CompletedTask;
     }
 }
@@ -35,5 +37,4 @@ public class LikeRequest : RequestBase
 
 public class LikeResponse : CodedResponseBase
 {
-    
 }

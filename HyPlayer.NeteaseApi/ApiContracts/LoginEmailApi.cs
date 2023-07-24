@@ -14,8 +14,9 @@ public class LoginEmailApi : WeApiContractBase<LoginEmailRequest, LoginResponse,
     public override string UserAgent => "pc";
     public override Dictionary<string, string> Cookies => new() { { "os", "pc" }, { "appver", "2.9.8" } };
 
-    public override Task MapRequest(LoginEmailRequest request)
+    public override Task MapRequest(LoginEmailRequest? request)
     {
+        if (request is null) return Task.CompletedTask;
         var md5Password = string.IsNullOrEmpty(request.Md5Password)
             ? request.Password!.ToByteArrayUtf8().ComputeMd5().ToHexStringLower()
             : request.Md5Password!;
