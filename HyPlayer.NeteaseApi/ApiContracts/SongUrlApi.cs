@@ -9,14 +9,16 @@ public class SongUrlApi : EApiContractBase<SongUrlRequest, SongUrlResponse, Erro
     public override string Url => "https://interface.music.163.com/eapi/song/enhance/player/url/v1";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override async Task MapRequest(SongUrlRequest request)
+    public override Task MapRequest(SongUrlRequest? request)
     {
+        if (request is null) return Task.CompletedTask;
         var ids = string.IsNullOrWhiteSpace(request.Id) ? $"[{string.Join(",", request.IdList!)}]" : $"[{request.Id}]";
         ActualRequest = new SongUrlActualRequest
                         {
                             Ids = ids,
                             Level = request.Level
                         };
+        return Task.CompletedTask;
     }
 
     public override Dictionary<string, string> Cookies =>

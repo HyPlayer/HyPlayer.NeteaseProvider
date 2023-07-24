@@ -8,7 +8,7 @@ public class ToplistApi : RawApiContractBase<ToplistRequest,ToplistResponse, Err
 {
     public override string Url => "https://music.163.com/api/toplist";
     public override HttpMethod Method => HttpMethod.Get;
-    public override Task MapRequest(ToplistRequest request)
+    public override Task MapRequest(ToplistRequest? request)
     {
         return Task.CompletedTask;
     }

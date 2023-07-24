@@ -8,8 +8,9 @@ public class PlaylistTracksEditApi : WeApiContractBase<PlaylistTracksEditRequest
 {
     public override string Url => "https://music.163.com/weapi/playlist/manipulate/tracks";
     public override HttpMethod Method => HttpMethod.Post;
-    public override Task MapRequest(PlaylistTracksEditRequest request)
+    public override Task MapRequest(PlaylistTracksEditRequest? request)
     {
+        if (request is null) return Task.CompletedTask;
         var trackIds = request.TrackIds is not null ? $"[{string.Join(",", request.TrackIds)}]" : request.TrackId!;
 
         ActualRequest = new PlaylistTracksEditActualRequest

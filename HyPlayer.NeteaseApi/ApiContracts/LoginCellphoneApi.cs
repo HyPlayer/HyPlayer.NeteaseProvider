@@ -16,8 +16,9 @@ public class LoginCellphoneApi : WeApiContractBase<LoginCellphoneRequest, LoginR
 
     public override string UserAgent => "pc";
 
-    public override Task MapRequest(LoginCellphoneRequest request)
+    public override Task MapRequest(LoginCellphoneRequest? request)
     {
+        if (request is null) return Task.CompletedTask;
         var md5Password = string.IsNullOrEmpty(request.Md5Password)
             ? request.Password!.ToByteArrayUtf8().ComputeMd5().ToHexStringLower()
             : request.Md5Password!;

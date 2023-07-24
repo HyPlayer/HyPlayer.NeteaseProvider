@@ -8,12 +8,14 @@ public class LikelistApi : WeApiContractBase<LikelistRequest, LikelistResponse, 
 {
     public override string Url => "https://music.163.com/weapi/song/like/get";
     public override HttpMethod Method => HttpMethod.Post;
-    public override Task MapRequest(LikelistRequest request)
+
+    public override Task MapRequest(LikelistRequest? request)
     {
-        ActualRequest = new LikelistActualRequest
-                        {
-                            Uid = request.Uid
-                        };
+        if (request is not null)
+            ActualRequest = new LikelistActualRequest
+                            {
+                                Uid = request.Uid
+                            };
         return Task.CompletedTask;
     }
 }

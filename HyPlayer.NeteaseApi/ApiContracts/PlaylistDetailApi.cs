@@ -10,21 +10,21 @@ public class PlaylistDetailApi : RawApiContractBase<PlaylistDetailRequest, Playl
     public override string Url => "https://music.163.com/api/v6/playlist/detail";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(PlaylistDetailRequest request)
+    public override Task MapRequest(PlaylistDetailRequest? request)
     {
-        ActualRequest = new()
-                        {
-                            {"id", request.Id},
-                            {"n", "100000"},
-                            {"s", "8"}
-                        };
+        if (request is not null)
+            ActualRequest = new()
+                            {
+                                { "id", request.Id },
+                                { "n", "100000" },
+                                { "s", "8" }
+                            };
         return Task.CompletedTask;
     }
 }
 
 public class PlaylistDetailActualRequest : RawApiActualRequestBase
 {
-    
 }
 
 public class PlaylistDetailRequest : RequestBase
