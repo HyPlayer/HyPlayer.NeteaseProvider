@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -34,7 +35,7 @@ public class PlaylistDetailRequest : RequestBase
 
 public class PlaylistDetailResponse : CodedResponseBase
 {
-    [JsonPropertyName("privileges")] public SongDetailResponse.PrivilegeItem[]? Privileges { get; set; }
+    [JsonPropertyName("privileges")] public PrivilegeDto[]? Privileges { get; set; }
     [JsonPropertyName("playlist")] public PlayListData? Playlist { get; set; }
 
     public class PlayListData
@@ -48,11 +49,11 @@ public class PlaylistDetailResponse : CodedResponseBase
         [JsonPropertyName("subscribedCount")] public int SubscribedCount { get; set; }
         [JsonPropertyName("playCount")] public int PlayCount { get; set; }
         [JsonPropertyName("trackCount")] public int TrackCount { get; set; }
-        [JsonPropertyName("tracks")] public SongDetailResponse.SongItem[]? Tracks { get; set; }
+        [JsonPropertyName("tracks")] public EmittedSongDto[]? Tracks { get; set; }
         [JsonPropertyName("trackIds")] public TrackIdItem[]? TrackIds { get; set; }
         [JsonPropertyName("updateTime")] public long UpdateTime { get; set; }
         [JsonPropertyName("createTime")] public long CreateTime { get; set; }
-        [JsonPropertyName("creator")] public LoginResponse.ProfileData? Creator { get; set; }
+        [JsonPropertyName("creator")] public UserInfoDto? Creator { get; set; }
         [JsonPropertyName("subscribed")] public bool? Subscribed { get; set; }
 
         public class TrackIdItem

@@ -1,4 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseApi.Models.ResponseModels;
 using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 
@@ -6,7 +7,7 @@ namespace HyPlayer.NeteaseProvider.Mappers;
 
 public static class SongDetailItemToNeteaseMusicMapper
 {
-    public static NeteaseSong MapToNeteaseMusic(this SongDetailResponse.SongItem item)
+    public static NeteaseSong MapToNeteaseMusic(this EmittedSongDto item)
     {
         return new NeteaseSong
                {
@@ -23,7 +24,7 @@ public static class SongDetailItemToNeteaseMusicMapper
                };
     }
     
-    public static NeteaseSong MapToNeteaseMusic(this SongItemWithPrivilege item)
+    public static NeteaseSong MapToNeteaseMusic(this EmittedSongDtoWithPrivilege item)
     {
         return new NeteaseSong
                {

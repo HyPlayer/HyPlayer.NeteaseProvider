@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -22,7 +23,7 @@ public class ToplistRequest : RequestBase
 public class ToplistResponse : CodedResponseBase
 {
     
-    [JsonPropertyName("list")] public UserPlaylistResponse.PlaylistItem[]? List { get; set; }
+    [JsonPropertyName("list")] public PlaylistDto[]? List { get; set; }
 }
 
 public class ToplistActualRequest : RawApiActualRequestBase

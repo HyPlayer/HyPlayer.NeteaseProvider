@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -32,25 +33,7 @@ public class UserPlaylistRequest : RequestBase
 
 public class UserPlaylistResponse : CodedResponseBase
 {
-    [JsonPropertyName("playlist")] public List<PlaylistItem>? Playlists { get; set; }
-
-
-    public class PlaylistItem
-    {
-        [JsonPropertyName("creator")] public LoginResponse.ProfileData? Creator { get; set; }
-        [JsonPropertyName("privacy")] public int Privacy { get; set; }
-        [JsonPropertyName("trackCount")] public int TrackCount { get; set; }
-        [JsonPropertyName("coverImgUrl")] public string? CoverUrl { get; set; }
-        [JsonPropertyName("updateFrequency")] public string? UpdateFrequency { get; set; }
-        [JsonPropertyName("playCount")] public long PlayCount { get; set; }
-        [JsonPropertyName("subscribedCount")] public long SubscribedCount { get; set; }
-
-        [JsonPropertyName("name")] public string? Name { get; set; }
-        [JsonPropertyName("id")] public string? Id { get; set; }
-        [JsonPropertyName("updateTime")] public long UpdateTime { get; set; }
-        [JsonPropertyName("description")] public string? Description { get; set; }
-        [JsonPropertyName("subscribed")] public bool Subscribed { get; set; }
-    }
+    [JsonPropertyName("playlist")] public List<PlaylistDto>? Playlists { get; set; }
 }
 
 public class UserPlaylistActualRequest : WeApiActualRequestBase
