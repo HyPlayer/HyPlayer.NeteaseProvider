@@ -1,11 +1,12 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseApi.Models.ResponseModels;
 using HyPlayer.NeteaseProvider.Models;
 
 namespace HyPlayer.NeteaseProvider.Mappers;
 
 public static class ProfileDataToNeteaseUserMapper
 {
-    public static NeteaseUser MapToNeteaseUser(this LoginResponse.ProfileData profileData)
+    public static NeteaseUser MapToNeteaseUser(this UserInfoDto profileData)
     {
         return new NeteaseUser
                {

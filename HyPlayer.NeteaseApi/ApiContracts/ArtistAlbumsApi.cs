@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -46,10 +47,10 @@ public class ArtistAlbumsActualRequest : WeApiActualRequestBase
 public class ArtistAlbumsResponse : CodedResponseBase
 {
     [JsonPropertyName("more")] public bool HasMore { get; set; }
-    [JsonPropertyName("hotAlbums")] public AlbumItem[]? Albums { get; set; }
+    [JsonPropertyName("hotAlbums")] public ArtistAlbumDto[]? Albums { get; set; }
 
 
-    public class AlbumItem : SongDetailResponse.SongItem.AlbumData
+    public class ArtistAlbumDto : AlbumDto
     {
         [JsonPropertyName("alias")] public string[]? Alias { get; set; }
         [JsonPropertyName("transNames")] public string[]? Translations { get; set; }
@@ -59,6 +60,6 @@ public class ArtistAlbumsResponse : CodedResponseBase
         [JsonPropertyName("subType")] public string? Subtype { get; set; }
         [JsonPropertyName("type")] public string? AlbumType { get; set; }
         [JsonPropertyName("isSub")] public bool IsSubscribed { get; set; }
-        [JsonPropertyName("artists")] public SongDetailResponse.SongItem.ArtistItem[]? Artists { get; set; }
+        [JsonPropertyName("artists")] public ArtistDto[]? Artists { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -46,10 +47,5 @@ public class ArtistSongsResponse : CodedResponseBase
 {
     [JsonPropertyName("total")] public bool Total { get; set; }
     [JsonPropertyName("more")] public bool HasMore { get; set; }
-    [JsonPropertyName("songs")] public SongItemWithPrivilege[]? Songs { get; set; }
-}
-
-public class SongItemWithPrivilege : SongDetailResponse.SongItem
-{
-    [JsonPropertyName("privilege")] public SongDetailResponse.PrivilegeItem? Privilege { get; set; }
+    [JsonPropertyName("songs")] public EmittedSongDtoWithPrivilege[]? Songs { get; set; }
 }

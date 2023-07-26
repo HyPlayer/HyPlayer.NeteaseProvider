@@ -1,11 +1,12 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseApi.Models.ResponseModels;
 using HyPlayer.NeteaseProvider.Models;
 
 namespace HyPlayer.NeteaseProvider.Mappers;
 
 public static class AlbumItemToNeteaseAlbumMapper
 {
-    public static NeteaseAlbum? MapToNeteaseAlbum(this ArtistAlbumsResponse.AlbumItem item)
+    public static NeteaseAlbum? MapToNeteaseAlbum(this ArtistAlbumsResponse.ArtistAlbumDto item)
     {
         return new NeteaseAlbum
                {
