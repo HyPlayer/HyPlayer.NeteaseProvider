@@ -47,7 +47,7 @@ public class NeteaseApisTests
             (resp) =>
             {
                 resp.Should().NotBeNull();
-                resp.Profile.Gender.Should().BeOneOf(0, 1);
+                resp.Profile?.Gender.Should().BeOneOf(0, 1);
                 return true;
             },
             (err) => throw err
@@ -69,7 +69,7 @@ public class NeteaseApisTests
             success =>
             {
                 success.Songs.Should().HaveCount(1);
-                success.Songs[0].Id.Should().Be(id);
+                success.Songs?[0].Id.Should().Be(id);
                 return true;
             },
             error => throw error
@@ -104,7 +104,7 @@ public class NeteaseApisTests
         var result =
             await _provider.RequestAsync(
                 NeteaseApis.SongUrlApi,
-                new()
+                new SongUrlRequest()
                 {
                     Id = id,
                     Level = "jymaster"
@@ -128,13 +128,13 @@ public class NeteaseApisTests
         var result =
             await _provider.RequestAsync(
                 NeteaseApis.SongUrlApi,
-                new()
+                new SongUrlRequest()
                 {
                     IdList = ids.ToArray(),
                     Level = "jymaster"
                 });
         result.Match(
-            success => true,
+            _ => true,
             error => throw error
         );
     }
@@ -146,12 +146,12 @@ public class NeteaseApisTests
     {
         var result = await _provider.RequestAsync(
             NeteaseApis.PlaylistDetailApi,
-            new()
+            new PlaylistDetailRequest()
             {
                 Id = playlistId
             });
         result.Match(
-            success => true,
+            _ => true,
             error => throw error
         );
     }

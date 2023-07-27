@@ -46,7 +46,7 @@ public class NeteaseProvider : ProviderBase,
                { "rd", "电台" },
            };
 
-    public Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
+    public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract,
         CancellationToken cancellationToken = default)
         where TError : ErrorResultBase
@@ -55,16 +55,15 @@ public class NeteaseProvider : ProviderBase,
     {
         try
         {
-            return _handler.RequestAsync(contract, Option, cancellationToken);
+            return await _handler.RequestAsync(contract, Option, cancellationToken);
         }
         catch (Exception ex)
         {
-            return Task.FromResult(
-                Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex)));
+            return Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex));
         }
     }
 
-    public Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
+    public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest request,
         CancellationToken cancellationToken = default)
         where TError : ErrorResultBase
@@ -73,12 +72,11 @@ public class NeteaseProvider : ProviderBase,
     {
         try
         {
-            return _handler.RequestAsync(contract, request, Option, cancellationToken);
+            return await _handler.RequestAsync(contract, request, Option, cancellationToken);
         }
         catch (Exception ex)
         {
-            return Task.FromResult(
-                Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex)));
+            return Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex));
         }
     }
 
