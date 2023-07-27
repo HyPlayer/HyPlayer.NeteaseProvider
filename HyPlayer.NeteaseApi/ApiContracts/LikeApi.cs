@@ -4,6 +4,14 @@ using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 喜欢歌曲
+    /// </summary>
+    public static LikeApi LikeApi = new();
+}
+
 public class LikeApi : WeApiContractBase<LikeRequest, LikeResponse, ErrorResultBase, LikeActualRequest>
 {
     public override string Url => "https://music.163.com/api/radio/like";
@@ -31,7 +39,14 @@ public class LikeActualRequest : WeApiActualRequestBase
 
 public class LikeRequest : RequestBase
 {
+    /// <summary>
+    /// 歌曲 ID
+    /// </summary>
     public required string TrackId { get; set; }
+    
+    /// <summary>
+    /// 是否喜欢
+    /// </summary>
     public bool Like { get; set; } = true;
 }
 

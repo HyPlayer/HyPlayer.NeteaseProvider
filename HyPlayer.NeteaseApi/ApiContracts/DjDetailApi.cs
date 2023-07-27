@@ -5,6 +5,14 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 电台详情
+    /// </summary>
+    public static DjDetailApi DjDetailApi = new();
+}
+
 public class DjDetailApi : WeApiContractBase<DjDetailRequest, DjDetailResponse, ErrorResultBase, DjDetailActualRequest>
 {
     public override string Url => "https://music.163.com/weapi/djDj/get";
@@ -22,6 +30,9 @@ public class DjDetailApi : WeApiContractBase<DjDetailRequest, DjDetailResponse, 
 
 public class DjDetailRequest : RequestBase
 {
+    /// <summary>
+    /// 电台 ID
+    /// </summary>
     public required string Id { get; set; }
 }
 

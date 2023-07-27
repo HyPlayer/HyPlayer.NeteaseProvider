@@ -4,6 +4,14 @@ using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 删除云盘歌曲
+    /// </summary>
+    public static UserCloudDeleteApi UserCloudDeleteApi = new();
+}
+
 public class UserCloudDeleteApi : WeApiContractBase<UserCloudDeleteRequest, UserCloudDeleteResponse, ErrorResultBase,
     UserCloudDeleteActualRequest>
 {
@@ -26,7 +34,14 @@ public class UserCloudDeleteApi : WeApiContractBase<UserCloudDeleteRequest, User
 
 public class UserCloudDeleteRequest : RequestBase
 {
+    /// <summary>
+    /// 歌曲 ID
+    /// </summary>
     public string? Id { get; set; }
+    
+    /// <summary>
+    /// 歌曲 ID 列表
+    /// </summary>
     public string[]? IdList { get; set; }
 }
 

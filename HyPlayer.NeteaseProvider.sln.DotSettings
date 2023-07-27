@@ -4,7 +4,12 @@
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Reformat/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Shortcut/@EntryValue">neteaseapi</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Text/@EntryValue">public class $ApiName$Api : $ApiType$ContractBase&lt;$ApiName$Request, $ApiName$Response, ErrorResultBase, $ApiName$ActualRequest&gt;
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Text/@EntryValue">public static partial class NeteaseApis
+{
+    public static $ApiName$Api $ApiName$Api = new();
+}
+
+public class $ApiName$Api : $ApiType$ContractBase&lt;$ApiName$Request, $ApiName$Response, ErrorResultBase, $ApiName$ActualRequest&gt;
 {
     public override string Url =&gt; ""; 
     public override HttpMethod Method =&gt; HttpMethod.Post;

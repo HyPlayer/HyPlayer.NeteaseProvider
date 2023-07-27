@@ -5,6 +5,15 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 喜欢歌曲
+    /// </summary>
+    public static UserCloudApi UserCloudApi = new();
+}
+
+
 public class UserCloudApi : WeApiContractBase<UserCloudRequest, UserCloudResponse, ErrorResultBase, UserCloudActualRequest>
 {
     public override string Url => "https://music.163.com/api/v1/cloud/get";
@@ -23,7 +32,14 @@ public class UserCloudApi : WeApiContractBase<UserCloudRequest, UserCloudRespons
 
 public class UserCloudRequest : RequestBase
 {
+    /// <summary>
+    /// 起始位置
+    /// </summary>
     public int Limit { get; set; } = 30;
+    
+    /// <summary>
+    /// 获取数量
+    /// </summary>
     public int Offset { get; set; } = 0;
 }
 

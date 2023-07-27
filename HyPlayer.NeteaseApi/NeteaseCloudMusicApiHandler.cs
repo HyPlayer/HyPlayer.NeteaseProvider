@@ -36,6 +36,7 @@ public class NeteaseCloudMusicApiHandler
         where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
     {
         var client = new HttpClient(_httpClientHandler);
+        contract.Request = request;
         await contract.MapRequest(request);
         var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken), cancellationToken);
         return await contract.ProcessResponseAsync(response, option, cancellationToken);

@@ -5,6 +5,15 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 歌曲详情
+    /// </summary>
+    public static SongDetailApi SongDetailApi = new();
+}
+
+
 public class SongDetailApi : WeApiContractBase<SongDetailRequest, SongDetailResponse, ErrorResultBase, SongDetailActualRequest>
 {
     public override string Url => "https://music.163.com/weapi/v3/song/detail";
@@ -27,7 +36,14 @@ public class SongDetailActualRequest : WeApiActualRequestBase
 
 public class SongDetailRequest : RequestBase
 {
+    /// <summary>
+    /// 歌曲 ID 列表
+    /// </summary>
     public List<string>? IdList { get; set; }
+    
+    /// <summary>
+    /// 歌曲 ID
+    /// </summary>
     public string? Id { get; set; }
 }
 

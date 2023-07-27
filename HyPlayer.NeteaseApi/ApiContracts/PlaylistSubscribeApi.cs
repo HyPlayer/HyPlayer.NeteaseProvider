@@ -4,6 +4,14 @@ using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 歌单收藏
+    /// </summary>
+    public static PlaylistSubscribeApi PlaylistSubscribeApi = new();
+}
+
 public class PlaylistSubscribeApi : WeApiContractBase<PlaylistSubscribeRequest, PlaylistSubscribeResponse,
     ErrorResultBase, PlaylistSubscribeActualRequest>
 {
@@ -39,7 +47,14 @@ public class PlaylistSubscribeActualRequest : WeApiActualRequestBase
 
 public class PlaylistSubscribeRequest : RequestBase
 {
+    /// <summary>
+    /// 是否收藏
+    /// </summary>
     public bool IsSubscribe { get; set; } = true;
+
+    /// <summary>
+    /// 歌单 ID
+    /// </summary>
     public required string PlaylistId { get; set; }
 }
 

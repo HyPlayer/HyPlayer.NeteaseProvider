@@ -5,6 +5,14 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 私人 FM
+    /// </summary>
+    public static PersonalFmApi PersonalFmApi = new();
+}
+
 public class PersonalFmApi : WeApiContractBase<PersonalFmRequest, PersonalFmResponse, ErrorResultBase, PersonalFmActualRequest>
 {
     public override string Url => "https://music.163.com/weapi/v1/radio/get"; 

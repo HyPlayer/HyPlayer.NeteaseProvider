@@ -4,6 +4,14 @@ using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 歌词
+    /// </summary>
+    public static LyricApi LyricApi = new();
+}
+
 public class LyricApi : EApiContractBase<LyricRequest, LyricResponse, ErrorResultBase, LyricActualRequest>
 {
     public override string Url => "https://interface3.music.163.com/eapi/song/lyric/v1";
@@ -37,6 +45,9 @@ public class LyricActualRequest : EApiActualRequestBase
 
 public class LyricRequest : RequestBase
 {
+    /// <summary>
+    /// 歌曲 ID
+    /// </summary>
     public required string Id { get; set; }
 }
 
