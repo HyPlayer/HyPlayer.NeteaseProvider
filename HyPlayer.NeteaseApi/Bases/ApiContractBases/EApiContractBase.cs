@@ -18,7 +18,7 @@ public abstract class
     public static readonly byte[] eapiKey = "e82ckenh8dichen8"u8.ToArray();
     public abstract string ApiPath { get; }
 
-    public override Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option)
+    public override Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
         var url = Regex.Replace(Url, @"\w*api", "eapi");
         if (option.DegradeHttp)
@@ -91,7 +91,7 @@ public abstract class
     }
 
     public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(
-        HttpResponseMessage response, ApiHandlerOption option)
+        HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
         if (!response.IsSuccessStatusCode)
             return new ErrorResultBase((int)response.StatusCode, $"请求返回 HTTP 代码: {response.StatusCode}");
@@ -130,7 +130,7 @@ public abstract class
             catch
             {
                 // 防止加密后开头刚好是 {
-                //return new ErrorResultBase(500, "JSON 解析错误");
+                // return new ErrorResultBase(500, "JSON 解析错误");
                 using var aes = Aes.Create();
                 aes.BlockSize = 128;
                 aes.Key = eapiKey;

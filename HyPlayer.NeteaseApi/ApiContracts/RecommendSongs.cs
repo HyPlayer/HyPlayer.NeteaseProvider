@@ -12,6 +12,8 @@ public class RecommendSongsApi : WeApiContractBase<RecommendSongsRequest, Recomm
 
     public override Dictionary<string, string> Cookies => new() { { "os", "ios" } };
 
+    public override string? UserAgent => "ios";
+
     public override Task MapRequest(RecommendSongsRequest? request)
     {
         return Task.CompletedTask;

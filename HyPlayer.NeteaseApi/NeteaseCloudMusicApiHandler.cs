@@ -10,7 +10,7 @@ public class NeteaseCloudMusicApiHandler
         new()
         {
             UseCookies = false,
-            AutomaticDecompression =  DecompressionMethods.GZip | DecompressionMethods.Deflate,
+            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
         };
 
     public async void UseProxyConfiguration(bool useProxy, IWebProxy proxy)
@@ -18,23 +18,26 @@ public class NeteaseCloudMusicApiHandler
         _httpClientHandler.UseProxy = useProxy;
         _httpClientHandler.Proxy = proxy;
     }
-    
+
     public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
-        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, ApiHandlerOption option)
-         where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, ApiHandlerOption option,
+        CancellationToken cancellationToken = default)
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
     {
         var client = new HttpClient(_httpClientHandler);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option));
-        return await contract.ProcessResponseAsync(response, option);
+        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken),
+                                              cancellationToken);
+        return await contract.ProcessResponseAsync(response, option, cancellationToken);
     }
-    
+
     public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
-        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest? request, ApiHandlerOption option)
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest? request,
+        ApiHandlerOption option, CancellationToken cancellationToken = default)
         where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
     {
         var client = new HttpClient(_httpClientHandler);
         await contract.MapRequest(request);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option));
-        return await contract.ProcessResponseAsync(response, option);
+        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken), cancellationToken);
+        return await contract.ProcessResponseAsync(response, option, cancellationToken);
     }
 }

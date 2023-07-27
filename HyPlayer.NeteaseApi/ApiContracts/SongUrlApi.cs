@@ -9,6 +9,7 @@ public class SongUrlApi : EApiContractBase<SongUrlRequest, SongUrlResponse, Erro
     public override string Url => "https://interface.music.163.com/eapi/song/enhance/player/url/v1";
     public override HttpMethod Method => HttpMethod.Post;
 
+    public override string? UserAgent => "andriod";
     public override Task MapRequest(SongUrlRequest? request)
     {
         if (request is null) return Task.CompletedTask;
