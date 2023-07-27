@@ -22,7 +22,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
     private static readonly byte[] presetKey = "0CoJUm6Qyw8W8jud"u8.ToArray();
     private const string base62 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    public override Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option)
+    public override Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
         var url = Url;
         if (option.DegradeHttp)
@@ -64,7 +64,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
     }
 
     public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(
-        HttpResponseMessage response, ApiHandlerOption option)
+        HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
         if (!response.IsSuccessStatusCode)
             return new ErrorResultBase((int)response.StatusCode, $"请求返回 HTTP 代码: {response.StatusCode}");

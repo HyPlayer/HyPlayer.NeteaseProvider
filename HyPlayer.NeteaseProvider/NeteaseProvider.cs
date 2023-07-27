@@ -47,35 +47,38 @@ public class NeteaseProvider : ProviderBase,
            };
 
     public Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
-        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract)
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract,
+        CancellationToken cancellationToken = default)
         where TError : ErrorResultBase
         where TActualRequest : ActualRequestBase
         where TRequest : RequestBase
     {
         try
         {
-            return _handler.RequestAsync(contract, Option);
+            return _handler.RequestAsync(contract, Option, cancellationToken);
         }
         catch (Exception ex)
         {
-            return Task.FromResult(Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex)));
+            return Task.FromResult(
+                Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex)));
         }
-        
     }
 
     public Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
-        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest request)
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest request,
+        CancellationToken cancellationToken = default)
         where TError : ErrorResultBase
         where TActualRequest : ActualRequestBase
         where TRequest : RequestBase
     {
         try
         {
-            return _handler.RequestAsync(contract, request, Option);
+            return _handler.RequestAsync(contract, request, Option, cancellationToken);
         }
         catch (Exception ex)
         {
-            return Task.FromResult(Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex)));
+            return Task.FromResult(
+                Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex)));
         }
     }
 
@@ -97,7 +100,7 @@ public class NeteaseProvider : ProviderBase,
                 LoginedUser = success.Profile?.MapToNeteaseUser();
                 return true;
             },
-            error => false
+            _ => false
         );
     }
 
@@ -118,7 +121,7 @@ public class NeteaseProvider : ProviderBase,
                 LoginedUser = success.Profile?.MapToNeteaseUser();
                 return true;
             },
-            error => false
+            _ => false
         );
     }
 
@@ -127,7 +130,7 @@ public class NeteaseProvider : ProviderBase,
         var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = song.Id });
         return results.Match(
             success => success.Map(),
-            error => new()
+            _ => new()
         ).Select(t => (RawLyricInfo)t).ToList();
     }
 
@@ -185,7 +188,7 @@ public class NeteaseProvider : ProviderBase,
             {
                 await RequestAsync(
                     NeteaseApis.PlaylistTracksEditApi,
-                    new()
+                    new PlaylistTracksEditRequest()
                     {
                         IsAdd = true,
                         PlaylistId = targetId,
@@ -197,7 +200,7 @@ public class NeteaseProvider : ProviderBase,
         else if (inProviderId.StartsWith("pl"))
         {
             await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
-                               new()
+                               new PlaylistSubscribeRequest()
                                {
                                    IsSubscribe = true,
                                    PlaylistId = inProviderId.Substring(2)
@@ -224,7 +227,7 @@ public class NeteaseProvider : ProviderBase,
             {
                 await RequestAsync(
                     NeteaseApis.PlaylistTracksEditApi,
-                    new()
+                    new PlaylistTracksEditRequest()
                     {
                         IsAdd = false,
                         PlaylistId = targetId,
@@ -236,7 +239,7 @@ public class NeteaseProvider : ProviderBase,
         else if (inProviderId.StartsWith("pl"))
         {
             await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
-                               new()
+                               new PlaylistSubscribeRequest()
                                {
                                    IsSubscribe = true,
                                    PlaylistId = inProviderId.Substring(2)
@@ -253,7 +256,7 @@ public class NeteaseProvider : ProviderBase,
                                                                  });
         return result.Match(
             success => success.TrackIds.ToList(),
-            error => new List<string>());
+            _ => new List<string>());
     }
 
     public async Task<ProvidableItemBase?> GetProvidableItemById(string inProviderId)
@@ -264,15 +267,14 @@ public class NeteaseProvider : ProviderBase,
         {
             case "ns":
                 var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
-                                                    new()
+                                                    new SongDetailRequest()
                                                     {
                                                         Id = inProviderId.Substring(2)
                                                     });
                 return songResult.Match(
                     success => success.Songs?[0].MapToNeteaseMusic(),
-                    error => null
+                    _ => null
                 );
-                break;
             case "pl":
                 var playlistResult = await RequestAsync(
                     NeteaseApis.PlaylistDetailApi,
@@ -282,9 +284,8 @@ public class NeteaseProvider : ProviderBase,
                     });
                 return playlistResult.Match(
                     success => success.Playlist?.MapToNeteasePlaylist(),
-                    error => null
+                    _ => null
                 );
-                break;
         }
 
         throw new NotImplementedException();
@@ -301,14 +302,14 @@ public class NeteaseProvider : ProviderBase,
             {
                 case "ns":
                     var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
-                                                        new()
+                                                        new SongDetailRequest()
                                                         {
                                                             IdList = inProviderIds.Select(t => t.Substring(2)).ToList()
                                                         });
                     return songResult.Match(
                         success => success.Songs?.Select(t => (ProvidableItemBase)t.MapToNeteaseMusic()).ToList() ??
                                    new List<ProvidableItemBase>(),
-                        error => new List<ProvidableItemBase>()
+                        _ => new List<ProvidableItemBase>()
                     );
             }
         }

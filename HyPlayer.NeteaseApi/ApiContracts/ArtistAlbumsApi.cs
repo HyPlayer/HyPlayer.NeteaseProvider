@@ -11,9 +11,9 @@ public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbu
     public override string Url => "https://music.163.com/weapi/artist/albums/";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option)
+    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        var req = await base.GenerateRequestMessageAsync(option);
+        var req = await base.GenerateRequestMessageAsync(option, cancellationToken);
         req.RequestUri = new Uri(Url + Request!.ArtistId);
         return req;
     }

@@ -12,9 +12,10 @@ public class PlaylistSubscribeApi : WeApiContractBase<PlaylistSubscribeRequest, 
 
     private string _action = "subscribe";
 
-    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option)
+    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(
+        ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        var req = await base.GenerateRequestMessageAsync(option);
+        var req = await base.GenerateRequestMessageAsync(option, cancellationToken);
         req.RequestUri = new Uri(Url + _action);
         return req;
     }
@@ -22,10 +23,10 @@ public class PlaylistSubscribeApi : WeApiContractBase<PlaylistSubscribeRequest, 
     public override Task MapRequest(PlaylistSubscribeRequest? request)
     {
         if (request is null) return Task.CompletedTask;
-            ActualRequest = new()
-                            {
-                                PlaylistId = request.PlaylistId
-                            };
+        ActualRequest = new()
+                        {
+                            PlaylistId = request.PlaylistId
+                        };
         _action = request.IsSubscribe ? "subscribe" : "unsubscribe";
         return Task.CompletedTask;
     }
