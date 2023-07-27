@@ -4,6 +4,15 @@ using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 歌曲播放链接
+    /// </summary>
+    public static SongUrlApi SongUrlApi = new();
+}
+
+
 public class SongUrlApi : EApiContractBase<SongUrlRequest, SongUrlResponse, ErrorResultBase, SongUrlActualRequest>
 {
     public override string Url => "https://interface.music.163.com/eapi/song/enhance/player/url/v1";
@@ -42,8 +51,19 @@ public class SongUrlActualRequest : EApiActualRequestBase
 
 public class SongUrlRequest : RequestBase
 {
+    /// <summary>
+    /// 歌曲 ID
+    /// </summary>
     public string? Id { get; set; }
+    
+    /// <summary>
+    /// 歌曲 ID 列表
+    /// </summary>
     public string[]? IdList { get; set; }
+    
+    /// <summary>
+    /// 音质
+    /// </summary>
     public required string Level { get; set; }
 }
 

@@ -5,6 +5,14 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 歌手歌曲
+    /// </summary>
+    public static ArtistSongsApi ArtistSongsApi = new();
+}
+
 public class ArtistSongsApi : WeApiContractBase<ArtistSongsRequest, ArtistSongsResponse, ErrorResultBase,
     ArtistSongsActualRequest>
 {
@@ -37,9 +45,24 @@ public class ArtistSongsActualRequest : WeApiActualRequestBase
 
 public class ArtistSongsRequest : RequestBase
 {
+    /// <summary>
+    /// 歌手 ID
+    /// </summary>
     public required string ArtistId { get; set; }
+    
+    /// <summary>
+    /// 排序类型 hot, time
+    /// </summary>
     public string OrderType { get; set; } = "hot";
+    
+    /// <summary>
+    /// 起始位置
+    /// </summary>
     public int Offset { get; set; } = 0;
+    
+    /// <summary>
+    /// 获取数量
+    /// </summary>
     public int Limit { get; set; } = 200;
 }
 

@@ -5,6 +5,14 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 歌单详情
+    /// </summary>
+    public static PlaylistDetailApi PlaylistDetailApi = new();
+}
+
 public class PlaylistDetailApi : RawApiContractBase<PlaylistDetailRequest, PlaylistDetailResponse, ErrorResultBase,
     PlaylistDetailActualRequest>
 {
@@ -30,6 +38,9 @@ public class PlaylistDetailActualRequest : RawApiActualRequestBase
 
 public class PlaylistDetailRequest : RequestBase
 {
+    /// <summary>
+    /// 歌单 ID
+    /// </summary>
     public required string Id { get; set; }
 }
 

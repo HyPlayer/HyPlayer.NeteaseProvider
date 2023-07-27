@@ -5,6 +5,14 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 喜欢歌曲
+    /// </summary>
+    public static UserPlaylistApi UserPlaylistApi = new();
+}
+
 public class UserPlaylistApi : WeApiContractBase<UserPlaylistRequest, UserPlaylistResponse, ErrorResultBase,
     UserPlaylistActualRequest>
 {
@@ -26,8 +34,19 @@ public class UserPlaylistApi : WeApiContractBase<UserPlaylistRequest, UserPlayli
 
 public class UserPlaylistRequest : RequestBase
 {
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
     public required string Uid { get; set; }
+    
+    /// <summary>
+    /// 获取数目
+    /// </summary>
     public int Limit { get; set; } = 30;
+    
+    /// <summary>
+    /// 起始位置
+    /// </summary>
     public int Offset { get; set; } = 0;
 }
 

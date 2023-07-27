@@ -7,6 +7,14 @@ using Kengwang.Toolkit;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 手机登录
+    /// </summary>
+    public static LoginCellphoneApi LoginCellphoneApi = new();
+}
+
 public class LoginCellphoneApi : WeApiContractBase<LoginCellphoneRequest, LoginResponse, ErrorResultBase,
     LoginCellphoneActualRequest>
 {
@@ -52,9 +60,24 @@ public class LoginCellphoneActualRequest : WeApiActualRequestBase
 
 public class LoginCellphoneRequest : RequestBase
 {
+    /// <summary>
+    /// 手机号
+    /// </summary>
     public required string Cellphone { get; set; }
+    
+    /// <summary>
+    /// 国家代码
+    /// </summary>
     public string CountryCode { get; set; } = "86";
+    
+    /// <summary>
+    /// 密码
+    /// </summary>
     public string? Password { get; set; }
+    
+    /// <summary>
+    /// 密码 (MD5 加密)
+    /// </summary>
     public string? Md5Password { get; set; }
 }
 

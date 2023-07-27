@@ -5,6 +5,15 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 热门榜单
+    /// </summary>
+    public static ToplistApi ToplistApi = new();
+}
+
+
 public class ToplistApi : RawApiContractBase<ToplistRequest,ToplistResponse, ErrorResultBase,ToplistActualRequest  >
 {
     public override string Url => "https://music.163.com/api/toplist";

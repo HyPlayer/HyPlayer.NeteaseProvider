@@ -5,6 +5,14 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 推荐歌单
+    /// </summary>
+    public static RecommendPlaylistsApi RecommendPlaylistsApi = new();
+}
+
 public class RecommendPlaylistsApi : WeApiContractBase<RecommendPlaylistsRequest, RecommendPlaylistsResponse, ErrorResultBase, RecommendPlaylistsActualRequest>
 {
     public override string Url => "https://music.163.com/weapi/v1/discovery/recommend/resource";

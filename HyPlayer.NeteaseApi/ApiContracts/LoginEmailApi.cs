@@ -6,6 +6,14 @@ using Kengwang.Toolkit;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
+public static partial class NeteaseApis
+{
+    /// <summary>
+    /// 邮箱登录
+    /// </summary>
+    public static LoginEmailApi LoginEmailApi = new();
+}
+
 public class LoginEmailApi : WeApiContractBase<LoginEmailRequest, LoginResponse, ErrorResultBase,
     LoginEmailActualRequest>
 {
@@ -48,7 +56,18 @@ public class LoginEmailActualRequest : WeApiActualRequestBase
 
 public class LoginEmailRequest : RequestBase
 {
+    /// <summary>
+    /// 邮箱
+    /// </summary>
     public required string Email { get; set; }
+    
+    /// <summary>
+    /// 密码
+    /// </summary>
     public string? Password { get; set; }
+    
+    /// <summary>
+    /// 密码 (MD5)
+    /// </summary>
     public string? Md5Password { get; set; }
 }
