@@ -31,11 +31,11 @@ public class PersonalFmRequest : RequestBase
 
 public class PersonalFmResponse : CodedResponseBase
 {
-    [JsonPropertyName("data")] public PersonalFmDataItem[] Items { get; set; }
+    [JsonPropertyName("data")] public PersonalFmDataItem[]? Items { get; set; }
 
     public class PersonalFmDataItem : SongDto
     {
-        [JsonPropertyName("reason")] public string RecommendedReason { get; set; }
+        [JsonPropertyName("reason")] public string? RecommendedReason { get; set; }
     }
 }
 

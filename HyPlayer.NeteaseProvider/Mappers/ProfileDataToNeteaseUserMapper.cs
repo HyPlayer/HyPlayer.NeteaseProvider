@@ -12,7 +12,7 @@ public static class ProfileDataToNeteaseUserMapper
                {
                    Name = profileData.Nickname!,
                    ActualId = profileData.UserId!,
-                   Gender = profileData.Gender,
+                   Gender = profileData.Gender ?? -1,
                    BackgroundUrl = profileData.BackgroundUrl,
                    Followed = profileData.Followed is true,
                    VipType = profileData.VipType,

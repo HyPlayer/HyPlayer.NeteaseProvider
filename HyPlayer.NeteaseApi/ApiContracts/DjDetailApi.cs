@@ -38,11 +38,11 @@ public class DjDetailRequest : RequestBase
 
 public class DjDetailResponse : CodedResponseBase
 {
-    [JsonPropertyName("data")] public DjDetailData RadioData { get; set; }
+    [JsonPropertyName("data")] public DjDetailData? RadioData { get; set; }
 
     public class DjDetailData : DjRadioDto
     {
-        [JsonPropertyName("dj")] public UserInfoDto DjData { get; set; }
+        [JsonPropertyName("dj")] public UserInfoDto? DjData { get; set; }
     }
 }
 

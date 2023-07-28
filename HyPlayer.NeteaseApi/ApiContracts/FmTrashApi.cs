@@ -50,5 +50,5 @@ public class FmTrashResponse : CodedResponseBase
 
 public class FmTrashActualRequest : WeApiActualRequestBase
 {
-    [JsonPropertyName("songId")] public string Id { get; set; }
+    [JsonPropertyName("songId")] public required string Id { get; set; }
 }

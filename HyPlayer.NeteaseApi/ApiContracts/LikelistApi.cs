@@ -38,7 +38,7 @@ public class LikelistRequest : RequestBase
 
 public class LikelistResponse : CodedResponseBase
 {
-    [JsonPropertyName("ids")] public string[] TrackIds { get; set; }
+    [JsonPropertyName("ids")] public string[]? TrackIds { get; set; }
     [JsonPropertyName("checkPoint")] public long CheckPoint { get; set; }
 }
 

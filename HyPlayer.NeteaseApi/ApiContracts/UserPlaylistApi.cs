@@ -57,7 +57,7 @@ public class UserPlaylistResponse : CodedResponseBase
 
 public class UserPlaylistActualRequest : WeApiActualRequestBase
 {
-    [JsonPropertyName("uid")] public string Uid { get; set; }
+    [JsonPropertyName("uid")] public string? Uid { get; set; }
     [JsonPropertyName("limit")] public int Limit { get; set; } = 30;
     [JsonPropertyName("offset")] public int Offset { get; set; }
     [JsonPropertyName("includeVideo")] public bool IncludeVideo => true;
