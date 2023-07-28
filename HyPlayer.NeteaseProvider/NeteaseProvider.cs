@@ -43,7 +43,8 @@ public class NeteaseProvider : ProviderBase,
                { "ar", "歌手" },
                { "al", "专辑" },
                { "us", "用户" },
-               { "rd", "电台" },
+               { "rd", "电台节目" },
+               { "dj", "电台" }
            };
 
     public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
