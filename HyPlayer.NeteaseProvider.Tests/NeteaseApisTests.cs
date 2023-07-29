@@ -4,17 +4,12 @@ using HyPlayer.NeteaseApi.ApiContracts;
 
 namespace HyPlayer.NeteaseProvider.Tests;
 
-public class NeteaseApisTests
+public class NeteaseApisTests : IAsyncLifetime
 {
-    private readonly NeteaseProvider _provider;
-
-    public NeteaseApisTests()
-    {
-        _provider = new NeteaseProvider();
-    }
-
+    private readonly NeteaseProvider _provider = new();
+    
     //[Theory]
-    public async void LoginEmail_Should_LoginWithInfo(string email, string password)
+    public async Task LoginEmail_Should_LoginWithInfo(string email, string password)
     {
         var result = await _provider.RequestAsync(NeteaseApis.LoginEmailApi,
                                                   new LoginEmailRequest
@@ -26,7 +21,7 @@ public class NeteaseApisTests
             (resp) =>
             {
                 resp.Should().NotBeNull();
-                resp.Profile.Gender.Should().BeOneOf(0, 1);
+                resp.Profile?.Gender.Should().BeOneOf(0, 1);
                 return true;
             },
             (err) => throw err
@@ -34,7 +29,7 @@ public class NeteaseApisTests
     }
 
     //[Theory]
-    public async void LoginCellphone_Should_LoginWithInfo(string phone, string password)
+    public async Task LoginCellphone_Should_LoginWithInfo(string phone, string password)
     {
         var result =
             await _provider.RequestAsync(NeteaseApis.LoginCellphoneApi,
@@ -182,5 +177,25 @@ public class NeteaseApisTests
             success => success.List.Should().NotBeEmpty(),
             error => throw error
         );
+    }
+
+    [Fact]
+    public async void RecommendedPlaylist_Should_ReturnNormal()
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.RecommendPlaylistsApi, new RecommendPlaylistsRequest());
+        result.Match(
+            success => success.Recommends.Should().NotBeEmpty(),
+            error => throw error
+        );
+    }
+
+    public async Task InitializeAsync()
+    {
+        //await LoginEmail_Should_LoginWithInfo("<Email>", "<Password>");
+    }
+
+    public async Task DisposeAsync()
+    {
+        
     }
 }

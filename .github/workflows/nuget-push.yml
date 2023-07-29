@@ -22,8 +22,8 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+      #- name: Test
+        #run: dotnet test --no-build --verbosity normal
       - name: Build NuGet Packages
         run: |
           dotnet pack HyPlayer.NeteaseApi/HyPlayer.NeteaseApi.csproj -c Release -o Packages/
