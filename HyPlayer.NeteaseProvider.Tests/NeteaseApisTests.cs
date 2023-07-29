@@ -191,7 +191,8 @@ public class NeteaseApisTests : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        //await LoginEmail_Should_LoginWithInfo("<Email>", "<Password>");
+        _provider.Option.Cookies["__csrf"] = Secrets.Csrf;
+        _provider.Option.Cookies["MUSIC_U"] = Secrets.MUSIC_U;
     }
 
     public async Task DisposeAsync()
