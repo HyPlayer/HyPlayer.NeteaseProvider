@@ -15,10 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Put Secret to Secret File
-        run: |
-          echo "${{ secrets.NETEASE_LOGIN_SECRET }}" >> ./HyPlayer.NeteaseProvider.Tests/Secrets.cs
-
+      - name: Write Secret into file
+        uses: "DamianReeves/write-file-action@master"
+        with:
+          path: HyPlayer.NeteaseProvider.Tests/Secrets.cs
+          write-mode: overwrite
+          contents: |
+            ${{ secrets.NETEASE_LOGIN_SECRET }}
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
