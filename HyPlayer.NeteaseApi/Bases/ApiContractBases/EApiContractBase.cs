@@ -69,11 +69,14 @@ public abstract class
             dataHeader["MUSIC_U"] = cookies.GetValueOrDefault("MUSIC_U");
         if (!string.IsNullOrEmpty(cookies.GetValueOrDefault("MUSIC_A")))
             dataHeader["MUSIC_A"] = cookies.GetValueOrDefault("MUSIC_A");
-        ActualRequest ??= (TActualRequest)new EApiActualRequestBase();
-        ActualRequest.Header = JsonSerializer.Serialize(dataHeader, option.JsonSerializerOptions);
+        var req = ActualRequest ?? new EApiActualRequestBase();
+        req.Header = JsonSerializer.Serialize(dataHeader, option.JsonSerializerOptions);
 
-
-        var json = JsonSerializer.Serialize(ActualRequest, option.JsonSerializerOptions);
+        string json;
+        if (req is TActualRequest actualRequest)
+            json = JsonSerializer.Serialize(actualRequest, option.JsonSerializerOptions);
+        else
+            json = JsonSerializer.Serialize(req, option.JsonSerializerOptions);
         var encryptMessage = $"nobody{ApiPath}use{json}md5forencrypt";
         var digest = encryptMessage.ToByteArrayUtf8().ComputeMd5().ToHexStringLower();
         var requestData = $"{ApiPath}-36cd479b6b5-{json}-36cd479b6b5-{digest}";
@@ -110,7 +113,7 @@ public abstract class
         try
         {
             if (buffer[0] != 0x7B && buffer[1] != 0x22)
-            { 
+            {
                 using var aes = Aes.Create();
                 aes.BlockSize = 128;
                 aes.Key = eapiKey;
@@ -121,10 +124,12 @@ public abstract class
 
             try
             {
-                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer), option.JsonSerializerOptions);
+                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer),
+                                                                option.JsonSerializerOptions);
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
-                    return Results<TResponse, ErrorResultBase>.CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
+                    return Results<TResponse, ErrorResultBase>
+                           .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
                 return ret;
             }
             catch
@@ -137,12 +142,18 @@ public abstract class
                 aes.Mode = CipherMode.ECB;
                 using var decryptor = aes.CreateDecryptor();
                 buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
-                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer), option.JsonSerializerOptions);
+                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer),
+                                                                option.JsonSerializerOptions);
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
-                    return Results<TResponse, ErrorResultBase>.CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
+                    return Results<TResponse, ErrorResultBase>
+                           .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
                 return ret;
             }
+        }
+        catch when (buffer[0] == 123)
+        {
+            return new ErrorResultBase(462, "返回 JSON 解析为空");
         }
         catch (Exception e)
         {

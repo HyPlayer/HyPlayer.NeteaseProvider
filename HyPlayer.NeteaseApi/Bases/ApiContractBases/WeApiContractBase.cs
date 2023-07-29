@@ -43,9 +43,13 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
 
         if (cookies.Count > 0)
             requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
-        ActualRequest ??= (TActualRequest)new WeApiActualRequestBase();
-        ActualRequest.CsrfToken = cookies.GetValueOrDefault("__csrf", string.Empty);
-        var json = JsonSerializer.Serialize(ActualRequest, option.JsonSerializerOptions);
+        var req = ActualRequest ?? new WeApiActualRequestBase();
+        req.CsrfToken = cookies.GetValueOrDefault("__csrf", string.Empty);
+        string json;
+        if (req is TActualRequest actualRequest)
+            json = JsonSerializer.Serialize(actualRequest, option.JsonSerializerOptions);
+        else
+            json = JsonSerializer.Serialize(req, option.JsonSerializerOptions);
         byte[] secretKey = new Random().RandomBytes(16);
         secretKey = secretKey.Select(n => (byte)base62[n % 62]).ToArray();
         var paramsData =
