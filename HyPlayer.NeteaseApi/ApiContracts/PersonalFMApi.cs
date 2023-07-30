@@ -13,20 +13,29 @@ public static partial class NeteaseApis
     public static PersonalFmApi PersonalFmApi = new();
 }
 
-public class PersonalFmApi : WeApiContractBase<PersonalFmRequest, PersonalFmResponse, ErrorResultBase, PersonalFmActualRequest>
+public class PersonalFmApi : EApiContractBase<PersonalFmRequest, PersonalFmResponse, ErrorResultBase, PersonalFmActualRequest>
 {
-    public override string Url => "https://music.163.com/weapi/v1/radio/get"; 
+    public override string Url => "https://interface3.music.163.com/eapi/v1/radio/get"; 
     public override HttpMethod Method => HttpMethod.Post;
+
+    public override string ApiPath => "/api/v1/radio/get";
 
     public override Task MapRequest(PersonalFmRequest? request)
     {
+        if (request is not null)
+            ActualRequest = new PersonalFmActualRequest
+                            {
+                                Mode = request.Mode,
+                                Limit = request.Limit
+                            };
         return Task.CompletedTask;
     }
 }
 
 public class PersonalFmRequest : RequestBase
 {
-
+    public string Mode { get; set; } = "FAMILIAR";
+    public int Limit { get; set; } = 3;
 }
 
 public class PersonalFmResponse : CodedResponseBase
@@ -39,7 +48,8 @@ public class PersonalFmResponse : CodedResponseBase
     }
 }
 
-public class PersonalFmActualRequest : WeApiActualRequestBase
+public class PersonalFmActualRequest : EApiActualRequestBase
 {
-
+    [JsonPropertyName("mode")] public string Mode { get; set; } = "FAMILIAR";
+    [JsonPropertyName("limit")] public int Limit { get; set; } = 3;
 }
