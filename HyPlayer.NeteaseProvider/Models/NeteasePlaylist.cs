@@ -1,5 +1,4 @@
-﻿using HyPlayer.NeteaseApi;
-using HyPlayer.NeteaseApi.ApiContracts;
+﻿using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.PlayCore.Abstraction.Interfaces.PlayListContainer;
 using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;

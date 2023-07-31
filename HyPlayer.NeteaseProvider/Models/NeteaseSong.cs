@@ -1,7 +1,7 @@
 ﻿using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
-using HyPlayer.PlayCore.Abstraction.Models.Songs;
+using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
 
 namespace HyPlayer.NeteaseProvider.Models;
 

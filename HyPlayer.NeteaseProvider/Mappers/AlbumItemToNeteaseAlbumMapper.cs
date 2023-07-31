@@ -1,5 +1,4 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts;
-using HyPlayer.NeteaseApi.Models.ResponseModels;
 using HyPlayer.NeteaseProvider.Models;
 
 namespace HyPlayer.NeteaseProvider.Mappers;
