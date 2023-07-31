@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
-        <Version>0.0.4.1</Version>
+        <Version>0.0.5</Version>
         <Authors>HyPlayer Team</Authors>
         <Description>The NeteaseCloudMusic Api</Description>
         <PackageProjectUrl>https://github.com/HyPlayer/HyPlayer.NeteaseProvider</PackageProjectUrl>
