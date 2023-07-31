@@ -18,7 +18,12 @@ public abstract class
     public static readonly byte[] eapiKey = "e82ckenh8dichen8"u8.ToArray();
     public abstract string ApiPath { get; }
 
-    public override Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
+    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
+    {
+        return await GenerateRequestMessageAsync(ActualRequest! ,option, cancellationToken);
+    }
+
+    public override Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestMessageModel>(TActualRequestMessageModel actualRequest, ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
         var url = Regex.Replace(Url, @"\w*api", "eapi");
         if (option.DegradeHttp)
@@ -69,12 +74,12 @@ public abstract class
             dataHeader["MUSIC_U"] = cookies.GetValueOrDefault("MUSIC_U");
         if (!string.IsNullOrEmpty(cookies.GetValueOrDefault("MUSIC_A")))
             dataHeader["MUSIC_A"] = cookies.GetValueOrDefault("MUSIC_A");
-        var req = ActualRequest ?? new EApiActualRequestBase();
+        var req = actualRequest as EApiActualRequestBase ?? new EApiActualRequestBase();
         req.Header = JsonSerializer.Serialize(dataHeader, option.JsonSerializerOptions);
 
         string json;
-        if (req is TActualRequest actualRequest)
-            json = JsonSerializer.Serialize(actualRequest, option.JsonSerializerOptions);
+        if (req is TActualRequestMessageModel apiRequest)
+            json = JsonSerializer.Serialize(apiRequest, option.JsonSerializerOptions);
         else
             json = JsonSerializer.Serialize(req, option.JsonSerializerOptions);
         var encryptMessage = $"nobody{ApiPath}use{json}md5forencrypt";
@@ -93,7 +98,13 @@ public abstract class
         return Task.FromResult(requestMessage);
     }
 
-    public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(
+    public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(HttpResponseMessage response, ApiHandlerOption option,
+                                                                                   CancellationToken cancellationToken = default)
+    {
+        return await ProcessResponseAsync<TResponse>(response, option, cancellationToken);
+    }
+
+    public override async Task<Results<TResponseModel, ErrorResultBase>> ProcessResponseAsync<TResponseModel>(
         HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
         if (!response.IsSuccessStatusCode)
@@ -124,11 +135,11 @@ public abstract class
 
             try
             {
-                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer),
-                                                                option.JsonSerializerOptions);
+                var ret = JsonSerializer.Deserialize<TResponseModel>(Encoding.UTF8.GetString(buffer),
+                                                                     option.JsonSerializerOptions);
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
-                    return Results<TResponse, ErrorResultBase>
+                    return Results<TResponseModel, ErrorResultBase>
                            .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
                 return ret;
             }
@@ -142,11 +153,11 @@ public abstract class
                 aes.Mode = CipherMode.ECB;
                 using var decryptor = aes.CreateDecryptor();
                 buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
-                var ret = JsonSerializer.Deserialize<TResponse>(Encoding.UTF8.GetString(buffer),
-                                                                option.JsonSerializerOptions);
+                var ret = JsonSerializer.Deserialize<TResponseModel>(Encoding.UTF8.GetString(buffer),
+                                                                     option.JsonSerializerOptions);
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
-                    return Results<TResponse, ErrorResultBase>
+                    return Results<TResponseModel, ErrorResultBase>
                            .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
                 return ret;
             }

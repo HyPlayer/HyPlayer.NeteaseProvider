@@ -1,5 +1,4 @@
-﻿using HyPlayer.NeteaseApi.ApiContracts;
-using HyPlayer.NeteaseApi.Models.ResponseModels;
+﻿using HyPlayer.NeteaseApi.Models.ResponseModels;
 using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 

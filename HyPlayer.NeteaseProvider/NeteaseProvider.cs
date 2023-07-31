@@ -8,7 +8,7 @@ using HyPlayer.PlayCore.Abstraction.Interfaces.Provider;
 using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
-using HyPlayer.PlayCore.Abstraction.Models.Songs;
+using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
 using Kengwang.Toolkit;
 
 namespace HyPlayer.NeteaseProvider;
@@ -19,7 +19,8 @@ public class NeteaseProvider : ProviderBase,
                                IProvableItemLikable,
                                IProvidableItemProvidable,
                                IProvidableItemRangeProvidable,
-                               ISearchableProvider
+                               ISearchableProvider,
+                               IStoredItemsProvidable
 {
     public ApiHandlerOption Option { get; set; } = new();
     private readonly NeteaseCloudMusicApiHandler _handler = new();
@@ -317,6 +318,11 @@ public class NeteaseProvider : ProviderBase,
     }
 
     public async Task<ContainerBase?> SearchProvidableItems(string keyword, string typeId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<ContainerBase?> GetStoredItems(string typeId)
     {
         throw new NotImplementedException();
     }
