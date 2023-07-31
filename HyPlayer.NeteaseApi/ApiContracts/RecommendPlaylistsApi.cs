@@ -31,7 +31,7 @@ public class RecommendPlaylistsRequest : RequestBase
 
 public class RecommendPlaylistsResponse : CodedResponseBase
 {
-    [JsonPropertyName("recommend")] public PlaylistDto[]? Recommends { get; set; }
+    [JsonPropertyName("recommend")] public RecommendPlaylistDto[]? Recommends { get; set; }
 }
 
 public class RecommendPlaylistsActualRequest : WeApiActualRequestBase
