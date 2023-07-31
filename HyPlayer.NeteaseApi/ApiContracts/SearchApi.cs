@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Models.ResponseModels;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -16,7 +17,16 @@ public class SearchApi : EApiContractBase<SearchRequest, SearchResponse, ErrorRe
 
     public override async Task MapRequest(SearchRequest? request)
     {
-        throw new NotImplementedException();
+        if (request is not null)
+        {
+            ActualRequest = new()
+                            {
+                                Keyword = request.Keyword,
+                                Type = request.Type,
+                                Limit = request.Limit,
+                                Offset = request.Offset
+                            };
+        }
     }
 
     public override string ApiPath => "/api/cloudsearch/pc";
@@ -32,7 +42,17 @@ public class SearchRequest : RequestBase
 
 public class SearchResponse : CodedResponseBase
 {
-    
+}
+
+public class SearchSongResponse : CodedResponseBase
+{
+    [JsonPropertyName("result")] public SearchSongResult? Result { get; set; }
+
+    public class SearchSongResult
+    {
+        [JsonPropertyName("songs")] public EmittedSongDtoWithPrivilege[]? Items { get; set; }
+        [JsonPropertyName("songCount")] public int Count { get; set; }
+    }
 }
 
 public class SearchActualRequest : EApiActualRequestBase
@@ -41,5 +61,5 @@ public class SearchActualRequest : EApiActualRequestBase
     [JsonPropertyName("type")] public int Type { get; set; }
     [JsonPropertyName("limit")] public int Limit { get; set; } = 30;
     [JsonPropertyName("offset")] public int Offset { get; set; } = 0;
-    [JsonPropertyName("total")] public bool Total  => true;
+    [JsonPropertyName("total")] public bool Total => true;
 }

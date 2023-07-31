@@ -1,6 +1,7 @@
 using FluentAssertions;
 using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.PlayCore.Abstraction.Models.Containers;
 
 namespace HyPlayer.NeteaseProvider.Tests;
 
@@ -189,6 +190,13 @@ public class NeteaseApisTests : IAsyncLifetime
         );
     }
 
+    [Fact]
+    public async void Search_Song_Should_ReturnNormal()
+    {
+        var result = await _provider.SearchProvidableItems("spiral", "sg");
+        (await result.Should().BeAssignableTo<LinerContainerBase>().Subject.GetAllItems()).Should().NotBeEmpty();
+    }
+    
     public async Task InitializeAsync()
     {
         _provider.Option.Cookies["__csrf"] = Secrets.Csrf;

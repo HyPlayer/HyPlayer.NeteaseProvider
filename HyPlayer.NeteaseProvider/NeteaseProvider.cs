@@ -23,7 +23,7 @@ public class NeteaseProvider : ProviderBase,
                                IStoredItemsProvidable
 {
     public ApiHandlerOption Option { get; set; } = new();
-    private readonly NeteaseCloudMusicApiHandler _handler = new();
+    public readonly NeteaseCloudMusicApiHandler Handler = new();
     public override string Name => "网易云音乐";
     public override string Id => "ncm";
 
@@ -57,7 +57,7 @@ public class NeteaseProvider : ProviderBase,
     {
         try
         {
-            return await _handler.RequestAsync(contract, Option, cancellationToken);
+            return await Handler.RequestAsync(contract, Option, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -74,7 +74,7 @@ public class NeteaseProvider : ProviderBase,
     {
         try
         {
-            return await _handler.RequestAsync(contract, request, Option, cancellationToken);
+            return await Handler.RequestAsync(contract, request, Option, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -82,6 +82,60 @@ public class NeteaseProvider : ProviderBase,
         }
     }
 
+    public async Task<Results<TCustomResponse, ErrorResultBase>> RequestAsync<
+        TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest? request,
+        CancellationToken cancellationToken = default)
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+    {
+        try
+        {
+            return await Handler.RequestAsync<TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
+                contract, request, Option, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            return Results<TCustomResponse, ErrorResultBase>.CreateError(
+                new ExceptionedErrorBase(-500, ex.Message, ex));
+        }
+    }
+
+    public async Task<Results<TCustomResponse, ErrorResultBase>> RequestAsync<
+        TCustomRequest, TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, bool differ, TCustomRequest? request,
+        CancellationToken cancellationToken = default)
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+    {
+        try
+        {
+            return await Handler
+                .RequestAsync<TCustomRequest, TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
+                    contract, true, request, Option, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            return Results<TCustomResponse, ErrorResultBase>.CreateError(
+                new ExceptionedErrorBase(-500, ex.Message, ex));
+        }
+    }
+
+    public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TCustomRequest, TRequest, TResponse, TError,
+                                                                        TActualRequest>(
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, bool differ, TCustomRequest? request,
+        ApiHandlerOption option, CancellationToken cancellationToken = default)
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+    {
+        try
+        {
+            return await Handler.RequestAsync(
+                contract, true, request, Option, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            return Results<TResponse, ErrorResultBase>.CreateError(
+                new ExceptionedErrorBase(-500, ex.Message, ex));
+        }
+    }
 
     public async Task<bool> LoginEmail(string email, string password, bool isMd5 = false)
     {
@@ -265,7 +319,7 @@ public class NeteaseProvider : ProviderBase,
         // 之后可以对此处逻辑进行拆解
         switch (typeId)
         {
-            case "ns":
+            case "sg":
                 var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
                                                     new SongDetailRequest()
                                                     {
@@ -300,7 +354,7 @@ public class NeteaseProvider : ProviderBase,
             // 之后可以对此处逻辑进行拆解
             switch (grouped[0].Key)
             {
-                case "ns":
+                case "sg":
                     var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
                                                         new SongDetailRequest()
                                                         {
@@ -319,7 +373,13 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task<ContainerBase?> SearchProvidableItems(string keyword, string typeId)
     {
-        throw new NotImplementedException();
+        return new NeteaseSearchContainer
+               {
+                   Name = "搜索结果",
+                   ActualId = null,
+                   SearchTypeId = TypeIdToSearchIdMapper.MapToResourceId(typeId),
+                   SearchKeyword = keyword,
+               };
     }
 
     public async Task<ContainerBase?> GetStoredItems(string typeId)
