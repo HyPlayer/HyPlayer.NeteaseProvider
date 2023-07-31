@@ -20,7 +20,8 @@ public class NeteaseProvider : ProviderBase,
                                IProvidableItemProvidable,
                                IProvidableItemRangeProvidable,
                                ISearchableProvider,
-                               IStoredItemsProvidable
+                               IStoredItemsProvidable,
+                               IRecommendationProvidable
 {
     public ApiHandlerOption Option { get; set; } = new();
     public readonly NeteaseCloudMusicApiHandler Handler = new();
@@ -385,5 +386,59 @@ public class NeteaseProvider : ProviderBase,
     public async Task<ContainerBase?> GetStoredItems(string typeId)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<ContainerBase?> GetRecommendation(string? typeId = null)
+    {
+        switch (typeId)
+        {
+            case "pl": // 推荐歌单
+                return new NeteaseActionGettableContainer(async () =>
+                       {
+                           return (await RequestAsync(
+                                   NeteaseApis.RecommendPlaylistsApi,
+                                   new RecommendPlaylistsRequest()))
+                               .Match(success => success.Recommends?.Select(
+                                          t => (ProvidableItemBase)
+                                              t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
+                                      error => throw error);
+                       })
+                       {
+                           Name = "推荐歌单",
+                           ActualId = "rcpl"
+                       };
+            case "sg": // 推荐歌曲
+                return new NeteaseActionGettableContainer(async () =>
+                       {
+                           return (await RequestAsync(
+                                   NeteaseApis.RecommendSongsApi,
+                                   new RecommendSongsRequest()))
+                               .Match(success => success.Data?.DailySongs?.Select(
+                                          t => (ProvidableItemBase)
+                                              t.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
+                                      error => throw error);
+                       })
+                       {
+                           Name = "推荐歌曲",
+                           ActualId = "rcsg"
+                       };
+            case "ct": // 排行榜
+                return new NeteaseActionGettableContainer(async () =>
+                       {
+                           return (await RequestAsync(
+                                   NeteaseApis.ToplistApi,
+                                   new ToplistRequest()))
+                               .Match(success => success.List?.Select(
+                                          t => (ProvidableItemBase)
+                                              t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
+                                      error => throw error);
+                       })
+                       {
+                           Name = "排行榜",
+                           ActualId = "chart"
+                       };
+            default:
+                throw new NotImplementedException();
+        }
     }
 }
