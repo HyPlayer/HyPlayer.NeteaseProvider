@@ -41,4 +41,36 @@ public class NeteaseCloudMusicApiHandler
         var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken), cancellationToken);
         return await contract.ProcessResponseAsync(response, option, cancellationToken);
     }
+    
+    public async Task<Results<TCustomResponse, ErrorResultBase>> RequestAsync<TCustomResponse,TRequest, TResponse, TError, TActualRequest>(
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest? request,
+        ApiHandlerOption option, CancellationToken cancellationToken = default)
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+    {
+        var client = new HttpClient(_httpClientHandler);
+        contract.Request = request;
+        await contract.MapRequest(request);
+        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken), cancellationToken);
+        return await contract.ProcessResponseAsync<TCustomResponse>(response, option, cancellationToken);
+    }
+    
+    public async Task<Results<TCustomResponse, ErrorResultBase>> RequestAsync<TCustomRequest, TCustomResponse,TRequest, TResponse, TError, TActualRequest>(
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, bool differ, TCustomRequest? request,
+        ApiHandlerOption option, CancellationToken cancellationToken = default)
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+    {
+        var client = new HttpClient(_httpClientHandler);
+        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync<TCustomRequest>(request! ,option, cancellationToken), cancellationToken);
+        return await contract.ProcessResponseAsync<TCustomResponse>(response, option, cancellationToken);
+    }
+    
+    public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TCustomRequest, TRequest, TResponse, TError, TActualRequest>(
+        ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, bool differ, TCustomRequest? request,
+        ApiHandlerOption option, CancellationToken cancellationToken = default)
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+    {
+        var client = new HttpClient(_httpClientHandler);
+        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync<TCustomRequest>(request! ,option, cancellationToken), cancellationToken);
+        return await contract.ProcessResponseAsync(response, option, cancellationToken);
+    }
 }
