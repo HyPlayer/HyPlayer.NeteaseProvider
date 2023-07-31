@@ -188,6 +188,9 @@ public class NeteaseApisTests : IAsyncLifetime
             success => success.Recommends.Should().NotBeEmpty(),
             error => throw error
         );
+
+        (await (await _provider.GetRecommendation("pl")).Should().BeAssignableTo<LinerContainerBase>().Subject
+                                                        .GetAllItems()).Should().NotBeEmpty();
     }
 
     [Fact]
