@@ -183,9 +183,9 @@ public class NeteaseApisTests : IAsyncLifetime
     [Fact]
     public async void RecommendedPlaylist_Should_ReturnNormal()
     {
-        var result = await _provider.RequestAsync(NeteaseApis.RecommendPlaylistsApi, new RecommendPlaylistsRequest());
+        var result = await _provider.RequestAsync(NeteaseApis.RecommendSongsApi, new RecommendSongsRequest());
         result.Match(
-            success => success.Recommends.Should().NotBeEmpty(),
+            success => success.Data?.DailySongs.Should().NotBeEmpty(),
             error => throw error
         );
 
