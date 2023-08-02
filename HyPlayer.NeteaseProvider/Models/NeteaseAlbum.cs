@@ -1,4 +1,5 @@
-﻿using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
+﻿using HyPlayer.NeteaseProvider.Constants;
+using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 
@@ -7,7 +8,7 @@ namespace HyPlayer.NeteaseProvider.Models;
 public class NeteaseAlbum : AlbumBase, IHasCover, IHasTranslation, IHasDescription,IHasCreators
 {
     public override string ProviderId => "ncm";
-    public override string TypeId => "al";
+    public override string TypeId => NeteaseTypeIds.Album;
     public string? PictureUrl { get; set; }
 
     public List<string>? Alias { get; set; }

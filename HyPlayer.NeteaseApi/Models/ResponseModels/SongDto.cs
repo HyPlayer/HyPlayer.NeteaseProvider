@@ -13,6 +13,17 @@ public class SongDto
     [JsonPropertyName("disc")] public string? CdName { get; set; }
     [JsonPropertyName("no")] public int TrackNumber { get; set; }
     [JsonPropertyName("album")] public AlbumDto? Album { get; set; }
-    [JsonPropertyName("ar")] public ArtistDto[]? Artists { get; set; }
+    [JsonPropertyName("artists")] public ArtistDto[]? Artists { get; set; }
+    [JsonPropertyName("videoInfo")] public VideoInfoDto? VideoInfo { get; set; }
 
+    public class VideoInfoDto
+    {
+        [JsonPropertyName("video")] public VideoDto? Video { get; set; }
+
+
+        public class VideoDto
+        {
+            [JsonPropertyName("vid")] public string? Vid { get; set; }
+        }
+    }
 }

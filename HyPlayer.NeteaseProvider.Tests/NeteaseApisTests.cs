@@ -1,6 +1,7 @@
 using FluentAssertions;
 using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 
 namespace HyPlayer.NeteaseProvider.Tests;
@@ -189,7 +190,7 @@ public class NeteaseApisTests : IAsyncLifetime
             error => throw error
         );
 
-        (await (await _provider.GetRecommendation("pl")).Should().BeAssignableTo<LinerContainerBase>().Subject
+        (await (await _provider.GetRecommendation(NeteaseTypeIds.Playlist)).Should().BeAssignableTo<LinerContainerBase>().Subject
                                                         .GetAllItems()).Should().NotBeEmpty();
     }
 

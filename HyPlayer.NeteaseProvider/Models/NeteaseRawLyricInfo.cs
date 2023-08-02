@@ -1,4 +1,5 @@
-﻿using HyPlayer.PlayCore.Abstraction.Models;
+﻿using HyPlayer.NeteaseProvider.Constants;
+using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 
@@ -19,7 +20,7 @@ public class NeteaseRawLyricInfo : RawLyricInfo
     public class LyricAuthorInfo : ProvidableItemBase
     {
         public override string ProviderId => "ncm";
-        public override string TypeId => "us";
+        public override string TypeId => NeteaseTypeIds.User;
         
     }
 

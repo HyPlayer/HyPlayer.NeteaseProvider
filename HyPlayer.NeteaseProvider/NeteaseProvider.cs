@@ -1,6 +1,7 @@
 using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction;
@@ -41,17 +42,17 @@ public class NeteaseProvider : ProviderBase,
     public override List<ProvidableTypeId> ProvidableTypeIds =>
         new()
         {
-            new("sg", "歌曲", true),
-            new ("pl", "歌单", true),
-            new ("ar","歌手",true),
-            new("al","专辑",true),
-            new ("us","用户",true),
-            new("rd","节目",true),// 电台节目
-            new ("dj","电台",true),
-            new ("se","搜索结果", false),
-            new ("ag","歌曲容器", false)
+            new(NeteaseTypeIds.SingleSong, "歌曲", true),
+            new(NeteaseTypeIds.Playlist, "歌单", true),
+            new(NeteaseTypeIds.Artist, "歌手", true),
+            new(NeteaseTypeIds.Album, "专辑", true),
+            new(NeteaseTypeIds.User, "用户", true),
+            new(NeteaseTypeIds.RadioProgram, "节目", true), // 电台节目
+            new(NeteaseTypeIds.RadioChannel, "电台", true),
+            new(NeteaseTypeIds.SearchResult, "搜索结果", false),
+            new(NeteaseTypeIds.ActionGettableSongContainer, "歌曲容器", false)
         };
-    
+
 
     public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract,
@@ -256,7 +257,7 @@ public class NeteaseProvider : ProviderBase,
                 );
             }
         }
-        else if (inProviderId.StartsWith("pl"))
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Playlist))
         {
             await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
                                new PlaylistSubscribeRequest()
@@ -295,7 +296,7 @@ public class NeteaseProvider : ProviderBase,
                 );
             }
         }
-        else if (inProviderId.StartsWith("pl"))
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Playlist))
         {
             await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
                                new PlaylistSubscribeRequest()
@@ -318,8 +319,7 @@ public class NeteaseProvider : ProviderBase,
             _ => new List<string>());
     }
 
-   
-    
+
     public async Task<ProvidableItemBase?> GetProvidableItemById(string inProviderId)
     {
         var typeId = inProviderId.Substring(0, 2);
@@ -327,21 +327,28 @@ public class NeteaseProvider : ProviderBase,
         switch (typeId)
         {
             case "sg":
-                var sg = new NeteaseSong
-                         {
-                             ActualId = actualId,
-                             Artists = null,
-                             Name = string.Empty
-                         };
-                return await UpdateProvidableItemInfo(sg);
-            case "pl":
-                var pl = new NeteasePlaylist()
-                         {
-                             ActualId = actualId,
-                             Name = string.Empty
-                         };
-                return await UpdateProvidableItemInfo(pl);
+                var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
+                                                    new SongDetailRequest()
+                                                    {
+                                                        Id = actualId
+                                                    });
+                return songResult.Match(
+                    success => success.Songs?[0].MapToNeteaseMusic(),
+                    _ => null
+                );
+            case NeteaseTypeIds.Playlist:
+                var playlistResult = await RequestAsync(
+                    NeteaseApis.PlaylistDetailApi,
+                    new PlaylistDetailRequest
+                    {
+                        Id = actualId
+                    });
+                return playlistResult.Match(
+                    success => success.Playlist?.MapToNeteasePlaylist(),
+                    _ => null
+                );
         }
+
         throw new NotImplementedException();
     }
 
@@ -384,14 +391,20 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task<ContainerBase?> GetStoredItems(string typeId)
     {
-        throw new NotImplementedException();
+        switch (typeId)
+        {
+            case NeteaseTypeIds.User:
+                return LoginedUser;
+            default:
+                throw new NotImplementedException();
+        }
     }
 
     public async Task<ContainerBase?> GetRecommendation(string? typeId = null)
     {
         switch (typeId)
         {
-            case "pl": // 推荐歌单
+            case NeteaseTypeIds.Playlist: // 推荐歌单
                 return new NeteaseActionGettableContainer(async () =>
                        {
                            return (await RequestAsync(
@@ -445,32 +458,6 @@ public class NeteaseProvider : ProviderBase,
     {
         var actualId = providableItem.ActualId;
         var typeId = providableItem.TypeId;
-        // 之后可以对此处逻辑进行拆解
-        switch (typeId)
-        {
-            case "sg":
-                var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
-                                                    new SongDetailRequest()
-                                                    {
-                                                        Id = actualId
-                                                    });
-                return songResult.Match(
-                    success => success.Songs?[0].MapToNeteaseMusic(),
-                    _ => null
-                );
-            case "pl":
-                var playlistResult = await RequestAsync(
-                    NeteaseApis.PlaylistDetailApi,
-                    new PlaylistDetailRequest
-                    {
-                        Id = actualId
-                    });
-                return playlistResult.Match(
-                    success => success.Playlist?.MapToNeteasePlaylist(),
-                    _ => null
-                );
-        }
-
-        throw new NotImplementedException();
+        return await GetProvidableItemById($"{providableItem.TypeId}{providableItem.ActualId}");
     }
 }

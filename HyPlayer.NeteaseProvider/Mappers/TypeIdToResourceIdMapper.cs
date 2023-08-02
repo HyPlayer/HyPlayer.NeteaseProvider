@@ -1,4 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.Extensions;
+using HyPlayer.NeteaseProvider.Constants;
 
 namespace HyPlayer.NeteaseProvider.Mappers;
 
@@ -9,12 +10,12 @@ public class TypeIdToResourceIdMapper
         {
             { "sg", "R_SO_4_" },
             { "mv", "R_MV_5_" },
-            { "pl", "A_PL_0_" },
-            { "al", "R_AL_3_" },
-            { "rd", "A_DJ_1_" },
+            { NeteaseTypeIds.Playlist, "A_PL_0_" },
+            { NeteaseTypeIds.Album, "R_AL_3_" },
+            { NeteaseTypeIds.RadioProgram, "A_DJ_1_" },
             { "vd", "R_VI_62_" },
             { "dy", "A_EV_2_" },
-            { "dj", "A_DR_14_" }
+            { NeteaseTypeIds.RadioChannel, "A_DR_14_" }
         };
 
     public static string MapToResourceId(string typeId)

@@ -1,4 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.PlayCore.Abstraction.Interfaces.PlayListContainer;
 using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
@@ -12,7 +13,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
                                IHasCreators
 {
     public override string ProviderId => "ncm";
-    public override string TypeId => "pl";
+    public override string TypeId => NeteaseTypeIds.Playlist;
 
     private string[]? _trackIds;
     public string? CoverUrl;

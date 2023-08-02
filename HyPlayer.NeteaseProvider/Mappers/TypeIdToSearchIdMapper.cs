@@ -1,4 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.Extensions;
+using HyPlayer.NeteaseProvider.Constants;
 
 namespace HyPlayer.NeteaseProvider.Mappers;
 
@@ -8,11 +9,11 @@ public static class TypeIdToSearchIdMapper
         new()
         {
             { "sg", 1 },
-            { "pl", 1000 },
-            { "al", 10 },
-            { "ar", 100 },
-            { "us", 1002 },
-            { "rd", 1009 },
+            { NeteaseTypeIds.Playlist, 1000 },
+            { NeteaseTypeIds.Album, 10 },
+            { NeteaseTypeIds.Artist, 100 },
+            { NeteaseTypeIds.User, 1002 },
+            { NeteaseTypeIds.RadioProgram, 1009 },
             { "vd", 1014 },
             { "mv", 1004 },
             { "lr", 1006 },

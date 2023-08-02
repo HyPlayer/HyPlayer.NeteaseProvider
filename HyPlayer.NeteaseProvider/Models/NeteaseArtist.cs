@@ -1,4 +1,5 @@
-﻿using HyPlayer.PlayCore.Abstraction.Models;
+﻿using HyPlayer.NeteaseProvider.Constants;
+using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 
 namespace HyPlayer.NeteaseProvider.Models;
@@ -6,7 +7,7 @@ namespace HyPlayer.NeteaseProvider.Models;
 public class NeteaseArtist : ArtistBase
 {
     public override string ProviderId => "ncm";
-    public override string TypeId => "ar";
+    public override string TypeId => NeteaseTypeIds.Artist;
 
     public override async Task<List<ContainerBase>> GetSubContainer()
     {
