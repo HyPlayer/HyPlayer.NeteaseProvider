@@ -1,4 +1,5 @@
-﻿using HyPlayer.PlayCore.Abstraction.Models;
+﻿using HyPlayer.NeteaseProvider.Constants;
+using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 
 namespace HyPlayer.NeteaseProvider.Models;
@@ -11,7 +12,7 @@ public class NeteaseActionGettableContainer : LinerContainerBase
     }
 
     public override string ProviderId => "ncm";
-    public override string TypeId => "ag";
+    public override string TypeId => NeteaseTypeIds.ActionGettableSongContainer;
     
     public Func<Task<List<ProvidableItemBase>>> Getter { get; set; }
     

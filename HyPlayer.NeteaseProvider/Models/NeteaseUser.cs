@@ -1,4 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models;
@@ -10,7 +11,7 @@ namespace HyPlayer.NeteaseProvider.Models;
 public class NeteaseUser : PersonBase, IHasCover, IHasDescription
 {
     public override string ProviderId => "ncm";
-    public override string TypeId => "us";
+    public override string TypeId => NeteaseTypeIds.User;
 
     public int Gender { get; set; }
     public string? BackgroundUrl { get; set; }

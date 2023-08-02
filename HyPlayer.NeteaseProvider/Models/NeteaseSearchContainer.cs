@@ -1,6 +1,7 @@
 ﻿using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.PlayCore.Abstraction.Interfaces.PlayListContainer;
 using HyPlayer.PlayCore.Abstraction.Models;
@@ -11,7 +12,7 @@ namespace HyPlayer.NeteaseProvider.Models;
 public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingContainer
 {
     public override string ProviderId => "ncm";
-    public override string TypeId => "se"; // search
+    public override string TypeId => NeteaseTypeIds.SearchResult; // search
 
 
     public required int SearchTypeId { get; set; }
