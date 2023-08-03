@@ -9,7 +9,7 @@ namespace HyPlayer.NeteaseProvider.Tests;
 public class NeteaseApisTests : IAsyncLifetime
 {
     private readonly NeteaseProvider _provider = new();
-    
+
     //[Theory]
     public async Task LoginEmail_Should_LoginWithInfo(string email, string password)
     {
@@ -190,8 +190,9 @@ public class NeteaseApisTests : IAsyncLifetime
             error => throw error
         );
 
-        (await (await _provider.GetRecommendation(NeteaseTypeIds.Playlist)).Should().BeAssignableTo<LinerContainerBase>().Subject
-                                                        .GetAllItems()).Should().NotBeEmpty();
+        (await (await _provider.GetRecommendation(NeteaseTypeIds.Playlist))
+               .Should().BeAssignableTo<LinerContainerBase>().Subject
+               .GetAllItems()).Should().NotBeEmpty();
     }
 
     [Fact]
@@ -200,7 +201,19 @@ public class NeteaseApisTests : IAsyncLifetime
         var result = await _provider.SearchProvidableItems("spiral", "sg");
         (await result.Should().BeAssignableTo<LinerContainerBase>().Subject.GetAllItems()).Should().NotBeEmpty();
     }
-    
+
+    [Fact]
+    public async void PlaylistCategoryListApi_Should_BeNormal()
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.PlaylistCategoryListApi, new PlaylistCategoryListRequest
+                                                      {
+                                                          Category = "ACG",
+                                                          Limit = 15
+                                                      });
+        result.Match(s => s.Playlists.Should().NotBeEmpty(),
+                     e => throw e);
+    }
+
     public async Task InitializeAsync()
     {
         _provider.Option.Cookies["__csrf"] = Secrets.Csrf;
@@ -209,6 +222,5 @@ public class NeteaseApisTests : IAsyncLifetime
 
     public async Task DisposeAsync()
     {
-        
     }
 }
