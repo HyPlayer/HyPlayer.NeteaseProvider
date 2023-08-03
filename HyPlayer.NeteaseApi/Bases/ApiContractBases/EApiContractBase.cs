@@ -14,6 +14,7 @@ public abstract class
     where TActualRequest : EApiActualRequestBase
     where TError : ErrorResultBase
     where TRequest : RequestBase
+    where TResponse : ResponseBase, new()
 {
     public static readonly byte[] eapiKey = "e82ckenh8dichen8"u8.ToArray();
     public abstract string ApiPath { get; }
@@ -135,8 +136,14 @@ public abstract class
 
             try
             {
-                var ret = JsonSerializer.Deserialize<TResponseModel>(Encoding.UTF8.GetString(buffer),
-                                                                     option.JsonSerializerOptions);
+                var result = Encoding.UTF8.GetString(buffer);
+                var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
+#if DEBUG
+                if (ret is null)
+                    ret = new ();
+                ret.OriginalResponse = result;
+#endif
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
                     return Results<TResponseModel, ErrorResultBase>
