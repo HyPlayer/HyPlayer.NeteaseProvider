@@ -49,8 +49,6 @@ public class NeteaseProvider : ProviderBase,
             new(NeteaseTypeIds.User, "用户", true),
             new(NeteaseTypeIds.RadioProgram, "节目", true), // 电台节目
             new(NeteaseTypeIds.RadioChannel, "电台", true),
-            new(NeteaseTypeIds.SearchResult, "搜索结果", false),
-            new(NeteaseTypeIds.ActionGettableSongContainer, "歌曲容器", false)
         };
 
 
@@ -94,7 +92,11 @@ public class NeteaseProvider : ProviderBase,
         TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest? request,
         CancellationToken cancellationToken = default)
-        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new() where TCustomResponse : ResponseBase, new()
+        where TError : ErrorResultBase
+        where TActualRequest : ActualRequestBase
+        where TRequest : RequestBase
+        where TResponse : ResponseBase, new()
+        where TCustomResponse : ResponseBase, new()
     {
         try
         {
@@ -112,7 +114,11 @@ public class NeteaseProvider : ProviderBase,
         TCustomRequest, TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, bool differ, TCustomRequest? request,
         CancellationToken cancellationToken = default)
-        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new() where TCustomResponse : ResponseBase, new()
+        where TError : ErrorResultBase
+        where TActualRequest : ActualRequestBase
+        where TRequest : RequestBase
+        where TResponse : ResponseBase, new()
+        where TCustomResponse : ResponseBase, new()
     {
         try
         {
@@ -131,7 +137,10 @@ public class NeteaseProvider : ProviderBase,
                                                                         TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, bool differ, TCustomRequest? request,
         ApiHandlerOption option, CancellationToken cancellationToken = default)
-        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new()
+        where TError : ErrorResultBase
+        where TActualRequest : ActualRequestBase
+        where TRequest : RequestBase
+        where TResponse : ResponseBase, new()
     {
         try
         {
@@ -234,7 +243,7 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task LikeProvidableItem(string inProviderId, string? targetId)
     {
-        if (inProviderId.StartsWith("sg"))
+        if (inProviderId.StartsWith(NeteaseTypeIds.SingleSong))
         {
             if (targetId is null)
             {
@@ -273,7 +282,7 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task UnlikeProvidableItem(string inProviderId, string? targetId)
     {
-        if (inProviderId.StartsWith("sg"))
+        if (inProviderId.StartsWith(NeteaseTypeIds.SingleSong))
         {
             if (targetId is null)
             {
@@ -328,7 +337,7 @@ public class NeteaseProvider : ProviderBase,
         var actualId = inProviderId.Substring(2);
         switch (typeId)
         {
-            case "sg":
+            case NeteaseTypeIds.SingleSong:
                 var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
                                                     new SongDetailRequest()
                                                     {
@@ -346,7 +355,7 @@ public class NeteaseProvider : ProviderBase,
                         Id = actualId
                     });
                 return playlistResult.Match(
-                    success => success.Playlist?.MapToNeteasePlaylist(),
+                    success => success.Playlists?[0].MapToNeteasePlaylist(),
                     _ => null
                 );
         }
@@ -363,7 +372,7 @@ public class NeteaseProvider : ProviderBase,
             // 之后可以对此处逻辑进行拆解
             switch (grouped[0].Key)
             {
-                case "sg":
+                case NeteaseTypeIds.SingleSong:
                     var songResult = await RequestAsync(NeteaseApis.SongDetailApi,
                                                         new SongDetailRequest()
                                                         {
@@ -404,56 +413,76 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task<ContainerBase?> GetRecommendation(string? typeId = null)
     {
-        switch (typeId)
+        // ReSharper disable once ConvertIfStatementToSwitchStatement
+        if (typeId == NeteaseTypeIds.Playlist) // 推荐歌单
+            return new NeteaseActionGettableContainer(async () =>
+                   {
+                       return (await RequestAsync(
+                               NeteaseApis.RecommendPlaylistsApi,
+                               new RecommendPlaylistsRequest()))
+                           .Match(success => success.Recommends?.Select(
+                                      t => (ProvidableItemBase)
+                                          t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
+                                  error => throw error);
+                   })
+                   {
+                       Name = "推荐歌单",
+                       ActualId = "rcpl"
+                   };
+        if (typeId == NeteaseTypeIds.SingleSong) // 推荐歌曲
+            return new NeteaseActionGettableContainer(async () =>
+                   {
+                       return (await RequestAsync(
+                               NeteaseApis.RecommendSongsApi,
+                               new RecommendSongsRequest()))
+                           .Match(success => success.Data?.DailySongs?.Select(
+                                      t => (ProvidableItemBase)
+                                          t.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
+                                  error => throw error);
+                   })
+                   {
+                       Name = "推荐歌曲",
+                       ActualId = "rcsg"
+                   };
+        if (typeId == NeteaseTypeIds.Chart) // 排行榜
+            return new NeteaseActionGettableContainer(async () =>
+                   {
+                       return (await RequestAsync(
+                               NeteaseApis.ToplistApi,
+                               new ToplistRequest()))
+                           .Match(success => success.List?.Select(
+                                      t => (ProvidableItemBase)
+                                          t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
+                                  error => throw error);
+                   })
+                   {
+                       Name = "排行榜",
+                       ActualId = "chart"
+                   };
+        if (typeId?.StartsWith(NeteaseTypeIds.PlaylistCategory) is true)
         {
-            case NeteaseTypeIds.Playlist: // 推荐歌单
-                return new NeteaseActionGettableContainer(async () =>
-                       {
-                           return (await RequestAsync(
-                                   NeteaseApis.RecommendPlaylistsApi,
-                                   new RecommendPlaylistsRequest()))
-                               .Match(success => success.Recommends?.Select(
+            return new NeteaseActionGettableProgressiveContainer(async (start, count) =>
+                   {
+                       return (true, (await RequestAsync(
+                                   NeteaseApis.PlaylistCategoryListApi,
+                                   new PlaylistCategoryListRequest
+                                   {
+                                       Category = typeId.Substring(2),
+                                       Limit = count
+                                   }))
+                               .Match(success => success.Playlists?.Select(
                                           t => (ProvidableItemBase)
                                               t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
-                                      error => throw error);
-                       })
-                       {
-                           Name = "推荐歌单",
-                           ActualId = "rcpl"
-                       };
-            case "sg": // 推荐歌曲
-                return new NeteaseActionGettableContainer(async () =>
-                       {
-                           return (await RequestAsync(
-                                   NeteaseApis.RecommendSongsApi,
-                                   new RecommendSongsRequest()))
-                               .Match(success => success.Data?.DailySongs?.Select(
-                                          t => (ProvidableItemBase)
-                                              t.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
-                                      error => throw error);
-                       })
-                       {
-                           Name = "推荐歌曲",
-                           ActualId = "rcsg"
-                       };
-            case "ct": // 排行榜
-                return new NeteaseActionGettableContainer(async () =>
-                       {
-                           return (await RequestAsync(
-                                   NeteaseApis.ToplistApi,
-                                   new ToplistRequest()))
-                               .Match(success => success.List?.Select(
-                                          t => (ProvidableItemBase)
-                                              t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
-                                      error => throw error);
-                       })
-                       {
-                           Name = "排行榜",
-                           ActualId = "chart"
-                       };
-            default:
-                throw new NotImplementedException();
+                                      error => throw error));
+                   })
+                   {
+                       Name = "官方推荐歌单",
+                       ActualId = typeId.Substring(2),
+                       MaxProgressiveCount = 15
+                   };
         }
+
+        throw new ArgumentException(typeId);
     }
 
     public async Task<ProvidableItemBase?> UpdateProvidableItemInfo(ProvidableItemBase providableItem)

@@ -152,6 +152,22 @@ public class NeteaseApisTests : IAsyncLifetime
             error => throw error
         );
     }
+    [Theory]
+    [InlineData("2778408564")]
+    [InlineData("897784673")]
+    public async void PlaylistTracksGet_Should_ReturnNormal(string playlistId)
+    {
+        var result = await _provider.RequestAsync(
+            NeteaseApis.PlaylistTracksGetApi,
+            new PlaylistTracksGetRequest()
+            {
+                Id = playlistId
+            });
+        result.Match(
+            success => success.Playlist.TrackIds.Should().NotBeEmpty(),
+            error => throw error
+        );
+    }
 
     [Theory]
     [InlineData("1455706958")]
@@ -198,7 +214,7 @@ public class NeteaseApisTests : IAsyncLifetime
     [Fact]
     public async void Search_Song_Should_ReturnNormal()
     {
-        var result = await _provider.SearchProvidableItems("spiral", "sg");
+        var result = await _provider.SearchProvidableItems("spiral", NeteaseTypeIds.SingleSong);
         (await result.Should().BeAssignableTo<LinerContainerBase>().Subject.GetAllItems()).Should().NotBeEmpty();
     }
 

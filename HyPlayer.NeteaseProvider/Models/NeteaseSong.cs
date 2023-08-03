@@ -1,4 +1,5 @@
-﻿using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
+﻿using HyPlayer.NeteaseProvider.Constants;
+using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
@@ -8,7 +9,7 @@ namespace HyPlayer.NeteaseProvider.Models;
 public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover
 {
     public override string ProviderId => "ncm";
-    public override string TypeId => "sg";
+    public override string TypeId => NeteaseTypeIds.SingleSong;
 
     public string[]? Alias { get; set; }
     public bool HasCopyright { get; set; }

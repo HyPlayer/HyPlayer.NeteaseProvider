@@ -21,30 +21,20 @@ public class SongDetailApi : WeApiContractBase<SongDetailRequest, SongDetailResp
     public override Task MapRequest(SongDetailRequest? request)
     {
         if (request is null) return Task.CompletedTask;
-        var requestIds = string.IsNullOrWhiteSpace(request.Id)
-            ? $"[{string.Join(",", request.IdList.Select(id => $$"""{"id":'{{id}}'}"""))}]"
-            : $$"""[{"id": '{{request.Id}}'}]""";
+        var requestIds = request.ParseToIdObjects();
         ActualRequest = new SongDetailActualRequest { Ids = requestIds };
         return Task.CompletedTask;
     }
 }
 
+public class SongDetailRequest : IdOrIdListListRequest
+{
+    
+}
+
 public class SongDetailActualRequest : WeApiActualRequestBase
 {
     [JsonPropertyName("c")] public required string Ids { get; set; }
-}
-
-public class SongDetailRequest : RequestBase
-{
-    /// <summary>
-    /// 歌曲 ID 列表
-    /// </summary>
-    public List<string>? IdList { get; set; }
-    
-    /// <summary>
-    /// 歌曲 ID
-    /// </summary>
-    public string? Id { get; set; }
 }
 
 public class SongDetailResponse : CodedResponseBase
