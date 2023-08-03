@@ -21,7 +21,6 @@ public class NeteaseProvider : ProviderBase,
                                IProvidableItemProvidable,
                                IProvidableItemRangeProvidable,
                                ISearchableProvider,
-                               IStoredItemsProvidable,
                                IRecommendationProvidable,
                                IProvidableItemUpdatable
 {
