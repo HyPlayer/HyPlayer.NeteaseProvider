@@ -13,57 +13,48 @@ public static partial class NeteaseApis
     public static PlaylistDetailApi PlaylistDetailApi = new();
 }
 
-public class PlaylistDetailApi : RawApiContractBase<PlaylistDetailRequest, PlaylistDetailResponse, ErrorResultBase,
+public class PlaylistDetailApi : EApiContractBase<PlaylistDetailRequest, PlaylistDetailResponse, ErrorResultBase,
     PlaylistDetailActualRequest>
 {
-    public override string Url => "https://music.163.com/api/v6/playlist/detail";
+    public override string Url => "https://interface.music.163.com/eapi/playlist/list/get";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override Task MapRequest(PlaylistDetailRequest? request)
     {
         if (request is not null)
-            ActualRequest = new()
+            ActualRequest = new PlaylistDetailActualRequest()
                             {
-                                { "id", request.Id },
-                                { "n", "100000" },
-                                { "s", "8" }
+                                IdList = request.ConvertToIdStringList()
                             };
         return Task.CompletedTask;
     }
+
+    public override string ApiPath => "/api/playlist/list/get";
 }
 
-public class PlaylistDetailActualRequest : RawApiActualRequestBase
+public class PlaylistDetailActualRequest : EApiActualRequestBase
 {
+    [JsonPropertyName("ids")] public required string IdList { get; set; }
 }
 
-public class PlaylistDetailRequest : RequestBase
+public class PlaylistDetailRequest : IdOrIdListListRequest
 {
-    /// <summary>
-    /// 歌单 ID
-    /// </summary>
-    public required string Id { get; set; }
 }
 
 public class PlaylistDetailResponse : CodedResponseBase
 {
-    [JsonPropertyName("privileges")] public PrivilegeDto[]? Privileges { get; set; }
-    [JsonPropertyName("playlist")] public PlayListData? Playlist { get; set; }
+    [JsonPropertyName("playlists")] public PlayListData[]? Playlists { get; set; }
 
     public class PlayListData : PlaylistDto
     {
         [JsonPropertyName("tags")] public string[]? Tags { get; set; }
 
         [JsonPropertyName("titleImageUrl")] public string? TitleImageUrl { get; set; }
-
-        [JsonPropertyName("tracks")] public EmittedSongDto[]? Tracks { get; set; }
-        [JsonPropertyName("trackIds")] public TrackIdItem[]? TrackIds { get; set; }
-
+        
         [JsonPropertyName("createTime")] public long CreateTime { get; set; }
-
-        public class TrackIdItem
-        {
-            [JsonPropertyName("id")] public required string Id { get; set; }
-            [JsonPropertyName("rcmdReason")] public string? RecommendReason { get; set; }
-        }
+        [JsonPropertyName("commentCount")] public long CommentCount { get; set; }
+        [JsonPropertyName("shareCount")] public long ShareCount { get; set; }
+        [JsonPropertyName("newImported")] public bool IsNewImported { get; set; }
+        
     }
 }

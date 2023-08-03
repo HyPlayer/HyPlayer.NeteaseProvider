@@ -1,4 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.PlayCore.Abstraction.Interfaces.PlayListContainer;
 using HyPlayer.PlayCore.Abstraction.Models;
@@ -9,7 +10,7 @@ namespace HyPlayer.NeteaseProvider.Models;
 public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoadingContainer
 {
     public override string ProviderId => "ncm";
-    public override string TypeId => "sg";
+    public override string TypeId => NeteaseTypeIds.Artist;
 
     public override async Task<List<ProvidableItemBase>> GetAllItems()
     {

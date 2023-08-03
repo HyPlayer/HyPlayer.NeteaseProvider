@@ -15,7 +15,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.Playlist;
 
-    private string[]? _trackIds;
+    private PlaylistTracksGetResponse.PlaylistWithTracksInfoDto.TrackIdItem[]? _trackIds;
     public string? CoverUrl;
     public NeteaseUser? Creator;
     public bool Subscribed { get; set; }
@@ -23,6 +23,9 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
     public int TrackCount { get; set; }
     public long PlayCount { get; set; }
     public long SubscribedCount { get; set; }
+    public long CommentCount { get; set; }
+    public long ShareCount { get; set; }
+    public bool IsNewImported { get; set; }
 
     public async Task UpdatePlaylistInfo()
     {
@@ -35,29 +38,43 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
         results.Match(
             success =>
             {
-                CoverUrl = success.Playlist?.CoverUrl;
-                Description = success.Playlist?.Description;
-                if (!string.IsNullOrEmpty(success.Playlist?.Name))
-                    Name = success.Playlist?.Name!;
-                _trackIds = success.Playlist?.TrackIds?.Select(t => t.Id).ToArray();
-                Creator = success.Playlist?.Creator?.MapToNeteaseUser();
+                CoverUrl = success.Playlists?[0].CoverUrl;
+                Description = success.Playlists?[0].Description;
+                if (!string.IsNullOrEmpty(success.Playlists?[0].Name))
+                    Name = success.Playlists?[0].Name!;
+                Creator = success.Playlists?[0].Creator?.MapToNeteaseUser();
                 CreatorList?.Clear();
                 CreatorList?.Add(Creator?.Name!);
-                Subscribed = success.Playlist?.Subscribed is true;
-                UpdateTime = success.Playlist?.UpdateTime ?? 0;
-                TrackCount = success.Playlist?.TrackCount ?? 0;
-                PlayCount = success.Playlist?.PlayCount ?? 0;
-                SubscribedCount = success.Playlist?.SubscribedCount ?? 0;
+                Subscribed = success.Playlists?[0].Subscribed is true;
+                UpdateTime = success.Playlists?[0].UpdateTime ?? 0;
+                TrackCount = success.Playlists?[0].TrackCount ?? 0;
+                PlayCount = success.Playlists?[0].PlayCount ?? 0;
+                SubscribedCount = success.Playlists?[0].SubscribedCount ?? 0;
+                CommentCount = success.Playlists?[0].CommentCount ?? 0;
+                ShareCount = success.Playlists?[0].ShareCount ?? 0;
+                IsNewImported = success.Playlists?[0].IsNewImported ?? false;
+                
                 return true;
             }, error => false);
     }
 
+    public async Task UpdateTrackList()
+    {
+        _trackIds = (await NeteaseProvider.Instance.RequestAsync(NeteaseApis.PlaylistTracksGetApi,
+                                                          new PlaylistTracksGetRequest()
+                                                          {
+                                                              Id = Id
+                                                          })).Match(
+            success => success.Playlist.TrackIds,
+            error => Array.Empty<PlaylistTracksGetResponse.PlaylistWithTracksInfoDto.TrackIdItem>());
+    }
+    
     public override async Task<List<ProvidableItemBase>> GetAllItems()
     {
         if (_trackIds is null)
-            await UpdatePlaylistInfo();
+            await UpdateTrackList();
         if (_trackIds is not null)
-            return await NeteaseProvider.Instance.GetProvidableItemsRange(_trackIds.ToList());
+            return await NeteaseProvider.Instance.GetProvidableItemsRange(_trackIds.Select(t=>t.Id).ToList());
         return new List<ProvidableItemBase>();
     }
 
@@ -67,7 +84,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
             await UpdatePlaylistInfo();
         if (_trackIds is not null)
             return (start + count < _trackIds.Length,
-                    await NeteaseProvider.Instance.GetProvidableItemsRange(_trackIds.ToList()));
+                    await NeteaseProvider.Instance.GetProvidableItemsRange(_trackIds.Select(t=>t.Id).ToList()));
         return (false, new List<ProvidableItemBase>());
     }
 
