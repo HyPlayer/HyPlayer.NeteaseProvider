@@ -13,6 +13,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
     where TActualRequest : WeApiActualRequestBase
     where TError : ErrorResultBase
     where TRequest : RequestBase
+    where TResponse : ResponseBase, new()
 {
     private static readonly byte[] iv = "0102030405060708"u8.ToArray();
 
@@ -100,9 +101,14 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
 
         var buffer = await response.Content.ReadAsByteArrayAsync();
         if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
-
-        var ret = JsonSerializer.Deserialize<TResponseModel>(Encoding.UTF8.GetString(buffer),
-                                                             option.JsonSerializerOptions);
+        var result = Encoding.UTF8.GetString(buffer);
+        var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
+#if DEBUG
+        if (ret is null)
+            ret = new ();
+        ret.OriginalResponse = result;
+#endif
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
         if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
             return Results<TResponseModel, ErrorResultBase>

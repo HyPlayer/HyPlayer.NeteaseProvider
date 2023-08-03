@@ -49,23 +49,16 @@ public class PlaylistDetailResponse : CodedResponseBase
     [JsonPropertyName("privileges")] public PrivilegeDto[]? Privileges { get; set; }
     [JsonPropertyName("playlist")] public PlayListData? Playlist { get; set; }
 
-    public class PlayListData
+    public class PlayListData : PlaylistDto
     {
-        [JsonPropertyName("id")] public required string Id { get; set; }
-        [JsonPropertyName("name")] public string? Name { get; set; }
-        [JsonPropertyName("description")] public string? Description { get; set; }
         [JsonPropertyName("tags")] public string[]? Tags { get; set; }
-        [JsonPropertyName("coverImgUrl")] public string? CoverUrl { get; set; }
+
         [JsonPropertyName("titleImageUrl")] public string? TitleImageUrl { get; set; }
-        [JsonPropertyName("subscribedCount")] public int SubscribedCount { get; set; }
-        [JsonPropertyName("playCount")] public int PlayCount { get; set; }
-        [JsonPropertyName("trackCount")] public int TrackCount { get; set; }
+
         [JsonPropertyName("tracks")] public EmittedSongDto[]? Tracks { get; set; }
         [JsonPropertyName("trackIds")] public TrackIdItem[]? TrackIds { get; set; }
-        [JsonPropertyName("updateTime")] public long UpdateTime { get; set; }
+
         [JsonPropertyName("createTime")] public long CreateTime { get; set; }
-        [JsonPropertyName("creator")] public UserInfoDto? Creator { get; set; }
-        [JsonPropertyName("subscribed")] public bool? Subscribed { get; set; }
 
         public class TrackIdItem
         {

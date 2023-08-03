@@ -60,6 +60,7 @@ public class NeteaseProvider : ProviderBase,
         where TError : ErrorResultBase
         where TActualRequest : ActualRequestBase
         where TRequest : RequestBase
+        where TResponse : ResponseBase, new()
     {
         try
         {
@@ -77,6 +78,7 @@ public class NeteaseProvider : ProviderBase,
         where TError : ErrorResultBase
         where TActualRequest : ActualRequestBase
         where TRequest : RequestBase
+        where TResponse : ResponseBase, new()
     {
         try
         {
@@ -92,7 +94,7 @@ public class NeteaseProvider : ProviderBase,
         TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest? request,
         CancellationToken cancellationToken = default)
-        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new() where TCustomResponse : ResponseBase, new()
     {
         try
         {
@@ -110,7 +112,7 @@ public class NeteaseProvider : ProviderBase,
         TCustomRequest, TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, bool differ, TCustomRequest? request,
         CancellationToken cancellationToken = default)
-        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new() where TCustomResponse : ResponseBase, new()
     {
         try
         {
@@ -129,12 +131,12 @@ public class NeteaseProvider : ProviderBase,
                                                                         TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, bool differ, TCustomRequest? request,
         ApiHandlerOption option, CancellationToken cancellationToken = default)
-        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase
+        where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new()
     {
         try
         {
             return await Handler.RequestAsync(
-                contract, true, request, Option, cancellationToken);
+                contract, true, request, option, cancellationToken);
         }
         catch (Exception ex)
         {
