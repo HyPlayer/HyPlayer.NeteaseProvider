@@ -4,7 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
-        <Version>0.0.5.2</Version>
+        <Version>0.0.5.3</Version>
         <Title>HyPlayer.NeteaseProvider</Title>
         <Authors>HyPlayer Team</Authors>
         <Description>The NeteaseProvider for HyPlayer</Description>
