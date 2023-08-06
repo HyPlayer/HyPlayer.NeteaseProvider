@@ -20,7 +20,7 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
 
     public string? AvatarUrl { get; set; }
 
-    public override async Task<List<ContainerBase>> GetSubContainer()
+    public override async Task<List<ContainerBase>> GetSubContainerAsync(CancellationToken ctk = new())
     {
         var results = await NeteaseProvider.Instance.RequestAsync(NeteaseApis.UserPlaylistApi,
                                                     new UserPlaylistRequest
@@ -35,7 +35,7 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
             );
     }
 
-    public Task<ImageResourceBase?> GetCover()
+    public Task<ImageResourceBase?> GetCoverAsync(CancellationToken ctk = new())
     {
         return Task.FromResult<ImageResourceBase?>(new NeteaseImageResource()
                                                    {

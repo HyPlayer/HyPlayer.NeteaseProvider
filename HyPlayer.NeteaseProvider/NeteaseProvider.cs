@@ -21,8 +21,7 @@ public class NeteaseProvider : ProviderBase,
                                IProvidableItemProvidable,
                                IProvidableItemRangeProvidable,
                                ISearchableProvider,
-                               IRecommendationProvidable,
-                               IProvidableItemUpdatable
+                               IRecommendationProvidable
 {
     public ApiHandlerOption Option { get; set; } = new();
     public readonly NeteaseCloudMusicApiHandler Handler = new();
@@ -153,7 +152,7 @@ public class NeteaseProvider : ProviderBase,
         }
     }
 
-    public async Task<bool> LoginEmail(string email, string password, bool isMd5 = false)
+    public async Task<bool> LoginEmailAsync(string email, string password, bool isMd5 = false, CancellationToken ctk = new())
     {
         var request = new LoginEmailRequest()
                       {
@@ -163,7 +162,7 @@ public class NeteaseProvider : ProviderBase,
             request.Md5Password = password;
         else
             request.Password = password;
-        var result = await RequestAsync(NeteaseApis.LoginEmailApi, request);
+        var result = await RequestAsync(NeteaseApis.LoginEmailApi, request, ctk);
         return result.Match(
             success =>
             {
@@ -174,7 +173,7 @@ public class NeteaseProvider : ProviderBase,
         );
     }
 
-    public async Task<bool> LoginCellphone(string cellphone, string password, bool isMd5 = false)
+    public async Task<bool> LoginCellphone(string cellphone, string password, bool isMd5 = false, CancellationToken ctk = new())
     {
         var request = new LoginCellphoneRequest()
                       {
@@ -184,7 +183,7 @@ public class NeteaseProvider : ProviderBase,
             request.Md5Password = password;
         else
             request.Password = password;
-        var result = await RequestAsync(NeteaseApis.LoginCellphoneApi, request);
+        var result = await RequestAsync(NeteaseApis.LoginCellphoneApi, request, ctk);
         return result.Match(
             success =>
             {
@@ -195,16 +194,17 @@ public class NeteaseProvider : ProviderBase,
         );
     }
 
-    public async Task<List<RawLyricInfo>> GetLyricInfo(SingleSongBase song)
+    
+    public async Task<List<RawLyricInfo>> GetLyricInfoAsync(SingleSongBase song, CancellationToken ctk = new())
     {
-        var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = song.Id });
+        var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = song.Id }, ctk);
         return results.Match(
             success => success.Map(),
             _ => new()
         ).Select(t => (RawLyricInfo)t).ToList();
     }
 
-    public async Task<MusicResourceBase?> GetMusicResource(SingleSongBase song, ResourceQualityTag qualityTag)
+    public async Task<MusicResourceBase?> GetMusicResourceAsync(SingleSongBase song, ResourceQualityTag qualityTag, CancellationToken ctk = new())
     {
         var quality = "exhigh";
         if (qualityTag is NeteaseMusicQualityTag neteaseMusicQualityTag)
@@ -214,7 +214,7 @@ public class NeteaseProvider : ProviderBase,
                                          {
                                              Id = song.Id,
                                              Level = quality
-                                         });
+                                         }, ctk);
 
         NeteaseMusicResource? MatchSuccess(SongUrlResponse response)
         {
@@ -240,7 +240,7 @@ public class NeteaseProvider : ProviderBase,
         );
     }
 
-    public async Task LikeProvidableItem(string inProviderId, string? targetId)
+    public async Task LikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = new())
     {
         if (inProviderId.StartsWith(NeteaseTypeIds.SingleSong))
         {
@@ -252,7 +252,7 @@ public class NeteaseProvider : ProviderBase,
                     {
                         TrackId = inProviderId.Substring(2),
                         Like = true
-                    });
+                    }, ctk);
             }
             else
             {
@@ -263,8 +263,7 @@ public class NeteaseProvider : ProviderBase,
                         IsAdd = true,
                         PlaylistId = targetId,
                         TrackId = inProviderId.Substring(2)
-                    }
-                );
+                    }, ctk);
             }
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.Playlist))
@@ -274,12 +273,12 @@ public class NeteaseProvider : ProviderBase,
                                {
                                    IsSubscribe = true,
                                    PlaylistId = inProviderId.Substring(2)
-                               });
+                               }, ctk);
         }
         // TODO
     }
 
-    public async Task UnlikeProvidableItem(string inProviderId, string? targetId)
+    public async Task UnlikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = new())
     {
         if (inProviderId.StartsWith(NeteaseTypeIds.SingleSong))
         {
@@ -291,7 +290,7 @@ public class NeteaseProvider : ProviderBase,
                     {
                         TrackId = inProviderId.Substring(2),
                         Like = false
-                    });
+                    }, ctk);
             }
             else
             {
@@ -302,8 +301,7 @@ public class NeteaseProvider : ProviderBase,
                         IsAdd = false,
                         PlaylistId = targetId,
                         TrackId = inProviderId.Substring(2)
-                    }
-                );
+                    }, ctk);
             }
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.Playlist))
@@ -313,24 +311,24 @@ public class NeteaseProvider : ProviderBase,
                                {
                                    IsSubscribe = true,
                                    PlaylistId = inProviderId.Substring(2)
-                               });
+                               }, ctk);
         }
         // TODO
     }
 
-    public async Task<List<string>> GetLikedProvidableIds(string typeId)
+    public async Task<List<string>> GetLikedProvidableIdsAsync(string typeId, CancellationToken ctk = new())
     {
         var result = await RequestAsync(NeteaseApis.LikelistApi, new LikelistRequest()
                                                                  {
                                                                      Uid = LoginedUser?.Id!
-                                                                 });
+                                                                 }, ctk);
         return result.Match(
-            success => success.TrackIds.ToList(),
+            success => success.TrackIds?.ToList() ?? new List<string>(),
             _ => new List<string>());
     }
 
 
-    public async Task<ProvidableItemBase?> GetProvidableItemById(string inProviderId)
+    public async Task<ProvidableItemBase?> GetProvidableItemByIdAsync(string inProviderId, CancellationToken ctk = new())
     {
         var typeId = inProviderId.Substring(0, 2);
         var actualId = inProviderId.Substring(2);
@@ -341,7 +339,7 @@ public class NeteaseProvider : ProviderBase,
                                                     new SongDetailRequest()
                                                     {
                                                         Id = actualId
-                                                    });
+                                                    }, ctk);
                 return songResult.Match(
                     success => success.Songs?[0].MapToNeteaseMusic(),
                     _ => null
@@ -352,7 +350,7 @@ public class NeteaseProvider : ProviderBase,
                     new PlaylistDetailRequest
                     {
                         Id = actualId
-                    });
+                    }, ctk);
                 return playlistResult.Match(
                     success => success.Playlists?[0].MapToNeteasePlaylist(),
                     _ => null
@@ -362,7 +360,7 @@ public class NeteaseProvider : ProviderBase,
         throw new NotImplementedException();
     }
 
-    public async Task<List<ProvidableItemBase>> GetProvidableItemsRange(List<string> inProviderIds)
+    public async Task<List<ProvidableItemBase>> GetProvidableItemsRangeAsync(List<string> inProviderIds, CancellationToken ctk = new())
     {
         var grouped = inProviderIds.GroupBy(t => t.Substring(0, 2)).ToList();
         if (grouped.Count == 1)
@@ -376,7 +374,7 @@ public class NeteaseProvider : ProviderBase,
                                                         new SongDetailRequest()
                                                         {
                                                             IdList = inProviderIds.Select(t => t.Substring(2)).ToList()
-                                                        });
+                                                        }, ctk);
                     return songResult.Match(
                         success => success.Songs?.Select(t => (ProvidableItemBase)t.MapToNeteaseMusic()).ToList() ??
                                    new List<ProvidableItemBase>(),
@@ -388,7 +386,7 @@ public class NeteaseProvider : ProviderBase,
         throw new NotImplementedException();
     }
 
-    public async Task<ContainerBase?> SearchProvidableItems(string keyword, string typeId)
+    public async Task<ContainerBase?> SearchProvidableItemsAsync(string keyword, string typeId, CancellationToken ctk = new())
     {
         return new NeteaseSearchContainer
                {
@@ -399,7 +397,7 @@ public class NeteaseProvider : ProviderBase,
                };
     }
 
-    public async Task<ContainerBase?> GetStoredItems(string typeId)
+    public async Task<ContainerBase?> GetStoredItemsAsync(string typeId, CancellationToken ctk = new())
     {
         switch (typeId)
         {
@@ -410,7 +408,7 @@ public class NeteaseProvider : ProviderBase,
         }
     }
 
-    public async Task<ContainerBase?> GetRecommendation(string? typeId = null)
+    public async Task<ContainerBase?> GetRecommendationAsync(string? typeId = null, CancellationToken ctk = new())
     {
         // ReSharper disable once ConvertIfStatementToSwitchStatement
         if (typeId == NeteaseTypeIds.Playlist) // 推荐歌单
@@ -418,7 +416,7 @@ public class NeteaseProvider : ProviderBase,
                    {
                        return (await RequestAsync(
                                NeteaseApis.RecommendPlaylistsApi,
-                               new RecommendPlaylistsRequest()))
+                               new RecommendPlaylistsRequest(), ctk))
                            .Match(success => success.Recommends?.Select(
                                       t => (ProvidableItemBase)
                                           t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
@@ -433,7 +431,7 @@ public class NeteaseProvider : ProviderBase,
                    {
                        return (await RequestAsync(
                                NeteaseApis.RecommendSongsApi,
-                               new RecommendSongsRequest()))
+                               new RecommendSongsRequest(), ctk))
                            .Match(success => success.Data?.DailySongs?.Select(
                                       t => (ProvidableItemBase)
                                           t.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
@@ -448,7 +446,7 @@ public class NeteaseProvider : ProviderBase,
                    {
                        return (await RequestAsync(
                                NeteaseApis.ToplistApi,
-                               new ToplistRequest()))
+                               new ToplistRequest(), ctk))
                            .Match(success => success.List?.Select(
                                       t => (ProvidableItemBase)
                                           t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
@@ -468,7 +466,7 @@ public class NeteaseProvider : ProviderBase,
                                    {
                                        Category = typeId.Substring(2),
                                        Limit = count
-                                   }))
+                                   }, ctk))
                                .Match(success => success.Playlists?.Select(
                                           t => (ProvidableItemBase)
                                               t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
@@ -482,12 +480,5 @@ public class NeteaseProvider : ProviderBase,
         }
 
         throw new ArgumentException(typeId);
-    }
-
-    public async Task<ProvidableItemBase?> UpdateProvidableItemInfo(ProvidableItemBase providableItem)
-    {
-        var actualId = providableItem.ActualId;
-        var typeId = providableItem.TypeId;
-        return await GetProvidableItemById($"{providableItem.TypeId}{providableItem.ActualId}");
     }
 }

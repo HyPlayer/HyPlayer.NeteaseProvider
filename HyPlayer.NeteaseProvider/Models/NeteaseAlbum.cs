@@ -21,7 +21,7 @@ public class NeteaseAlbum : AlbumBase, IHasCover, IHasTranslation, IHasDescripti
     public List<NeteaseArtist>? Artists { get; set; }
     
 
-    public async Task<ImageResourceBase?> GetCover()
+    public async Task<ImageResourceBase?> GetCoverAsync(CancellationToken ctk = new())
     {
         return new NeteaseImageResource
                {
@@ -32,7 +32,7 @@ public class NeteaseAlbum : AlbumBase, IHasCover, IHasTranslation, IHasDescripti
 
     public string? Translation { get; set; }
     public string? Description { get; set; }
-    public Task<List<PersonBase>?> GetCreators()
+    public Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = new())
     {
         if (Artists is null) return Task.FromResult<List<PersonBase>?>(null);
         return Task.FromResult(Artists?.Select(ar=>(PersonBase)ar).ToList());

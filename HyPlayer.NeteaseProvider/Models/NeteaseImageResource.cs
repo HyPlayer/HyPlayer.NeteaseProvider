@@ -4,7 +4,7 @@ namespace HyPlayer.NeteaseProvider.Models;
 
 public class NeteaseImageResource : ImageResourceBase
 {
-    public override async Task<object?> GetResource(ResourceQualityTag? qualityTag = null, Type? awaitingType = null)
+    public override async Task<object?> GetResourceAsync(ResourceQualityTag? qualityTag = null, Type? awaitingType = null,CancellationToken ctk = new())
     {
         if (awaitingType == typeof(string))
         {
@@ -13,5 +13,4 @@ public class NeteaseImageResource : ImageResourceBase
 
         return null;
     }
-    
 }

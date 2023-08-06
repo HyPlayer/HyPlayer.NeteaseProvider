@@ -206,16 +206,16 @@ public class NeteaseApisTests : IAsyncLifetime
             error => throw error
         );
 
-        (await (await _provider.GetRecommendation(NeteaseTypeIds.Playlist))
+        (await (await _provider.GetRecommendationAsync(NeteaseTypeIds.Playlist))
                .Should().BeAssignableTo<LinerContainerBase>().Subject
-               .GetAllItems()).Should().NotBeEmpty();
+               .GetAllItemsAsync()).Should().NotBeEmpty();
     }
 
     [Fact]
     public async void Search_Song_Should_ReturnNormal()
     {
-        var result = await _provider.SearchProvidableItems("spiral", NeteaseTypeIds.SingleSong);
-        (await result.Should().BeAssignableTo<LinerContainerBase>().Subject.GetAllItems()).Should().NotBeEmpty();
+        var result = await _provider.SearchProvidableItemsAsync("spiral", NeteaseTypeIds.SingleSong);
+        (await result.Should().BeAssignableTo<LinerContainerBase>().Subject.GetAllItemsAsync()).Should().NotBeEmpty();
     }
 
     [Fact]

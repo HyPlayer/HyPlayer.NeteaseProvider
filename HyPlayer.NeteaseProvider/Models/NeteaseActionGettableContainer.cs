@@ -21,7 +21,7 @@ public class NeteaseActionGettableContainer : LinerContainerBase
 
     public Func<Task<List<ProvidableItemBase>>>? Getter { get; set; }
 
-    public override async Task<List<ProvidableItemBase>> GetAllItems()
+    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = new())
     {
         return await (Getter?.Invoke() ?? Task.FromResult(new List<ProvidableItemBase>()));
     }
@@ -38,15 +38,15 @@ public class NeteaseActionGettableProgressiveContainer : NeteaseActionGettableCo
     public Func<int, int, Task<(bool, List<ProvidableItemBase>)>>? ProgressiveGetter { get; set; }
 
 
-    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsList(int start, int count)
+    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = new())
     {
         return await (ProgressiveGetter?.Invoke(start, count) ??
                       Task.FromResult((false, new List<ProvidableItemBase>())));
     }
 
-    public override async Task<List<ProvidableItemBase>> GetAllItems()
+    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = new())
     {
-        return (await GetProgressiveItemsList(0,MaxProgressiveCount)).Item2;
+        return (await GetProgressiveItemsListAsync(0, MaxProgressiveCount, ctk)).Item2;
     }
 
     public int MaxProgressiveCount { get; set; } = 30;

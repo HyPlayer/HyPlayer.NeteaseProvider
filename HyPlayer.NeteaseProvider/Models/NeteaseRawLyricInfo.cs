@@ -24,7 +24,7 @@ public class NeteaseRawLyricInfo : RawLyricInfo
         
     }
 
-    public override Task<object?> GetResource(ResourceQualityTag? qualityTag = null, Type? awaitingType = null)
+    public override Task<object?> GetResourceAsync(ResourceQualityTag? qualityTag = null, Type? awaitingType = null,CancellationToken ctk = new())
     {
         return Task.FromResult<object?>(LyricText);
     }

@@ -20,13 +20,13 @@ public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover
 
     public required List<PersonBase>? Artists { get; init; }
 
-    public override Task<List<PersonBase>?> GetCreators()
+    public override Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = new())
     {
         return Task.FromResult(Artists);
     }
 
     public string? Translation { get; set; }
-    public Task<ImageResourceBase?> GetCover()
+    public Task<ImageResourceBase?> GetCoverAsync(CancellationToken ctk = new())
     {
         return Task.FromResult<ImageResourceBase?>(new NeteaseImageResource() { Url = CoverUrl });
     }
