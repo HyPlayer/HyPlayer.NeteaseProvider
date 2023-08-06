@@ -12,7 +12,7 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.Artist;
 
-    public override async Task<List<ProvidableItemBase>> GetAllItems()
+    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = new())
     {
         var itemType = ActualId.Substring(0, 3);
         var artistId = ActualId.Substring(3);
@@ -67,7 +67,7 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
         }
     }
 
-    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsList(int start = 0, int count = 50)
+    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start = 0, int count = 50,CancellationToken ctk = new())
     {
         var itemType = ActualId.Substring(0, 3);
         var artistId = ActualId.Substring(3);

@@ -23,12 +23,12 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
         Name = "搜索结果";
     }
 
-    public override async Task<List<ProvidableItemBase>> GetAllItems()
+    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = new())
     {
-        return (await GetProgressiveItemsList(0, MaxProgressiveCount)).Item2;
+        return (await GetProgressiveItemsListAsync(0, MaxProgressiveCount, ctk)).Item2;
     }
 
-    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsList(int start, int count)
+    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count,CancellationToken ctk = new())
     {
         switch (SearchTypeId)
         {
@@ -43,7 +43,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                                                           Type = SearchTypeId,
                                                           Limit = count,
                                                           Offset = start
-                                                      });
+                                                      }, ctk);
                 return result.Match(success => (success.Result?.Count > start + count, success.Result?.Items
                                                     ?.Select(t => (ProvidableItemBase)t.MapToNeteaseMusic())
                                                     .ToList() ?? new()),

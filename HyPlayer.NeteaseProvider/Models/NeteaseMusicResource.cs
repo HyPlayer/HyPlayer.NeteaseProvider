@@ -13,7 +13,7 @@ public class NeteaseMusicResource : MusicResourceBase
     public string? Level { get; set; }
 
 
-    public override Task<object?> GetResource(ResourceQualityTag? qualityTag = null, Type? awaitingType = null)
+    public override Task<object?> GetResourceAsync(ResourceQualityTag? qualityTag = null, Type? awaitingType = null,CancellationToken ctk = new())
     {
         return Task.FromResult<object?>(Url);
     }
