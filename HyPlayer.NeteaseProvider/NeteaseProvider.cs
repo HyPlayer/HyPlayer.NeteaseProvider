@@ -173,7 +173,7 @@ public class NeteaseProvider : ProviderBase,
         );
     }
 
-    public async Task<bool> LoginCellphone(string cellphone, string password, bool isMd5 = false, CancellationToken ctk = new())
+    public async Task<bool> LoginCellphoneAsync(string cellphone, string password, bool isMd5 = false, CancellationToken ctk = new())
     {
         var request = new LoginCellphoneRequest()
                       {
