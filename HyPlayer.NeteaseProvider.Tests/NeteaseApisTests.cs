@@ -230,6 +230,18 @@ public class NeteaseApisTests : IAsyncLifetime
                      e => throw e);
     }
 
+    [Theory]
+    [InlineData("1972641406")]
+    public async void ListenFirstInfo_Should_BeNormal(string songId)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.MusicFirstListenInfoApi, new MusicFirstListenInfoRequest()
+                                                      {
+                                                          SongId = songId
+                                                      });
+        result.Match(s => s.Code.Should().Be(200),
+                     e => throw e);
+    }
+
     public async Task InitializeAsync()
     {
         _provider.Option.Cookies["__csrf"] = Secrets.Csrf;

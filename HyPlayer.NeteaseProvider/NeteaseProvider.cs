@@ -479,6 +479,15 @@ public class NeteaseProvider : ProviderBase,
                    };
         }
 
+        if (typeId == NeteaseTypeIds.PersonalFm)
+        {
+            return new NeteasePersonalFMContainer
+                   {
+                       Name = "私人FM",
+                       ActualId = ""
+                   };
+        }
+        
         throw new ArgumentException(typeId);
     }
 }

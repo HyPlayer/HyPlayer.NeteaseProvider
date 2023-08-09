@@ -76,4 +76,9 @@ public static class NeteaseTypeIds
     /// 歌词
     /// </summary>
     public const string Lyric = "lr";
+
+    /// <summary>
+    /// 私人 FM
+    /// </summary>
+    public const string PersonalFm = "fm";
 }

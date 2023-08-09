@@ -51,3 +51,25 @@ public class NeteaseActionGettableProgressiveContainer : NeteaseActionGettableCo
 
     public int MaxProgressiveCount { get; set; } = 30;
 }
+
+
+public class NeteaseActionGettableUndetermindContainer : UndeterminedContainerBase
+{
+    public NeteaseActionGettableUndetermindContainer(
+        Func<Task<List<ProvidableItemBase>>> progressiveGetter)
+    {
+        ProgressiveGetter = progressiveGetter;
+    }
+
+    public Func<Task<List<ProvidableItemBase>>>? ProgressiveGetter { get; set; }
+
+
+    public override async Task<List<ProvidableItemBase>> GetNextItemsRangeAsync(CancellationToken ctk = new CancellationToken())
+    {
+        return await (ProgressiveGetter?.Invoke() ??
+                      Task.FromResult(new List<ProvidableItemBase>()));
+    }
+
+    public override string ProviderId => "ncm";
+    public override string TypeId => NeteaseTypeIds.ActionGettableSongContainer;
+}
