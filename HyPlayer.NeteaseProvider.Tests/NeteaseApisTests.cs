@@ -230,6 +230,15 @@ public class NeteaseApisTests : IAsyncLifetime
                      e => throw e);
     }
 
+    [Fact]
+    public async void AiDjRcmdInfo_Should_ReturnNormal()
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.AiDjContentRcmdInfoApi, new AiDjContentRcmdInfoRequest());
+        result.Match(success =>
+                         success.Code.Should().Be(200),
+            e=>throw e);
+    }
+    
     [Theory]
     [InlineData("1972641406")]
     public async void ListenFirstInfo_Should_BeNormal(string songId)
