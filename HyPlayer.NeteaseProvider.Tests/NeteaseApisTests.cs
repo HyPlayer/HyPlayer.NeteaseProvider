@@ -152,6 +152,7 @@ public class NeteaseApisTests : IAsyncLifetime
             error => throw error
         );
     }
+
     [Theory]
     [InlineData("2778408564")]
     [InlineData("897784673")]
@@ -236,9 +237,9 @@ public class NeteaseApisTests : IAsyncLifetime
         var result = await _provider.RequestAsync(NeteaseApis.AiDjContentRcmdInfoApi, new AiDjContentRcmdInfoRequest());
         result.Match(success =>
                          success.Code.Should().Be(200),
-            e=>throw e);
+                     e => throw e);
     }
-    
+
     [Theory]
     [InlineData("1972641406")]
     public async void ListenFirstInfo_Should_BeNormal(string songId)
@@ -247,6 +248,21 @@ public class NeteaseApisTests : IAsyncLifetime
                                                       {
                                                           SongId = songId
                                                       });
+        result.Match(s => s.Code.Should().Be(200),
+                     e => throw e);
+    }
+    
+    [Theory]
+    [InlineData("DEFAULT")]
+    [InlineData("SCENE_RCMD", "NIGHT_EMO")]
+    public async void PersonalFm_Should_BeNormal(string mode, string? subMode = null)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.PersonalFmApi, new PersonalFmRequest
+                                                                             {
+                                                                                 Mode = mode,
+                                                                                 SubMode = subMode,
+                                                                                 Limit = 5
+                                                                             });
         result.Match(s => s.Code.Should().Be(200),
                      e => throw e);
     }
