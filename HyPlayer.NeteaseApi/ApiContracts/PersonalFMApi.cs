@@ -34,7 +34,8 @@ public class PersonalFmApi : EApiContractBase<PersonalFmRequest, PersonalFmRespo
 
 public class PersonalFmRequest : RequestBase
 {
-    public string Mode { get; set; } = "FAMILIAR";
+    public string Mode { get; set; } = "FAMILIAR"; // aidj, DEFAULT, FAMILIAR, EXPLORE, SCENE_RCMD ( EXERCISE, FOCUS, NIGHT_EMO  )
+    public string? SubMode { get; set; } = null;
     public int Limit { get; set; } = 3;
 }
 
@@ -51,5 +52,6 @@ public class PersonalFmResponse : CodedResponseBase
 public class PersonalFmActualRequest : EApiActualRequestBase
 {
     [JsonPropertyName("mode")] public string Mode { get; set; } = "FAMILIAR";
+    [JsonPropertyName("subMode")] public string? SubMode { get; set; } = null;
     [JsonPropertyName("limit")] public int Limit { get; set; } = 3;
 }
