@@ -1,6 +1,5 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using CryptoBase.DataFormatExtensions;
 using HyPlayer.NeteaseApi.Extensions;
 using Spectre.Console;
 
@@ -123,4 +122,43 @@ public enum CurrentMode
     WeApiResponse,
     LinuxApiRequest,
     LinuxApiResponse
+}
+
+// Code from https://github.com/HMBSbige/CryptoBase/blob/master/src/CryptoBase/DataFormatExtensions/HexExtensions.cs
+public static class HexExtensions
+{
+    /// <summary>
+    /// Converts the specified string, which encodes binary data as hex characters, to an equivalent 8-bit unsigned integer array.
+    /// </summary>
+    public static byte[] FromHex(this string hex)
+    {
+        return hex.AsSpan().FromHex();
+    }
+
+    /// <summary>
+    /// Converts the span, which encodes binary data as hex characters, to an equivalent 8-bit unsigned integer array.
+    /// </summary>
+    public static byte[] FromHex(this ReadOnlySpan<char> hex)
+    {
+        if ((hex.Length & 1) is not 0)
+        {
+            throw new ArgumentException($@"{nameof(hex)} length must be even");
+        }
+
+        int length = hex.Length >> 1;
+        byte[] buffer = GC.AllocateUninitializedArray<byte>(length);
+
+        for (int i = 0, j = 0; i < length; ++i, ++j)
+        {
+            // Convert first half of byte
+            char c = hex[j];
+            buffer[i] = (byte)((c > '9' ? (c > 'Z' ? (c - 'a' + 10) : (c - 'A' + 10)) : (c - '0')) << 4);
+
+            // Convert second half of byte
+            c = hex[++j];
+            buffer[i] |= (byte)(c > '9' ? (c > 'Z' ? (c - 'a' + 10) : (c - 'A' + 10)) : (c - '0'));
+        }
+
+        return buffer;
+    }
 }
