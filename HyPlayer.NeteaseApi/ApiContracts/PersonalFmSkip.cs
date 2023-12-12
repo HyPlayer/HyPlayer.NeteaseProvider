@@ -19,7 +19,7 @@ public class AiDjSkipApi : EApiContractBase<AiDjSkipRequest, AiDjSkipResponse, E
         ApiHandlerOption option,
         CancellationToken cancellationToken = default)
     {
-        var res = await base.GenerateRequestMessageAsync(actualRequest, option, cancellationToken);
+        var res = await base.GenerateRequestMessageAsync(actualRequest, option, cancellationToken).ConfigureAwait(false);
         res.RequestUri =
             new Uri(
                 $"https://interface3.music.163.com/eapi/v1/radio/skip?songId={Request?.SongId}&time={Request?.Time ?? 0}&mode={Request?.Mode ?? "DEFAULT"}&subMode={Request?.SubMode}&source=userfm");

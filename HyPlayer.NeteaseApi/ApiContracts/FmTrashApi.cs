@@ -30,7 +30,7 @@ public class FmTrashApi : WeApiContractBase<FmTrashRequest, FmTrashResponse, Err
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(
         ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        var req = await base.GenerateRequestMessageAsync(option, cancellationToken);
+        var req = await base.GenerateRequestMessageAsync(option, cancellationToken).ConfigureAwait(false);
         req.RequestUri = new Uri($"https://music.163.com/weapi/radio/trash/add?alg=RT&songId={Request?.Id}&time=25");
         return req;
     }

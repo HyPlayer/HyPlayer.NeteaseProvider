@@ -39,7 +39,7 @@ public class LoginEmailApi : WeApiContractBase<LoginEmailRequest, LoginResponse,
     public override async Task<Results<LoginResponse, ErrorResultBase>> ProcessResponseAsync(
         HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        return (await base.ProcessResponseAsync(response, option, cancellationToken))
+        return (await base.ProcessResponseAsync(response, option, cancellationToken).ConfigureAwait(false))
             .Match(
                 (success) => success.Code != 200 ? new ErrorResultBase(success.Code, success.Message) : success,
                 Results<LoginResponse, ErrorResultBase>.CreateError

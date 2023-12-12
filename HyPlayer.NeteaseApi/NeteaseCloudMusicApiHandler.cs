@@ -26,8 +26,8 @@ public class NeteaseCloudMusicApiHandler
     {
         var client = new HttpClient(_httpClientHandler);
         var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken),
-                                              cancellationToken);
-        return await contract.ProcessResponseAsync(response, option, cancellationToken);
+                                              cancellationToken).ConfigureAwait(false);
+        return await contract.ProcessResponseAsync(response, option, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TRequest, TResponse, TError, TActualRequest>(
@@ -37,9 +37,9 @@ public class NeteaseCloudMusicApiHandler
     {
         var client = new HttpClient(_httpClientHandler);
         contract.Request = request;
-        await contract.MapRequest(request);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken), cancellationToken);
-        return await contract.ProcessResponseAsync(response, option, cancellationToken);
+        await contract.MapRequest(request).ConfigureAwait(false);
+        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false);
+        return await contract.ProcessResponseAsync(response, option, cancellationToken).ConfigureAwait(false);
     }
     
     public async Task<Results<TCustomResponse, ErrorResultBase>> RequestAsync<TCustomResponse,TRequest, TResponse, TError, TActualRequest>(
@@ -49,9 +49,9 @@ public class NeteaseCloudMusicApiHandler
     {
         var client = new HttpClient(_httpClientHandler);
         contract.Request = request;
-        await contract.MapRequest(request);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken), cancellationToken);
-        return await contract.ProcessResponseAsync<TCustomResponse>(response, option, cancellationToken);
+        await contract.MapRequest(request).ConfigureAwait(false);
+        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(option, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false);
+        return await contract.ProcessResponseAsync<TCustomResponse>(response, option, cancellationToken).ConfigureAwait(false);
     }
     
     public async Task<Results<TCustomResponse, ErrorResultBase>> RequestAsync<TCustomRequest, TCustomResponse,TRequest, TResponse, TError, TActualRequest>(
@@ -60,8 +60,8 @@ public class NeteaseCloudMusicApiHandler
         where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new() where TCustomResponse : ResponseBase, new()
     {
         var client = new HttpClient(_httpClientHandler);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync<TCustomRequest>(request! ,option, cancellationToken), cancellationToken);
-        return await contract.ProcessResponseAsync<TCustomResponse>(response, option, cancellationToken);
+        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync<TCustomRequest>(request! ,option, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false);
+        return await contract.ProcessResponseAsync<TCustomResponse>(response, option, cancellationToken).ConfigureAwait(false);
     }
     
     public async Task<Results<TResponse, ErrorResultBase>> RequestAsync<TCustomRequest, TRequest, TResponse, TError, TActualRequest>(
@@ -70,7 +70,7 @@ public class NeteaseCloudMusicApiHandler
         where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new()
     {
         var client = new HttpClient(_httpClientHandler);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync<TCustomRequest>(request! ,option, cancellationToken), cancellationToken);
-        return await contract.ProcessResponseAsync(response, option, cancellationToken);
+        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync<TCustomRequest>(request! ,option, cancellationToken), cancellationToken).ConfigureAwait(false);
+        return await contract.ProcessResponseAsync(response, option, cancellationToken).ConfigureAwait(false);
     }
 }
