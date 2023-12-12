@@ -21,7 +21,7 @@ public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbu
 
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        var req = await base.GenerateRequestMessageAsync(option, cancellationToken);
+        var req = await base.GenerateRequestMessageAsync(option, cancellationToken).ConfigureAwait(false);
         req.RequestUri = new Uri(Url + Request!.ArtistId);
         return req;
     }

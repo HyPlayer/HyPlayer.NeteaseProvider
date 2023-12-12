@@ -45,7 +45,7 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(
         ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        return await GenerateRequestMessageAsync(ActualRequest!, option, cancellationToken);
+        return await GenerateRequestMessageAsync(ActualRequest!, option, cancellationToken).ConfigureAwait(false);
     }
 
     public override async Task<Results<TResponseModel, ErrorResultBase>> ProcessResponseAsync<TResponseModel>(
@@ -64,7 +64,7 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
             }
         }
 
-        var buffer = await response.Content.ReadAsByteArrayAsync();
+        var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
         var result = Encoding.UTF8.GetString(buffer);
         var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
@@ -84,6 +84,6 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
     public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(
         HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        return await ProcessResponseAsync<TResponse>(response, option, cancellationToken);
+        return await ProcessResponseAsync<TResponse>(response, option, cancellationToken).ConfigureAwait(false);
     }
 }

@@ -21,7 +21,7 @@ public abstract class
 
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        return await GenerateRequestMessageAsync(ActualRequest! ,option, cancellationToken);
+        return await GenerateRequestMessageAsync(ActualRequest! ,option, cancellationToken).ConfigureAwait(false);
     }
 
     public override Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestMessageModel>(TActualRequestMessageModel actualRequest, ApiHandlerOption option, CancellationToken cancellationToken = default)
@@ -102,7 +102,7 @@ public abstract class
     public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(HttpResponseMessage response, ApiHandlerOption option,
                                                                                    CancellationToken cancellationToken = default)
     {
-        return await ProcessResponseAsync<TResponse>(response, option, cancellationToken);
+        return await ProcessResponseAsync<TResponse>(response, option, cancellationToken).ConfigureAwait(false);
     }
 
     public override async Task<Results<TResponseModel, ErrorResultBase>> ProcessResponseAsync<TResponseModel>(
@@ -120,7 +120,7 @@ public abstract class
             }
         }
 
-        var buffer = await response.Content.ReadAsByteArrayAsync();
+        var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
         try
         {
