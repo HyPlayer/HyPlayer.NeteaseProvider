@@ -312,7 +312,7 @@ public class NeteaseProvider : ProviderBase,
             await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
                                new PlaylistSubscribeRequest()
                                {
-                                   IsSubscribe = true,
+                                   IsSubscribe = false,
                                    PlaylistId = inProviderId.Substring(2)
                                }, ctk);
         }
