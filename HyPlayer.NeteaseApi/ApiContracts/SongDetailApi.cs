@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -29,7 +29,7 @@ public class SongDetailApi : WeApiContractBase<SongDetailRequest, SongDetailResp
 
 public class SongDetailRequest : IdOrIdListListRequest
 {
-    
+
 }
 
 public class SongDetailActualRequest : WeApiActualRequestBase

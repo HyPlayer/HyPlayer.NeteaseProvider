@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -30,10 +30,10 @@ public class AiDjSkipApi : EApiContractBase<AiDjSkipRequest, AiDjSkipResponse, E
     {
         if (request is not null)
             ActualRequest = new AiDjSkipActualRequest
-                            {
-                                SongId = request.SongId,
-                                Time = request.Time
-                            };
+            {
+                SongId = request.SongId,
+                Time = request.Time
+            };
         return Task.CompletedTask;
     }
 

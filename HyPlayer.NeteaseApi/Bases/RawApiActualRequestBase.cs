@@ -43,7 +43,7 @@ public abstract class RawApiActualRequestBase : ActualRequestBase, IDictionary<s
 
     public int Count => _backingDictionary.Count;
 
-    public bool IsReadOnly => ((ICollection<KeyValuePair<string,string>>)_backingDictionary).IsReadOnly;
+    public bool IsReadOnly => ((ICollection<KeyValuePair<string, string>>)_backingDictionary).IsReadOnly;
 
     public void Add(string key, string value)
     {
@@ -71,7 +71,7 @@ public abstract class RawApiActualRequestBase : ActualRequestBase, IDictionary<s
         set => _backingDictionary[key] = value;
     }
 
-    public ICollection<string> Keys => ((IDictionary<string,string>)_backingDictionary).Keys;
+    public ICollection<string> Keys => ((IDictionary<string, string>)_backingDictionary).Keys;
 
-    public ICollection<string> Values => ((IDictionary<string,string>)_backingDictionary).Values;
+    public ICollection<string> Values => ((IDictionary<string, string>)_backingDictionary).Values;
 }

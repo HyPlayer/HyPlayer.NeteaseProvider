@@ -1,4 +1,3 @@
-﻿using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseProvider.Constants;
@@ -28,7 +27,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
         return (await GetProgressiveItemsListAsync(0, MaxProgressiveCount, ctk)).Item2;
     }
 
-    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count,CancellationToken ctk = new())
+    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = new())
     {
         switch (SearchTypeId)
         {
@@ -48,7 +47,6 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                                                     ?.Select(t => (ProvidableItemBase)t.MapToNeteaseMusic())
                                                     .ToList() ?? new()),
                                     _ => (false, new()));
-                break;
             default:
                 throw new NotImplementedException();
         }

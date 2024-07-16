@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -22,10 +22,10 @@ public class UserCloudApi : WeApiContractBase<UserCloudRequest, UserCloudRespons
     public override Task MapRequest(UserCloudRequest? request)
     {
         ActualRequest = new()
-                        {
-                            Limit = request?.Limit ?? 30,
-                            Offset = request?.Offset ?? 0
-                        };
+        {
+            Limit = request?.Limit ?? 30,
+            Offset = request?.Offset ?? 0
+        };
         return Task.CompletedTask;
     }
 }
@@ -36,7 +36,7 @@ public class UserCloudRequest : RequestBase
     /// 起始位置
     /// </summary>
     public int Limit { get; set; } = 30;
-    
+
     /// <summary>
     /// 获取数量
     /// </summary>
@@ -49,7 +49,7 @@ public class UserCloudResponse : CodedResponseBase
     [JsonPropertyName("size")] public long MaxSize { get; set; }
     [JsonPropertyName("count")] public int Count { get; set; }
     [JsonPropertyName("data")] public UserCloudSongItem[]? Songs { get; set; }
-    
+
     public class UserCloudSongItem
     {
         [JsonPropertyName("album")] public string? AlbumName { get; set; }

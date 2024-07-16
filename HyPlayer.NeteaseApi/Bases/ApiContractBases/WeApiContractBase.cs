@@ -1,10 +1,10 @@
-﻿using System.Numerics;
+﻿using HyPlayer.NeteaseApi.Extensions;
+using Kengwang.Toolkit;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using HyPlayer.NeteaseApi.Extensions;
-using Kengwang.Toolkit;
 
 namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
@@ -105,7 +105,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
 #if DEBUG
         if (ret is null)
-            ret = new ();
+            ret = new();
         ret.OriginalResponse = result;
 #endif
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
@@ -235,9 +235,9 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         byte[] exponent = reader.ReadBytes(exponentLength);
 
         return new RSAParameters
-               {
-                   Modulus = modulus,
-                   Exponent = exponent
-               };
+        {
+            Modulus = modulus,
+            Exponent = exponent
+        };
     }
 }

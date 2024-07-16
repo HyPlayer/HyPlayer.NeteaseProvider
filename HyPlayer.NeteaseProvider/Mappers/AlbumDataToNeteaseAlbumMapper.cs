@@ -9,11 +9,11 @@ public static class AlbumDataToNeteaseAlbumMapper
     {
         if (data is null) return null;
         return new NeteaseAlbum
-               {
-                   Name = data.Name!,
-                   ActualId = data.Id!,
-                   PictureUrl = data.PictureUrl
-               };
-        
+        {
+            Name = data.Name!,
+            ActualId = data.Id!,
+            PictureUrl = data.PictureUrl
+        };
+
     }
 }

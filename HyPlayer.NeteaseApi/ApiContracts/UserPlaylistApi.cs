@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -23,11 +23,11 @@ public class UserPlaylistApi : WeApiContractBase<UserPlaylistRequest, UserPlayli
     {
         if (request is not null)
             ActualRequest = new UserPlaylistActualRequest
-                            {
-                                Uid = request.Uid,
-                                Limit = request.Limit,
-                                Offset = request.Offset
-                            };
+            {
+                Uid = request.Uid,
+                Limit = request.Limit,
+                Offset = request.Offset
+            };
         return Task.CompletedTask;
     }
 }
@@ -37,13 +37,13 @@ public class UserPlaylistRequest : RequestBase
     /// <summary>
     /// 用户 ID
     /// </summary>
-    public required string Uid { get; set; }
-    
+    public string? Uid { get; set; }
+
     /// <summary>
     /// 获取数目
     /// </summary>
     public int Limit { get; set; } = 30;
-    
+
     /// <summary>
     /// 起始位置
     /// </summary>

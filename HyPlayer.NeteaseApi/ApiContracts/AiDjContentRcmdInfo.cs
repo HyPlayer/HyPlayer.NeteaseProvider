@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -14,8 +14,9 @@ public class AiDjContentRcmdInfoApi : EApiContractBase<AiDjContentRcmdInfoReques
     public override string Url => "https://interface3.music.163.com/eapi/aidj/content/rcmd/info";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override async Task MapRequest(AiDjContentRcmdInfoRequest? request)
+    public override Task MapRequest(AiDjContentRcmdInfoRequest? request)
     {
+        throw new NotImplementedException();
         // TODO
     }
 
@@ -24,15 +25,16 @@ public class AiDjContentRcmdInfoApi : EApiContractBase<AiDjContentRcmdInfoReques
 
 public class AiDjContentRcmdInfoRequest : RequestBase
 {
-    
+
 }
 
 public class AiDjContentRcmdInfoResponse : CodedResponseBase
 {
-    
+
 }
 
 public class AiDjContentRcmdInfoActualRequest : EApiActualRequestBase
 {
-    [JsonPropertyName("extInfo")] public string ExtInfo { get; set; }
+    [JsonPropertyName("extInfo")]
+    public string? ExtInfo { get; set; }
 }

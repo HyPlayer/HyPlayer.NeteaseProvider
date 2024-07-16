@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -30,10 +30,10 @@ public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbu
     {
         if (request is not null)
             ActualRequest = new ArtistAlbumsActualRequest
-                            {
-                                Limit = request.Limit,
-                                Offset = request.Start
-                            };
+            {
+                Limit = request.Limit,
+                Offset = request.Start
+            };
         return Task.CompletedTask;
     }
 }
@@ -44,12 +44,12 @@ public class ArtistAlbumsRequest : RequestBase
     /// 起始位置
     /// </summary>
     public int Start { get; set; } = 0;
-    
+
     /// <summary>
     /// 获取数量
     /// </summary>
     public int Limit { get; set; } = 30;
-    
+
     /// <summary>
     /// 歌手 ID
     /// </summary>

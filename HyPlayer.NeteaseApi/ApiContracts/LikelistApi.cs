@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -21,9 +21,9 @@ public class LikelistApi : WeApiContractBase<LikelistRequest, LikelistResponse, 
     {
         if (request is not null)
             ActualRequest = new LikelistActualRequest
-                            {
-                                Uid = request.Uid
-                            };
+            {
+                Uid = request.Uid
+            };
         return Task.CompletedTask;
     }
 }

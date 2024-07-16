@@ -1,10 +1,10 @@
-﻿using System.Globalization;
+﻿using HyPlayer.NeteaseApi.Extensions;
+using Kengwang.Toolkit;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using HyPlayer.NeteaseApi.Extensions;
-using Kengwang.Toolkit;
 
 namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
@@ -21,7 +21,7 @@ public abstract class
 
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        return await GenerateRequestMessageAsync(ActualRequest! ,option, cancellationToken).ConfigureAwait(false);
+        return await GenerateRequestMessageAsync(ActualRequest!, option, cancellationToken).ConfigureAwait(false);
     }
 
     public override Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestMessageModel>(TActualRequestMessageModel actualRequest, ApiHandlerOption option, CancellationToken cancellationToken = default)
@@ -140,7 +140,7 @@ public abstract class
                 var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
 #if DEBUG
                 if (ret is null)
-                    ret = new ();
+                    ret = new();
                 ret.OriginalResponse = result;
 #endif
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalse

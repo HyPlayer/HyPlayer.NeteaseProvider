@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -32,9 +32,9 @@ public class PlaylistSubscribeApi : WeApiContractBase<PlaylistSubscribeRequest, 
     {
         if (request is null) return Task.CompletedTask;
         ActualRequest = new()
-                        {
-                            PlaylistId = request.PlaylistId
-                        };
+        {
+            PlaylistId = request.PlaylistId
+        };
         _action = request.IsSubscribe ? "subscribe" : "unsubscribe";
         return Task.CompletedTask;
     }

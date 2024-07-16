@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -20,13 +20,13 @@ public class CommentFloorApi : WeApiContractBase<CommentFloorRequest, CommentFlo
     {
         if (request is not null)
             ActualRequest = new()
-                            {
-                                CsrfToken = null,
-                                ThreadId = request.ThreadId,
-                                ParentCommentId = request.ParentCommentId,
-                                Time = request.Time,
-                                Limit = request.Limit
-                            };
+            {
+                CsrfToken = null,
+                ThreadId = request.ThreadId,
+                ParentCommentId = request.ParentCommentId,
+                Time = request.Time,
+                Limit = request.Limit
+            };
         return Task.CompletedTask;
     }
 }
@@ -69,9 +69,9 @@ public class CommentFloorResponse : CodedResponseBase
 }
 
 public class CommentFloorActualRequest : WeApiActualRequestBase
-    {
-        [JsonPropertyName("threadId")] public required string ThreadId { get; set; }
-        [JsonPropertyName("parentCommentId")] public required string ParentCommentId { get; set; }
-        [JsonPropertyName("time")] public long Time { get; set; } = -1;
-        [JsonPropertyName("limit")] public int Limit { get; set; } = 20;
-    }
+{
+    [JsonPropertyName("threadId")] public required string ThreadId { get; set; }
+    [JsonPropertyName("parentCommentId")] public required string ParentCommentId { get; set; }
+    [JsonPropertyName("time")] public long Time { get; set; } = -1;
+    [JsonPropertyName("limit")] public int Limit { get; set; } = 20;
+}

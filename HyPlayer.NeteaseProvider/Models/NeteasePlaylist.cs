@@ -1,4 +1,4 @@
-﻿using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.PlayCore.Abstraction.Interfaces.PlayListContainer;
@@ -60,12 +60,13 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
 
     public async Task UpdateTrackListAsync(CancellationToken ctk = new())
     {
+        if (ActualId == null) throw new ArgumentNullException();
         _trackIds = (await NeteaseProvider.Instance.RequestAsync(NeteaseApis.PlaylistTracksGetApi,
                                                                  new PlaylistTracksGetRequest()
                                                                  {
                                                                      Id = ActualId
                                                                  }, ctk)).Match(
-            success => success.Playlist.TrackIds,
+            success => success.Playlist?.TrackIds,
             error => { return Array.Empty<PlaylistTracksGetResponse.PlaylistWithTracksInfoDto.TrackIdItem>(); });
     }
 
@@ -94,20 +95,35 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
 
     public int MaxProgressiveCount => 200;
 
-    public Task<ImageResourceBase?> GetCoverAsync(CancellationToken ctk = new())
-    {
-        return Task.FromResult<ImageResourceBase?>(
-            new NeteaseImageResource
-            {
-                Url = CoverUrl,
-            });
-    }
-
     public string? Description { get; set; }
 
     public Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = new())
     {
         return Task.FromResult(new List<PersonBase> { Creator! })!;
+    }
+
+    public Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
+    {
+        if (qualityTag is NeteaseImageResourceQualityTag neteaseImageResourceQualityTag)
+        {
+            var result = new NeteaseImageResourceResult()
+            {
+                ExternalException = null,
+                ResourceStatus = ResourceStatus.Success,
+                Uri = new Uri($"{CoverUrl}?{neteaseImageResourceQualityTag.ToString()}")
+            };
+            return Task.FromResult(result as ResourceResultBase);
+        }
+        else
+        {
+            var result = new NeteaseImageResourceResult()
+            {
+                ExternalException = null,
+                ResourceStatus = ResourceStatus.Success,
+                Uri = new Uri($"{CoverUrl}")
+            };
+            return Task.FromResult(result as ResourceResultBase);
+        }
     }
 
     public List<string>? CreatorList { get; init; } = new();

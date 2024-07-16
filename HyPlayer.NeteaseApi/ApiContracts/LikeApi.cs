@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -21,10 +21,10 @@ public class LikeApi : WeApiContractBase<LikeRequest, LikeResponse, ErrorResultB
     {
         if (request is not null)
             ActualRequest = new LikeActualRequest
-                            {
-                                TrackId = request.TrackId,
-                                Like = request.Like
-                            };
+            {
+                TrackId = request.TrackId,
+                Like = request.Like
+            };
         return Task.CompletedTask;
     }
 }
@@ -43,7 +43,7 @@ public class LikeRequest : RequestBase
     /// 歌曲 ID
     /// </summary>
     public required string TrackId { get; set; }
-    
+
     /// <summary>
     /// 是否喜欢
     /// </summary>

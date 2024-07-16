@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -21,9 +21,9 @@ public class FmTrashApi : WeApiContractBase<FmTrashRequest, FmTrashResponse, Err
     {
         if (request is not null)
             ActualRequest = new FmTrashActualRequest()
-                            {
-                                Id = request.Id
-                            };
+            {
+                Id = request.Id
+            };
         return Task.CompletedTask;
     }
 

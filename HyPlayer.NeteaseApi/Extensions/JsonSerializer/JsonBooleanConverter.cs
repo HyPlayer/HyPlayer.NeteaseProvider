@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.Extensions.JsonSerializer;
@@ -13,7 +13,6 @@ public class JsonBooleanConverter : JsonConverter<bool>
                 return !(reader.GetString() == "false" || string.IsNullOrWhiteSpace(reader.GetString()));
             case JsonTokenType.Number:
                 return reader.GetInt32() > 0;
-                break;
             case JsonTokenType.None:
             case JsonTokenType.False:
             case JsonTokenType.Null:

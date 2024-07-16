@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 public static partial class NeteaseApis
@@ -21,11 +21,11 @@ public class PlaylistTracksEditApi : WeApiContractBase<PlaylistTracksEditRequest
         var trackIds = request.TrackIds is not null ? $"[{string.Join(",", request.TrackIds)}]" : request.TrackId!;
 
         ActualRequest = new PlaylistTracksEditActualRequest
-                        {
-                            Operation = request.IsAdd ? "add" : "del",
-                            PlaylistId = request.PlaylistId,
-                            TrackIds = trackIds
-                        };
+        {
+            Operation = request.IsAdd ? "add" : "del",
+            PlaylistId = request.PlaylistId,
+            TrackIds = trackIds
+        };
         return Task.CompletedTask;
     }
 }
@@ -45,17 +45,17 @@ public class PlaylistTracksEditRequest : RequestBase
     /// 是否添加
     /// </summary>
     public bool IsAdd { get; set; } = true;
-    
+
     /// <summary>
     /// 歌单 ID
     /// </summary>
     public required string PlaylistId { get; set; }
-    
+
     /// <summary>
     /// 歌曲 ID
     /// </summary>
     public string? TrackId { get; set; }
-    
+
     /// <summary>
     /// 歌曲 ID 列表
     /// </summary>
@@ -63,5 +63,5 @@ public class PlaylistTracksEditRequest : RequestBase
 }
 public class PlaylistTracksEditResponse : CodedResponseBase
 {
-    
+
 }
