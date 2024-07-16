@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -19,10 +19,10 @@ public class PlaylistCategoryListApi : EApiContractBase<PlaylistCategoryListRequ
     {
         if (request is not null)
             ActualRequest = new()
-                            {
-                                Category = request.Category,
-                                Limit = request.Limit
-                            };
+            {
+                Category = request.Category,
+                Limit = request.Limit
+            };
         return Task.CompletedTask;
     }
 

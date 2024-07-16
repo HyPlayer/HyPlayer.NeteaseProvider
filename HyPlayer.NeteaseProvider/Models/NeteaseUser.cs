@@ -1,4 +1,4 @@
-﻿using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
@@ -35,12 +35,28 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
             );
     }
 
-    public Task<ImageResourceBase?> GetCoverAsync(CancellationToken ctk = new())
+    public Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
-        return Task.FromResult<ImageResourceBase?>(new NeteaseImageResource()
-                                                   {
-                                                       Url = AvatarUrl
-                                                   });
+        if (qualityTag is NeteaseImageResourceQualityTag neteaseImageResourceQualityTag)
+        {
+            var result = new NeteaseImageResourceResult()
+            {
+                ExternalException = null,
+                ResourceStatus = ResourceStatus.Success,
+                Uri = new Uri($"{AvatarUrl}?{neteaseImageResourceQualityTag.ToString()}")
+            };
+            return Task.FromResult(result as ResourceResultBase);
+        }
+        else
+        {
+            var result = new NeteaseImageResourceResult()
+            {
+                ExternalException = null,
+                ResourceStatus = ResourceStatus.Success,
+                Uri = new Uri($"{AvatarUrl}")
+            };
+            return Task.FromResult(result as ResourceResultBase);
+        }
     }
 
     public string? Description { get; set; }

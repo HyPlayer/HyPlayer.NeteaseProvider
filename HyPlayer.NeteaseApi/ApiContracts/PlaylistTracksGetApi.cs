@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -18,9 +18,9 @@ public class PlaylistTracksGetApi : EApiContractBase<PlaylistTracksGetRequest, P
     {
         if (request is not null)
             ActualRequest = new PlaylistTracksGetActualRequest()
-                            {
-                                Id = request.Id
-                            };
+            {
+                Id = request.Id
+            };
         return Task.CompletedTask;
     }
 
@@ -34,12 +34,13 @@ public class PlaylistTracksGetRequest : RequestBase
 
 public class PlaylistTracksGetResponse : CodedResponseBase
 {
-    [JsonPropertyName("playlist")] public PlaylistWithTracksInfoDto Playlist { get; set; }
+    [JsonPropertyName("playlist")]
+    public PlaylistWithTracksInfoDto? Playlist { get; set; }
 
     public class PlaylistWithTracksInfoDto : PlaylistDetailResponse.PlayListData
     {
         [JsonPropertyName("trackIds")] public TrackIdItem[]? TrackIds { get; set; }
-        
+
         public class TrackIdItem
         {
             [JsonPropertyName("id")] public required string Id { get; set; }

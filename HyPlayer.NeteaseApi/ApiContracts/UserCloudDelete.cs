@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -25,9 +25,9 @@ public class UserCloudDeleteApi : WeApiContractBase<UserCloudDeleteRequest, User
         if (request is null) return Task.CompletedTask;
         var ids = string.IsNullOrWhiteSpace(request.Id) ? $"[{string.Join(",", request.IdList!)}]" : $"[{request.Id}]";
         ActualRequest = new UserCloudDeleteActualRequest()
-                        {
-                            SongIds = ids
-                        };
+        {
+            SongIds = ids
+        };
         return Task.CompletedTask;
     }
 }
@@ -38,7 +38,7 @@ public class UserCloudDeleteRequest : RequestBase
     /// 歌曲 ID
     /// </summary>
     public string? Id { get; set; }
-    
+
     /// <summary>
     /// 歌曲 ID 列表
     /// </summary>

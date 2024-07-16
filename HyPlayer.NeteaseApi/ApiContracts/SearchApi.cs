@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -15,18 +15,19 @@ public class SearchApi : EApiContractBase<SearchRequest, SearchResponse, ErrorRe
     public override string Url => "https://interface.music.163.com/eapi/cloudsearch/pc";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override async Task MapRequest(SearchRequest? request)
+    public override Task MapRequest(SearchRequest? request)
     {
         if (request is not null)
         {
             ActualRequest = new()
-                            {
-                                Keyword = request.Keyword,
-                                Type = request.Type,
-                                Limit = request.Limit,
-                                Offset = request.Offset
-                            };
+            {
+                Keyword = request.Keyword,
+                Type = request.Type,
+                Limit = request.Limit,
+                Offset = request.Offset
+            };
         }
+        return Task.CompletedTask;
     }
 
     public override string ApiPath => "/api/cloudsearch/pc";

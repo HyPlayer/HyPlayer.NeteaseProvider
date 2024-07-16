@@ -156,9 +156,9 @@ public class NeteaseProvider : ProviderBase,
                                             CancellationToken ctk = new())
     {
         var request = new LoginEmailRequest()
-                      {
-                          Email = email,
-                      };
+        {
+            Email = email,
+        };
         if (isMd5)
             request.Md5Password = password;
         else
@@ -178,9 +178,9 @@ public class NeteaseProvider : ProviderBase,
                                                 CancellationToken ctk = new())
     {
         var request = new LoginCellphoneRequest()
-                      {
-                          Cellphone = cellphone
-                      };
+        {
+            Cellphone = cellphone
+        };
         if (isMd5)
             request.Md5Password = password;
         else
@@ -199,6 +199,7 @@ public class NeteaseProvider : ProviderBase,
 
     public async Task<List<RawLyricInfo>> GetLyricInfoAsync(SingleSongBase song, CancellationToken ctk = new())
     {
+        if (song.ActualId == null) throw new ArgumentNullException();
         var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = song.ActualId }, ctk);
         return results.Match(
             success => success.Map(),
@@ -224,16 +225,16 @@ public class NeteaseProvider : ProviderBase,
             if (response.Code is not 200) return null;
             if (response.SongUrls is not { Length: > 0 }) return null;
             return new NeteaseMusicResource
-                   {
-                       Md5 = response.SongUrls[0].Md5,
-                       Size = response.SongUrls[0].Size,
-                       BitRate = response.SongUrls[0].BitRate,
-                       EncodeType = response.SongUrls[0].EncodeType,
-                       Time = response.SongUrls[0].Time,
-                       MusicType = response.SongUrls[0].Type,
-                       Level = response.SongUrls[0].Level,
-                       Url = response.SongUrls[0].Url,
-                   };
+            {
+                Md5 = response.SongUrls[0].Md5,
+                Size = response.SongUrls[0].Size,
+                BitRate = response.SongUrls[0].BitRate,
+                EncodeType = response.SongUrls[0].EncodeType,
+                Time = response.SongUrls[0].Time,
+                MusicType = response.SongUrls[0].Type,
+                Level = response.SongUrls[0].Level,
+                Uri = new Uri(response.SongUrls[0].Url)
+            };
         }
 
 
@@ -322,9 +323,9 @@ public class NeteaseProvider : ProviderBase,
     public async Task<List<string>> GetLikedProvidableIdsAsync(string typeId, CancellationToken ctk = new())
     {
         var result = await RequestAsync(NeteaseApis.LikelistApi, new LikelistRequest()
-                                                                 {
-                                                                     Uid = LoginedUser?.ActualId!
-                                                                 }, ctk);
+        {
+            Uid = LoginedUser?.ActualId!
+        }, ctk);
         return result.Match(
             success => success.TrackIds?.ToList() ?? new List<string>(),
             _ => new List<string>());
@@ -426,64 +427,65 @@ public class NeteaseProvider : ProviderBase,
 
     #endregion
 
-    public async Task<ContainerBase?> SearchProvidableItemsAsync(string keyword, string typeId,
+    public Task<ContainerBase> SearchProvidableItemsAsync(string keyword, string typeId,
                                                                  CancellationToken ctk = new())
     {
-        return new NeteaseSearchContainer
-               {
-                   Name = "搜索结果",
-                   ActualId = keyword,
-                   SearchTypeId = TypeIdToSearchIdMapper.MapToResourceId(typeId),
-                   SearchKeyword = keyword,
-               };
+        return Task.FromResult(new NeteaseSearchContainer
+        {
+            Name = "搜索结果",
+            ActualId = keyword,
+            SearchTypeId = TypeIdToSearchIdMapper.MapToResourceId(typeId),
+            SearchKeyword = keyword,
+        } as ContainerBase);
     }
 
-    public async Task<ContainerBase?> GetStoredItemsAsync(string typeId, CancellationToken ctk = new())
+    public Task<ContainerBase?> GetStoredItemsAsync(string typeId, CancellationToken ctk = new())
     {
         switch (typeId)
         {
             case NeteaseTypeIds.Playlist:
-                return LoginedUser;
+                return Task.FromResult(LoginedUser as ContainerBase);
             default:
                 throw new NotImplementedException();
         }
     }
 
-    public async Task<ContainerBase?> GetRecommendationAsync(string? typeId = null, CancellationToken ctk = new())
+    public Task<ContainerBase> GetRecommendationAsync(string? typeId = null, CancellationToken ctk = new())
     {
         // ReSharper disable once ConvertIfStatementToSwitchStatement
         if (typeId == NeteaseTypeIds.Playlist) // 推荐歌单
-            return new NeteaseActionGettableContainer(async () =>
-                   {
-                       return (await RequestAsync(
-                               NeteaseApis.RecommendPlaylistsApi,
-                               new RecommendPlaylistsRequest(), ctk))
-                           .Match(success => success.Recommends?.Select(
-                                      t => (ProvidableItemBase)
-                                          t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
-                                  error => throw error);
-                   })
-                   {
-                       Name = "推荐歌单",
-                       ActualId = "rcpl"
-                   };
+            return Task.FromResult(
+                new NeteaseActionGettableContainer(async () =>
+                {
+                    return (await RequestAsync(
+                            NeteaseApis.RecommendPlaylistsApi,
+                            new RecommendPlaylistsRequest(), ctk))
+                        .Match(success => success.Recommends?.Select(
+                                   t => (ProvidableItemBase)
+                                       t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
+                               error => throw error);
+                })
+                {
+                    Name = "推荐歌单",
+                    ActualId = "rcpl"
+                } as ContainerBase);
         if (typeId == NeteaseTypeIds.SingleSong) // 推荐歌曲
-            return new NeteaseActionGettableContainer(async () =>
-                   {
-                       return (await RequestAsync(
-                               NeteaseApis.RecommendSongsApi,
-                               new RecommendSongsRequest(), ctk))
-                           .Match(success => success.Data?.DailySongs?.Select(
-                                      t => (ProvidableItemBase)
-                                          t.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
-                                  error => throw error);
-                   })
-                   {
-                       Name = "推荐歌曲",
-                       ActualId = "rcsg"
-                   };
+            return Task.FromResult(new NeteaseActionGettableContainer(async () =>
+            {
+                return (await RequestAsync(
+                        NeteaseApis.RecommendSongsApi,
+                        new RecommendSongsRequest(), ctk))
+                    .Match(success => success.Data?.DailySongs?.Select(
+                               t => (ProvidableItemBase)
+                                   t.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
+                           error => throw error);
+            })
+            {
+                Name = "推荐歌曲",
+                ActualId = "rcsg"
+            } as ContainerBase);
         if (typeId == NeteaseTypeIds.Chart) // 排行榜
-            return new NeteaseActionGettableContainer(async () =>
+            return Task.FromResult(new NeteaseActionGettableContainer(async () =>
                    {
                        return (await RequestAsync(
                                NeteaseApis.ToplistApi,
@@ -493,13 +495,13 @@ public class NeteaseProvider : ProviderBase,
                                           t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
                                   error => throw error);
                    })
-                   {
-                       Name = "排行榜",
-                       ActualId = "chart"
-                   };
+            {
+                Name = "排行榜",
+                ActualId = "chart"
+            } as ContainerBase);
         if (typeId?.StartsWith(NeteaseTypeIds.PlaylistCategory) is true)
         {
-            return new NeteaseActionGettableProgressiveContainer(async (start, count) =>
+            return Task.FromResult(new NeteaseActionGettableProgressiveContainer(async (start, count) =>
                    {
                        return (true, (await RequestAsync(
                                    NeteaseApis.PlaylistCategoryListApi,
@@ -513,20 +515,20 @@ public class NeteaseProvider : ProviderBase,
                                               t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
                                       error => throw error));
                    })
-                   {
-                       Name = "官方推荐歌单",
-                       ActualId = typeId.Substring(2),
-                       MaxProgressiveCount = 15
-                   };
+            {
+                Name = "官方推荐歌单",
+                ActualId = typeId.Substring(2),
+                MaxProgressiveCount = 15
+            } as ContainerBase);
         }
 
         if (typeId == NeteaseTypeIds.PersonalFm)
         {
-            return new NeteasePersonalFMContainer
-                   {
-                       Name = "私人FM",
-                       ActualId = ""
-                   };
+            return Task.FromResult(new NeteasePersonalFMContainer
+            {
+                Name = "私人FM",
+                ActualId = ""
+            } as ContainerBase);
         }
 
         throw new ArgumentException(typeId);

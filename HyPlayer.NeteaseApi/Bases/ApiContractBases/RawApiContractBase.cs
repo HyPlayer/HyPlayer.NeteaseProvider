@@ -1,7 +1,7 @@
-﻿using System.Text;
-using System.Text.Json;
-using HyPlayer.NeteaseApi.Extensions;
+﻿using HyPlayer.NeteaseApi.Extensions;
 using Kengwang.Toolkit;
+using System.Text;
+using System.Text.Json;
 
 namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
@@ -70,7 +70,7 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
         var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
 #if DEBUG
         if (ret is null)
-            ret = new ();
+            ret = new();
         ret.OriginalResponse = result;
 #endif
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse

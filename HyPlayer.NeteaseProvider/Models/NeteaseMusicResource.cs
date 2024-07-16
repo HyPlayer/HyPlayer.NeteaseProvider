@@ -1,4 +1,5 @@
-﻿using HyPlayer.PlayCore.Abstraction.Models.Resources;
+using HyPlayer.PlayCore.Abstraction.Models;
+using HyPlayer.PlayCore.Abstraction.Models.Resources;
 
 namespace HyPlayer.NeteaseProvider.Models;
 
@@ -12,9 +13,13 @@ public class NeteaseMusicResource : MusicResourceBase
     public string? MusicType { get; set; }
     public string? Level { get; set; }
 
-
-    public override Task<object?> GetResourceAsync(ResourceQualityTag? qualityTag = null, Type? awaitingType = null,CancellationToken ctk = new())
+    public override Task<ResourceResultBase> GetResourceAsync(ResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
-        return Task.FromResult<object?>(Url);
+        return Task.FromResult(new NeteaseMusicResourceResult { ResourceStatus = ResourceStatus.Success, ExternalException = null } as ResourceResultBase);
     }
+}
+public class NeteaseMusicResourceResult : ResourceResultBase
+{
+    public override Exception? ExternalException { get; init; }
+    public override required ResourceStatus ResourceStatus { get; init; }
 }

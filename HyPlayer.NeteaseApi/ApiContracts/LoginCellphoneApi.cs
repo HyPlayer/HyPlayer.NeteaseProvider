@@ -1,9 +1,9 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using Kengwang.Toolkit;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -32,14 +32,14 @@ public class LoginCellphoneApi : WeApiContractBase<LoginCellphoneRequest, LoginR
             ? request.Password!.ToByteArrayUtf8().ComputeMd5().ToHexStringLower()
             : request.Md5Password!;
         ActualRequest = new LoginCellphoneActualRequest
-                        {
-                            Phone = request.Cellphone,
-                            CountryCode = request.CountryCode,
-                            Md5Password = md5Password
-                        };
+        {
+            Phone = request.Cellphone,
+            CountryCode = request.CountryCode,
+            Md5Password = md5Password
+        };
         return Task.CompletedTask;
     }
-    
+
     public override async Task<Results<LoginResponse, ErrorResultBase>> ProcessResponseAsync(HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
         return (await base.ProcessResponseAsync(response, option, cancellationToken).ConfigureAwait(false))
@@ -64,17 +64,17 @@ public class LoginCellphoneRequest : RequestBase
     /// 手机号
     /// </summary>
     public required string Cellphone { get; set; }
-    
+
     /// <summary>
     /// 国家代码
     /// </summary>
     public string CountryCode { get; set; } = "86";
-    
+
     /// <summary>
     /// 密码
     /// </summary>
     public string? Password { get; set; }
-    
+
     /// <summary>
     /// 密码 (MD5 加密)
     /// </summary>

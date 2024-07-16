@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -15,7 +15,7 @@ public static partial class NeteaseApis
 
 public class PersonalFmApi : EApiContractBase<PersonalFmRequest, PersonalFmResponse, ErrorResultBase, PersonalFmActualRequest>
 {
-    public override string Url => "https://interface3.music.163.com/eapi/v1/radio/get"; 
+    public override string Url => "https://interface3.music.163.com/eapi/v1/radio/get";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override string ApiPath => "/api/v1/radio/get";
@@ -24,10 +24,10 @@ public class PersonalFmApi : EApiContractBase<PersonalFmRequest, PersonalFmRespo
     {
         if (request is not null)
             ActualRequest = new PersonalFmActualRequest
-                            {
-                                Mode = request.Mode,
-                                Limit = request.Limit
-                            };
+            {
+                Mode = request.Mode,
+                Limit = request.Limit
+            };
         return Task.CompletedTask;
     }
 }

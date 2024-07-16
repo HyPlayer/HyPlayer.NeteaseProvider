@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -24,11 +24,11 @@ public class PlaylistCreateApi : WeApiContractBase<PlaylistCreateRequest, Playli
     {
         if (request is not null)
             ActualRequest = new PlaylistCreateActualRequest
-                            {
-                                Name = request.Name,
-                                Privacy = request.Privacy,
-                                Type = request.Type
-                            };
+            {
+                Name = request.Name,
+                Privacy = request.Privacy,
+                Type = request.Type
+            };
         return Task.CompletedTask;
     }
 }

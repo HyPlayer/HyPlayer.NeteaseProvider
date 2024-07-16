@@ -6,7 +6,7 @@ public class IdOrIdListListRequest : RequestBase
     /// 歌曲 ID 列表
     /// </summary>
     public List<string>? IdList { get; set; }
-    
+
     /// <summary>
     /// 歌曲 ID
     /// </summary>

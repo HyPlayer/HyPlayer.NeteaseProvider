@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -23,9 +23,9 @@ public class PlaylistDetailApi : EApiContractBase<PlaylistDetailRequest, Playlis
     {
         if (request is not null)
             ActualRequest = new PlaylistDetailActualRequest()
-                            {
-                                IdList = request.ConvertToIdStringList()
-                            };
+            {
+                IdList = request.ConvertToIdStringList()
+            };
         return Task.CompletedTask;
     }
 
@@ -50,11 +50,11 @@ public class PlaylistDetailResponse : CodedResponseBase
         [JsonPropertyName("tags")] public string[]? Tags { get; set; }
 
         [JsonPropertyName("titleImageUrl")] public string? TitleImageUrl { get; set; }
-        
+
         [JsonPropertyName("createTime")] public long CreateTime { get; set; }
         [JsonPropertyName("commentCount")] public long CommentCount { get; set; }
         [JsonPropertyName("shareCount")] public long ShareCount { get; set; }
         [JsonPropertyName("newImported")] public bool IsNewImported { get; set; }
-        
+
     }
 }

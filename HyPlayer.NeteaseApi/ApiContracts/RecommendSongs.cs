@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -42,7 +42,7 @@ public class RecommendSongsResponse : CodedResponseBase
     {
         [JsonPropertyName("dailySongs")] public RecommendSongItem[]? DailySongs { get; set; }
     }
-    
+
     public class RecommendSongItem : EmittedSongDtoWithPrivilege
     {
         [JsonPropertyName("recommendReason")] public string? RecommendReason { get; set; }

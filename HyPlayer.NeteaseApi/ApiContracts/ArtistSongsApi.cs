@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -23,12 +23,12 @@ public class ArtistSongsApi : WeApiContractBase<ArtistSongsRequest, ArtistSongsR
     {
         if (request is not null)
             ActualRequest = new ArtistSongsActualRequest
-                            {
-                                Id = request.ArtistId,
-                                OrderType = request.OrderType,
-                                Offset = request.Offset,
-                                Limit = request.Limit
-                            };
+            {
+                Id = request.ArtistId,
+                OrderType = request.OrderType,
+                Offset = request.Offset,
+                Limit = request.Limit
+            };
         return Task.CompletedTask;
     }
 }
@@ -49,17 +49,17 @@ public class ArtistSongsRequest : RequestBase
     /// 歌手 ID
     /// </summary>
     public required string ArtistId { get; set; }
-    
+
     /// <summary>
     /// 排序类型 hot, time
     /// </summary>
     public string OrderType { get; set; } = "hot";
-    
+
     /// <summary>
     /// 起始位置
     /// </summary>
     public int Offset { get; set; } = 0;
-    
+
     /// <summary>
     /// 获取数量
     /// </summary>

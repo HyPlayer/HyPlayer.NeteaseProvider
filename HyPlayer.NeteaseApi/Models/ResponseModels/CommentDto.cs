@@ -10,5 +10,5 @@ public class CommentDto
     [JsonPropertyName("likedCount")] public int LikedCount { get; set; }
     [JsonPropertyName("liked")] public bool Liked { get; set; }
     [JsonPropertyName("owner")] public bool Owner { get; set; }
-    
+
 }

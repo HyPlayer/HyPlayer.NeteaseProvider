@@ -1,8 +1,8 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using Kengwang.Toolkit;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -29,10 +29,10 @@ public class LoginEmailApi : WeApiContractBase<LoginEmailRequest, LoginResponse,
             ? request.Password!.ToByteArrayUtf8().ComputeMd5().ToHexStringLower()
             : request.Md5Password!;
         ActualRequest = new LoginEmailActualRequest
-                        {
-                            Username = request?.Email!,
-                            Md5Password = md5Password,
-                        };
+        {
+            Username = request?.Email!,
+            Md5Password = md5Password,
+        };
         return Task.CompletedTask;
     }
 
@@ -60,12 +60,12 @@ public class LoginEmailRequest : RequestBase
     /// 邮箱
     /// </summary>
     public required string Email { get; set; }
-    
+
     /// <summary>
     /// 密码
     /// </summary>
     public string? Password { get; set; }
-    
+
     /// <summary>
     /// 密码 (MD5)
     /// </summary>

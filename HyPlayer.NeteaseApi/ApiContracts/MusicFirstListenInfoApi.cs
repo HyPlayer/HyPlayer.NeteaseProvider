@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -19,23 +19,23 @@ public class MusicFirstListenInfoApi : WeApiContractBase<MusicFirstListenInfoReq
     {
         if (request is not null)
             ActualRequest = new MusicFirstListenInfoActualRequest()
-                            {
-                                SongId = request.SongId
-                            };
+            {
+                SongId = request.SongId
+            };
         return Task.CompletedTask;
     }
 }
 
 public class MusicFirstListenInfoRequest : RequestBase
 {
-    public string SongId { get; set; }
+    public required string SongId { get; set; }
 }
 
 public class MusicFirstListenInfoResponse : CodedResponseBase
 {
     [JsonPropertyName("data")] public MusicFirstListenInfoData? Data { get; set; }
     [JsonPropertyName("message")] public string? Message { get; set; }
-    
+
     public class MusicFirstListenInfoData
     {
         [JsonPropertyName("songInfoDto")] public SongInfoDto? SongInfo { get; set; }
@@ -80,7 +80,7 @@ public class MusicFirstListenInfoResponse : CodedResponseBase
             [JsonPropertyName("like")] public bool Like { get; set; }
             [JsonPropertyName("collect")] public bool Collect { get; set; }
         }
-        
+
     }
 }
 

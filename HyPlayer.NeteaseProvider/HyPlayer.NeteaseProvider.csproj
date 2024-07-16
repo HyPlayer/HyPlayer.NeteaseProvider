@@ -20,14 +20,14 @@
 
     <ItemGroup>
         <PackageReference Include="Depository.Abstraction" Version="2.1.0" />
-        <PackageReference Include="HyPlayer.PlayCore.Abstraction" Version="0.1.3" />
 
 
     </ItemGroup>
 
 
     <ItemGroup>
-        <ProjectReference Include="..\HyPlayer.NeteaseApi\HyPlayer.NeteaseApi.csproj" />
+      <ProjectReference Include="..\..\HyPlayer.PlayCore\HyPlayer.PlayCore\HyPlayer.PlayCore.csproj" />
+      <ProjectReference Include="..\HyPlayer.NeteaseApi\HyPlayer.NeteaseApi.csproj" />
     </ItemGroup>
 
 

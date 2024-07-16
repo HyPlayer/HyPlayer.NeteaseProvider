@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -21,9 +21,9 @@ public class DjDetailApi : WeApiContractBase<DjDetailRequest, DjDetailResponse, 
     public override Task MapRequest(DjDetailRequest? request)
     {
         ActualRequest = new DjDetailActualRequest
-                        {
-                            Id = request!.Id
-                        };
+        {
+            Id = request!.Id
+        };
         return Task.CompletedTask;
     }
 }

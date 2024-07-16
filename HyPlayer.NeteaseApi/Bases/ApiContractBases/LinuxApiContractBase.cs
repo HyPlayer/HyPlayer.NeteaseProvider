@@ -1,9 +1,9 @@
-﻿using System.Security.Cryptography;
+﻿using HyPlayer.NeteaseApi.Extensions;
+using Kengwang.Toolkit;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using HyPlayer.NeteaseApi.Extensions;
-using Kengwang.Toolkit;
 
 namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
@@ -45,7 +45,7 @@ public abstract class LinuxApiContractBase<TRequest, TResponse, TError, TActualR
 
         if (cookies.Count > 0)
             requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
-        
+
         var json = actualRequest is LinuxApiActualRequestBase la ? JsonSerializer.Serialize(la, option.JsonSerializerOptions) : string.Empty;
         var preData = JsonSerializer.Serialize(
             new Dictionary<string, string>()
@@ -87,7 +87,7 @@ public abstract class LinuxApiContractBase<TRequest, TResponse, TError, TActualR
         var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
 #if DEBUG
         if (ret is null)
-            ret = new ();
+            ret = new();
         ret.OriginalResponse = result;
 #endif
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse

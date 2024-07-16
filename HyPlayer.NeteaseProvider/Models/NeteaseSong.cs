@@ -1,5 +1,6 @@
-﻿using HyPlayer.NeteaseProvider.Constants;
+using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
+using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
@@ -26,8 +27,28 @@ public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover
     }
 
     public string? Translation { get; set; }
-    public Task<ImageResourceBase?> GetCoverAsync(CancellationToken ctk = new())
+
+    public Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
-        return Task.FromResult<ImageResourceBase?>(new NeteaseImageResource() { Url = CoverUrl });
+        if (qualityTag is NeteaseImageResourceQualityTag neteaseImageResourceQualityTag)
+        {
+            var result = new NeteaseImageResourceResult()
+            {
+                ExternalException = null,
+                ResourceStatus = ResourceStatus.Success,
+                Uri = new Uri($"{CoverUrl}?{neteaseImageResourceQualityTag.ToString()}")
+            };
+            return Task.FromResult(result as ResourceResultBase);
+        }
+        else
+        {
+            var result = new NeteaseImageResourceResult()
+            {
+                ExternalException = null,
+                ResourceStatus = ResourceStatus.Success,
+                Uri = new Uri($"{CoverUrl}")
+            };
+            return Task.FromResult(result as ResourceResultBase);
+        }
     }
 }
