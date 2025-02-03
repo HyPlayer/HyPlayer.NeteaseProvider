@@ -27,7 +27,6 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj" />
       <ProjectReference Include="..\HyPlayer.NeteaseApi\HyPlayer.NeteaseApi.csproj" />
     </ItemGroup>
 
