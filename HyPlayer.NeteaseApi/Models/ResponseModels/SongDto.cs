@@ -14,14 +14,14 @@ public class SongDto
     [JsonPropertyName("no")] public int TrackNumber { get; set; }
     [JsonPropertyName("album")] public AlbumDto? Album { get; set; }
     [JsonPropertyName("artists")] public ArtistDto[]? Artists { get; set; }
-    [JsonPropertyName("videoInfo")] public VideoInfoDto? VideoInfo { get; set; }
+    [JsonPropertyName("videoInfo")] public SongInfoVideoInfoDto? VideoInfo { get; set; }
 
-    public class VideoInfoDto
+    public class SongInfoVideoInfoDto
     {
-        [JsonPropertyName("video")] public VideoDto? Video { get; set; }
+        [JsonPropertyName("video")] public SongInfoVideoDto? Video { get; set; }
 
 
-        public class VideoDto
+        public class SongInfoVideoDto
         {
             [JsonPropertyName("vid")] public string? Vid { get; set; }
         }

@@ -1,5 +1,4 @@
 ﻿using HyPlayer.NeteaseApi.Extensions;
-using Kengwang.Toolkit;
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
@@ -50,6 +49,8 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         {
             cookies[keyValuePair.Key] = keyValuePair.Value;
         }
+        
+        cookies!.MergeDictionary(option.AdditionalParameters.Cookies);
 
         if (cookies.Count > 0)
             requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
@@ -74,6 +75,14 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
                    };
 
         requestMessage.Content = new FormUrlEncodedContent(data);
+        foreach (var additionalParametersHeader in option.AdditionalParameters.Headers)
+        {
+            if (requestMessage.Headers.Contains(additionalParametersHeader.Key))
+                requestMessage.Headers.Remove(additionalParametersHeader.Key);
+            if (additionalParametersHeader.Value is not null)
+                requestMessage.Headers.TryAddWithoutValidation(additionalParametersHeader.Key,
+                    additionalParametersHeader.Value);
+        }
         return Task.FromResult(requestMessage);
     }
 
@@ -112,7 +121,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
         if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
             return Results<TResponseModel, ErrorResultBase>
-                   .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
+                   .CreateError(new ErrorResultBase(codedResponseBase.Code, $"返回不成功({codedResponseBase.Code}): {codedResponseBase.Message}")).WithValue(ret);
         return ret;
     }
 

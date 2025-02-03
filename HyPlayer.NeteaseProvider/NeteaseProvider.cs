@@ -10,7 +10,7 @@ using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
-using Kengwang.Toolkit;
+using HyPlayer.NeteaseApi.Extensions;
 
 namespace HyPlayer.NeteaseProvider;
 
@@ -23,7 +23,6 @@ public class NeteaseProvider : ProviderBase,
                                ISearchableProvider,
                                IRecommendationProvidable
 {
-    public ApiHandlerOption Option { get; set; } = new();
     public readonly NeteaseCloudMusicApiHandler Handler = new();
     public override string Name => "网易云音乐";
     public override string Id => "ncm";
@@ -60,7 +59,7 @@ public class NeteaseProvider : ProviderBase,
     {
         try
         {
-            return await Handler.RequestAsync(contract, Option, cancellationToken);
+            return await Handler.RequestAsync(contract, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -78,14 +77,14 @@ public class NeteaseProvider : ProviderBase,
     {
         try
         {
-            return await Handler.RequestAsync(contract, request, Option, cancellationToken);
+            return await Handler.RequestAsync(contract, request, cancellationToken);
         }
         catch (Exception ex)
         {
             return Results<TResponse, ErrorResultBase>.CreateError(new ExceptionedErrorBase(-500, ex.Message, ex));
         }
     }
-
+    
     public async Task<Results<TCustomResponse, ErrorResultBase>> RequestAsync<
         TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
         ApiContractBase<TRequest, TResponse, TError, TActualRequest> contract, TRequest? request,
@@ -99,7 +98,7 @@ public class NeteaseProvider : ProviderBase,
         try
         {
             return await Handler.RequestAsync<TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
-                contract, request, Option, cancellationToken);
+                contract, request, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -122,7 +121,7 @@ public class NeteaseProvider : ProviderBase,
         {
             return await Handler
                 .RequestAsync<TCustomRequest, TCustomResponse, TRequest, TResponse, TError, TActualRequest>(
-                    contract, true, request, Option, cancellationToken);
+                    contract, request, cancellationToken);
         }
         catch (Exception ex)
         {

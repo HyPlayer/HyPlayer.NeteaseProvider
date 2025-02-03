@@ -9,12 +9,13 @@ public static partial class NeteaseApis
     /// <summary>
     /// 删除云盘歌曲
     /// </summary>
-    public static UserCloudDeleteApi UserCloudDeleteApi = new();
+    public static UserCloudDeleteApi UserCloudDeleteApi => new();
 }
 
 public class UserCloudDeleteApi : WeApiContractBase<UserCloudDeleteRequest, UserCloudDeleteResponse, ErrorResultBase,
     UserCloudDeleteActualRequest>
 {
+    public override string IdentifyRoute => "/user/cloud/del";
     public override string Url => "https://music.163.com/weapi/cloud/del";
     public override HttpMethod Method => HttpMethod.Post;
     public override string? UserAgent => "pc";

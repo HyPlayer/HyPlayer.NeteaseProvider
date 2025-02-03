@@ -10,11 +10,12 @@ public static partial class NeteaseApis
     /// <summary>
     /// 私人 FM
     /// </summary>
-    public static PersonalFmApi PersonalFmApi = new();
+    public static PersonalFmApi PersonalFmApi => new();
 }
 
 public class PersonalFmApi : EApiContractBase<PersonalFmRequest, PersonalFmResponse, ErrorResultBase, PersonalFmActualRequest>
 {
+    public override string IdentifyRoute => "/personal/fm";
     public override string Url => "https://interface3.music.163.com/eapi/v1/radio/get";
     public override HttpMethod Method => HttpMethod.Post;
 

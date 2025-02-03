@@ -8,11 +8,12 @@ public static partial class NeteaseApis
     /// <summary>
     /// 歌单歌曲编辑
     /// </summary>
-    public static PlaylistTracksEditApi PlaylistTracksEditApi = new();
+    public static PlaylistTracksEditApi PlaylistTracksEditApi => new();
 }
 
 public class PlaylistTracksEditApi : WeApiContractBase<PlaylistTracksEditRequest, PlaylistTracksEditResponse, ErrorResultBase, PlaylistTracksEditActualRequest>
 {
+    public override string IdentifyRoute => "/playlist/tracks/edit";
     public override string Url => "https://music.163.com/weapi/playlist/manipulate/tracks";
     public override HttpMethod Method => HttpMethod.Post;
     public override Task MapRequest(PlaylistTracksEditRequest? request)

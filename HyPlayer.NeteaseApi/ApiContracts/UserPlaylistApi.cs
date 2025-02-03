@@ -10,12 +10,13 @@ public static partial class NeteaseApis
     /// <summary>
     /// 喜欢歌曲
     /// </summary>
-    public static UserPlaylistApi UserPlaylistApi = new();
+    public static UserPlaylistApi UserPlaylistApi => new();
 }
 
 public class UserPlaylistApi : WeApiContractBase<UserPlaylistRequest, UserPlaylistResponse, ErrorResultBase,
     UserPlaylistActualRequest>
 {
+    public override string IdentifyRoute => "/user/playlist";
     public override string Url => "https://music.163.com/api/user/playlist";
     public override HttpMethod Method => HttpMethod.Post;
 
@@ -52,7 +53,7 @@ public class UserPlaylistRequest : RequestBase
 
 public class UserPlaylistResponse : CodedResponseBase
 {
-    [JsonPropertyName("playlist")] public List<PlaylistDto>? Playlists { get; set; }
+    [JsonPropertyName("playlist")] public PlaylistDto[]? Playlists { get; set; }
 }
 
 public class UserPlaylistActualRequest : WeApiActualRequestBase

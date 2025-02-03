@@ -9,11 +9,12 @@ public static partial class NeteaseApis
     /// <summary>
     /// 歌词
     /// </summary>
-    public static LyricApi LyricApi = new();
+    public static LyricApi LyricApi => new();
 }
 
 public class LyricApi : EApiContractBase<LyricRequest, LyricResponse, ErrorResultBase, LyricActualRequest>
 {
+    public override string IdentifyRoute => "/lyric";
     public override string Url => "https://interface3.music.163.com/eapi/song/lyric/v1";
     public override HttpMethod Method => HttpMethod.Post;
 

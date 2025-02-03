@@ -36,7 +36,7 @@ public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover
             {
                 ExternalException = null,
                 ResourceStatus = ResourceStatus.Success,
-                Uri = new Uri($"{CoverUrl}?{neteaseImageResourceQualityTag.ToString()}")
+                Uri = new Uri($"{CoverUrl}?{neteaseImageResourceQualityTag}")
             };
             return Task.FromResult(result as ResourceResultBase);
         }

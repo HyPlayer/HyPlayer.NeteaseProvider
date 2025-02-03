@@ -7,11 +7,12 @@ namespace HyPlayer.NeteaseApi.ApiContracts;
 
 public static partial class NeteaseApis
 {
-    public static PlaylistCategoryListApi PlaylistCategoryListApi = new();
+    public static PlaylistCategoryListApi PlaylistCategoryListApi => new();
 }
 
 public class PlaylistCategoryListApi : EApiContractBase<PlaylistCategoryListRequest, PlaylistCategoryListResponse, ErrorResultBase, PlaylistCategoryListActualRequest>
 {
+    public override string IdentifyRoute => "/playlist/category/list";
     public override string Url => "https://interface.music.163.com/eapi/playlist/category/list";
     public override HttpMethod Method => HttpMethod.Post;
 

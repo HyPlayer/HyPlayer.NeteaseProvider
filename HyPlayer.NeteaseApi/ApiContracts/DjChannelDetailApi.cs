@@ -10,17 +10,18 @@ public static partial class NeteaseApis
     /// <summary>
     /// 电台详情
     /// </summary>
-    public static DjDetailApi DjDetailApi = new();
+    public static DjChannelDetailApi DjChannelDetailApi => new();
 }
 
-public class DjDetailApi : WeApiContractBase<DjDetailRequest, DjDetailResponse, ErrorResultBase, DjDetailActualRequest>
+public class DjChannelDetailApi : WeApiContractBase<DjChannelDetailRequest, DjChannelDetailResponse, ErrorResultBase, DjChannelDetailActualRequest>
 {
+    public override string IdentifyRoute => "/dj/detail";
     public override string Url => "https://music.163.com/weapi/djDj/get";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(DjDetailRequest? request)
+    public override Task MapRequest(DjChannelDetailRequest? request)
     {
-        ActualRequest = new DjDetailActualRequest
+        ActualRequest = new DjChannelDetailActualRequest
         {
             Id = request!.Id
         };
@@ -28,7 +29,7 @@ public class DjDetailApi : WeApiContractBase<DjDetailRequest, DjDetailResponse, 
     }
 }
 
-public class DjDetailRequest : RequestBase
+public class DjChannelDetailRequest : RequestBase
 {
     /// <summary>
     /// 电台 ID
@@ -36,17 +37,12 @@ public class DjDetailRequest : RequestBase
     public required string Id { get; set; }
 }
 
-public class DjDetailResponse : CodedResponseBase
+public class DjChannelDetailResponse : CodedResponseBase
 {
-    [JsonPropertyName("data")] public DjDetailData? RadioData { get; set; }
-
-    public class DjDetailData : DjRadioDto
-    {
-        [JsonPropertyName("dj")] public UserInfoDto? DjData { get; set; }
-    }
+    [JsonPropertyName("data")] public DjRadioChannelWithDjDto? RadioData { get; set; }
 }
 
-public class DjDetailActualRequest : WeApiActualRequestBase
+public class DjChannelDetailActualRequest : WeApiActualRequestBase
 {
     [JsonPropertyName("id")] public required string Id { get; set; }
 }

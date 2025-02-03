@@ -10,12 +10,13 @@ public static partial class NeteaseApis
     /// <summary>
     /// 歌单详情
     /// </summary>
-    public static PlaylistDetailApi PlaylistDetailApi = new();
+    public static PlaylistDetailApi PlaylistDetailApi => new();
 }
 
 public class PlaylistDetailApi : EApiContractBase<PlaylistDetailRequest, PlaylistDetailResponse, ErrorResultBase,
     PlaylistDetailActualRequest>
 {
+    public override string IdentifyRoute => "/playlist/detail";
     public override string Url => "https://interface.music.163.com/eapi/playlist/list/get";
     public override HttpMethod Method => HttpMethod.Post;
 
