@@ -133,10 +133,16 @@ public class NeteaseApisTests
                 new SongUrlRequest()
                 {
                     IdList = ids.ToList(),
-                    Level = "jymaster"
+                    Level = "high"
                 });
         result.Match(
-            _ => true,
+            success =>
+            {
+                success.SongUrls.Should().NotBeNull();
+                success.SongUrls.Should().NotBeEmpty();
+                success.SongUrls.Should().AllSatisfy(s => s.Url.Should().NotBeEmpty());
+                return true;
+            },
             error => throw error
         );
     }
@@ -153,7 +159,12 @@ public class NeteaseApisTests
                 Id = playlistId
             });
         result.Match(
-            _ => true,
+            success =>
+            {
+                success.Playlists.Should().NotBeEmpty();
+                success.Playlists.Should().AllSatisfy(t => t.Name.Should().NotBeEmpty());
+                return true;
+            },
             error => throw error
         );
     }
@@ -248,12 +259,17 @@ public class NeteaseApisTests
     {
         var result = await _provider.RequestAsync(NeteaseApis.AiDjContentRcmdInfoApi, new AiDjContentRcmdInfoRequest());
         result.Match(success =>
-                success.Code.Should().Be(200),
+            {
+                success.Code.Should().Be(200);
+                success.Data.Should().NotBeNull();
+                success.Data.AiDjResources.Should().NotBeEmpty();
+                return true;
+            },
             e => throw e);
     }
 
     [Test]
-    [Arguments("1972641406")]
+    [Arguments("2033878955")]
     public async Task ListenFirstInfo_Should_BeNormal(string songId)
     {
         var result = await _provider.RequestAsync(NeteaseApis.MusicFirstListenInfoApi, new MusicFirstListenInfoRequest()
@@ -275,7 +291,12 @@ public class NeteaseApisTests
             SubMode = subMode,
             Limit = 5
         });
-        result.Match(s => s.Code.Should().Be(200),
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Items.Should().NotBeEmpty();
+                return true;
+            },
             e => throw e);
     }
 
@@ -336,8 +357,9 @@ public class NeteaseApisTests
     }
 
     [Test]
-    [Arguments("8645419738")]
-    public async Task UserRecordApi_Should_BeNormal(string id)
+    [Arguments("8645419738", UserRecordType.All)]
+    // [Arguments("8645419738", UserRecordType.WeekData)] // TODO: uncomment this line when the test account's weekly listen record accumulates
+    public async Task UserRecordApi_Should_BeNormal(string id, UserRecordType type)
     {
         var result =
             await _provider
@@ -345,13 +367,17 @@ public class NeteaseApisTests
                     UserRecordActualRequest>(NeteaseApis.UserRecordApi, new UserRecordRequest
                 {
                     UserId = id,
-                    RecordType = UserRecordType.All
+                    RecordType = type
                 });
-        result.Match(s => s.Code.Should().Be(200),
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.AllData.Should().NotBeEmpty();
+                return false;
+            },
             e => throw e);
     }
 
-    //SearchSuggestionApi
     [Test]
     [Arguments("ヰ世界情緒")]
     public async Task SearchSuggestion_Should_BeNormal(string keyword)
@@ -360,7 +386,13 @@ public class NeteaseApisTests
         {
             Keyword = keyword
         });
-        result.Match(s => s.Code.Should().Be(200),
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Result.Should().NotBeNull();
+                s.Result.AllMatch.Should().NotBeEmpty();
+                return true;
+            },
             e => throw e);
     }
 
@@ -386,7 +418,12 @@ public class NeteaseApisTests
         {
             RadioId = id
         });
-        result.Match(s => s.Code.Should().Be(200),
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Programs.Should().NotBeEmpty();
+                return true;
+            },
             e => throw e);
     }
 
@@ -395,7 +432,12 @@ public class NeteaseApisTests
     public async Task LoginStatus_Should_BeNormal()
     {
         var result = await _provider.RequestAsync(NeteaseApis.LoginStatusApi, new LoginStatusRequest());
-        result.Match(s => s.Code.Should().Be(200),
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Profile.Should().NotBeNull();
+                return true;
+            },
             e => throw e);
     }
 
@@ -408,7 +450,12 @@ public class NeteaseApisTests
         {
             ArtistId = id
         });
-        result.Match(s => s.Code.Should().Be(200),
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Songs.Should().NotBeEmpty();
+                return true;
+            },
             e => throw e);
     }
 
@@ -421,7 +468,11 @@ public class NeteaseApisTests
         {
             SongId = id
         });
-        result.Match(s => s.Code.Should().Be(200),
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                return true;
+            },
             e => throw e);
     }
 
@@ -430,7 +481,12 @@ public class NeteaseApisTests
     public async Task RecommendResource_Should_BeNormal()
     {
         var result = await _provider.RequestAsync(NeteaseApis.RecommendResourceApi, new RecommendResourceRequest());
-        result.Match(s => s.Code.Should().Be(200),
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Recommends.Should().NotBeEmpty();
+                return true;
+            },
             e => throw e);
     }
 
@@ -443,7 +499,13 @@ public class NeteaseApisTests
         {
             ArtistId = id
         });
-        result.Match(s => s.Code.Should().Be(200),
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Data.Should().NotBeNull();
+                s.Data.Records.Should().NotBeEmpty();
+                return true;
+            },
             e => throw e);
     }
 
