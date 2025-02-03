@@ -9,11 +9,12 @@ public static partial class NeteaseApis
     /// <summary>
     /// 喜欢歌曲列表
     /// </summary>
-    public static LikelistApi LikelistApi = new();
+    public static LikelistApi LikelistApi => new();
 }
 
 public class LikelistApi : WeApiContractBase<LikelistRequest, LikelistResponse, ErrorResultBase, LikelistActualRequest>
 {
+    public override string IdentifyRoute => "/likelist";
     public override string Url => "https://music.163.com/weapi/song/like/get";
     public override HttpMethod Method => HttpMethod.Post;
 

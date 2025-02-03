@@ -2,7 +2,7 @@
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
-using Kengwang.Toolkit;
+using HyPlayer.NeteaseApi.Extensions;
 using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
@@ -12,13 +12,15 @@ public static partial class NeteaseApis
     /// <summary>
     /// 手机登录
     /// </summary>
-    public static LoginCellphoneApi LoginCellphoneApi = new();
+    public static LoginCellphoneApi LoginCellphoneApi => new();
 }
 
-public class LoginCellphoneApi : WeApiContractBase<LoginCellphoneRequest, LoginResponse, ErrorResultBase,
+public class LoginCellphoneApi : EApiContractBase<LoginCellphoneRequest, LoginResponse, ErrorResultBase,
     LoginCellphoneActualRequest>
 {
-    public override string Url => "https://music.163.com/weapi/login/cellphone";
+    public override string IdentifyRoute => "/login/cellphone";
+    public override string ApiPath => "/api/w/login/cellphone";
+    public override string Url => "https://interface..163.com/eapi/w/login/cellphone";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override Dictionary<string, string> Cookies => new() { { "os", "pc" }, { "appver", "2.9.8" } };
@@ -50,7 +52,7 @@ public class LoginCellphoneApi : WeApiContractBase<LoginCellphoneRequest, LoginR
     }
 }
 
-public class LoginCellphoneActualRequest : WeApiActualRequestBase
+public class LoginCellphoneActualRequest : EApiActualRequestBase
 {
     [JsonPropertyName("phone")] public required string Phone { get; set; }
     [JsonPropertyName("countrycode")] public string CountryCode { get; set; } = "86";
@@ -84,6 +86,5 @@ public class LoginCellphoneRequest : RequestBase
 public class LoginResponse : CodedResponseBase
 {
     [JsonPropertyName("loginType")] public int LoginType { get; set; }
-    [JsonPropertyName("message")] public string? Message { get; set; }
     [JsonPropertyName("profile")] public UserInfoDto? Profile { get; set; }
 }

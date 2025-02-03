@@ -9,11 +9,12 @@ public static partial class NeteaseApis
     /// <summary>
     /// 私人 FM 垃圾桶
     /// </summary>
-    public static FmTrashApi FmTrashApi = new();
+    public static PersonalFmTrashApi PersonalFmTrashApi => new();
 }
 
-public class FmTrashApi : WeApiContractBase<FmTrashRequest, FmTrashResponse, ErrorResultBase, FmTrashActualRequest>
+public class PersonalFmTrashApi : WeApiContractBase<FmTrashRequest, FmTrashResponse, ErrorResultBase, FmTrashActualRequest>
 {
+    public override string IdentifyRoute => "/fm/trash";
     public override string Url => "";
     public override HttpMethod Method => HttpMethod.Post;
 

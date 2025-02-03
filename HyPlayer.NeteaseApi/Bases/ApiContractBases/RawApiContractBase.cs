@@ -1,5 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.Extensions;
-using Kengwang.Toolkit;
+using HyPlayer.NeteaseApi.Extensions;
 using System.Text;
 using System.Text.Json;
 
@@ -77,7 +77,7 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
         if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
         if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
             return Results<TResponseModel, ErrorResultBase>
-                   .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
+                   .CreateError(new ErrorResultBase(codedResponseBase.Code, $"返回不成功({codedResponseBase.Code}): {codedResponseBase.Message}")).WithValue(ret);
         return ret;
     }
 

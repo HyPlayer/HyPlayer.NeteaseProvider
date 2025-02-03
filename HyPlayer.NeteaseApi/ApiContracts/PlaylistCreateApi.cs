@@ -9,12 +9,13 @@ public static partial class NeteaseApis
     /// <summary>
     /// 创建歌单
     /// </summary>
-    public static PlaylistCreateApi PlaylistCreateApi = new();
+    public static PlaylistCreateApi PlaylistCreateApi => new();
 }
 
 public class PlaylistCreateApi : WeApiContractBase<PlaylistCreateRequest, PlaylistCreateResponse, ErrorResultBase,
     PlaylistCreateActualRequest>
 {
+    public override string IdentifyRoute => "/playlist/create";
     public override string Url => "https://music.163.com/api/playlist/create";
     public override HttpMethod Method => HttpMethod.Post;
 
@@ -53,6 +54,7 @@ public class PlaylistCreateRequest : RequestBase
 
 public class PlaylistCreateResponse : CodedResponseBase
 {
+    
 }
 
 public class PlaylistCreateActualRequest : WeApiActualRequestBase

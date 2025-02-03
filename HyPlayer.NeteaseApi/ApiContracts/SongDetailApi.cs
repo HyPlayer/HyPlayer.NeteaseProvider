@@ -10,12 +10,13 @@ public static partial class NeteaseApis
     /// <summary>
     /// 歌曲详情
     /// </summary>
-    public static SongDetailApi SongDetailApi = new();
+    public static SongDetailApi SongDetailApi => new();
 }
 
 
 public class SongDetailApi : WeApiContractBase<SongDetailRequest, SongDetailResponse, ErrorResultBase, SongDetailActualRequest>
 {
+    public override string IdentifyRoute => "/song/detail";
     public override string Url => "https://music.163.com/weapi/v3/song/detail";
     public override HttpMethod Method => HttpMethod.Post;
     public override Task MapRequest(SongDetailRequest? request)

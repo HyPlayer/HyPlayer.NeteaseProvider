@@ -1,0 +1,48 @@
+﻿using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+
+namespace HyPlayer.NeteaseApi.ApiContracts;
+
+public static partial class NeteaseApis
+{
+    public static AlbumDetailDynamicApi AlbumDetailDynamicApi => new();
+}
+
+public class AlbumDetailDynamicApi : WeApiContractBase<AlbumDetailDynamicRequest, AlbumDetailDynamicResponse, ErrorResultBase, AlbumDetailDynamicActualRequest>
+{
+    public override string IdentifyRoute => "/album/detail/dynamic";
+    public override string Url => "https://music.163.com/api/album/detail/dynamic";
+    public override HttpMethod Method => HttpMethod.Post;
+
+    public override Task MapRequest(AlbumDetailDynamicRequest? request)
+    {
+        if (request?.Id is not null)
+            ActualRequest = new AlbumDetailDynamicActualRequest
+            {
+                Id = request.Id
+            };
+        return Task.CompletedTask;
+    }
+}
+
+public class AlbumDetailDynamicRequest : RequestBase
+{
+    public required string Id { get; set; }
+}
+
+public class AlbumDetailDynamicResponse : CodedResponseBase
+{
+    [JsonPropertyName("onSale")] public bool OnSale { get; set; }
+    [JsonPropertyName("commentCount")] public int CommentCount { get; set; }
+    [JsonPropertyName("likedCount")] public int LikedCount { get; set; }
+    [JsonPropertyName("shareCount")] public int ShareCount { get; set; }
+    [JsonPropertyName("isSub")] public bool IsSub { get; set; }
+    [JsonPropertyName("subTime")] public long SubTime { get; set; }
+    [JsonPropertyName("subCount")] public int SubCount { get; set; }
+}
+
+public class AlbumDetailDynamicActualRequest : WeApiActualRequestBase
+{
+    [JsonPropertyName("id")] public required string Id { get; set; }
+}

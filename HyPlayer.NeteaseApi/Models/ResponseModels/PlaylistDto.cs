@@ -11,10 +11,13 @@ public class PlaylistDto
     [JsonPropertyName("updateFrequency")] public string? UpdateFrequency { get; set; }
     [JsonPropertyName("playCount")] public long PlayCount { get; set; }
     [JsonPropertyName("subscribedCount")] public long SubscribedCount { get; set; }
-
+    [JsonPropertyName("bookCount")] public long BookCount { get; set; }
     [JsonPropertyName("name")] public string? Name { get; set; }
     [JsonPropertyName("id")] public string? Id { get; set; }
     [JsonPropertyName("updateTime")] public long UpdateTime { get; set; }
     [JsonPropertyName("description")] public string? Description { get; set; }
     [JsonPropertyName("subscribed")] public bool Subscribed { get; set; }
+    [JsonPropertyName("userId")] public string? UserId { get; set; }
+    [JsonPropertyName("recommendText")] public string? RecommendText { get; set; }
+    [JsonPropertyName("highQuality")] public bool HighQuality { get; set; }
 }

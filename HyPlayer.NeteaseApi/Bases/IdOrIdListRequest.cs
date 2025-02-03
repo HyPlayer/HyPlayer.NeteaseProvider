@@ -15,14 +15,14 @@ public class IdOrIdListListRequest : RequestBase
     public string ConvertToIdStringList()
     {
         return string.IsNullOrWhiteSpace(Id)
-            ? $"[{string.Join(",", IdList ?? new List<string>())}]"
+            ? $"[{string.Join(",", IdList ?? [])}]"
             : $"[{Id}]";
     }
 
     public string ParseToIdObjects()
     {
         return string.IsNullOrWhiteSpace(Id)
-            ? $"[{string.Join(",", IdList?.Select(id => $$"""{"id":'{{id}}'}""") ?? new List<string>())}]"
+            ? $"[{string.Join(",", IdList?.Select(id => $$"""{"id":'{{id}}'}""") ?? [])}]"
             : $$"""[{"id": '{{Id}}'}]""";
     }
 }

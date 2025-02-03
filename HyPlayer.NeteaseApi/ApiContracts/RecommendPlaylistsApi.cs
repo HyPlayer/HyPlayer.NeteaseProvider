@@ -10,11 +10,12 @@ public static partial class NeteaseApis
     /// <summary>
     /// 推荐歌单
     /// </summary>
-    public static RecommendPlaylistsApi RecommendPlaylistsApi = new();
+    public static RecommendPlaylistsApi RecommendPlaylistsApi => new();
 }
 
 public class RecommendPlaylistsApi : WeApiContractBase<RecommendPlaylistsRequest, RecommendPlaylistsResponse, ErrorResultBase, RecommendPlaylistsActualRequest>
 {
+    public override string IdentifyRoute => "/recommend/resource";
     public override string Url => "https://music.163.com/weapi/v1/discovery/recommend/resource";
     public override HttpMethod Method => HttpMethod.Post;
 

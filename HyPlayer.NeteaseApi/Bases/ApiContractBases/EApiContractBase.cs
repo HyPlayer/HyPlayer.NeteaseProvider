@@ -1,5 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.Extensions;
-using Kengwang.Toolkit;
+using HyPlayer.NeteaseApi.Extensions;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +10,7 @@ namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 public abstract class
     EApiContractBase<TRequest, TResponse, TError, TActualRequest> :
-        ApiContractBase<TRequest, TResponse, TError, TActualRequest>
+    ApiContractBase<TRequest, TResponse, TError, TActualRequest>
     where TActualRequest : EApiActualRequestBase
     where TError : ErrorResultBase
     where TRequest : RequestBase
@@ -19,12 +19,15 @@ public abstract class
     public static readonly byte[] eapiKey = "e82ckenh8dichen8"u8.ToArray();
     public abstract string ApiPath { get; }
 
-    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
+    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option,
+        CancellationToken cancellationToken = default)
     {
         return await GenerateRequestMessageAsync(ActualRequest!, option, cancellationToken).ConfigureAwait(false);
     }
 
-    public override Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestMessageModel>(TActualRequestMessageModel actualRequest, ApiHandlerOption option, CancellationToken cancellationToken = default)
+    public override Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestMessageModel>(
+        TActualRequestMessageModel actualRequest, ApiHandlerOption option,
+        CancellationToken cancellationToken = default)
     {
         var url = Regex.Replace(Url, @"\w*api", "eapi");
         if (option.DegradeHttp)
@@ -35,49 +38,52 @@ public abstract class
         if (!string.IsNullOrWhiteSpace(option.XRealIP))
             requestMessage.Headers.Add("X-Real-IP", option.XRealIP);
         requestMessage.Headers.UserAgent.Clear();
-        requestMessage.Headers.TryAddWithoutValidation("User-Agent", UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent));
-
+        requestMessage.Headers.TryAddWithoutValidation("User-Agent",
+            UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent));
         var cookies = option.Cookies.ToDictionary(t => t.Key, t => t.Value);
+
         foreach (var keyValuePair in Cookies)
         {
             cookies[keyValuePair.Key] = keyValuePair.Value;
         }
 
+        cookies!.MergeDictionary(option.AdditionalParameters.Cookies);
+
         if (cookies.Count > 0)
             requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
 
         var csrfToken = cookies.GetValueOrDefault("__csrf");
-        var subDateTime = DateTime.Now.Subtract(new DateTime(1970, 1, 1));
+
         var dataHeader = new Dictionary<string, string?>()
-                         {
-                             { "osver", cookies.GetValueOrDefault("osver", string.Empty) },
-                             {
-                                 "deviceId", cookies.GetValueOrDefault("deviceId", string.Empty)
-                             }, // encrypt.base64.encode(imei + '\t02:00:00:00:00:00\t5106025eb79a5247\t70ffbaac7')
-                             { "appver", cookies.GetValueOrDefault("appver", "8.10.10") },
-                             { "versioncode", cookies.GetValueOrDefault("versioncode", "140") },
-                             { "mobilename", cookies.GetValueOrDefault("mobilename", string.Empty) },
-                             {
-                                 "buildver",
-                                 cookies.GetValueOrDefault(
-                                     "buildver", subDateTime.TotalSeconds.ToString(CultureInfo.InvariantCulture))
-                             },
-                             { "resolution", cookies.GetValueOrDefault("resolution", "1920x1080") },
-                             { "__csrf", csrfToken },
-                             { "os", cookies.GetValueOrDefault("os", "android") },
-                             { "channel", cookies.GetValueOrDefault("channel", string.Empty) },
-                             {
-                                 "requestId",
-                                 $"{subDateTime.TotalMilliseconds}_{Math.Floor(new Random().NextDouble() * 1000).ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')}"
-                             },
-                         };
+        {
+            { "osver", cookies.GetValueOrDefault("osver", string.Empty) },
+            {
+                "deviceId", cookies.GetValueOrDefault("deviceId", string.Empty)
+            },
+            { "appver", cookies.GetValueOrDefault("appver", "8.10.10") },
+            { "versioncode", cookies.GetValueOrDefault("versioncode", "140") },
+            { "mobilename", cookies.GetValueOrDefault("mobilename", string.Empty) },
+            {
+                "buildver",
+                cookies.GetValueOrDefault(
+                    "buildver", DateTimeOffset.Now.ToUnixTimeSeconds().ToString())
+            },
+            { "resolution", cookies.GetValueOrDefault("resolution", "1920x1080") },
+            { "__csrf", csrfToken },
+            { "os", cookies.GetValueOrDefault("os", "android") },
+            { "channel", cookies.GetValueOrDefault("channel", string.Empty) },
+            {
+                "requestId",
+                $"{DateTimeOffset.Now.ToUnixTimeMilliseconds()}_{Math.Floor(new Random().NextDouble() * 1000).ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')}"
+            },
+        };
         if (!string.IsNullOrEmpty(cookies.GetValueOrDefault("MUSIC_U")))
             dataHeader["MUSIC_U"] = cookies.GetValueOrDefault("MUSIC_U");
         if (!string.IsNullOrEmpty(cookies.GetValueOrDefault("MUSIC_A")))
             dataHeader["MUSIC_A"] = cookies.GetValueOrDefault("MUSIC_A");
+        dataHeader.MergeDictionary(option.AdditionalParameters.EApiHeaders);
         var req = actualRequest as EApiActualRequestBase ?? new EApiActualRequestBase();
         req.Header = JsonSerializer.Serialize(dataHeader, option.JsonSerializerOptions);
-
         string json;
         if (req is TActualRequestMessageModel apiRequest)
             json = JsonSerializer.Serialize(apiRequest, option.JsonSerializerOptions);
@@ -95,12 +101,22 @@ public abstract class
         var reqDataBytes = requestData.ToByteArrayUtf8();
         var reqBytes = cryptoTransform.TransformFinalBlock(reqDataBytes, 0, reqDataBytes.Length);
         requestMessage.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
-                                                           { { "params", reqBytes.ToHexStringUpper() } });
+            { { "params", reqBytes.ToHexStringUpper() } });
+        foreach (var additionalParametersHeader in option.AdditionalParameters.Headers)
+        {
+            if (requestMessage.Headers.Contains(additionalParametersHeader.Key))
+                requestMessage.Headers.Remove(additionalParametersHeader.Key);
+            if (additionalParametersHeader.Value is not null)
+                requestMessage.Headers.TryAddWithoutValidation(additionalParametersHeader.Key,
+                    additionalParametersHeader.Value);
+        }
+
         return Task.FromResult(requestMessage);
     }
 
-    public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(HttpResponseMessage response, ApiHandlerOption option,
-                                                                                   CancellationToken cancellationToken = default)
+    public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(HttpResponseMessage response,
+        ApiHandlerOption option,
+        CancellationToken cancellationToken = default)
     {
         return await ProcessResponseAsync<TResponse>(response, option, cancellationToken).ConfigureAwait(false);
     }
@@ -114,7 +130,7 @@ public abstract class
         {
             foreach (var rawSetCookie in rawSetCookies)
             {
-                var arr1 = rawSetCookie.Split(';').ToList();
+                var arr1 = rawSetCookie.Split(';');
                 var arr2 = arr1[0].TrimStart().Split('=');
                 option.Cookies[arr2[0]] = arr2[1];
             }
@@ -147,7 +163,8 @@ public abstract class
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
                     return Results<TResponseModel, ErrorResultBase>
-                           .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
+                        .CreateError(new ErrorResultBase(codedResponseBase.Code,
+                            $"返回不成功({codedResponseBase.Code}): {codedResponseBase.Message}")).WithValue(ret);
                 return ret;
             }
             catch
@@ -161,11 +178,11 @@ public abstract class
                 using var decryptor = aes.CreateDecryptor();
                 buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
                 var ret = JsonSerializer.Deserialize<TResponseModel>(Encoding.UTF8.GetString(buffer),
-                                                                     option.JsonSerializerOptions);
+                    option.JsonSerializerOptions);
                 if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
                     return Results<TResponseModel, ErrorResultBase>
-                           .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
+                        .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
                 return ret;
             }
         }

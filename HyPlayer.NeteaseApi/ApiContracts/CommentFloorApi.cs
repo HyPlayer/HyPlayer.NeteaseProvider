@@ -7,12 +7,13 @@ namespace HyPlayer.NeteaseApi.ApiContracts;
 
 public static partial class NeteaseApis
 {
-    public static CommentFloorApi CommentFloorApi = new();
+    public static CommentFloorApi CommentFloorApi => new();
 }
 
 public class CommentFloorApi : WeApiContractBase<CommentFloorRequest, CommentFloorResponse, ErrorResultBase,
     CommentFloorActualRequest>
 {
+    public override string IdentifyRoute => "/comment/floor";
     public override string Url => "https://music.163.com/api/resource/comment/floor/get";
     public override HttpMethod Method => HttpMethod.Post;
 

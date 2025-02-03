@@ -10,12 +10,13 @@ public static partial class NeteaseApis
     /// <summary>
     /// 歌手专辑
     /// </summary>
-    public static ArtistAlbumsApi ArtistAlbumsApi = new();
+    public static ArtistAlbumsApi ArtistAlbumsApi => new();
 }
 
 public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbumsResponse, ErrorResultBase,
     ArtistAlbumsActualRequest>
 {
+    public override string IdentifyRoute => "/artist/albums";
     public override string Url => "https://music.163.com/weapi/artist/albums/";
     public override HttpMethod Method => HttpMethod.Post;
 

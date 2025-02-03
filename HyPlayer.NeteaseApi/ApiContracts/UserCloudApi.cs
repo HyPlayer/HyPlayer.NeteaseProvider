@@ -10,12 +10,13 @@ public static partial class NeteaseApis
     /// <summary>
     /// 喜欢歌曲
     /// </summary>
-    public static UserCloudApi UserCloudApi = new();
+    public static UserCloudApi UserCloudApi => new();
 }
 
 
 public class UserCloudApi : WeApiContractBase<UserCloudRequest, UserCloudResponse, ErrorResultBase, UserCloudActualRequest>
 {
+    public override string IdentifyRoute => "/user/cloud";
     public override string Url => "https://music.163.com/api/v1/cloud/get";
     public override HttpMethod Method => HttpMethod.Post;
 

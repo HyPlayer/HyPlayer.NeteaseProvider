@@ -9,12 +9,13 @@ public static partial class NeteaseApis
     /// <summary>
     /// 歌单收藏
     /// </summary>
-    public static PlaylistSubscribeApi PlaylistSubscribeApi = new();
+    public static PlaylistSubscribeApi PlaylistSubscribeApi => new();
 }
 
 public class PlaylistSubscribeApi : WeApiContractBase<PlaylistSubscribeRequest, PlaylistSubscribeResponse,
     ErrorResultBase, PlaylistSubscribeActualRequest>
 {
+    public override string IdentifyRoute => "/playlist/subscribe";
     public override string Url => "https://music.163.com/weapi/playlist/";
     public override HttpMethod Method => HttpMethod.Post;
 

@@ -6,12 +6,13 @@ namespace HyPlayer.NeteaseApi.ApiContracts;
 
 public static partial class NeteaseApis
 {
-    public static MusicFirstListenInfoApi MusicFirstListenInfoApi = new();
+    public static MusicFirstListenInfoApi MusicFirstListenInfoApi => new();
 }
 
 public class MusicFirstListenInfoApi : WeApiContractBase<MusicFirstListenInfoRequest, MusicFirstListenInfoResponse,
     ErrorResultBase, MusicFirstListenInfoActualRequest>
 {
+    public override string IdentifyRoute => "/music/firstlisten/info";
     public override string Url => "https://interface3.music.163.com/api/content/activity/music/first/listen/info";
     public override HttpMethod Method => HttpMethod.Post;
 
@@ -34,7 +35,6 @@ public class MusicFirstListenInfoRequest : RequestBase
 public class MusicFirstListenInfoResponse : CodedResponseBase
 {
     [JsonPropertyName("data")] public MusicFirstListenInfoData? Data { get; set; }
-    [JsonPropertyName("message")] public string? Message { get; set; }
 
     public class MusicFirstListenInfoData
     {

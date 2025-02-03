@@ -6,11 +6,12 @@
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Text/@EntryValue">public static partial class NeteaseApis
 {
-    public static $ApiName$Api $ApiName$Api = new();
+    public static $ApiName$Api $ApiName$Api =&gt; new();
 }
 
 public class $ApiName$Api : $ApiType$ContractBase&lt;$ApiName$Request, $ApiName$Response, ErrorResultBase, $ApiName$ActualRequest&gt;
 {
+    public override string IdentifyRoute =&gt; "";
     public override string Url =&gt; ""; 
     public override HttpMethod Method =&gt; HttpMethod.Post;
     public override async Task MapRequest($ApiName$Request? request)

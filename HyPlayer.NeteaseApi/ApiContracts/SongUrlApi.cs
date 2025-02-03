@@ -9,20 +9,20 @@ public static partial class NeteaseApis
     /// <summary>
     /// 歌曲播放链接
     /// </summary>
-    public static SongUrlApi SongUrlApi = new();
+    public static SongUrlApi SongUrlApi => new();
 }
 
 
 public class SongUrlApi : EApiContractBase<SongUrlRequest, SongUrlResponse, ErrorResultBase, SongUrlActualRequest>
 {
+    public override string IdentifyRoute => "/song/url";
     public override string Url => "https://interface.music.163.com/eapi/song/enhance/player/url/v1";
     public override HttpMethod Method => HttpMethod.Post;
-
-    public override string? UserAgent => "andriod";
+    
     public override Task MapRequest(SongUrlRequest? request)
     {
         if (request is null) return Task.CompletedTask;
-        var ids = string.IsNullOrWhiteSpace(request.Id) ? $"[{string.Join(",", request.IdList!)}]" : $"[{request.Id}]";
+        var ids = request.ConvertToIdStringList();
         ActualRequest = new SongUrlActualRequest
         {
             Ids = ids,
@@ -49,18 +49,8 @@ public class SongUrlActualRequest : EApiActualRequestBase
     [JsonPropertyName("immerseType")] public string ImmerseType => "c51";
 }
 
-public class SongUrlRequest : RequestBase
+public class SongUrlRequest : IdOrIdListListRequest
 {
-    /// <summary>
-    /// 歌曲 ID
-    /// </summary>
-    public string? Id { get; set; }
-
-    /// <summary>
-    /// 歌曲 ID 列表
-    /// </summary>
-    public string[]? IdList { get; set; }
-
     /// <summary>
     /// 音质
     /// </summary>

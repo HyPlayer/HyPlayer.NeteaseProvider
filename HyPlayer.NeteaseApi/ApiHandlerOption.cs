@@ -15,6 +15,7 @@ public class ApiHandlerOption
     public IWebProxy? Proxy { get; set; } = null;
     public string? UserAgent { get; set; } = null;
     public bool DegradeHttp { get; set; } = false;
+    public AdditionalParameters AdditionalParameters { get; set; } = new ();
 
     public JsonSerializerOptions JsonSerializerOptions =
         new(JsonSerializerOptions.Default)
@@ -24,4 +25,11 @@ public class ApiHandlerOption
             AllowTrailingCommas = true,
             Converters = { new NumberToStringConverter(), new JsonBooleanConverter() }
         };
+}
+
+public class AdditionalParameters {
+    public Dictionary<string, string?> Cookies { get; set; } = [];
+    public Dictionary<string, string?> Headers { get; set; } = [];
+    public Dictionary<string, string?> EApiHeaders { get; set; } = [];
+    public Dictionary<string, string?> DataTokens { get; set; } = [];
 }

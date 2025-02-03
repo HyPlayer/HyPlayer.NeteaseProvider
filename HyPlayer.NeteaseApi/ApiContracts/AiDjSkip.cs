@@ -6,11 +6,12 @@ namespace HyPlayer.NeteaseApi.ApiContracts;
 
 public static partial class NeteaseApis
 {
-    public static AiDjSkipApi AiDjSkipApi = new();
+    public static AiDjSkipApi AiDjSkipApi => new();
 }
 
 public class AiDjSkipApi : EApiContractBase<AiDjSkipRequest, AiDjSkipResponse, ErrorResultBase, AiDjSkipActualRequest>
 {
+    public override string IdentifyRoute => "/aidj/skip";
     public override string Url => "https://interface3.music.163.com/eapi/v1/radio/skip";
     public override HttpMethod Method => HttpMethod.Post;
 
