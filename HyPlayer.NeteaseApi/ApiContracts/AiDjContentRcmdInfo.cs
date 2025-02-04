@@ -14,27 +14,27 @@ public static partial class NeteaseApis
 public class AiDjContentRcmdInfoApi : EApiContractBase<AiDjContentRcmdInfoRequest, AiDjContentRcmdInfoResponse, ErrorResultBase, AiDjContentRcmdInfoActualRequest>
 {
     public override string IdentifyRoute => "/aidj/content/rcmd/info";
-    public override string Url => "https://interface3.music.163.com/eapi/aidj/content/rcmd/info";
+    public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/aidj/content/rcmd/info";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(AiDjContentRcmdInfoRequest? request)
+    public override Task MapRequest()
     {
-        if (request == null) return Task.CompletedTask;
+        if (Request == null) return Task.CompletedTask;
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var extInfo = new AiDjActualRequestExtInfo
         {
             LastRequestTimestamp = timestamp,
-            ListenedTs = request.IsNewToAidj,
-            NoAidjToAidj = request.IsNewToAidj
+            ListenedTs = Request.IsNewToAidj,
+            NoAidjToAidj = Request.IsNewToAidj
         };
-        if (request is { Latitude: not null, Longitude: not null })
+        if (Request is { Latitude: not null, Longitude: not null })
         {
             extInfo.LbsInfoList =
             [
                 new AiDjActualRequestExtInfo.LbsInfo
                 {
-                    Latitude = request.Latitude.Value,
-                    Longitude = request.Longitude.Value,
+                    Latitude = Request.Latitude.Value,
+                    Longitude = Request.Longitude.Value,
                     Time = timestamp
                 }
             ];
@@ -46,7 +46,7 @@ public class AiDjContentRcmdInfoApi : EApiContractBase<AiDjContentRcmdInfoReques
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/aidj/content/rcmd/info";
+    public override string ApiPath { get; protected set; } = "/api/aidj/content/rcmd/info";
 }
 
 public class AiDjContentRcmdInfoRequest : RequestBase

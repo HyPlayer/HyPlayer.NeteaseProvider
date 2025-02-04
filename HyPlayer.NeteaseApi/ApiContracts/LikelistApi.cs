@@ -15,15 +15,15 @@ public static partial class NeteaseApis
 public class LikelistApi : WeApiContractBase<LikelistRequest, LikelistResponse, ErrorResultBase, LikelistActualRequest>
 {
     public override string IdentifyRoute => "/likelist";
-    public override string Url => "https://music.163.com/weapi/song/like/get";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/song/like/get";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(LikelistRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new LikelistActualRequest
             {
-                Uid = request.Uid
+                Uid = Request.Uid
             };
         return Task.CompletedTask;
     }

@@ -13,17 +13,17 @@ public static partial class NeteaseApis
 public class CloudPubApi : EApiContractBase<CloudPubRequest, CloudPubResponse, ErrorResultBase, CloudPubActualRequest>
 {
     public override string IdentifyRoute => "/cloud/pub";
-    public override string Url => "https://interface.music.163.com/eapi/cloud/pub/v2";
-    public override string ApiPath => "/api/cloud/pub/v2";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/cloud/pub/v2";
+    public override string ApiPath { get; protected set; } = "/api/cloud/pub/v2";
 
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(CloudPubRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new CloudPubActualRequest
             {
-                SongId = request.SongId
+                SongId = Request.SongId
             };
         return Task.CompletedTask;
     }

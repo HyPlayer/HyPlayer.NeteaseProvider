@@ -17,24 +17,21 @@ public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbu
     ArtistAlbumsActualRequest>
 {
     public override string IdentifyRoute => "/artist/albums";
-    public override string Url => "https://music.163.com/weapi/artist/albums/";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/artist/albums/";
     public override HttpMethod Method => HttpMethod.Post;
-
-    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option, CancellationToken cancellationToken = default)
+    
+    public override Task MapRequest()
     {
-        var req = await base.GenerateRequestMessageAsync(option, cancellationToken).ConfigureAwait(false);
-        req.RequestUri = new Uri(Url + Request!.ArtistId);
-        return req;
-    }
-
-    public override Task MapRequest(ArtistAlbumsRequest? request)
-    {
-        if (request is not null)
+        if (Request is not null)
+        {
+            Url += Request.ArtistId;
             ActualRequest = new ArtistAlbumsActualRequest
             {
-                Limit = request.Limit,
-                Offset = request.Start
+                Limit = Request.Limit,
+                Offset = Request.Start
             };
+        }
+
         return Task.CompletedTask;
     }
 }
@@ -74,7 +71,6 @@ public class ArtistAlbumsResponse : CodedResponseBase
     {
         [JsonPropertyName("alias")] public string[]? Alias { get; set; }
         [JsonPropertyName("transNames")] public string[]? Translations { get; set; }
-        [JsonPropertyName("subType")] public string? Subtype { get; set; }
         [JsonPropertyName("type")] public string? AlbumType { get; set; }
         [JsonPropertyName("isSub")] public bool IsSubscribed { get; set; }
     }

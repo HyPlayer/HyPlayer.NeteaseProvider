@@ -16,17 +16,17 @@ public static partial class NeteaseApis
 public class SongUrlApi : EApiContractBase<SongUrlRequest, SongUrlResponse, ErrorResultBase, SongUrlActualRequest>
 {
     public override string IdentifyRoute => "/song/url";
-    public override string Url => "https://interface.music.163.com/eapi/song/enhance/player/url/v1";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/song/enhance/player/url/v1";
     public override HttpMethod Method => HttpMethod.Post;
     
-    public override Task MapRequest(SongUrlRequest? request)
+    public override Task MapRequest()
     {
-        if (request is null) return Task.CompletedTask;
-        var ids = request.ConvertToIdStringList();
+        if (Request is null) return Task.CompletedTask;
+        var ids = Request.ConvertToIdStringList();
         ActualRequest = new SongUrlActualRequest
         {
             Ids = ids,
-            Level = request.Level
+            Level = Request.Level
         };
         return Task.CompletedTask;
     }
@@ -38,7 +38,7 @@ public class SongUrlApi : EApiContractBase<SongUrlRequest, SongUrlResponse, Erro
             { "appver", "8.10.05" }
         };
 
-    public override string ApiPath => "/api/song/enhance/player/url/v1";
+    public override string ApiPath { get; protected set; } = "/api/song/enhance/player/url/v1";
 }
 
 public class SongUrlActualRequest : EApiActualRequestBase

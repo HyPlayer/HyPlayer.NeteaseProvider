@@ -13,16 +13,16 @@ public static partial class NeteaseApis
 public class AlbumSublistApi : WeApiContractBase<AlbumSublistRequest, AlbumSublistResponse, ErrorResultBase, AlbumSublistActualRequest>
 {
     public override string IdentifyRoute => "/album/sublist";
-    public override string Url => "https://music.163.com/weapi/album/sublist";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/album/sublist";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(AlbumSublistRequest? request)
+    public override Task MapRequest()
     {
-        if (request != null)
+        if (Request is not null)
             ActualRequest = new AlbumSublistActualRequest
             {
-                Limit = request.Limit,
-                Offset = request.Offset
+                Limit = Request.Limit,
+                Offset = Request.Offset
             };
 
         return Task.CompletedTask;

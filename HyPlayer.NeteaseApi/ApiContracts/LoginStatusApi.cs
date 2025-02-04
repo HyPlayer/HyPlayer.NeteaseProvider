@@ -13,10 +13,10 @@ public static partial class NeteaseApis
 public class LoginStatusApi : EApiContractBase<LoginStatusRequest, LoginStatusResponse, ErrorResultBase, LoginStatusActualRequest>
 {
     public override string IdentifyRoute => "/login/status";
-    public override string Url => "https://interface.music.163.com/eapi/w/nuser/account/get";
-    public override string ApiPath => "/api/w/nuser/account/get";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/w/nuser/account/get";
+    public override string ApiPath { get; protected set; } = "/api/w/nuser/account/get";
     public override HttpMethod Method => HttpMethod.Post;
-    public override Task MapRequest(LoginStatusRequest? request)
+    public override Task MapRequest()
     {
         ActualRequest = new LoginStatusActualRequest();
         return Task.CompletedTask;

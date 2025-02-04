@@ -12,16 +12,16 @@ public static partial class NeteaseApis
 public class LoginQrCodeUnikeyApi : EApiContractBase<LoginQrCodeUnikeyRequest, LoginQrCodeUnikeyResponse, ErrorResultBase, LoginQrCodeUnikeyActualRequest>
 {
     public override string IdentifyRoute => "/login/qr/unikey";
-    public override string Url => "https://interface.music.163.com/eapi/login/qrcode/unikey";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/login/qrcode/unikey";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override async Task MapRequest(LoginQrCodeUnikeyRequest? request)
+    public override async Task MapRequest()
     {
         ActualRequest = new LoginQrCodeUnikeyActualRequest();
         await Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/login/qrcode/unikey";
+    public override string ApiPath { get; protected set; } = "/api/login/qrcode/unikey";
 }
 
 public class LoginQrCodeUnikeyRequest : RequestBase

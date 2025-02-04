@@ -18,24 +18,24 @@ public class LoginCellphoneApi : EApiContractBase<LoginCellphoneRequest, LoginRe
     LoginCellphoneActualRequest>
 {
     public override string IdentifyRoute => "/login/cellphone";
-    public override string ApiPath => "/api/w/login/cellphone";
-    public override string Url => "https://interface..163.com/eapi/w/login/cellphone";
+    public override string ApiPath { get; protected set; } = "/api/w/login/cellphone";
+    public override string Url { get; protected set; } = "https://interface..163.com/eapi/w/login/cellphone";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override Dictionary<string, string> Cookies => new() { { "os", "pc" }, { "appver", "2.9.8" } };
 
     public override string UserAgent => "pc";
 
-    public override Task MapRequest(LoginCellphoneRequest? request)
+    public override Task MapRequest()
     {
-        if (request is null) return Task.CompletedTask;
-        var md5Password = string.IsNullOrEmpty(request.Md5Password)
-            ? request.Password!.ToByteArrayUtf8().ComputeMd5().ToHexStringLower()
-            : request.Md5Password!;
+        if (Request is null) return Task.CompletedTask;
+        var md5Password = string.IsNullOrEmpty(Request.Md5Password)
+            ? Request.Password!.ToByteArrayUtf8().ComputeMd5().ToHexStringLower()
+            : Request.Md5Password!;
         ActualRequest = new LoginCellphoneActualRequest
         {
-            Phone = request.Cellphone,
-            CountryCode = request.CountryCode,
+            Phone = Request.Cellphone,
+            CountryCode = Request.CountryCode,
             Md5Password = md5Password
         };
         return Task.CompletedTask;

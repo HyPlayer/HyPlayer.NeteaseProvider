@@ -13,19 +13,19 @@ public static partial class NeteaseApis
 public class UserRecordApi : EApiContractBase<UserRecordRequest, UserRecordResponse, ErrorResultBase, UserRecordActualRequest>
 {
     public override string IdentifyRoute => "/user/record";
-    public override string Url => "https://interface.music.163.com/eapi/v1/play/record";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/v1/play/record";
     public override HttpMethod Method => HttpMethod.Post;
-    public override string ApiPath => "/api/v1/play/record";
+    public override string ApiPath { get; protected set; } = "/api/v1/play/record";
 
-    public override Task MapRequest(UserRecordRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new UserRecordActualRequest
             {
-                UserId = request.UserId,
-                RecordType = request.RecordType,
-                Offset = request.Offset,
-                Count = request.Count
+                UserId = Request.UserId,
+                RecordType = Request.RecordType,
+                Offset = Request.Offset,
+                Count = Request.Count
             };
         return Task.CompletedTask;
     }

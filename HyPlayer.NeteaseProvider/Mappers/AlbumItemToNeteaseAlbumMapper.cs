@@ -16,7 +16,7 @@ public static class AlbumItemToNeteaseAlbumMapper
             Translations = item.Translations?.ToList(),
             Company = item.Company,
             BriefDescription = item.BriefDescription,
-            SubType = item.Subtype,
+            SubType = item.SubType,
             AlbumType = item.AlbumType,
             IsSubscribed = item.IsSubscribed,
             Artists = item.Artists?.Select(t => t.MapToNeteaseArtist()).ToList(),

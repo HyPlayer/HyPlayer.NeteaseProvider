@@ -3,6 +3,7 @@
 using FluentAssertions;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Models;
 using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 
@@ -186,6 +187,25 @@ public class NeteaseApisTests
             e => throw e);
     }
 
+    // CommentsApi
+    [Test]
+    [Arguments("2623889384", NeteaseResourceType.Song)]
+    public async Task Comments_Should_BeNormal(string commentId, NeteaseResourceType resourceType)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.CommentsApi, new CommentsRequest()
+        {
+            Id = commentId,
+            ResourceType = resourceType
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Comments.Should().NotBeEmpty();
+                return true;
+            },
+            e => throw e);
+    }
+    
     [Test]
     [Arguments("793914432")]
     public async Task DjChannelPrograms_Should_BeNormal(string id)

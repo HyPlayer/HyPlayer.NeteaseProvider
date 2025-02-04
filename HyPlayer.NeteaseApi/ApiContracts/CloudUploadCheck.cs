@@ -12,21 +12,21 @@ public static partial class NeteaseApis
 public class CloudUploadCheckApi : EApiContractBase<CloudUploadCheckRequest, CloudUploadCheckResponse, ErrorResultBase, CloudUploadCheckActualRequest>
 {
     public override string IdentifyRoute => "/cloud/upload/check";
-    public override string Url => "http://music.163.com/eapi/cloud/upload/check";
-    public override string ApiPath => "/api/cloud/upload/check";
+    public override string Url { get; protected set; } = "http://music.163.com/eapi/cloud/upload/check";
+    public override string ApiPath { get; protected set; } = "/api/cloud/upload/check";
 
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(CloudUploadCheckRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new CloudUploadCheckActualRequest
             {
-                BitRate = request.Bitrate,
-                Ext = request.Ext,
-                Length = request.Length,
-                Md5 = request.Md5,
-                SongId = request.SongId
+                BitRate = Request.Bitrate,
+                Ext = Request.Ext,
+                Length = Request.Length,
+                Md5 = Request.Md5,
+                SongId = Request.SongId
             };
         return Task.CompletedTask;
     }

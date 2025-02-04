@@ -13,15 +13,15 @@ public class MusicFirstListenInfoApi : WeApiContractBase<MusicFirstListenInfoReq
     ErrorResultBase, MusicFirstListenInfoActualRequest>
 {
     public override string IdentifyRoute => "/music/firstlisten/info";
-    public override string Url => "https://interface3.music.163.com/api/content/activity/music/first/listen/info";
+    public override string Url { get; protected set; } = "https://interface3.music.163.com/api/content/activity/music/first/listen/info";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(MusicFirstListenInfoRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new MusicFirstListenInfoActualRequest()
             {
-                SongId = request.SongId
+                SongId = Request.SongId
             };
         return Task.CompletedTask;
     }
