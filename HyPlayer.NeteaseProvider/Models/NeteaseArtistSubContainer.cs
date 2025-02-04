@@ -27,7 +27,7 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
                         new ArtistSongsRequest
                         {
                             ArtistId = artistId,
-                            OrderType = "hot",
+                            OrderType = ArtistSongsOrderType.Hot,
                             Offset = 0,
                             Limit = 50
                         });
@@ -42,7 +42,7 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
                         new ArtistSongsRequest
                         {
                             ArtistId = artistId,
-                            OrderType = "time",
+                            OrderType = ArtistSongsOrderType.Time,
                             Offset = 0,
                             Limit = 50
                         });
@@ -85,7 +85,7 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
                     new ArtistSongsRequest
                     {
                         ArtistId = artistId,
-                        OrderType = "hot",
+                        OrderType = ArtistSongsOrderType.Hot,
                         Offset = start,
                         Limit = count
                     });
@@ -100,7 +100,7 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
                     new ArtistSongsRequest
                     {
                         ArtistId = artistId,
-                        OrderType = "time",
+                        OrderType = ArtistSongsOrderType.Hot,
                         Offset = 0,
                         Limit = 50
                     });

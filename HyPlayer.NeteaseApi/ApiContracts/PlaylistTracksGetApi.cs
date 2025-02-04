@@ -12,20 +12,20 @@ public static partial class NeteaseApis
 public class PlaylistTracksGetApi : EApiContractBase<PlaylistTracksGetRequest, PlaylistTracksGetResponse, ErrorResultBase, PlaylistTracksGetActualRequest>
 {
     public override string IdentifyRoute => "/playlist/detail";
-    public override string Url => "https://interface.music.163.com/eapi/v6/playlist/detail";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/v6/playlist/detail";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(PlaylistTracksGetRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new PlaylistTracksGetActualRequest()
             {
-                Id = request.Id
+                Id = Request.Id
             };
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/v6/playlist/detail";
+    public override string ApiPath { get; protected set; } = "/api/v6/playlist/detail";
 }
 
 public class PlaylistTracksGetRequest : RequestBase

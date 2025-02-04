@@ -14,19 +14,19 @@ public class CommentFloorApi : WeApiContractBase<CommentFloorRequest, CommentFlo
     CommentFloorActualRequest>
 {
     public override string IdentifyRoute => "/comment/floor";
-    public override string Url => "https://music.163.com/api/resource/comment/floor/get";
+    public override string Url { get; protected set; } = "https://music.163.com/api/resource/comment/floor/get";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(CommentFloorRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new()
             {
                 CsrfToken = null,
-                ThreadId = request.ThreadId,
-                ParentCommentId = request.ParentCommentId,
-                Time = request.Time,
-                Limit = request.Limit
+                ThreadId = Request.ThreadId,
+                ParentCommentId = Request.ParentCommentId,
+                Time = Request.Time,
+                Limit = Request.Limit
             };
         return Task.CompletedTask;
     }
@@ -65,6 +65,8 @@ public class CommentFloorResponse : CodedResponseBase
         [JsonPropertyName("time")] public long Time { get; set; }
         [JsonPropertyName("hasMore")] public bool HasMore { get; set; }
         [JsonPropertyName("comments")] public CommentDto[]? Comments { get; set; }
+        [JsonPropertyName("ownerComment")] public CommentDto? OwnerComments { get; set; }
+        [JsonPropertyName("bestComments")] public CommentDto[]? BestComments { get; set; }
         [JsonPropertyName("totalCount")] public int TotalCount { get; set; }
     }
 }

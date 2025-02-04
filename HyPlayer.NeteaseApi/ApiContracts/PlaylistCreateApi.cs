@@ -16,19 +16,19 @@ public class PlaylistCreateApi : WeApiContractBase<PlaylistCreateRequest, Playli
     PlaylistCreateActualRequest>
 {
     public override string IdentifyRoute => "/playlist/create";
-    public override string Url => "https://music.163.com/api/playlist/create";
+    public override string Url { get; protected set; } = "https://music.163.com/api/playlist/create";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override string? UserAgent => "pc";
 
-    public override Task MapRequest(PlaylistCreateRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new PlaylistCreateActualRequest
             {
-                Name = request.Name,
-                Privacy = request.Privacy,
-                Type = request.Type
+                Name = Request.Name,
+                Privacy = Request.Privacy,
+                Type = Request.Type
             };
         return Task.CompletedTask;
     }

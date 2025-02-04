@@ -17,15 +17,15 @@ public static partial class NeteaseApis
 public class UserCloudApi : WeApiContractBase<UserCloudRequest, UserCloudResponse, ErrorResultBase, UserCloudActualRequest>
 {
     public override string IdentifyRoute => "/user/cloud";
-    public override string Url => "https://music.163.com/api/v1/cloud/get";
+    public override string Url { get; protected set; } = "https://music.163.com/api/v1/cloud/get";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(UserCloudRequest? request)
+    public override Task MapRequest()
     {
         ActualRequest = new()
         {
-            Limit = request?.Limit ?? 30,
-            Offset = request?.Offset ?? 0
+            Limit = Request?.Limit ?? 30,
+            Offset = Request?.Offset ?? 0
         };
         return Task.CompletedTask;
     }

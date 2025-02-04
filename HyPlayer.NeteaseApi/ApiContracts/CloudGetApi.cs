@@ -14,18 +14,18 @@ public class CloudGetApi : EApiContractBase<CloudGetRequest, CloudGetResponse, E
 {
 
     public override string IdentifyRoute => "/cloud/get";
-    public override string Url => "https://interface.music.163.com/eapi/v1/cloud/get";
-    public override string ApiPath => "/api/v1/cloud/get";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/v1/cloud/get";
+    public override string ApiPath { get; protected set; } = "/api/v1/cloud/get";
 
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(CloudGetRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new CloudGetActualRequest
             {
-                Offset = request.Offset,
-                Limit = request.Limit
+                Offset = Request.Offset,
+                Limit = Request.Limit
             };
         return Task.CompletedTask;
     }

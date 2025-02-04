@@ -13,18 +13,20 @@ public static partial class NeteaseApis
     public static DjChannelDetailApi DjChannelDetailApi => new();
 }
 
-public class DjChannelDetailApi : WeApiContractBase<DjChannelDetailRequest, DjChannelDetailResponse, ErrorResultBase, DjChannelDetailActualRequest>
+public class DjChannelDetailApi : WeApiContractBase<DjChannelDetailRequest, DjChannelDetailResponse, ErrorResultBase,
+    DjChannelDetailActualRequest>
 {
     public override string IdentifyRoute => "/dj/detail";
-    public override string Url => "https://music.163.com/weapi/djDj/get";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/djDj/get";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(DjChannelDetailRequest? request)
+    public override Task MapRequest()
     {
-        ActualRequest = new DjChannelDetailActualRequest
-        {
-            Id = request!.Id
-        };
+        if (Request?.Id is not null)
+            ActualRequest = new DjChannelDetailActualRequest
+            {
+                Id = Request.Id
+            };
         return Task.CompletedTask;
     }
 }

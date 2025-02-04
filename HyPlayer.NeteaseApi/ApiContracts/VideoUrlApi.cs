@@ -12,21 +12,21 @@ public static partial class NeteaseApis
 public class VideoUrlApi : EApiContractBase<VideoUrlRequest, VideoUrlResponse, ErrorResultBase, VideoUrlActualRequest>
 {
     public override string IdentifyRoute => "/video/url";
-    public override string Url => "https://interface.music.163.com/eapi/song/enhance/play/mv/url";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/song/enhance/play/mv/url";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(VideoUrlRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new VideoUrlActualRequest
             {
-                Id = request.Id,
-                Resolution = request.Resolution
+                Id = Request.Id,
+                Resolution = Request.Resolution
             };
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/song/enhance/play/mv/url";
+    public override string ApiPath { get; protected set; } = "/api/song/enhance/play/mv/url";
 }
 
 public class VideoUrlRequest : RequestBase

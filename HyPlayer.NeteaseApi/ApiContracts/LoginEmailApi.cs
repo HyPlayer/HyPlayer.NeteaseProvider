@@ -1,7 +1,6 @@
 ﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
-using HyPlayer.NeteaseApi.Extensions;
 using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
@@ -18,20 +17,20 @@ public class LoginEmailApi : EApiContractBase<LoginEmailRequest, LoginResponse, 
     LoginEmailActualRequest>
 {
     public override string IdentifyRoute => "/login";
-    public override string Url => "https://interface.163.com/eapi/w/login";
-    public override string ApiPath => "/api/w/login";
+    public override string Url { get; protected set; } = "https://interface.163.com/eapi/w/login";
+    public override string ApiPath { get; protected set; } = "/api/w/login";
     public override HttpMethod Method => HttpMethod.Post;
     public override string UserAgent => "pc";
 
-    public override Task MapRequest(LoginEmailRequest? request)
+    public override Task MapRequest()
     {
-        if (request is null) return Task.CompletedTask;
-        var md5Password = string.IsNullOrEmpty(request.Md5Password)
-            ? request.Password!.ToByteArrayUtf8().ComputeMd5().ToHexStringLower()
-            : request.Md5Password!;
+        if (Request is null) return Task.CompletedTask;
+        var md5Password = string.IsNullOrEmpty(Request.Md5Password)
+            ? Request.Password!.ToByteArrayUtf8().ComputeMd5().ToHexStringLower()
+            : Request.Md5Password!;
         ActualRequest = new LoginEmailActualRequest
         {
-            Username = request?.Email!,
+            Username = Request.Email,
             Md5Password = md5Password,
         };
         return Task.CompletedTask;

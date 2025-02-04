@@ -13,26 +13,21 @@ public class AlbumSubscribeApi : WeApiContractBase<AlbumSubscribeRequest, AlbumS
     AlbumSubscribeActualRequest>
 {
     public override string IdentifyRoute => "/album/subscribe";
-    public override string Url => "https://music.163.com/api/album/";
+    public override string Url { get; protected set; } = "https://music.163.com/api/album/";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(AlbumSubscribeRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
+        {
             ActualRequest = new AlbumSubscribeActualRequest
             {
-                Id = request.Id
+                Id = Request.Id
             };
-        return Task.CompletedTask;
-    }
+            Url += Request.IsSubscribe is true ? "sub" : "unsub";
+        }
 
-    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestModel>(
-        TActualRequestModel actualRequest, ApiHandlerOption option,
-        CancellationToken cancellationToken = default)
-    {
-        var req = await base.GenerateRequestMessageAsync(actualRequest, option, cancellationToken);
-        req.RequestUri = new Uri(Url + (Request?.IsSubscribe is true ? "sub" : "unsub"));
-        return req;
+        return Task.CompletedTask;
     }
 }
 

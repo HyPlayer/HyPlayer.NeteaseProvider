@@ -16,18 +16,18 @@ public static partial class NeteaseApis
 public class PersonalFmApi : EApiContractBase<PersonalFmRequest, PersonalFmResponse, ErrorResultBase, PersonalFmActualRequest>
 {
     public override string IdentifyRoute => "/personal/fm";
-    public override string Url => "https://interface3.music.163.com/eapi/v1/radio/get";
+    public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/v1/radio/get";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override string ApiPath => "/api/v1/radio/get";
+    public override string ApiPath { get; protected set; } = "/api/v1/radio/get";
 
-    public override Task MapRequest(PersonalFmRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new PersonalFmActualRequest
             {
-                Mode = request.Mode,
-                Limit = request.Limit
+                Mode = Request.Mode,
+                Limit = Request.Limit
             };
         return Task.CompletedTask;
     }

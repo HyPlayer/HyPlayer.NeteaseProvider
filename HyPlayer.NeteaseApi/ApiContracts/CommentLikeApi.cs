@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Models;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
@@ -14,16 +15,16 @@ public class CommentLikeApi : WeApiContractBase<CommentLikeRequest, CommentLikeR
     CommentLikeActualRequest>
 {
     public override string IdentifyRoute => "/comment/like";
-    public override string Url => "https://music.163.com/weapi/v1/comment/";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/v1/comment/";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(CommentLikeRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new CommentLikeActualRequest
             {
-                CommentId = request.CommentId,
-                ThreadId = request.ThreadId ?? CommentTypeTransformer(request.ResourceType) + request.CommentId
+                CommentId = Request.CommentId,
+                ThreadId = Request.ThreadId ?? NeteaseUtils.CommentTypeTransformer(Request.ResourceType) + Request.CommentId
             };
         return Task.CompletedTask;
     }
@@ -34,22 +35,6 @@ public class CommentLikeApi : WeApiContractBase<CommentLikeRequest, CommentLikeR
         var req = await base.GenerateRequestMessageAsync(actualRequest, option, cancellationToken).ConfigureAwait(false);
         req.RequestUri = new Uri(Url + (Request?.IsLike == true ? "like" : "unlike"));
         return req;
-    }
-
-    private static string CommentTypeTransformer(NeteaseResourceType type)
-    {
-        switch (type)
-        {
-            case NeteaseResourceType.Song: return "R_SO_4_";
-            case NeteaseResourceType.MV: return "R_MV_5_";
-            case NeteaseResourceType.Playlist: return "A_PL_0_";
-            case NeteaseResourceType.Album: return "R_AL_3_";
-            case NeteaseResourceType.RadioChannel: return "A_DJ_1_";
-            case NeteaseResourceType.Video: return "R_VI_62_";
-            case NeteaseResourceType.Dynamic: return "A_EV_2_";
-            case NeteaseResourceType.MLog: return "R_MLOG_1001_";
-            default: throw new ArgumentOutOfRangeException(nameof(type));
-        }
     }
 }
 
@@ -67,6 +52,6 @@ public class CommentLikeResponse : CodedResponseBase
 
 public class CommentLikeActualRequest : WeApiActualRequestBase
 {
-    [JsonPropertyName("commentId")] public string CommentId { get; set; }
-    [JsonPropertyName("threadId")] public string ThreadId { get; set; }
+    [JsonPropertyName("commentId")] public required string CommentId { get; set; }
+    [JsonPropertyName("threadId")] public required string ThreadId { get; set; }
 }

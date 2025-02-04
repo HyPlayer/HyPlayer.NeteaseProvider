@@ -12,7 +12,7 @@ public static partial class NeteaseApis
 public class AiDjSkipApi : EApiContractBase<AiDjSkipRequest, AiDjSkipResponse, ErrorResultBase, AiDjSkipActualRequest>
 {
     public override string IdentifyRoute => "/aidj/skip";
-    public override string Url => "https://interface3.music.163.com/eapi/v1/radio/skip";
+    public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/v1/radio/skip";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestMessageModel>(
@@ -27,18 +27,18 @@ public class AiDjSkipApi : EApiContractBase<AiDjSkipRequest, AiDjSkipResponse, E
         return res;
     }
 
-    public override Task MapRequest(AiDjSkipRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new AiDjSkipActualRequest
             {
-                SongId = request.SongId,
-                Time = request.Time
+                SongId = Request.SongId,
+                Time = Request.Time
             };
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/v1/radio/skip";
+    public override string ApiPath { get; protected set; } = "/api/v1/radio/skip";
 }
 
 public class AiDjSkipRequest : RequestBase

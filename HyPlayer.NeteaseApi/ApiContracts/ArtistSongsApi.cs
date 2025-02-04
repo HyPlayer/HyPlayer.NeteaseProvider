@@ -17,18 +17,22 @@ public class ArtistSongsApi : WeApiContractBase<ArtistSongsRequest, ArtistSongsR
     ArtistSongsActualRequest>
 {
     public override string IdentifyRoute => "/artist/songs";
-    public override string Url => "https://music.163.com/api/v1/artist/songs";
+    public override string Url { get; protected set; } = "https://music.163.com/api/v1/artist/songs";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(ArtistSongsRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new ArtistSongsActualRequest
             {
-                Id = request.ArtistId,
-                OrderType = request.OrderType,
-                Offset = request.Offset,
-                Limit = request.Limit
+                Id = Request.ArtistId,
+                OrderType = Request.OrderType switch
+                {
+                    ArtistSongsOrderType.Time => "time",
+                    _ => "hot"
+                },
+                Offset = Request.Offset,
+                Limit = Request.Limit
             };
         return Task.CompletedTask;
     }
@@ -44,6 +48,12 @@ public class ArtistSongsActualRequest : WeApiActualRequestBase
     [JsonPropertyName("limit")] public int Limit { get; set; } = 100;
 }
 
+public enum ArtistSongsOrderType
+{
+    Hot,
+    Time
+}
+
 public class ArtistSongsRequest : RequestBase
 {
     /// <summary>
@@ -54,7 +64,7 @@ public class ArtistSongsRequest : RequestBase
     /// <summary>
     /// 排序类型 hot, time
     /// </summary>
-    public string OrderType { get; set; } = "hot";
+    public ArtistSongsOrderType OrderType { get; set; } = ArtistSongsOrderType.Hot;
 
     /// <summary>
     /// 起始位置

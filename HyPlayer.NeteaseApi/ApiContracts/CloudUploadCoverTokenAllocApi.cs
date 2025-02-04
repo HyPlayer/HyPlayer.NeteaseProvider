@@ -12,19 +12,19 @@ public static partial class NeteaseApis
 public class CloudUploadCoverTokenAllocApi : EApiContractBase<CloudUploadCoverTokenAllocRequest, CloudUploadCoverTokenAllocResponse, ErrorResultBase, CloudUploadCoverTokenAllocActualRequest>
 {
     public override string IdentifyRoute => "/cloud/upload/cover/token/alloc";
-    public override string ApiPath => "/api/nos/token/alloc";
+    public override string ApiPath { get; protected set; } = "/api/nos/token/alloc";
 
-    public override string Url => "http://musicupload.netease.com/eapi/nos/token/alloc";
+    public override string Url { get; protected set; } = "http://musicupload.netease.com/eapi/nos/token/alloc";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(CloudUploadCoverTokenAllocRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new CloudUploadCoverTokenAllocActualRequest
             {
-                Extension = request.Ext,
-                FileName = request.Filename,
-                Type = request.Type
+                Extension = Request.Ext,
+                FileName = Request.Filename,
+                Type = Request.Type
             };
         return Task.CompletedTask;
     }
