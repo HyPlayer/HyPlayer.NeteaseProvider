@@ -13,15 +13,15 @@ public static partial class NeteaseApis
 public class ArtistDetailApi : WeApiContractBase<ArtistDetailRequest, ArtistDetailResponse, ErrorResultBase, ArtistDetailActualRequest>
 {
     public override string IdentifyRoute => "/artist/detail";
-    public override string Url => "https://music.163.com/api/artist/head/info/get";
+    public override string Url { get; protected set; } = "https://music.163.com/api/artist/head/info/get";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(ArtistDetailRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new ArtistDetailActualRequest
             {
-                ArtistId = request.ArtistId
+                ArtistId = Request.ArtistId
             };
         return Task.CompletedTask;
     }

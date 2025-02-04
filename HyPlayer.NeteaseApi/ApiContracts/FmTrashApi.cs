@@ -15,15 +15,15 @@ public static partial class NeteaseApis
 public class PersonalFmTrashApi : WeApiContractBase<FmTrashRequest, FmTrashResponse, ErrorResultBase, FmTrashActualRequest>
 {
     public override string IdentifyRoute => "/fm/trash";
-    public override string Url => "";
+    public override string Url { get; protected set; } = "";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(FmTrashRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new FmTrashActualRequest()
             {
-                Id = request.Id
+                Id = Request.Id
             };
         return Task.CompletedTask;
     }

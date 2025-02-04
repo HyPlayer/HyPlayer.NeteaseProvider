@@ -1,5 +1,4 @@
 ﻿using HyPlayer.NeteaseApi.Extensions;
-using HyPlayer.NeteaseApi.Extensions;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
@@ -17,7 +16,7 @@ public abstract class
     where TResponse : ResponseBase, new()
 {
     public static readonly byte[] eapiKey = "e82ckenh8dichen8"u8.ToArray();
-    public abstract string ApiPath { get; }
+    public abstract string ApiPath { get; protected set; }
 
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option,
         CancellationToken cancellationToken = default)

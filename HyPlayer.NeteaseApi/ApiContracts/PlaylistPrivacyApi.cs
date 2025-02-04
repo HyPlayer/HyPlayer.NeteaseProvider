@@ -13,16 +13,16 @@ public class PlaylistPrivacyApi : EApiContractBase<PlaylistPrivacyRequest, Playl
 {
 
     public override string IdentifyRoute => "/playlist/privacy";
-    public override string Url => "https://interface.music.163.com/eapi/playlist/update/privacy";
-    public override string ApiPath => "/api/playlist/update/privacy";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/playlist/update/privacy";
+    public override string ApiPath { get; protected set; } = "/api/playlist/update/privacy";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(PlaylistPrivacyRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new PlaylistPrivacyActualRequest
             {
-                Id = request.Id
+                Id = Request.Id
             };
         return Task.CompletedTask;
     }

@@ -17,12 +17,12 @@ public static partial class NeteaseApis
 public class SongDetailApi : WeApiContractBase<SongDetailRequest, SongDetailResponse, ErrorResultBase, SongDetailActualRequest>
 {
     public override string IdentifyRoute => "/song/detail";
-    public override string Url => "https://music.163.com/weapi/v3/song/detail";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/v3/song/detail";
     public override HttpMethod Method => HttpMethod.Post;
-    public override Task MapRequest(SongDetailRequest? request)
+    public override Task MapRequest()
     {
-        if (request is null) return Task.CompletedTask;
-        var requestIds = request.ParseToIdObjects();
+        if (Request is null) return Task.CompletedTask;
+        var requestIds = Request.ParseToIdObjects();
         ActualRequest = new SongDetailActualRequest { Ids = requestIds };
         return Task.CompletedTask;
     }

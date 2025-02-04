@@ -16,7 +16,7 @@ public class PlaylistSubscribeApi : WeApiContractBase<PlaylistSubscribeRequest, 
     ErrorResultBase, PlaylistSubscribeActualRequest>
 {
     public override string IdentifyRoute => "/playlist/subscribe";
-    public override string Url => "https://music.163.com/weapi/playlist/";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/playlist/";
     public override HttpMethod Method => HttpMethod.Post;
 
     private string _action = "subscribe";
@@ -29,14 +29,14 @@ public class PlaylistSubscribeApi : WeApiContractBase<PlaylistSubscribeRequest, 
         return req;
     }
 
-    public override Task MapRequest(PlaylistSubscribeRequest? request)
+    public override Task MapRequest()
     {
-        if (request is null) return Task.CompletedTask;
+        if (Request is null) return Task.CompletedTask;
         ActualRequest = new()
         {
-            PlaylistId = request.PlaylistId
+            PlaylistId = Request.PlaylistId
         };
-        _action = request.IsSubscribe ? "subscribe" : "unsubscribe";
+        _action = Request.IsSubscribe ? "subscribe" : "unsubscribe";
         return Task.CompletedTask;
     }
 }

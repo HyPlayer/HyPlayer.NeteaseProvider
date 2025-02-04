@@ -14,17 +14,17 @@ public static partial class NeteaseApis
 public class PlaylistTracksEditApi : WeApiContractBase<PlaylistTracksEditRequest, PlaylistTracksEditResponse, ErrorResultBase, PlaylistTracksEditActualRequest>
 {
     public override string IdentifyRoute => "/playlist/tracks/edit";
-    public override string Url => "https://music.163.com/weapi/playlist/manipulate/tracks";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/playlist/manipulate/tracks";
     public override HttpMethod Method => HttpMethod.Post;
-    public override Task MapRequest(PlaylistTracksEditRequest? request)
+    public override Task MapRequest()
     {
-        if (request is null) return Task.CompletedTask;
-        var trackIds = request.TrackIds is not null ? $"[{string.Join(",", request.TrackIds)}]" : request.TrackId!;
+        if (Request is null) return Task.CompletedTask;
+        var trackIds = Request.TrackIds is not null ? $"[{string.Join(",", Request.TrackIds)}]" : Request.TrackId!;
 
         ActualRequest = new PlaylistTracksEditActualRequest
         {
-            Operation = request.IsAdd ? "add" : "del",
-            PlaylistId = request.PlaylistId,
+            Operation = Request.IsAdd ? "add" : "del",
+            PlaylistId = Request.PlaylistId,
             TrackIds = trackIds
         };
         return Task.CompletedTask;

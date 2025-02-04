@@ -12,15 +12,15 @@ public static partial class NeteaseApis
 public class SearchSuggestionApi : WeApiContractBase<SearchSuggestionRequest, SearchSuggestionResponse, ErrorResultBase, SearchSuggestionActualRequest>
 {
     public override string IdentifyRoute => "/search/suggest";
-    public override string Url => "https://music.163.com/weapi/search/suggest/keyword";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/search/suggest/keyword";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(SearchSuggestionRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new SearchSuggestionActualRequest
             {
-                Keyword = request.Keyword
+                Keyword = Request.Keyword
             };
         return Task.CompletedTask;
     }

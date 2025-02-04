@@ -15,20 +15,20 @@ public static partial class NeteaseApis
 public class LyricApi : EApiContractBase<LyricRequest, LyricResponse, ErrorResultBase, LyricActualRequest>
 {
     public override string IdentifyRoute => "/lyric";
-    public override string Url => "https://interface3.music.163.com/eapi/song/lyric/v1";
+    public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/song/lyric/v1";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(LyricRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new()
             {
-                Id = request.Id
+                Id = Request.Id
             };
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/song/lyric/v1";
+    public override string ApiPath { get; protected set; } = "/api/song/lyric/v1";
 }
 
 public class LyricActualRequest : EApiActualRequestBase

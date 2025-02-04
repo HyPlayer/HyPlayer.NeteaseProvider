@@ -17,20 +17,20 @@ public class PlaylistDetailApi : EApiContractBase<PlaylistDetailRequest, Playlis
     PlaylistDetailActualRequest>
 {
     public override string IdentifyRoute => "/playlist/detail";
-    public override string Url => "https://interface.music.163.com/eapi/playlist/list/get";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/playlist/list/get";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(PlaylistDetailRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new PlaylistDetailActualRequest()
             {
-                IdList = request.ConvertToIdStringList()
+                IdList = Request.ConvertToIdStringList()
             };
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/playlist/list/get";
+    public override string ApiPath { get; protected set; } = "/api/playlist/list/get";
 }
 
 public class PlaylistDetailActualRequest : EApiActualRequestBase

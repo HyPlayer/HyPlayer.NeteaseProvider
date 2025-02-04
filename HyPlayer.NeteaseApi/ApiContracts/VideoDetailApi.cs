@@ -14,21 +14,21 @@ public class VideoDetailApi : EApiContractBase<VideoDetailRequest, VideoDetailRe
     VideoDetailActualRequest>
 {
     public override string IdentifyRoute => "/video/detail";
-    public override string Url => "https://interface.music.163.com/eapi/mlog/detail/v1";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/mlog/detail/v1";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(VideoDetailRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new VideoDetailActualRequest
             {
-                Id = request.Id,
-                Type = request.Type
+                Id = Request.Id,
+                Type = Request.Type
             };
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/mlog/detail/v1";
+    public override string ApiPath { get; protected set; } = "/api/mlog/detail/v1";
 }
 
 public class VideoDetailRequest : RequestBase
@@ -55,7 +55,7 @@ public class VideoDetailResponse : CodedResponseBase
             [JsonPropertyName("liked")] public bool Liked { get; set; }
             [JsonPropertyName("threadId")] public string? ThreadId { get; set; }
             [JsonPropertyName("data")] public VideoDetailResourceData? Data { get; set; }
-            [JsonPropertyName("mp")] public VideoDetailResourceMp Mp { get; set; }
+            [JsonPropertyName("mp")] public VideoDetailResourceMp? Mp { get; set; }
 
             public class VideoDetailResourceMp
             {

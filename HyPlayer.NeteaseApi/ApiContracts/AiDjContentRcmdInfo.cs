@@ -14,27 +14,27 @@ public static partial class NeteaseApis
 public class AiDjContentRcmdInfoApi : EApiContractBase<AiDjContentRcmdInfoRequest, AiDjContentRcmdInfoResponse, ErrorResultBase, AiDjContentRcmdInfoActualRequest>
 {
     public override string IdentifyRoute => "/aidj/content/rcmd/info";
-    public override string Url => "https://interface3.music.163.com/eapi/aidj/content/rcmd/info";
+    public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/aidj/content/rcmd/info";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(AiDjContentRcmdInfoRequest? request)
+    public override Task MapRequest()
     {
-        if (request == null) return Task.CompletedTask;
+        if (Request == null) return Task.CompletedTask;
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var extInfo = new AiDjActualRequestExtInfo
         {
             LastRequestTimestamp = timestamp,
-            ListenedTs = request.IsNewToAidj,
-            NoAidjToAidj = request.IsNewToAidj
+            ListenedTs = Request.IsNewToAidj,
+            NoAidjToAidj = Request.IsNewToAidj
         };
-        if (request is { Latitude: not null, Longitude: not null })
+        if (Request is { Latitude: not null, Longitude: not null })
         {
             extInfo.LbsInfoList =
             [
                 new AiDjActualRequestExtInfo.LbsInfo
                 {
-                    Latitude = request.Latitude.Value,
-                    Longitude = request.Longitude.Value,
+                    Latitude = Request.Latitude.Value,
+                    Longitude = Request.Longitude.Value,
                     Time = timestamp
                 }
             ];
@@ -46,7 +46,7 @@ public class AiDjContentRcmdInfoApi : EApiContractBase<AiDjContentRcmdInfoReques
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/aidj/content/rcmd/info";
+    public override string ApiPath { get; protected set; } = "/api/aidj/content/rcmd/info";
 }
 
 public class AiDjContentRcmdInfoRequest : RequestBase
@@ -74,7 +74,7 @@ public class AiDjContentRcmdInfoResponse : CodedResponseBase
 
         public class AiDjContentRcmdAudioSong : AiDjContentRcmdInfoResource
         {
-            [JsonPropertyName("value")] public AiDjContentRcmdAudioSongValue Value { get; set; }
+            [JsonPropertyName("value")] public AiDjContentRcmdAudioSongValue? Value { get; set; }
 
             public class AiDjContentRcmdAudioSongValue
             {
@@ -86,12 +86,12 @@ public class AiDjContentRcmdInfoResponse : CodedResponseBase
         
         public class AiDjContentRcmdAudioResource : AiDjContentRcmdInfoResource
         {
-            [JsonPropertyName("value")] public AiDjContentRcmdAudioResourceValue Value { get; set; }
+            [JsonPropertyName("value")] public AiDjContentRcmdAudioResourceValue? Value { get; set; }
 
 
             public class AiDjContentRcmdAudioResourceValue
             {
-                [JsonPropertyName("audioList")] public AiDjContentRcmdAudioResourceValueAudio[] Audio { get; set; }
+                [JsonPropertyName("audioList")] public AiDjContentRcmdAudioResourceValueAudio[]? Audio { get; set; }
                 public class AiDjContentRcmdAudioResourceValueAudio
                 {
                     [JsonPropertyName("audioUrl")] public string? Url { get; set; }
@@ -116,7 +116,7 @@ public class AiDjContentRcmdInfoActualRequest : EApiActualRequestBase
 class AiDjActualRequestExtInfo
 {
     [JsonPropertyName("lastRequestTimestamp")] public long LastRequestTimestamp { get; set; }
-    [JsonPropertyName("lbsInfoList")] public LbsInfo[] LbsInfoList { get; set; }
+    [JsonPropertyName("lbsInfoList")] public LbsInfo[]? LbsInfoList { get; set; }
     [JsonPropertyName("listenedTs")] public bool ListenedTs { get; set; }
     [JsonPropertyName("noAidjToAidj")] public bool NoAidjToAidj { get; set; }
     internal class LbsInfo

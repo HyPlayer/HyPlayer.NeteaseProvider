@@ -12,20 +12,20 @@ public static partial class NeteaseApis
 public class CloudDeleteApi : EApiContractBase<CloudDeleteRequest, CloudDeleteResponse, ErrorResultBase, CloudDeleteActualRequest>
 {
     public override string IdentifyRoute => "/cloud/del";
-    public override string Url => "https://interface.music.163.com/eapi/cloud/del";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/cloud/del";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(CloudDeleteRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new CloudDeleteActualRequest
             {
-                SongIds = request.ConvertToIdStringList()
+                SongIds = Request.ConvertToIdStringList()
             };
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/cloud/del";
+    public override string ApiPath { get; protected set; } = "/api/cloud/del";
 }
 
 
