@@ -10,6 +10,8 @@ public class EmittedSongDto
     [JsonPropertyName("alia")] public string[]? Alias { get; set; }
     [JsonPropertyName("tns")] public string[]? Translations { get; set; }
     [JsonPropertyName("mv")] public string? MvId { get; set; }
+    [JsonPropertyName("s_id")] public string? Sid { get; set; }
+    [JsonPropertyName("fee")] public int Fee { get; set; }
     [JsonPropertyName("cd")] public string? CdName { get; set; }
     [JsonPropertyName("no")] public int TrackNumber { get; set; }
     [JsonPropertyName("al")] public AlbumDto? Album { get; set; }

@@ -14,27 +14,20 @@ public class AiDjSkipApi : EApiContractBase<AiDjSkipRequest, AiDjSkipResponse, E
     public override string IdentifyRoute => "/aidj/skip";
     public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/v1/radio/skip";
     public override HttpMethod Method => HttpMethod.Post;
-
-    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestMessageModel>(
-        TActualRequestMessageModel actualRequest,
-        ApiHandlerOption option,
-        CancellationToken cancellationToken = default)
-    {
-        var res = await base.GenerateRequestMessageAsync(actualRequest, option, cancellationToken).ConfigureAwait(false);
-        res.RequestUri =
-            new Uri(
-                $"https://interface3.music.163.com/eapi/v1/radio/skip?songId={Request?.SongId}&time={Request?.Time ?? 0}&mode={Request?.Mode ?? "DEFAULT"}&subMode={Request?.SubMode}&source=userfm");
-        return res;
-    }
-
+    
     public override Task MapRequest()
     {
         if (Request is not null)
+        {
+            Url =
+                $"https://interface3.music.163.com/eapi/v1/radio/skip?songId={Request.SongId}&time={Request.Time}&mode={Request.Mode}&subMode={Request.SubMode}&source=userfm";
             ActualRequest = new AiDjSkipActualRequest
             {
                 SongId = Request.SongId,
                 Time = Request.Time
             };
+        }
+
         return Task.CompletedTask;
     }
 

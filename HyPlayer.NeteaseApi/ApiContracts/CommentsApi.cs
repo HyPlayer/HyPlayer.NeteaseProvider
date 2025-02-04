@@ -15,27 +15,30 @@ public static partial class NeteaseApis
 public class CommentsApi : EApiContractBase<CommentsRequest, CommentsResponse, ErrorResultBase, CommentsActualRequest>
 {
     public override string IdentifyRoute => "/comments";
-    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/v1/resource/comments/R_SO_4_2033878955";
-    public override string ApiPath { get; protected set; } = "/api/v1/resource/comments/";
+    public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/v2/resource/comments";
+    public override string ApiPath { get; protected set; } = "/api/v2/resource/comments";
     public override HttpMethod Method => HttpMethod.Post;
 
    
     public override Task MapRequest()
     {
         if (Request is null) return Task.CompletedTask;
-        var resourceId = $"{NeteaseUtils.CommentTypeTransformer(Request.ResourceType)}{Request.Id}";
-        ApiPath = $"/api/v1/resource/comments/{resourceId}";
-        ActualRequest = new CommentsActualRequest()
+        var threadId = $"{NeteaseUtils.CommentTypeToThreadPrefix(Request.ResourceType)}{Request.Id}";
+        var cursor = Request.Cursor ?? Request.CommentSortType switch
         {
-            Limit = Request.Limit,
-            Offset = Request.Offset,
-            BeforeTime = Request.BeforeTime,
-            CompareUserLocation = Request.CompareUserLocation,
-            CommentId = Request.CommentId,
-            ComposeConcert = Request.ComposeConcert,
-            MarkReplied = Request.MarkReplied,
-            ForceFlatComment = Request.ForceFlatComment,
-            ShowInner = Request.ShowInner
+            CommentSortType.Recommend => ((Request.PageNo - 1) * Request.PageSize).ToString(),
+            CommentSortType.Hot => $"normalHot#{(Request.PageNo - 1) * Request.PageSize}",
+            _ => "0"
+        };
+        ActualRequest = new CommentsActualRequest
+        {
+            ThreadId = threadId,
+            Cursor = cursor,
+            SortType = (int)Request.CommentSortType,
+            PageSize = Request.PageSize,
+            PageNo = Request.PageNo,
+            ShowInnerComment = false,
+            ParentCommentId = "0"
         };
         return Task.CompletedTask;
     }
@@ -45,38 +48,41 @@ public class CommentsRequest : RequestBase
 {
     public NeteaseResourceType ResourceType { get; set; } = NeteaseResourceType.Song;
     public required string Id { get; set; }
-    public int Limit { get; set; } = 60;
-    public int Offset { get; set; } = 0;
-    public int BeforeTime { get; set; } = 0;
-    public bool CompareUserLocation { get; set; } = false;
-    public string CommentId { get; set; } = "0";
-    public bool ComposeConcert { get; set; } = false;
-    public bool MarkReplied { get; set; } = false;
-    public bool ForceFlatComment { get; set; } = false;
-    public bool ShowInner { get; set; } = false;
+    public CommentSortType CommentSortType { get; set; }
+    public int PageSize { get; set; } = 20;
+    public int PageNo { get; set; } = 1;
+    public string? Cursor { get; set; }
+}
+
+public enum CommentSortType
+{
+    Recommend = 1,
+    Hot = 2,
+    Time = 3
 }
 
 public class CommentsResponse : CodedResponseBase
 {
-    [JsonPropertyName("isMusician")] public bool IsMusician { get; set; }
-    [JsonPropertyName("userId")] public string? UserId { get; set; }
-    [JsonPropertyName("moreHot")] public bool MoreHot { get; set; }
-    [JsonPropertyName("total")] public long Total { get; set; }
-    [JsonPropertyName("more")] public bool More { get; set; }
-    [JsonPropertyName("hotComments")] public CommentDto[]? HotComments { get; set; }
-    [JsonPropertyName("topComments")] public CommentDto[]? TopComments { get; set; }
+    [JsonPropertyName("data")] public CommentsResponseData? Data { get; set; }
+}
+
+public class CommentsResponseData
+{
+    [JsonPropertyName("commentsTitle")] public string? CommentsTitle { get; set; }
     [JsonPropertyName("comments")] public CommentDto[]? Comments { get; set; }
+    [JsonPropertyName("currentCommentTitle")] public string? CurrentCommentTitle { get; set; }
+    [JsonPropertyName("totalCount")] public long TotalCount { get; set; }
+    [JsonPropertyName("hasMore")] public bool HasMore { get; set; }
+    [JsonPropertyName("cursor")] public string? Cursor { get; set; }
 }
 
 public class CommentsActualRequest : EApiActualRequestBase
 {
-    [JsonPropertyName("limit")] public int Limit { get; set; } = 60;
-    [JsonPropertyName("offset")] public int Offset { get; set; } = 0;
-    [JsonPropertyName("beforeTime")] public int BeforeTime { get; set; } = 0;
-    [JsonPropertyName("compareUserLocation")] public bool CompareUserLocation { get; set; } = false;
-    [JsonPropertyName("commentId")] public string CommentId { get; set; } = "0";
-    [JsonPropertyName("composeConcert")] public bool ComposeConcert { get; set; } = false;
-    [JsonPropertyName("markReplied")] public bool MarkReplied { get; set; } = false;
-    [JsonPropertyName("forceFlatComment")] public bool ForceFlatComment { get; set; } = false;
-    [JsonPropertyName("showInner")] public bool ShowInner { get; set; } = false;
+    [JsonPropertyName("threadId")] public required string ThreadId { get; set; }
+    [JsonPropertyName("cursor")] public string Cursor { get; set; } = "0";
+    [JsonPropertyName("sortType")] public int SortType { get; set; } = 1;
+    [JsonPropertyName("pageSize")] public int PageSize { get; set; } = 20;
+    [JsonPropertyName("pageNo")] public int PageNo { get; set; } = 1;
+    [JsonPropertyName("showInner")] public bool ShowInnerComment { get; set; } = true;
+    [JsonPropertyName("parentCommentId")] public required string ParentCommentId { get; set; } = "0";
 }

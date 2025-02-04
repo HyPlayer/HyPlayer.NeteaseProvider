@@ -19,7 +19,7 @@ public class PlaylistTracksEditApi : WeApiContractBase<PlaylistTracksEditRequest
     public override Task MapRequest()
     {
         if (Request is null) return Task.CompletedTask;
-        var trackIds = Request.TrackIds is not null ? $"[{string.Join(",", Request.TrackIds)}]" : Request.TrackId!;
+        var trackIds = Request.ConvertToIdStringList();
 
         ActualRequest = new PlaylistTracksEditActualRequest
         {
@@ -40,7 +40,7 @@ public class PlaylistTracksEditActualRequest : WeApiActualRequestBase
 
 }
 
-public class PlaylistTracksEditRequest : RequestBase
+public class PlaylistTracksEditRequest : IdOrIdListListRequest
 {
     /// <summary>
     /// 是否添加
@@ -51,16 +51,6 @@ public class PlaylistTracksEditRequest : RequestBase
     /// 歌单 ID
     /// </summary>
     public required string PlaylistId { get; set; }
-
-    /// <summary>
-    /// 歌曲 ID
-    /// </summary>
-    public string? TrackId { get; set; }
-
-    /// <summary>
-    /// 歌曲 ID 列表
-    /// </summary>
-    public string[]? TrackIds { get; set; }
 }
 public class PlaylistTracksEditResponse : CodedResponseBase
 {

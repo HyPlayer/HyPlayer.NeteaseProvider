@@ -21,20 +21,17 @@ public class CommentLikeApi : WeApiContractBase<CommentLikeRequest, CommentLikeR
     public override Task MapRequest()
     {
         if (Request is not null)
+        {
+            Url += Request.IsLike == true ? "like" : "unlike";
             ActualRequest = new CommentLikeActualRequest
             {
                 CommentId = Request.CommentId,
-                ThreadId = Request.ThreadId ?? NeteaseUtils.CommentTypeTransformer(Request.ResourceType) + Request.CommentId
+                ThreadId = Request.ThreadId ??
+                           NeteaseUtils.CommentTypeToThreadPrefix(Request.ResourceType) + Request.CommentId
             };
-        return Task.CompletedTask;
-    }
+        }
 
-    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestModel>(TActualRequestModel actualRequest, ApiHandlerOption option,
-        CancellationToken cancellationToken = default)
-    {
-        var req = await base.GenerateRequestMessageAsync(actualRequest, option, cancellationToken).ConfigureAwait(false);
-        req.RequestUri = new Uri(Url + (Request?.IsLike == true ? "like" : "unlike"));
-        return req;
+        return Task.CompletedTask;
     }
 }
 
