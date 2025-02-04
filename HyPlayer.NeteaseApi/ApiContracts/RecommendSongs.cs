@@ -17,14 +17,14 @@ public static partial class NeteaseApis
 public class RecommendSongsApi : WeApiContractBase<RecommendSongsRequest, RecommendSongsResponse, ErrorResultBase, RecommendSongsActualRequest>
 {
     public override string IdentifyRoute => "/recommend/songs";
-    public override string Url => "https://music.163.com/api/v3/discovery/recommend/songs";
+    public override string Url { get; protected set; } = "https://music.163.com/api/v3/discovery/recommend/songs";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override Dictionary<string, string> Cookies => new() { { "os", "ios" } };
 
     public override string? UserAgent => "ios";
 
-    public override Task MapRequest(RecommendSongsRequest? request)
+    public override Task MapRequest()
     {
         return Task.CompletedTask;
     }

@@ -17,17 +17,17 @@ public class UserPlaylistApi : WeApiContractBase<UserPlaylistRequest, UserPlayli
     UserPlaylistActualRequest>
 {
     public override string IdentifyRoute => "/user/playlist";
-    public override string Url => "https://music.163.com/api/user/playlist";
+    public override string Url { get; protected set; } = "https://music.163.com/api/user/playlist";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(UserPlaylistRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new UserPlaylistActualRequest
             {
-                Uid = request.Uid,
-                Limit = request.Limit,
-                Offset = request.Offset
+                Uid = Request.Uid,
+                Limit = Request.Limit,
+                Offset = Request.Offset
             };
         return Task.CompletedTask;
     }

@@ -13,21 +13,21 @@ public static partial class NeteaseApis
 public class PlaylistCategoryListApi : EApiContractBase<PlaylistCategoryListRequest, PlaylistCategoryListResponse, ErrorResultBase, PlaylistCategoryListActualRequest>
 {
     public override string IdentifyRoute => "/playlist/category/list";
-    public override string Url => "https://interface.music.163.com/eapi/playlist/category/list";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/playlist/category/list";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(PlaylistCategoryListRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new()
             {
-                Category = request.Category,
-                Limit = request.Limit
+                Category = Request.Category,
+                Limit = Request.Limit
             };
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/playlist/category/list";
+    public override string ApiPath { get; protected set; } = "/api/playlist/category/list";
 }
 
 public class PlaylistCategoryListRequest : RequestBase

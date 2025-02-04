@@ -14,14 +14,14 @@ public static partial class NeteaseApis
 public class SearchApi : EApiContractBase<SearchRequest, SearchResponse, ErrorResultBase, SearchActualRequest>
 {
     public override string IdentifyRoute => "/cloudsearch";
-    public override string Url => "https://interface.music.163.com/eapi/cloudsearch/pc";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/cloudsearch/pc";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(SearchRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
         {
-            var resourceType = request.Type switch
+            var resourceType = Request.Type switch
             {
                 NeteaseResourceType.Song => 1,
                 NeteaseResourceType.Album => 10,
@@ -38,16 +38,16 @@ public class SearchApi : EApiContractBase<SearchRequest, SearchResponse, ErrorRe
             };
             ActualRequest = new()
             {
-                Keyword = request.Keyword,
+                Keyword = Request.Keyword,
                 Type = resourceType,
-                Limit = request.Limit,
-                Offset = request.Offset
+                Limit = Request.Limit,
+                Offset = Request.Offset
             };
         }
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/cloudsearch/pc";
+    public override string ApiPath { get; protected set; } = "/api/cloudsearch/pc";
 }
 
 public class SearchRequest : RequestBase

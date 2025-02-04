@@ -16,10 +16,10 @@ public static partial class NeteaseApis
 public class RecommendPlaylistsApi : WeApiContractBase<RecommendPlaylistsRequest, RecommendPlaylistsResponse, ErrorResultBase, RecommendPlaylistsActualRequest>
 {
     public override string IdentifyRoute => "/recommend/resource";
-    public override string Url => "https://music.163.com/weapi/v1/discovery/recommend/resource";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/v1/discovery/recommend/resource";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(RecommendPlaylistsRequest? request)
+    public override Task MapRequest()
     {
         return Task.CompletedTask;
     }

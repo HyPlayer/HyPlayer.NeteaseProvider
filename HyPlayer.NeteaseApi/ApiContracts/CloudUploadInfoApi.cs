@@ -13,25 +13,25 @@ public static partial class NeteaseApis
 public class CloudUploadInfoApi : EApiContractBase<CloudUploadInfoRequest, CloudUploadInfoResponse, ErrorResultBase, CloudUploadInfoActualRequest>
 {
     public override string IdentifyRoute => "";
-    public override string Url => "http://musicupload.netease.com/eapi/upload/cloud/info/v2";
-    public override string ApiPath => "/api/upload/cloud/info/v2";
+    public override string Url { get; protected set; } = "http://musicupload.netease.com/eapi/upload/cloud/info/v2";
+    public override string ApiPath { get; protected set; } = "/api/upload/cloud/info/v2";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(CloudUploadInfoRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new CloudUploadInfoActualRequest
             {
-                Album = request.Album,
-                Artist = request.Artist,
-                Bitrate = request.Bitrate,
-                CoverId = request.CoverId,
-                FileName = request.FileName,
-                Md5 = request.Md5,
-                ObjectKey = request.ObjectKey,
-                ResourceId = request.ResourceId,
-                Song = request.Song,
-                SongId = request.SongId
+                Album = Request.Album,
+                Artist = Request.Artist,
+                Bitrate = Request.Bitrate,
+                CoverId = Request.CoverId,
+                FileName = Request.FileName,
+                Md5 = Request.Md5,
+                ObjectKey = Request.ObjectKey,
+                ResourceId = Request.ResourceId,
+                Song = Request.Song,
+                SongId = Request.SongId
             };
         return Task.CompletedTask;
     }

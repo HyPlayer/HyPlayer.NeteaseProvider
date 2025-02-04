@@ -15,25 +15,25 @@ public class ArtistVideoApi : EApiContractBase<ArtistVideoRequest, ArtistVideoRe
     ArtistVideoActualRequest>
 {
     public override string IdentifyRoute => "/artist/video";
-    public override string Url => "https://interface.music.163.com/eapi/mlog/artist/video";
-    public override string ApiPath => "/api/mlog/artist/video";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/mlog/artist/video";
+    public override string ApiPath { get; protected set; } = "/api/mlog/artist/video";
 
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(ArtistVideoRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
         {
             var page = new Dictionary<string, int>()
             {
-                ["size"] = request.Limit,
-                ["cursor"] = request.Offset
+                ["size"] = Request.Limit,
+                ["cursor"] = Request.Offset
             };
             ActualRequest = new()
             {
-                ArtistId = request.ArtistId,
-                Tab = request.Tab,
-                Order = request.Order,
+                ArtistId = Request.ArtistId,
+                Tab = Request.Tab,
+                Order = Request.Order,
                 Page = JsonSerializer.Serialize(page)
             };
         }

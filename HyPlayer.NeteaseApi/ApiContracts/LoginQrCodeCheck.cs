@@ -12,20 +12,20 @@ public static partial class NeteaseApis
 public class LoginQrCodeCheckApi : EApiContractBase<LoginQrCodeCheckRequest, LoginQrCodeCheckResponse, ErrorResultBase, LoginQrCodeCheckActualRequest>
 {
     public override string IdentifyRoute => "/login/qr/check";
-    public override string Url => "https://interface.music.163.com/eapi/login/qrcode/client/login";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/login/qrcode/client/login";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(LoginQrCodeCheckRequest? request)
+    public override Task MapRequest()
     {
-        if (request is null) return Task.CompletedTask;
+        if (Request is null) return Task.CompletedTask;
         ActualRequest = new LoginQrCodeCheckActualRequest
         {
-            Key = request.Unikey
+            Key = Request.Unikey
         };
         return Task.CompletedTask;
     }
 
-    public override string ApiPath => "/api/login/qrcode/client/login";
+    public override string ApiPath { get; protected set; } = "/api/login/qrcode/client/login";
 }
 
 public class LoginQrCodeCheckRequest : RequestBase

@@ -12,17 +12,17 @@ public static partial class NeteaseApis
 public class SongWikiSummaryApi : EApiContractBase<SongWikiSummaryRequest, SongWikiSummaryResponse, ErrorResultBase, SongWikiSummaryActualRequest>
 {
     public override string IdentifyRoute => "/song/wiki/summary";
-    public override string Url => "https://interface3.music.163.com/eapi/music/wiki/home/song/get";
-    public override string ApiPath => "/api/song/play/about/block/page";
+    public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/music/wiki/home/song/get";
+    public override string ApiPath { get; protected set; } = "/api/song/play/about/block/page";
 
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(SongWikiSummaryRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new SongWikiSummaryActualRequest
             {
-                SongId = request.SongId
+                SongId = Request.SongId
             };
         return Task.CompletedTask;
     }

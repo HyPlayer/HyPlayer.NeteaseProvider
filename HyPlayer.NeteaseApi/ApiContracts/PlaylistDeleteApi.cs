@@ -12,15 +12,15 @@ public static partial class NeteaseApis
 public class PlaylistDeleteApi : WeApiContractBase<PlaylistDeleteRequest, PlaylistDeleteResponse, ErrorResultBase, PlaylistDeleteActualRequest>
 {
     public override string IdentifyRoute => "/playlist/delete";
-    public override string Url => "https://music.163.com/weapi/playlist/remove";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/playlist/remove";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(PlaylistDeleteRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new PlaylistDeleteActualRequest
             {
-                Ids = request.ConvertToIdStringList()
+                Ids = Request.ConvertToIdStringList()
             };
         return Task.CompletedTask;
     }

@@ -16,15 +16,15 @@ public class UserCloudDeleteApi : WeApiContractBase<UserCloudDeleteRequest, User
     UserCloudDeleteActualRequest>
 {
     public override string IdentifyRoute => "/user/cloud/del";
-    public override string Url => "https://music.163.com/weapi/cloud/del";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/cloud/del";
     public override HttpMethod Method => HttpMethod.Post;
     public override string? UserAgent => "pc";
     public override Dictionary<string, string> Cookies => new() { { "os", "pc" }, { "appver", "2.7.1.198277" } };
 
-    public override Task MapRequest(UserCloudDeleteRequest? request)
+    public override Task MapRequest()
     {
-        if (request is null) return Task.CompletedTask;
-        var ids = string.IsNullOrWhiteSpace(request.Id) ? $"[{string.Join(",", request.IdList!)}]" : $"[{request.Id}]";
+        if (Request is null) return Task.CompletedTask;
+        var ids = string.IsNullOrWhiteSpace(Request.Id) ? $"[{string.Join(",", Request.IdList!)}]" : $"[{Request.Id}]";
         ActualRequest = new UserCloudDeleteActualRequest()
         {
             SongIds = ids

@@ -13,18 +13,18 @@ public class CloudUploadTokenAllocApi : RawApiContractBase<CloudUploadTokenAlloc
     ErrorResultBase, CloudUploadTokenAllocActualRequest>
 {
     public override string IdentifyRoute => "/cloud/upload/token/alloc";
-    public override string Url => "http://musicupload.netease.com/api/whale/token/alloc";
+    public override string Url { get; protected set; } = "http://musicupload.netease.com/api/whale/token/alloc";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(CloudUploadTokenAllocRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new CloudUploadTokenAllocActualRequest
             {
-                ["channel"] = request.Channel.ToString(),
-                ["fileName"] = request.FileName,
-                ["md5"] = request.Md5,
-                ["type"] = request.Type,
+                ["channel"] = Request.Channel.ToString(),
+                ["fileName"] = Request.FileName,
+                ["md5"] = Request.Md5,
+                ["type"] = Request.Type,
                 ["bucket"] = "jd-musicrep-privatecloud-audio-public"
             };
         return Task.CompletedTask;

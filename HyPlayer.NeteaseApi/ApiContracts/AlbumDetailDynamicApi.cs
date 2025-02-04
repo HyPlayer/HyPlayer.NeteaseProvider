@@ -12,15 +12,15 @@ public static partial class NeteaseApis
 public class AlbumDetailDynamicApi : WeApiContractBase<AlbumDetailDynamicRequest, AlbumDetailDynamicResponse, ErrorResultBase, AlbumDetailDynamicActualRequest>
 {
     public override string IdentifyRoute => "/album/detail/dynamic";
-    public override string Url => "https://music.163.com/api/album/detail/dynamic";
+    public override string Url { get; protected set; } = "https://music.163.com/api/album/detail/dynamic";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(AlbumDetailDynamicRequest? request)
+    public override Task MapRequest()
     {
-        if (request?.Id is not null)
+        if (Request?.Id is not null)
             ActualRequest = new AlbumDetailDynamicActualRequest
             {
-                Id = request.Id
+                Id = Request.Id
             };
         return Task.CompletedTask;
     }

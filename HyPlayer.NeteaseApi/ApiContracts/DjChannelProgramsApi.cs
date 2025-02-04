@@ -14,18 +14,18 @@ public class DjChannelProgramsApi : WeApiContractBase<DjChannelProgramsRequest, 
     ErrorResultBase, DjChannelProgramsActualRequest>
 {
     public override string IdentifyRoute => "/dj/program";
-    public override string Url => "https://music.163.com/weapi/dj/program/byradio";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/dj/program/byradio";
     public override HttpMethod Method => HttpMethod.Post;
 
-    public override Task MapRequest(DjChannelProgramsRequest? request)
+    public override Task MapRequest()
     {
-        if (request is not null)
+        if (Request is not null)
             ActualRequest = new DjChannelProgramsActualRequest
             {
-                RadioId = request.RadioId,
-                Limit = request.Limit,
-                Offset = request.Offset,
-                Asc = request.Asc
+                RadioId = Request.RadioId,
+                Limit = Request.Limit,
+                Offset = Request.Offset,
+                Asc = Request.Asc
             };
         return Task.CompletedTask;
     }
