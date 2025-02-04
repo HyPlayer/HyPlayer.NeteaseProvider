@@ -43,6 +43,7 @@ public class DjChannelProgramsResponse : CodedResponseBase
 {
     [JsonPropertyName("count")] public int Count { get; set; }
     [JsonPropertyName("programs")] public DjRadioProgramDto[]? Programs { get; set; }
+    [JsonPropertyName("more")] public bool More { get; set; }
 }
 
 public class DjChannelProgramsActualRequest : WeApiActualRequestBase

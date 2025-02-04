@@ -4,7 +4,7 @@ namespace HyPlayer.NeteaseApi.Extensions;
 
 public class NeteaseUtils
 {
-    public static string CommentTypeTransformer(NeteaseResourceType type)
+    public static string CommentTypeToThreadPrefix(NeteaseResourceType type)
     {
         switch (type)
         {
