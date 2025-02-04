@@ -74,7 +74,7 @@ public class AiDjContentRcmdInfoResponse : CodedResponseBase
 
         public class AiDjContentRcmdAudioSong : AiDjContentRcmdInfoResource
         {
-            [JsonPropertyName("value")] public AiDjContentRcmdAudioSongValue Value { get; set; }
+            [JsonPropertyName("value")] public AiDjContentRcmdAudioSongValue? Value { get; set; }
 
             public class AiDjContentRcmdAudioSongValue
             {
@@ -86,12 +86,12 @@ public class AiDjContentRcmdInfoResponse : CodedResponseBase
         
         public class AiDjContentRcmdAudioResource : AiDjContentRcmdInfoResource
         {
-            [JsonPropertyName("value")] public AiDjContentRcmdAudioResourceValue Value { get; set; }
+            [JsonPropertyName("value")] public AiDjContentRcmdAudioResourceValue? Value { get; set; }
 
 
             public class AiDjContentRcmdAudioResourceValue
             {
-                [JsonPropertyName("audioList")] public AiDjContentRcmdAudioResourceValueAudio[] Audio { get; set; }
+                [JsonPropertyName("audioList")] public AiDjContentRcmdAudioResourceValueAudio[]? Audio { get; set; }
                 public class AiDjContentRcmdAudioResourceValueAudio
                 {
                     [JsonPropertyName("audioUrl")] public string? Url { get; set; }
@@ -116,7 +116,7 @@ public class AiDjContentRcmdInfoActualRequest : EApiActualRequestBase
 class AiDjActualRequestExtInfo
 {
     [JsonPropertyName("lastRequestTimestamp")] public long LastRequestTimestamp { get; set; }
-    [JsonPropertyName("lbsInfoList")] public LbsInfo[] LbsInfoList { get; set; }
+    [JsonPropertyName("lbsInfoList")] public LbsInfo[]? LbsInfoList { get; set; }
     [JsonPropertyName("listenedTs")] public bool ListenedTs { get; set; }
     [JsonPropertyName("noAidjToAidj")] public bool NoAidjToAidj { get; set; }
     internal class LbsInfo

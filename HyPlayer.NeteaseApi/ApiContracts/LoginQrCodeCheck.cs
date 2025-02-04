@@ -41,7 +41,7 @@ public class LoginQrCodeCheckResponse : CodedResponseBase
 public class LoginQrCodeCheckActualRequest : EApiActualRequestBase
 {
     [JsonPropertyName("key")]
-    public string Key { get; set; }
+    public required string Key { get; set; }
 
     [JsonPropertyName("type")] public int Type => 3;
 }

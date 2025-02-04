@@ -26,7 +26,11 @@ public class ArtistSongsApi : WeApiContractBase<ArtistSongsRequest, ArtistSongsR
             ActualRequest = new ArtistSongsActualRequest
             {
                 Id = request.ArtistId,
-                OrderType = request.OrderType,
+                OrderType = request.OrderType switch
+                {
+                    ArtistSongsOrderType.Time => "time",
+                    _ => "hot"
+                },
                 Offset = request.Offset,
                 Limit = request.Limit
             };
@@ -44,6 +48,12 @@ public class ArtistSongsActualRequest : WeApiActualRequestBase
     [JsonPropertyName("limit")] public int Limit { get; set; } = 100;
 }
 
+public enum ArtistSongsOrderType
+{
+    Hot,
+    Time
+}
+
 public class ArtistSongsRequest : RequestBase
 {
     /// <summary>
@@ -54,7 +64,7 @@ public class ArtistSongsRequest : RequestBase
     /// <summary>
     /// 排序类型 hot, time
     /// </summary>
-    public string OrderType { get; set; } = "hot";
+    public ArtistSongsOrderType OrderType { get; set; } = ArtistSongsOrderType.Hot;
 
     /// <summary>
     /// 起始位置

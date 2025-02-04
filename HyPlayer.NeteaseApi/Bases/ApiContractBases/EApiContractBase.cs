@@ -1,5 +1,4 @@
 ﻿using HyPlayer.NeteaseApi.Extensions;
-using HyPlayer.NeteaseApi.Extensions;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;

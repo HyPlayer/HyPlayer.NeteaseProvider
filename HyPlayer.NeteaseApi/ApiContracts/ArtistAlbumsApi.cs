@@ -74,12 +74,8 @@ public class ArtistAlbumsResponse : CodedResponseBase
     {
         [JsonPropertyName("alias")] public string[]? Alias { get; set; }
         [JsonPropertyName("transNames")] public string[]? Translations { get; set; }
-        [JsonPropertyName("company")] public string? Company { get; set; }
-        [JsonPropertyName("briefDesc")] public string? BriefDescription { get; set; }
-        [JsonPropertyName("description")] public string? Description { get; set; }
         [JsonPropertyName("subType")] public string? Subtype { get; set; }
         [JsonPropertyName("type")] public string? AlbumType { get; set; }
         [JsonPropertyName("isSub")] public bool IsSubscribed { get; set; }
-        [JsonPropertyName("artists")] public ArtistDto[]? Artists { get; set; }
     }
 }

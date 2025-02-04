@@ -64,7 +64,7 @@ public class ArtistVideoResponse : CodedResponseBase
         {
             [JsonPropertyName("id")] public string? Id { get; set; }
             [JsonPropertyName("type")] public int Type { get; set; }
-            [JsonPropertyName("resource")] public ArtistVideoResponseResource Resource { get; set; }
+            [JsonPropertyName("resource")] public ArtistVideoResponseResource? Resource { get; set; }
 
             public class ArtistVideoResponseResource
             {

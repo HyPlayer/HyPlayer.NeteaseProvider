@@ -67,6 +67,6 @@ public class CommentLikeResponse : CodedResponseBase
 
 public class CommentLikeActualRequest : WeApiActualRequestBase
 {
-    [JsonPropertyName("commentId")] public string CommentId { get; set; }
-    [JsonPropertyName("threadId")] public string ThreadId { get; set; }
+    [JsonPropertyName("commentId")] public required string CommentId { get; set; }
+    [JsonPropertyName("threadId")] public required string ThreadId { get; set; }
 }

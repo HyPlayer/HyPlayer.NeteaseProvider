@@ -32,7 +32,7 @@ public class LoginQrCodeUnikeyRequest : RequestBase
 public class LoginQrCodeUnikeyResponse : CodedResponseBase
 {
     [JsonPropertyName("unikey")]
-    public string Unikey { get; set; }
+    public string? Unikey { get; set; }
 }
 
 public class LoginQrCodeUnikeyActualRequest : EApiActualRequestBase
