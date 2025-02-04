@@ -73,5 +73,7 @@ public class SongUrlResponse : CodedResponseBase
         [JsonPropertyName("level")] public string? Level { get; set; }
         [JsonPropertyName("encodeType")] public string? EncodeType { get; set; }
         [JsonPropertyName("time")] public long Time { get; set; }
+        [JsonPropertyName("freeTrialInfo")] public string? FreeTrialInfo { get; set; }
+        [JsonPropertyName("gain")] public float? Gain { get; set; }
     }
 }
