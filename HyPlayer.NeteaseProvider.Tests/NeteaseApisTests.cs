@@ -29,6 +29,25 @@ public class NeteaseApisTests
             },
             e => throw e);
     }
+    
+    [Test]
+    [Arguments("97767168")]
+    public async Task AlbumDetail_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.AlbumApi, new AlbumRequest
+        {
+            Id = id
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Songs.Should().NotBeEmpty();
+                s.Album.Should().NotBeNull();
+                s.Info.Should().NotBeNull();
+                return true;
+            },
+            e => throw e);
+    }
 
     [Test]
     [Arguments("162549105")]
@@ -200,12 +219,13 @@ public class NeteaseApisTests
         result.Match(s =>
             {
                 s.Code.Should().Be(200);
-                s.Comments.Should().NotBeEmpty();
+                s.Data.Should().NotBeNull();
+                s.Data.Comments.Should().NotBeEmpty();
                 return true;
             },
             e => throw e);
     }
-    
+
     [Test]
     [Arguments("793914432")]
     public async Task DjChannelPrograms_Should_BeNormal(string id)
@@ -320,6 +340,7 @@ public class NeteaseApisTests
 
     [Test]
     [Arguments("1880520974")]
+    [Arguments("2036833497")]
     public async Task Lyric_Should_ReturnNormal(string songId)
     {
         var result = await _provider.RequestAsync(

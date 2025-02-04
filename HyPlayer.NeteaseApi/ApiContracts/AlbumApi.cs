@@ -50,7 +50,7 @@ public class AlbumResponse : CodedResponseBase
     }
 }
 
-public class AlbumActualRequest : EApiActualRequestBase
+public class AlbumActualRequest : CacheKeyEApiActualRequest
 {
     [JsonPropertyName("id")] public required string Id { get; set; }
 }
