@@ -12,9 +12,9 @@
 public class $ApiName$Api : $ApiType$ContractBase&lt;$ApiName$Request, $ApiName$Response, ErrorResultBase, $ApiName$ActualRequest&gt;
 {
     public override string IdentifyRoute =&gt; "";
-    public override string Url { get; protected set;} ""; 
+    public override string Url { get; protected set;} = ""; 
     public override HttpMethod Method =&gt; HttpMethod.Post;
-    public override async Task MapRequest($ApiName$Request? request)
+    public override async Task MapRequest()
     {
         throw new NotImplementedException();
     }

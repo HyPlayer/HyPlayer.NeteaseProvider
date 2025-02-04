@@ -265,7 +265,7 @@ public class NeteaseProvider : ProviderBase,
                     {
                         IsAdd = true,
                         PlaylistId = targetId,
-                        TrackId = inProviderId.Substring(2)
+                        Id = inProviderId.Substring(2)
                     }, ctk);
             }
         }
@@ -303,7 +303,7 @@ public class NeteaseProvider : ProviderBase,
                     {
                         IsAdd = false,
                         PlaylistId = targetId,
-                        TrackId = inProviderId.Substring(2)
+                        Id = inProviderId.Substring(2)
                     }, ctk);
             }
         }
