@@ -36,13 +36,13 @@ public class SongWikiSummaryRequest : RequestBase
 
 public class SongWikiSummaryResponse : CodedResponseBase
 {
-    [JsonPropertyName("data")] public SongWikiSummaryResponseData Data { get; set; }
+    [JsonPropertyName("data")] public SongWikiSummaryResponseData? Data { get; set; }
     
     public class SongWikiSummaryResponseData
     {
         [JsonPropertyName("cursor")] public string? Cursor { get; set; }
         [JsonPropertyName("hasMore")] public bool HasMore { get; set; }
-        [JsonPropertyName("blocks")] public SongWikiSummaryResponseBlock[] Blocks { get; set; }
+        [JsonPropertyName("blocks")] public SongWikiSummaryResponseBlock[]? Blocks { get; set; }
 
         public class SongWikiSummaryResponseBlock
         {
@@ -51,7 +51,7 @@ public class SongWikiSummaryResponse : CodedResponseBase
             [JsonPropertyName("alg")] public string? Algorithm { get; set; }
             [JsonPropertyName("channel")] public string? Channel { get; set; }
             [JsonPropertyName("code")] public string? Code { get; set; }
-            [JsonPropertyName("uiElement")] public SongWikiSummaryResponseUiElement UiElement { get; set; }
+            [JsonPropertyName("uiElement")] public SongWikiSummaryResponseUiElement? UiElement { get; set; }
 
             public class SongWikiSummaryResponseUiElement
             {

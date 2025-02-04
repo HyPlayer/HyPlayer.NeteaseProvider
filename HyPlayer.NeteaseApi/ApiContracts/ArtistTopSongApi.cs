@@ -35,7 +35,7 @@ public class ArtistTopSongRequest : RequestBase
 public class ArtistTopSongResponse : CodedResponseBase
 {
     [JsonPropertyName("more")] public bool More { get; set; }
-    [JsonPropertyName("song")] public EmittedSongDtoWithPrivilege[]? Songs { get; set; }
+    [JsonPropertyName("songs")] public EmittedSongDtoWithPrivilege[]? Songs { get; set; }
 }
 
 public class ArtistTopSongActualRequest : WeApiActualRequestBase

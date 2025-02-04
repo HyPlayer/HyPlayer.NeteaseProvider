@@ -55,7 +55,7 @@ public class VideoDetailResponse : CodedResponseBase
             [JsonPropertyName("liked")] public bool Liked { get; set; }
             [JsonPropertyName("threadId")] public string? ThreadId { get; set; }
             [JsonPropertyName("data")] public VideoDetailResourceData? Data { get; set; }
-            [JsonPropertyName("mp")] public VideoDetailResourceMp Mp { get; set; }
+            [JsonPropertyName("mp")] public VideoDetailResourceMp? Mp { get; set; }
 
             public class VideoDetailResourceMp
             {

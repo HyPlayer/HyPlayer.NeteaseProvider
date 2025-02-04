@@ -2,7 +2,6 @@
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
-using HyPlayer.NeteaseApi.Extensions;
 using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
