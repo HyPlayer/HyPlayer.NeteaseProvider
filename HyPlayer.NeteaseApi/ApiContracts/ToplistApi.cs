@@ -17,6 +17,7 @@ public static partial class NeteaseApis
 public class ToplistApi : RawApiContractBase<ToplistRequest, ToplistResponse, ErrorResultBase, ToplistActualRequest>
 {
     public override string IdentifyRoute => "/toplist";
+    // backup: https://interface.music.163.com/eapi/toplist/detail/v2
     public override string Url { get; protected set; } = "https://music.163.com/api/toplist";
     public override HttpMethod Method => HttpMethod.Get;
     public override Task MapRequest()

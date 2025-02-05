@@ -69,6 +69,10 @@ public class VideoDetailResponse : CodedResponseBase
                 [JsonPropertyName("id")] public string? Id { get; set; }
                 [JsonPropertyName("name")] public string? Name { get; set; }
                 [JsonPropertyName("playCount")] public long PlayCount { get; set; }
+                [JsonPropertyName("artistId")] public string? ArtistId { get; set; }
+                [JsonPropertyName("artistName")] public string? ArtistName { get; set; }
+                [JsonPropertyName("desc")] public string? Description { get; set; }
+                [JsonPropertyName("briefDesc")] public string? BriefDescription { get; set; }
                 [JsonPropertyName("subCount")] public long SubCount { get; set; }
                 [JsonPropertyName("duration")] public long Duration { get; set; }
                 [JsonPropertyName("publishTime")] public string? PublishTime { get; set; }
@@ -79,7 +83,7 @@ public class VideoDetailResponse : CodedResponseBase
                 
                 public class VideoDetailResponseResourceBrItem
                 {
-                    [JsonPropertyName("size")] public long Size { get; set; }
+                    [JsonPropertyName("size")] public float Size { get; set; }
                     [JsonPropertyName("br")] public int Br { get; set; }
                     [JsonPropertyName("point")] public int Url { get; set; }
                 }

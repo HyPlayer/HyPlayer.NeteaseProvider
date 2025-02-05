@@ -7,6 +7,7 @@ public enum NeteaseResourceType
     Playlist,
     Album,
     RadioChannel,
+    RadioProgram,
     Video,
     Dynamic,
     Artist,

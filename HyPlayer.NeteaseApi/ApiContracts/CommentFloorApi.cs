@@ -2,6 +2,8 @@
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.Extensions;
+using HyPlayer.NeteaseApi.Models;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -20,25 +22,25 @@ public class CommentFloorApi : WeApiContractBase<CommentFloorRequest, CommentFlo
     public override Task MapRequest()
     {
         if (Request is not null)
-            ActualRequest = new()
+        {
+            var threadId = $"{NeteaseUtils.CommentTypeToThreadPrefix(Request.ResourceType)}{Request.ResourceId}";
+            ActualRequest = new CommentFloorActualRequest
             {
-                CsrfToken = null,
-                ThreadId = Request.ThreadId,
+                ThreadId = threadId,
                 ParentCommentId = Request.ParentCommentId,
                 Time = Request.Time,
                 Limit = Request.Limit
             };
+        }
+
         return Task.CompletedTask;
     }
 }
 
 public class CommentFloorRequest : RequestBase
 {
-    /// <summary>
-    /// 评论区 ID (type + id)
-    /// 使用 
-    /// </summary>
-    public required string ThreadId { get; set; }
+    public NeteaseResourceType ResourceType { get; set; } = NeteaseResourceType.Song;
+    public required string ResourceId { get; set; }
 
     /// <summary>
     /// 父评论 ID

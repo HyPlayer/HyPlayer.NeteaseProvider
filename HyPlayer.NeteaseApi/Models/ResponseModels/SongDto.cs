@@ -28,3 +28,27 @@ public class SongDto
         }
     }
 }
+
+public class FlattedSongDto
+{
+    [JsonPropertyName("name")] public string? Name { get; set; }
+    [JsonPropertyName("id")] public string? Id { get; set; }
+    [JsonPropertyName("coverUrl")] public string? CoverUrl { get; set; }
+    [JsonPropertyName("duration")] public long Duration { get; set; }
+    [JsonPropertyName("transName")] public string? Translation { get; set; }
+    [JsonPropertyName("albumName")] public string? Album { get; set; }
+    [JsonPropertyName("artists")] public FlattedArtistDto[]? Artists { get; set; }
+    [JsonPropertyName("isLiked")] public bool IsLiked { get; set; }
+
+    public class FlattedArtistDto
+    {
+        [JsonPropertyName("artistId")] public string? Id { get; set; }
+        [JsonPropertyName("artistName")] public string? Name { get; set; }
+    }
+    
+}
+
+public class FlattedSongWithPrivilegeDto : FlattedSongDto
+{
+    [JsonPropertyName("privilege")] public PrivilegeDto? Privilege { get; set; }
+}

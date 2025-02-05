@@ -7,53 +7,43 @@ namespace HyPlayer.NeteaseApi.ApiContracts;
 
 public static partial class NeteaseApis
 {
-    public static AlbumSublistApi AlbumSublistApi => new();
+    public static ArtistSublistApi ArtistSublistApi => new();
 }
 
-public class AlbumSublistApi : WeApiContractBase<AlbumSublistRequest, AlbumSublistResponse, ErrorResultBase, AlbumSublistActualRequest>
+public class ArtistSublistApi : WeApiContractBase<ArtistSublistRequest, ArtistSublistResponse, ErrorResultBase, ArtistSublistActualRequest>
 {
-    public override string IdentifyRoute => "/album/sublist";
-    public override string Url { get; protected set; } = "https://music.163.com/weapi/album/sublist";
+    public override string IdentifyRoute => "/artist/sublist";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/artist/sublist";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override Task MapRequest()
     {
         if (Request is not null)
-            ActualRequest = new AlbumSublistActualRequest
+            ActualRequest = new ArtistSublistActualRequest
             {
                 Limit = Request.Limit,
                 Offset = Request.Offset
             };
-
         return Task.CompletedTask;
     }
 }
 
-public class AlbumSublistRequest : RequestBase
+public class ArtistSublistRequest : RequestBase
 {
-
     public int Limit { get; set; } = 25;
     public int Offset { get; set; } = 0;
 }
 
-public class AlbumSublistResponse : CodedResponseBase
+public class ArtistSublistResponse : CodedResponseBase
 {
-    [JsonPropertyName("data")] public AlbumSublistResponseData[]? Data { get; set; }
-    
-    public class AlbumSublistResponseData : AlbumDto
-    {
-        [JsonPropertyName("subTime")] public long SubTime { get; set; }
-    }
-
     [JsonPropertyName("count")] public int Count { get; set; }
     [JsonPropertyName("hasMore")] public bool HasMore { get; set; }
+    [JsonPropertyName("data")] public ArtistDto[]? Artists { get; set; }
 }
 
-
-
-public class AlbumSublistActualRequest : WeApiActualRequestBase
+public class ArtistSublistActualRequest : WeApiActualRequestBase
 {
-    [JsonPropertyName("limit")] public int Limit { get; set; } = 25;
+    [JsonPropertyName("limit")] public int Limit { get; set; }
     [JsonPropertyName("offset")] public int Offset { get; set; }
     [JsonPropertyName("total")] public bool Total => true;
 }

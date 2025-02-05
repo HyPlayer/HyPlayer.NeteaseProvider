@@ -97,7 +97,7 @@ public abstract class
             map?.Remove("cache_key");
             // map to query string.
             var queryString = string.Join("&", map?.OrderBy(t=>t.Key).Select(kv => $"{kv.Key}={kv.Value}") ?? []);
-            var cacheKey = CacheKeyGenerator.GetCacheKey(queryString);
+            var cacheKey = NeteaseUtils.GetCacheKey(queryString);
             if (!string.IsNullOrEmpty(header))
                 map?.Add("header", header!);
             map?.Add("cache_key", cacheKey);
@@ -129,18 +129,11 @@ public abstract class
         return Task.FromResult(requestMessage);
     }
 
-    public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(HttpResponseMessage response,
-        ApiHandlerOption option,
-        CancellationToken cancellationToken = default)
-    {
-        return await ProcessResponseAsync<TResponse>(response, option, cancellationToken).ConfigureAwait(false);
-    }
-
     public override async Task<Results<TResponseModel, ErrorResultBase>> ProcessResponseAsync<TResponseModel>(
         HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        // if (!response.IsSuccessStatusCode)
-        //     return new ErrorResultBase((int)response.StatusCode, $"请求返回 HTTP 代码: {response.StatusCode}");
+        if (!response.IsSuccessStatusCode)
+            return new ErrorResultBase((int)response.StatusCode, $"请求返回 HTTP 代码: {response.StatusCode}");
         if (response.Headers.TryGetValues("Set-Cookie", out var rawSetCookies))
         {
             foreach (var rawSetCookie in rawSetCookies)
@@ -209,6 +202,13 @@ public abstract class
         {
             return new ExceptionedErrorBase(500, e.Message, e);
         }
+    }
+
+    public override async Task<Results<TResponse, ErrorResultBase>> ProcessResponseAsync(HttpResponseMessage response,
+        ApiHandlerOption option,
+        CancellationToken cancellationToken = default)
+    {
+        return await ProcessResponseAsync<TResponse>(response, option, cancellationToken).ConfigureAwait(false);
     }
 
     class KeyValuePairKeyComparer : IEqualityComparer<KeyValuePair<string, string>>
