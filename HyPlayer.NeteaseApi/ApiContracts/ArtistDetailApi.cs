@@ -39,9 +39,25 @@ public class ArtistDetailResponse : CodedResponseBase
     public class ArtistDetailResponseData
     {
         [JsonPropertyName("videoCount")] public long VideoCount { get; set; }
-        [JsonPropertyName("artist")] public ArtistDto? Artist { get; set; }
+        [JsonPropertyName("artist")] public ArtistDetailDto? Artist { get; set; }
         [JsonPropertyName("blacklist")] public bool Blacklist { get; set; }
         [JsonPropertyName("preferShow")] public int PreferShow { get; set; }
+
+        public class ArtistDetailDto
+        {
+            [JsonPropertyName("id")] public string? Id { get; set; }
+            [JsonPropertyName("name")] public string? Name { get; set; }
+            [JsonPropertyName("alias")] public string[]? Alias { get; set; }
+            [JsonPropertyName("followed")] public bool Followed { get; set; }
+            [JsonPropertyName("cover")] public string? PicUrl { get; set; }
+            [JsonPropertyName("avatar")] public string? Img1v1Url { get; set; }
+            [JsonPropertyName("briefDesc")] public string? BriefDesc { get; set; }
+            [JsonPropertyName("trans")] public string? Translation { get; set; }
+            [JsonPropertyName("musicSize")] public int MusicSize { get; set; }
+            [JsonPropertyName("albumSize")] public int AlbumSize { get; set; }
+            [JsonPropertyName("mvSize")] public int MvSize { get; set; }
+            [JsonPropertyName("transNames")] public string[]? TransNames { get; set; }
+        }
     }
 }
 
