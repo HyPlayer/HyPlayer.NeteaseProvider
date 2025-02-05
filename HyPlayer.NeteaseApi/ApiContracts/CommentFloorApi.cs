@@ -12,12 +12,14 @@ public static partial class NeteaseApis
     public static CommentFloorApi CommentFloorApi => new();
 }
 
-public class CommentFloorApi : WeApiContractBase<CommentFloorRequest, CommentFloorResponse, ErrorResultBase,
+public class CommentFloorApi : EApiContractBase<CommentFloorRequest, CommentFloorResponse, ErrorResultBase,
     CommentFloorActualRequest>
 {
     public override string IdentifyRoute => "/comment/floor";
-    public override string Url { get; protected set; } = "https://music.163.com/api/resource/comment/floor/get";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/v2/resource/comment/floor/get";
     public override HttpMethod Method => HttpMethod.Post;
+
+    public override string ApiPath { get; protected set; } = "/api/v2/resource/comment/floor/get";
 
     public override Task MapRequest()
     {
@@ -50,7 +52,7 @@ public class CommentFloorRequest : RequestBase
     /// <summary>
     /// 分页参数 - 最后一项的 time
     /// </summary>
-    public long Time { get; set; } = -1;
+    public long Time { get; set; } = 0;
 
     /// <summary>
     /// 评论数量
@@ -73,10 +75,14 @@ public class CommentFloorResponse : CodedResponseBase
     }
 }
 
-public class CommentFloorActualRequest : WeApiActualRequestBase
+public class CommentFloorActualRequest : EApiActualRequestBase
 {
     [JsonPropertyName("threadId")] public required string ThreadId { get; set; }
     [JsonPropertyName("parentCommentId")] public required string ParentCommentId { get; set; }
-    [JsonPropertyName("time")] public long Time { get; set; } = -1;
+    [JsonPropertyName("time")] public long Time { get; set; } = 0;
     [JsonPropertyName("limit")] public int Limit { get; set; } = 20;
+    [JsonPropertyName("order")] public long Order { get; set; } = 0;
+    [JsonPropertyName("scene")] public string Scene { get; set; } = "SONG_COMMENT";
+    [JsonPropertyName("cursor")] public string Cursor { get; set; } = "";
+
 }

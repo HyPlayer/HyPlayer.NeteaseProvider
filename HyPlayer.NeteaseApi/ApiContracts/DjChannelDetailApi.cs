@@ -17,7 +17,7 @@ public class DjChannelDetailApi : WeApiContractBase<DjChannelDetailRequest, DjCh
     DjChannelDetailActualRequest>
 {
     public override string IdentifyRoute => "/dj/detail";
-    public override string Url { get; protected set; } = "https://music.163.com/weapi/djDj/get";
+    public override string Url { get; protected set; } = "https://music.163.com/weapi/djradio/get";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override Task MapRequest()
@@ -41,7 +41,7 @@ public class DjChannelDetailRequest : RequestBase
 
 public class DjChannelDetailResponse : CodedResponseBase
 {
-    [JsonPropertyName("data")] public DjRadioChannelWithDjDto? RadioData { get; set; }
+    [JsonPropertyName("djRadio")] public DjRadioChannelWithDjDto? RadioData { get; set; }
 }
 
 public class DjChannelDetailActualRequest : WeApiActualRequestBase

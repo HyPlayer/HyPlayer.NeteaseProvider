@@ -69,11 +69,12 @@ public class AiDjContentRcmdInfoResponse : CodedResponseBase
         [JsonDerivedType(typeof(AiDjContentRcmdAudioSong), "song")]
         public class AiDjContentRcmdInfoResource
         {
-            [JsonPropertyName("type")] public string? Type { get; set; }
+
         }
 
         public class AiDjContentRcmdAudioSong : AiDjContentRcmdInfoResource
         {
+            [JsonPropertyName("type")] public string? Type { get; set; }
             [JsonPropertyName("value")] public AiDjContentRcmdAudioSongValue? Value { get; set; }
 
             public class AiDjContentRcmdAudioSongValue
@@ -88,7 +89,7 @@ public class AiDjContentRcmdInfoResponse : CodedResponseBase
         {
             [JsonPropertyName("value")] public AiDjContentRcmdAudioResourceValue? Value { get; set; }
 
-
+            [JsonPropertyName("type")] public string? Type { get; set; }
             public class AiDjContentRcmdAudioResourceValue
             {
                 [JsonPropertyName("audioList")] public AiDjContentRcmdAudioResourceValueAudio[]? Audio { get; set; }
