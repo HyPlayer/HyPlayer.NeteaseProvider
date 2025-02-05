@@ -69,9 +69,9 @@ public class ArtistAlbumsResponse : CodedResponseBase
 
     public class ArtistAlbumDto : AlbumDto
     {
-        [JsonPropertyName("alias")] public string[]? Alias { get; set; }
         [JsonPropertyName("transNames")] public string[]? Translations { get; set; }
         [JsonPropertyName("type")] public string? AlbumType { get; set; }
         [JsonPropertyName("isSub")] public bool IsSubscribed { get; set; }
+        [JsonPropertyName("paid")] public bool Paid { get; set; }
     }
 }
