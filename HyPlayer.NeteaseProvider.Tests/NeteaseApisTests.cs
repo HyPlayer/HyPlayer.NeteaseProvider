@@ -29,7 +29,7 @@ public class NeteaseApisTests
             },
             e => throw e);
     }
-    
+
     [Test]
     [Arguments("97767168")]
     public async Task AlbumDetail_Should_BeNormal(string id)
@@ -133,6 +133,23 @@ public class NeteaseApisTests
             },
             e => throw e);
     }
+    
+    // ArtistSublistApi
+    [Test]
+    public async Task ArtistSublist_Should_BeNormal()
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.ArtistSublistApi, new ArtistSublistRequest
+        {
+            Limit = 5
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Artists.Should().NotBeEmpty();
+                return true;
+            },
+            e => throw e);
+    }
 
     // ArtistTopSong
     [Test]
@@ -187,13 +204,14 @@ public class NeteaseApisTests
 
     // CommentFloorApi
     [Test]
-    [Arguments("R_SO_4_2033878955", "5943788056")]
-    public async Task CommentFloor_Should_BeNormal(string threadId, string parentCommentId)
+    [Arguments(NeteaseResourceType.Song,"2033878955", "5943788056")]
+    public async Task CommentFloor_Should_BeNormal(NeteaseResourceType type,string resourceId, string parentCommentId)
     {
         var result = await _provider.RequestAsync(NeteaseApis.CommentFloorApi,
             new CommentFloorRequest()
             {
-                ThreadId = threadId,
+                ResourceType = type,
+                ResourceId = resourceId,
                 ParentCommentId = parentCommentId
             });
         result.Match(s =>
@@ -213,7 +231,7 @@ public class NeteaseApisTests
     {
         var result = await _provider.RequestAsync(NeteaseApis.CommentsApi, new CommentsRequest()
         {
-            Id = commentId,
+            ResourceId = commentId,
             ResourceType = resourceType
         });
         result.Match(s =>
@@ -238,6 +256,22 @@ public class NeteaseApisTests
             {
                 s.Code.Should().Be(200);
                 s.Programs.Should().NotBeEmpty();
+                return true;
+            },
+            e => throw e);
+    }
+
+    // DjChannelSubscribedApi
+    [Test]
+    public async Task DjChannelSubscribed_Should_BeNormal()
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.DjChannelSubscribedApi, new DjChannelSubscribedRequest());
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Data?.Count.Should().BeGreaterThan(0);
+                s.Data.Should().NotBeNull();
+                s.Data.Data.Should().NotBeEmpty();
                 return true;
             },
             e => throw e);
@@ -356,6 +390,67 @@ public class NeteaseApisTests
         );
     }
 
+    // MlogDetailApi
+    [Test]
+    [Arguments("a1gJXo218Cggy9j", "480", "1834823818")]
+    public async Task MlogDetail_Should_BeNormal(string id, string resolution, string? songId)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.MlogDetailApi, new MlogDetailRequest
+        {
+            MlogId = id,
+            Resolution = resolution,
+            SongId = songId
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Data.Should().NotBeNull();
+                s.Data.Resource.Should().NotBeNull();
+                return true;
+            },
+            e => throw e);
+    }
+
+    [Test]
+    [Arguments("10879889", "1382359170")]
+    public async Task MlogRcmdFeedList_Should_BeNormal(string id, string songId)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.MlogRcmdFeedListApi, new MlogRcmdFeedListRequest
+        {
+            Id = id,
+            SongId = songId
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                return true;
+            },
+            e => throw e);
+    }
+
+
+    // MlogUrlApi
+    [Test]
+    [Arguments("a1gJXo218Cggy9j")]
+    public async Task MlogUrl_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.MlogUrlApi, new MlogUrlRequest
+        {
+            Id = id
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Data.Should().NotBeNull();
+                var item = s.Data.GetValueOrDefault(id);
+                item.Should().NotBeNull();
+                item.UrlInfo?.Url.Should().NotBeEmpty();
+
+                return true;
+            },
+            e => throw e);
+    }
+
     [Test]
     [Arguments("DEFAULT", null)]
     [Arguments("SCENE_RCMD", "NIGHT_EMO")]
@@ -424,6 +519,28 @@ public class NeteaseApisTests
             success => success.Playlist?.TrackIds.Should().NotBeEmpty(),
             error => throw error
         );
+    }
+
+    [Test]
+    [Arguments("8510499129", "2033878955", "2033878955", 5)]
+    public async Task PlaymodeIntelligenceList_Should_BeNormal(string playlistId, string songId, string startMusicId,
+        int count)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.PlaymodeIntelligenceListApi,
+            new PlaymodeIntelligenceListRequest
+            {
+                PlaylistId = playlistId,
+                SongId = songId,
+                StartMusicId = startMusicId,
+                Count = count
+            });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Data.Should().NotBeEmpty();
+                return true;
+            },
+            e => throw e);
     }
 
     [Test]
@@ -607,6 +724,25 @@ public class NeteaseApisTests
     }
 
     [Test]
+    // UserDetailApi
+    [Arguments("8645419738")]
+    [Arguments("1")]
+    public async Task UserDetail_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.UserDetailApi, new UserDetailRequest
+        {
+            UserId = id
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Profile.Should().NotBeNull();
+                return true;
+            },
+            e => throw e);
+    }
+
+    [Test]
     [Arguments("8645419738", UserRecordType.All)]
     // [Arguments("8645419738", UserRecordType.WeekData)] // TODO: uncomment this line when the test account's weekly listen record accumulates
     public async Task UserRecordApi_Should_BeNormal(string id, UserRecordType type)
@@ -624,6 +760,45 @@ public class NeteaseApisTests
                 s.Code.Should().Be(200);
                 s.AllData.Should().NotBeEmpty();
                 return false;
+            },
+            e => throw e);
+    }
+
+    // VideoDetailApi
+    [Test]
+    [Arguments("10879889")]
+    public async Task VideoDetail_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.VideoDetailApi, new VideoDetailRequest
+        {
+            Id = id
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Data.Should().NotBeNull();
+                s.Data.Resource.Should().NotBeNull();
+                return true;
+            },
+            e => throw e);
+    }
+
+
+    // VideoUrlApi
+    [Test]
+    [Arguments("10879889")]
+    public async Task VideoUrl_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.VideoUrlApi, new VideoUrlRequest
+        {
+            Id = id
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.Data.Should().NotBeNull();
+                s.Data.Url.Should().NotBeEmpty();
+                return true;
             },
             e => throw e);
     }
