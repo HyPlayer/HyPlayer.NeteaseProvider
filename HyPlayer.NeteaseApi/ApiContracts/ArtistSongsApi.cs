@@ -79,7 +79,7 @@ public class ArtistSongsRequest : RequestBase
 
 public class ArtistSongsResponse : CodedResponseBase
 {
-    [JsonPropertyName("total")] public bool Total { get; set; }
+    [JsonPropertyName("total")] public int Total { get; set; }
     [JsonPropertyName("more")] public bool HasMore { get; set; }
     [JsonPropertyName("songs")] public EmittedSongDtoWithPrivilege[]? Songs { get; set; }
 }
