@@ -6,6 +6,7 @@ public class PlaylistDto
 {
     [JsonPropertyName("creator")] public UserInfoDto? Creator { get; set; }
     [JsonPropertyName("privacy")] public int Privacy { get; set; }
+    [JsonPropertyName("specialType")] public int SpecialType { get; set; }
     [JsonPropertyName("trackCount")] public int TrackCount { get; set; }
     [JsonPropertyName("coverImgUrl")] public string? CoverUrl { get; set; }
     [JsonPropertyName("updateFrequency")] public string? UpdateFrequency { get; set; }

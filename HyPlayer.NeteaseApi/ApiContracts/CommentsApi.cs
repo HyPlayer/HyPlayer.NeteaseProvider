@@ -23,7 +23,7 @@ public class CommentsApi : EApiContractBase<CommentsRequest, CommentsResponse, E
     public override Task MapRequest()
     {
         if (Request is null) return Task.CompletedTask;
-        var threadId = $"{NeteaseUtils.CommentTypeToThreadPrefix(Request.ResourceType)}{Request.Id}";
+        var threadId = $"{NeteaseUtils.CommentTypeToThreadPrefix(Request.ResourceType)}{Request.ResourceId}";
         var cursor = Request.Cursor ?? Request.CommentSortType switch
         {
             CommentSortType.Recommend => ((Request.PageNo - 1) * Request.PageSize).ToString(),
@@ -47,7 +47,7 @@ public class CommentsApi : EApiContractBase<CommentsRequest, CommentsResponse, E
 public class CommentsRequest : RequestBase
 {
     public NeteaseResourceType ResourceType { get; set; } = NeteaseResourceType.Song;
-    public required string Id { get; set; }
+    public required string ResourceId { get; set; }
     public CommentSortType CommentSortType { get; set; }
     public int PageSize { get; set; } = 20;
     public int PageNo { get; set; } = 1;

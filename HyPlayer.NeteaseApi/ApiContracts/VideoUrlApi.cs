@@ -37,7 +37,14 @@ public class VideoUrlRequest : RequestBase
 
 public class VideoUrlResponse : CodedResponseBase
 {
-
+    [JsonPropertyName("data")] public VideoUrlResponseData? Data { get; set; }
+    
+    public class VideoUrlResponseData
+    {
+        [JsonPropertyName("url")] public string? Url { get; set; }
+        [JsonPropertyName("r")] public int Resolution { get; set; }
+        [JsonPropertyName("size")] public long Size { get; set; }
+    }
 }
 
 public class VideoUrlActualRequest : EApiActualRequestBase

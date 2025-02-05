@@ -12,6 +12,13 @@ public class IdOrIdListListRequest : RequestBase
     /// </summary>
     public string? Id { get; set; }
 
+    public string ConvertToQuotedIdStringList()
+    {
+        return string.IsNullOrWhiteSpace(Id)
+            ? $"[\"{string.Join("\",\"", IdList ?? [])}]\""
+            : $"[\"{Id}\"]";
+    }
+    
     public string ConvertToIdStringList()
     {
         return string.IsNullOrWhiteSpace(Id)
