@@ -66,7 +66,7 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
         var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
         var result = Encoding.UTF8.GetString(buffer);
-        var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
+        var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonDeserializerOptions);
 #if DEBUG
         if (ret is null)
             ret = new();
