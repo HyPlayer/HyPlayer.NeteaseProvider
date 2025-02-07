@@ -91,7 +91,7 @@ public abstract class
         
         if (req is CacheKeyEApiActualRequest)
         {
-            var map = JsonSerializer.Deserialize<Dictionary<string, string>>(json, option.JsonDeserializerOptions);
+            var map = JsonSerializer.Deserialize<Dictionary<string, string>>(json,  option.JsonSerializerOptions);
             var header = map?.GetValueOrDefault("header");
             map?.Remove("header");
             map?.Remove("cache_key");
@@ -161,7 +161,7 @@ public abstract class
             try
             {
                 var result = Encoding.UTF8.GetString(buffer);
-                var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonDeserializerOptions);
+                var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
 #if DEBUG
                 if (ret is null)
                     ret = new();
