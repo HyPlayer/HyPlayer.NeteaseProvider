@@ -1,5 +1,4 @@
 ﻿using HyPlayer.NeteaseApi.Extensions.JsonSerializer;
-using HyPlayer.NeteaseApi.Serialization;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -25,15 +24,6 @@ public class ApiHandlerOption
                              JsonNumberHandling.AllowReadingFromString,
             AllowTrailingCommas = true,
             Converters = { new NumberToStringConverter(), new JsonBooleanConverter() }
-        };
-    public JsonSerializerOptions JsonDeserializerOptions =
-        new(JsonSerializerOptions.Default)
-        {
-            NumberHandling = JsonNumberHandling.WriteAsString |
-                             JsonNumberHandling.AllowReadingFromString,
-            AllowTrailingCommas = true,
-            Converters = { new NumberToStringConverter(), new JsonBooleanConverter() },
-            TypeInfoResolver= JsonSerializeContext.Default
         };
 }
 
