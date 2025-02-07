@@ -26,7 +26,8 @@ public class NeteaseCloudMusicApiHandler
         where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new()
     {
         var client = new HttpClient(_httpClientHandler);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(Option, cancellationToken),
+        using var requestMessage= await contract.GenerateRequestMessageAsync(Option, cancellationToken);
+        using var response = await client.SendAsync(requestMessage,
                                               cancellationToken).ConfigureAwait(false);
         return await contract.ProcessResponseAsync(response, Option, cancellationToken).ConfigureAwait(false);
     }
@@ -38,7 +39,8 @@ public class NeteaseCloudMusicApiHandler
         var client = new HttpClient(_httpClientHandler);
         contract.Request = request;
         await contract.MapRequest().ConfigureAwait(false);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(Option, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false);
+        using var requestMessage = await contract.GenerateRequestMessageAsync(Option, cancellationToken).ConfigureAwait(false);
+        using var response = await client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
         return await contract.ProcessResponseAsync(response, Option, cancellationToken).ConfigureAwait(false);
     }
 
@@ -49,7 +51,8 @@ public class NeteaseCloudMusicApiHandler
         var client = new HttpClient(_httpClientHandler);
         contract.Request = request;
         await contract.MapRequest().ConfigureAwait(false);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync(Option, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false);
+        using var requestMessage = await contract.GenerateRequestMessageAsync(Option, cancellationToken).ConfigureAwait(false);
+        using var response = await client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
         return await contract.ProcessResponseAsync<TCustomResponse>(response, Option, cancellationToken).ConfigureAwait(false);
     }
 
@@ -58,7 +61,8 @@ public class NeteaseCloudMusicApiHandler
         where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new() where TCustomResponse : ResponseBase, new()
     {
         var client = new HttpClient(_httpClientHandler);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync<TCustomRequest>(request!, Option, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false);
+        using var requestMessage = await contract.GenerateRequestMessageAsync<TCustomRequest>(request!, Option, cancellationToken).ConfigureAwait(false);
+        using var response = await client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
         return await contract.ProcessResponseAsync<TCustomResponse>(response, Option, cancellationToken).ConfigureAwait(false);
     }
 
@@ -68,7 +72,8 @@ public class NeteaseCloudMusicApiHandler
         where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new()
     {
         var client = new HttpClient(_httpClientHandler);
-        var response = await client.SendAsync(await contract.GenerateRequestMessageAsync<TCustomRequest>(request!, option, cancellationToken), cancellationToken).ConfigureAwait(false);
+        using var requestMessage = await contract.GenerateRequestMessageAsync<TCustomRequest>(request!, option, cancellationToken);
+        using var response = await client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
         return await contract.ProcessResponseAsync(response, option, cancellationToken).ConfigureAwait(false);
     }
 }
