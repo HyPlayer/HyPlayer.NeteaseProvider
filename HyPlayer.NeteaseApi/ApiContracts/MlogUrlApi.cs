@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -55,7 +55,7 @@ public class MlogUrlResponse : CodedResponseBase
         [JsonPropertyName("rcmdUrlInfo")] public MlogUrlInfo? RcmdInfo { get; set; }
         [JsonPropertyName("urlInfos")] public MlogUrlInfo[]? UrlInfos { get; set; }
         [JsonPropertyName("coverImageTime")] public long CoverImageTime { get; set; }
-        
+
         public class MlogUrlInfo
         {
             [JsonPropertyName("id")] public string? Id { get; set; }

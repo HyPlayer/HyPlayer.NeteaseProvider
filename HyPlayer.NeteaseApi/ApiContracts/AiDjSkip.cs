@@ -14,7 +14,7 @@ public class AiDjSkipApi : EApiContractBase<AiDjSkipRequest, AiDjSkipResponse, E
     public override string IdentifyRoute => "/aidj/skip";
     public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/v1/radio/skip";
     public override HttpMethod Method => HttpMethod.Post;
-    
+
     public override Task MapRequest()
     {
         if (Request is not null)

@@ -14,7 +14,7 @@ public abstract class ApiContractBase<TRequest, TResponse, TError, TActualReques
     public abstract HttpMethod Method { get; }
     public virtual Dictionary<string, string> Cookies { get; } = new();
     public TRequest? Request { get; set; }
-    
+
     public TActualRequest? ActualRequest { get; set; }
     public virtual string? UserAgent { get; } = null;
     public abstract Task MapRequest();
@@ -34,5 +34,5 @@ public abstract class ApiContractBase
 {
     public abstract Task<HttpRequestMessage> GenerateRequestMessageAsync(
         ApiHandlerOption option, CancellationToken cancellationToken = default);
-    
+
 }

@@ -1,9 +1,9 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Models;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -19,7 +19,7 @@ public class CommentsApi : EApiContractBase<CommentsRequest, CommentsResponse, E
     public override string ApiPath { get; protected set; } = "/api/v2/resource/comments";
     public override HttpMethod Method => HttpMethod.Post;
 
-   
+
     public override Task MapRequest()
     {
         if (Request is null) return Task.CompletedTask;

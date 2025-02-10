@@ -1,22 +1,22 @@
 ﻿namespace HyPlayer.NeteaseApi.Extensions;
 
-public struct Results<TValue,TError>
+public struct Results<TValue, TError>
 {
     private TValue? _value;
     private TError? _error;
 
-    public bool IsError =>!IsSuccess;
+    public bool IsError => !IsSuccess;
     public bool IsSuccess { get; set; }
 
     public TValue? Value => _value;
     public TError? Error => _error;
-    
+
     private Results(TValue value)
     {
         IsSuccess = true;
         _value = value;
     }
-    
+
     private Results(TError error)
     {
         IsSuccess = false;
@@ -28,7 +28,7 @@ public struct Results<TValue,TError>
 
     public static Results<TValue, TError> CreateError(TError error) => new(error);
     public static Results<TValue, TError> CreateSuccess(TValue value) => new(value);
-    
+
     public Results<TValue, TError> WithValue(TValue value)
     {
         _value = value;

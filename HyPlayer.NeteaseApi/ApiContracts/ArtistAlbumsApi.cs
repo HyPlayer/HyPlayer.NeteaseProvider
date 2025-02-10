@@ -19,7 +19,7 @@ public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbu
     public override string IdentifyRoute => "/artist/albums";
     public override string Url { get; protected set; } = "https://music.163.com/weapi/artist/albums/";
     public override HttpMethod Method => HttpMethod.Post;
-    
+
     public override Task MapRequest()
     {
         if (Request is not null)

@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -40,7 +40,7 @@ public class CloudUploadCoverTokenAllocRequest : RequestBase
 
 public class CloudUploadCoverTokenAllocResponse : CodedResponseBase
 {
-    
+
     [JsonPropertyName("result")] public CloudUploadCoverTokenAllocResponseResult? Result { get; set; }
 
     public class CloudUploadCoverTokenAllocResponseResult

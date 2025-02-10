@@ -33,5 +33,5 @@ public class BeRepliedCommentDto
     [JsonPropertyName("content")] public string? Content { get; set; }
     [JsonPropertyName("richContent")] public string? RichContent { get; set; }
     [JsonPropertyName("ipLocation")] public CommentDto.CommentIpLocation? IpLocation { get; set; }
-    
+
 }

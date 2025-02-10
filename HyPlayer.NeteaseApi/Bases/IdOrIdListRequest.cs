@@ -18,7 +18,7 @@ public class IdOrIdListListRequest : RequestBase
             ? $"[\"{string.Join("\",\"", IdList ?? [])}]\""
             : $"[\"{Id}\"]";
     }
-    
+
     public string ConvertToIdStringList()
     {
         return string.IsNullOrWhiteSpace(Id)

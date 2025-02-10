@@ -1,6 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using HyPlayer.NeteaseApi.Models;
+using System.Security.Cryptography;
 using System.Text;
-using HyPlayer.NeteaseApi.Models;
 
 namespace HyPlayer.NeteaseApi.Extensions;
 
@@ -22,7 +22,7 @@ public class NeteaseUtils
             default: throw new ArgumentOutOfRangeException(nameof(type));
         }
     }
-    
+
     public static string GetCacheKey(string input)
     {
         // aes encrypt: ecb key:")(13daqP@ssw0rd~", output base64

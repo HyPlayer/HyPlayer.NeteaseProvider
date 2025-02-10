@@ -1,8 +1,8 @@
-using System.Text.Json;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
-using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -84,7 +84,7 @@ public class AiDjContentRcmdInfoResponse : CodedResponseBase
                 [JsonPropertyName("songData")] public SongDto? SongName { get; set; }
             }
         }
-        
+
         public class AiDjContentRcmdAudioResource : AiDjContentRcmdInfoResource
         {
             [JsonPropertyName("value")] public AiDjContentRcmdAudioResourceValue? Value { get; set; }

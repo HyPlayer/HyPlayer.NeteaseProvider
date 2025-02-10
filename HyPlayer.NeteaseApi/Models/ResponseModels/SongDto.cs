@@ -45,7 +45,7 @@ public class FlattedSongDto
         [JsonPropertyName("artistId")] public string? Id { get; set; }
         [JsonPropertyName("artistName")] public string? Name { get; set; }
     }
-    
+
 }
 
 public class FlattedSongWithPrivilegeDto : FlattedSongDto

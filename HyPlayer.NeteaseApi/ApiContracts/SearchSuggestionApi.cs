@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -34,11 +34,11 @@ public class SearchSuggestionRequest : RequestBase
 public class SearchSuggestionResponse : CodedResponseBase
 {
     [JsonPropertyName("result")] public SearchSuggestionResponseResult? Result { get; set; }
-    
+
     public class SearchSuggestionResponseResult
     {
         [JsonPropertyName("allMatch")] public SearchSuggestionResponseResultItem[]? AllMatch { get; set; }
-        
+
         public class SearchSuggestionResponseResultItem
         {
             [JsonPropertyName("keyword")] public string? Keyword { get; set; }
@@ -46,7 +46,7 @@ public class SearchSuggestionResponse : CodedResponseBase
             [JsonPropertyName("alg")] public string? Algorithm { get; set; }
             [JsonPropertyName("lastKeyword")] public string? LastKeyword { get; set; }
             [JsonPropertyName("feature")] public string? Feature { get; set; }
-            
+
         }
     }
 }

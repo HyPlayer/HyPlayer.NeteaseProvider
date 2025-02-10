@@ -1,8 +1,8 @@
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Models;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Models;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -132,7 +132,7 @@ public class SearchMVResponse : CodedResponseBase
         [JsonPropertyName("mvs")] public MVDto[]? Items { get; set; }
         [JsonPropertyName("mvCount")] public int Count { get; set; }
     }
-}   
+}
 
 public class SearchArtistResponse : CodedResponseBase
 {
