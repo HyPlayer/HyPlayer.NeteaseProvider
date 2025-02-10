@@ -28,7 +28,8 @@ public class PlaylistCreateApi : WeApiContractBase<PlaylistCreateRequest, Playli
             {
                 Name = Request.Name,
                 Privacy = Request.Privacy,
-                Type = Request.Type
+                Type = Request.Type,
+                CheckToken = Request.CheckToken,
             };
         return Task.CompletedTask;
     }
@@ -50,11 +51,15 @@ public class PlaylistCreateRequest : RequestBase
     /// 类型
     /// </summary>
     public string Type { get; set; } = "NORMAL";
+    /// <summary>
+    /// CheckToken
+    /// </summary>
+    public string CheckToken { get; set; } = "";
 }
 
 public class PlaylistCreateResponse : CodedResponseBase
 {
-    
+
 }
 
 public class PlaylistCreateActualRequest : WeApiActualRequestBase
@@ -62,4 +67,5 @@ public class PlaylistCreateActualRequest : WeApiActualRequestBase
     [JsonPropertyName("name")] public required string Name { get; set; }
     [JsonPropertyName("privacy")] public int Privacy { get; set; }
     [JsonPropertyName("type")] public string Type { get; set; } = "NORMAL";
+    [JsonPropertyName("checkToken")] public string CheckToken { get; set; } = "";
 }

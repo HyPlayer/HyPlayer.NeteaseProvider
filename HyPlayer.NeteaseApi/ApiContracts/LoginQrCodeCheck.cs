@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -30,7 +30,7 @@ public class LoginQrCodeCheckApi : EApiContractBase<LoginQrCodeCheckRequest, Log
 
 public class LoginQrCodeCheckRequest : RequestBase
 {
-    public required string Unikey { get; set; } 
+    public required string Unikey { get; set; }
 }
 
 public class LoginQrCodeCheckResponse : CodedResponseBase

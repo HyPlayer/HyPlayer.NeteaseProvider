@@ -27,7 +27,7 @@ public class DjRadioChannelDto
     [JsonPropertyName("lastProgramId")] public string? LastProgramId { get; set; }
     [JsonPropertyName("lastProgramName")] public string? LastProgramName { get; set; }
     [JsonPropertyName("hightQuality")] public bool IsHighQuality { get; set; }
-    
+
 }
 
 public class DjVoiceChannelDto

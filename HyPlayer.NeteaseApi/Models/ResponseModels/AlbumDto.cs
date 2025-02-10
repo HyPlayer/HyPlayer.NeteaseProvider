@@ -11,7 +11,7 @@ public class AlbumDto
     [JsonPropertyName("publishTime")] public long PublishTime { get; set; }
     [JsonPropertyName("company")] public string? Company { get; set; }
     [JsonPropertyName("briefDesc")] public string? BriefDescription { get; set; }
-    [JsonPropertyName("alias")] public string[]? Alias  { get; set; }
+    [JsonPropertyName("alias")] public string[]? Alias { get; set; }
     [JsonPropertyName("description")] public string? Description { get; set; }
     [JsonPropertyName("transName")] public string? Translation { get; set; }
     [JsonPropertyName("subType")] public string? SubType { get; set; }

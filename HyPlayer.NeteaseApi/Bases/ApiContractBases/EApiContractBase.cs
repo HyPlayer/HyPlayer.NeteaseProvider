@@ -50,7 +50,7 @@ public abstract class
 
         if (cookies.Count > 0)
             requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
-        
+
         var csrfToken = cookies.GetValueOrDefault("__csrf");
 
         var dataHeader = new Dictionary<string, string?>()
@@ -88,22 +88,22 @@ public abstract class
             json = JsonSerializer.Serialize(apiRequest, option.JsonSerializerOptions);
         else
             json = JsonSerializer.Serialize(req, option.JsonSerializerOptions);
-        
+
         if (req is CacheKeyEApiActualRequest)
         {
-            var map = JsonSerializer.Deserialize<Dictionary<string, string>>(json,  option.JsonSerializerOptions);
+            var map = JsonSerializer.Deserialize<Dictionary<string, string>>(json, option.JsonSerializerOptions);
             var header = map?.GetValueOrDefault("header");
             map?.Remove("header");
             map?.Remove("cache_key");
             // map to query string.
-            var queryString = string.Join("&", map?.OrderBy(t=>t.Key).Select(kv => $"{kv.Key}={kv.Value}") ?? []);
+            var queryString = string.Join("&", map?.OrderBy(t => t.Key).Select(kv => $"{kv.Key}={kv.Value}") ?? []);
             var cacheKey = NeteaseUtils.GetCacheKey(queryString);
             if (!string.IsNullOrEmpty(header))
                 map?.Add("header", header!);
             map?.Add("cache_key", cacheKey);
             json = JsonSerializer.Serialize(map, option.JsonSerializerOptions);
         }
-        
+
         var encryptMessage = $"nobody{ApiPath}use{json}md5forencrypt";
         var digest = encryptMessage.ToByteArrayUtf8().ComputeMd5().ToHexStringLower();
         var requestData = $"{ApiPath}-36cd479b6b5-{json}-36cd479b6b5-{digest}";

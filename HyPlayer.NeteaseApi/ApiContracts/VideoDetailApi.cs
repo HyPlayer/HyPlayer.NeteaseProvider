@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -63,7 +63,7 @@ public class VideoDetailResponse : CodedResponseBase
                 [JsonPropertyName("pl")] public int PlayResolution { get; set; }
                 [JsonPropertyName("dl")] public int DownloadResolution { get; set; }
             }
-            
+
             public class VideoDetailResourceData
             {
                 [JsonPropertyName("id")] public string? Id { get; set; }
@@ -80,7 +80,7 @@ public class VideoDetailResponse : CodedResponseBase
                 [JsonPropertyName("artists")] public ArtistDto[]? Artists { get; set; }
                 [JsonPropertyName("relatedSong")] public SongDto[]? RelatedSongs { get; set; }
                 [JsonPropertyName("videos")] public VideoUrlResult[]? Videos { get; set; }
-                
+
                 public class VideoDetailResponseResourceBrItem
                 {
                     [JsonPropertyName("size")] public float Size { get; set; }
@@ -88,7 +88,7 @@ public class VideoDetailResponse : CodedResponseBase
                     [JsonPropertyName("point")] public int Url { get; set; }
                 }
             }
-            
+
         }
     }
 }

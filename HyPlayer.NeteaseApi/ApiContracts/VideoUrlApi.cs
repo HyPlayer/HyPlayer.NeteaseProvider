@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -38,7 +38,7 @@ public class VideoUrlRequest : RequestBase
 public class VideoUrlResponse : CodedResponseBase
 {
     [JsonPropertyName("data")] public VideoUrlResponseData? Data { get; set; }
-    
+
     public class VideoUrlResponseData
     {
         [JsonPropertyName("url")] public string? Url { get; set; }

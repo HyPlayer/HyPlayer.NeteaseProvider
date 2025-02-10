@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -37,7 +37,7 @@ public class SongWikiSummaryRequest : RequestBase
 public class SongWikiSummaryResponse : CodedResponseBase
 {
     [JsonPropertyName("data")] public SongWikiSummaryResponseData? Data { get; set; }
-    
+
     public class SongWikiSummaryResponseData
     {
         [JsonPropertyName("cursor")] public string? Cursor { get; set; }

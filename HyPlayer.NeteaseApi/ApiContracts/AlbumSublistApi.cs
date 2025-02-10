@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -39,7 +39,7 @@ public class AlbumSublistRequest : RequestBase
 public class AlbumSublistResponse : CodedResponseBase
 {
     [JsonPropertyName("data")] public AlbumSublistResponseData[]? Data { get; set; }
-    
+
     public class AlbumSublistResponseData : AlbumDto
     {
         [JsonPropertyName("subTime")] public long SubTime { get; set; }

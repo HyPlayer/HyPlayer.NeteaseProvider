@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -53,11 +53,11 @@ public class ArtistVideoRequest : RequestBase
 
 public class ArtistVideoResponse : CodedResponseBase
 {
-    [JsonPropertyName("data")]public ArtistVideoResponseData? Data { get; set; }
+    [JsonPropertyName("data")] public ArtistVideoResponseData? Data { get; set; }
 
     public class ArtistVideoResponseData
     {
-        [JsonPropertyName("records")]public ArtistVideoResponseDataRecord[]? Records { get; set; }
+        [JsonPropertyName("records")] public ArtistVideoResponseDataRecord[]? Records { get; set; }
         [JsonPropertyName("page")] public ArtistVideoResponsePage? Page { get; set; }
 
         public class ArtistVideoResponseDataRecord
@@ -71,8 +71,8 @@ public class ArtistVideoResponse : CodedResponseBase
                 [JsonPropertyName("mlogBaseData")] public ArtistVideoResponseBaseData? BaseData { get; set; }
                 [JsonPropertyName("mlogExtVO")] public ArtistVideoResponseExtVO? ExtVO { get; set; }
                 [JsonPropertyName("userProfile")] public UserInfoDto? UserProfile { get; set; }
-                
-                
+
+
                 public class ArtistVideoResponseExtVO
                 {
                     [JsonPropertyName("likedCount")] public int LikedCount { get; set; }
@@ -97,11 +97,11 @@ public class ArtistVideoResponse : CodedResponseBase
                     [JsonPropertyName("duration")] public long Duration { get; set; }
                     [JsonPropertyName("videos")] public VideoUrlResult[]? Videos { get; set; }
                     [JsonPropertyName("relatedPubUsers")] public UserInfoDto[]? RelatedPubUsers { get; set; }
-                    
+
                 }
             }
         }
-        
+
         public class ArtistVideoResponsePage
         {
             [JsonPropertyName("size")] public int Size { get; set; }

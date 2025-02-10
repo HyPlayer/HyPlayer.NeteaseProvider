@@ -7,7 +7,7 @@ namespace HyPlayer.NeteaseApi;
 public class NeteaseCloudMusicApiHandler
 {
     public ApiHandlerOption Option { get; set; } = new();
-    
+
     private readonly HttpClientHandler _httpClientHandler =
         new()
         {
@@ -26,7 +26,7 @@ public class NeteaseCloudMusicApiHandler
         where TError : ErrorResultBase where TActualRequest : ActualRequestBase where TRequest : RequestBase where TResponse : ResponseBase, new()
     {
         var client = new HttpClient(_httpClientHandler);
-        using var requestMessage= await contract.GenerateRequestMessageAsync(Option, cancellationToken);
+        using var requestMessage = await contract.GenerateRequestMessageAsync(Option, cancellationToken);
         using var response = await client.SendAsync(requestMessage,
                                               cancellationToken).ConfigureAwait(false);
         return await contract.ProcessResponseAsync(response, Option, cancellationToken).ConfigureAwait(false);

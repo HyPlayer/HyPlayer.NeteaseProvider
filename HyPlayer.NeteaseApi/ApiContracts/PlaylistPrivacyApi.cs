@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -41,5 +41,5 @@ public class PlaylistPrivacyResponse : CodedResponseBase
 public class PlaylistPrivacyActualRequest : EApiActualRequestBase
 {
     [JsonPropertyName("id")] public required string Id { get; set; }
-    [JsonPropertyName("privacy")] public int Privacy => 0; 
+    [JsonPropertyName("privacy")] public int Privacy => 0;
 }

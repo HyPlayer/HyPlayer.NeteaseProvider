@@ -6,7 +6,7 @@ public static class DictionaryExtension
     {
         return dictionary.TryGetValue(key, out var value) ? value : defaultValue;
     }
-    
+
     public static void MergeDictionary<TKey, TValue>(this Dictionary<TKey, TValue?> dictionary,
         Dictionary<TKey, TValue?> other) where TKey : notnull
     {

@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -53,7 +53,7 @@ public class MlogDetailRequest : RequestBase
 public class MlogDetailResponse : CodedResponseBase
 {
     [JsonPropertyName("data")] public MlogDetailResponseData? Data { get; set; }
-    
+
     public class MlogDetailResponseData
     {
         [JsonPropertyName("id")] public string? Id { get; set; }
@@ -79,11 +79,11 @@ public class MlogDetailResponse : CodedResponseBase
             {
                 [JsonPropertyName("title")] public string? Title { get; set; }
                 [JsonPropertyName("text")] public string? Text { get; set; }
-                [JsonPropertyName("video")] public MlogUrlResponse.MlogUrlItem? Video  { get; set; }
+                [JsonPropertyName("video")] public MlogUrlResponse.MlogUrlItem? Video { get; set; }
                 [JsonPropertyName("song")] public FlattedSongWithPrivilegeDto? Song { get; set; }
                 [JsonPropertyName("relatedSongs")] public FlattedSongWithPrivilegeDto[]? RelatedSongs { get; set; }
             }
-            
+
         }
     }
 }

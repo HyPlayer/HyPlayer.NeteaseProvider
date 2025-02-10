@@ -49,7 +49,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         {
             cookies[keyValuePair.Key] = keyValuePair.Value;
         }
-        
+
         cookies!.MergeDictionary(option.AdditionalParameters.Cookies);
 
         if (cookies.Count > 0)
