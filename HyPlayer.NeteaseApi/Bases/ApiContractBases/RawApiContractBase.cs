@@ -32,12 +32,21 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
         {
             cookies[keyValuePair.Key] = keyValuePair.Value;
         }
-
+        cookies!.MergeDictionary(option.AdditionalParameters.Cookies);
         if (cookies.Count > 0)
             requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
 
         if (actualRequest is RawApiActualRequestBase rr)
             requestMessage.Content = new FormUrlEncodedContent(rr);
+        
+        foreach (var additionalParametersHeader in option.AdditionalParameters.Headers)
+        {
+            if (requestMessage.Headers.Contains(additionalParametersHeader.Key))
+                requestMessage.Headers.Remove(additionalParametersHeader.Key);
+            if (additionalParametersHeader.Value is not null)
+                requestMessage.Headers.TryAddWithoutValidation(additionalParametersHeader.Key,
+                    additionalParametersHeader.Value);
+        }
         return Task.FromResult(requestMessage);
     }
 
