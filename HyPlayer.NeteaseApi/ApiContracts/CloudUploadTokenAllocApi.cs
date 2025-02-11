@@ -1,6 +1,6 @@
-﻿using HyPlayer.NeteaseApi.Bases;
+﻿﻿using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
-using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts;
 
@@ -18,14 +18,16 @@ public class CloudUploadTokenAllocApi : RawApiContractBase<CloudUploadTokenAlloc
 
     public override Task MapRequest()
     {
+        var rand = new Random();
         if (Request is not null)
             ActualRequest = new CloudUploadTokenAllocActualRequest
             {
                 ["channel"] = Request.Channel.ToString(),
-                ["fileName"] = Request.FileName,
+                ["filename"] = Request.FileName,
                 ["md5"] = Request.Md5,
                 ["type"] = Request.Type,
-                ["bucket"] = "jd-musicrep-privatecloud-audio-public"
+                ["bucket"] = "jd-musicrep-privatecloud-audio-public",
+                ["bizKey"] = $"{rand.Next(4096, 65535):x}{rand.Next(65535):x}"
             };
         return Task.CompletedTask;
     }
