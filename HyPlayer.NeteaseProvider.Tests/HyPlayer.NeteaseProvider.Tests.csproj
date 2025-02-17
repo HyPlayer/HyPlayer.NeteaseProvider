@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="AwesomeAssertions" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.13.1" />
+        <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.1" />
         <PackageReference Include="TUnit" Version="0.10.19" />
     </ItemGroup>
 
