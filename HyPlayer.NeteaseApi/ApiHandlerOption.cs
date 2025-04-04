@@ -15,6 +15,11 @@ public class ApiHandlerOption
     public IWebProxy? Proxy { get; set; } = null;
     public string? UserAgent { get; set; } = null;
     public bool DegradeHttp { get; set; } = false;
+    /// <summary>
+    /// 启用需要使用CheckToken的接口, 当 AdditionalParameters 被设定时不进行检查
+    /// </summary>
+    public bool EnableCheckTokenApi { get; set; } = false;
+
     public AdditionalParameters AdditionalParameters { get; set; } = new();
 
     public JsonSerializerOptions JsonSerializerOptions =
@@ -33,4 +38,12 @@ public class AdditionalParameters
     public Dictionary<string, string?> Headers { get; set; } = [];
     public Dictionary<string, string?> EApiHeaders { get; set; } = [];
     public Dictionary<string, string?> DataTokens { get; set; } = [];
+    public bool HasValue()
+    {
+        if (Cookies.Count > 0 ||
+            Headers.Count > 0 ||
+            EApiHeaders.Count > 0 ||
+            DataTokens.Count > 0) return true;
+        return false;
+    }
 }

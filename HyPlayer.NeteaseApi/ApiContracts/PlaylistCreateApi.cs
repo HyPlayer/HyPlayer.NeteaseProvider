@@ -35,7 +35,7 @@ public class PlaylistCreateApi : WeApiContractBase<PlaylistCreateRequest, Playli
     }
 }
 
-public class PlaylistCreateRequest : RequestBase
+public class PlaylistCreateRequest : RequestBase, ICheckTokenApi
 {
     /// <summary>
     /// 歌单名
@@ -51,9 +51,7 @@ public class PlaylistCreateRequest : RequestBase
     /// 类型
     /// </summary>
     public string Type { get; set; } = "NORMAL";
-    /// <summary>
-    /// CheckToken
-    /// </summary>
+
     public string CheckToken { get; set; } = "";
 }
 
@@ -62,7 +60,7 @@ public class PlaylistCreateResponse : CodedResponseBase
 
 }
 
-public class PlaylistCreateActualRequest : WeApiActualRequestBase
+public class PlaylistCreateActualRequest : WeApiActualRequestBase, ICheckTokenApi
 {
     [JsonPropertyName("name")] public required string Name { get; set; }
     [JsonPropertyName("privacy")] public int Privacy { get; set; }

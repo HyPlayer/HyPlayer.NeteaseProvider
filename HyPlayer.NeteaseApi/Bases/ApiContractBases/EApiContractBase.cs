@@ -21,6 +21,7 @@ public abstract class
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option,
         CancellationToken cancellationToken = default)
     {
+        CheckApiPrivileges(option, Request!);
         return await GenerateRequestMessageAsync(ActualRequest!, option, cancellationToken).ConfigureAwait(false);
     }
 

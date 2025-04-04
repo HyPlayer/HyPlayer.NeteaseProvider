@@ -12,10 +12,11 @@ public static partial class NeteaseApis
     public static LikeApi LikeApi => new();
 }
 
-public class LikeApi : WeApiContractBase<LikeRequest, LikeResponse, ErrorResultBase, LikeActualRequest>
+public class LikeApi : EApiContractBase<LikeRequest, LikeResponse, ErrorResultBase, LikeActualRequest>
 {
     public override string IdentifyRoute => "/like";
-    public override string Url { get; protected set; } = "https://music.163.com/api/radio/like";
+    public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/song/like";
+    public override string ApiPath { get; protected set; } = "/api/song/like";
     public override HttpMethod Method => HttpMethod.Post;
 
     public override Task MapRequest()
@@ -24,18 +25,18 @@ public class LikeApi : WeApiContractBase<LikeRequest, LikeResponse, ErrorResultB
             ActualRequest = new LikeActualRequest
             {
                 TrackId = Request.TrackId,
-                Like = Request.Like
+                UserId = Request.UserId,
+                Like = Request.Like,
             };
         return Task.CompletedTask;
     }
 }
 
-public class LikeActualRequest : WeApiActualRequestBase
+public class LikeActualRequest : EApiActualRequestBase
 {
-    [JsonPropertyName("alg")] public string Alg => "itembased";
     [JsonPropertyName("trackId")] public required string TrackId { get; set; }
+    [JsonPropertyName("userid")] public required string UserId { get; set; }
     [JsonPropertyName("like")] public bool Like { get; set; } = true;
-    [JsonPropertyName("time")] public int Time => 3;
 }
 
 public class LikeRequest : RequestBase
@@ -44,6 +45,11 @@ public class LikeRequest : RequestBase
     /// 歌曲 ID
     /// </summary>
     public required string TrackId { get; set; }
+
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    public required string UserId { get; set; }
 
     /// <summary>
     /// 是否喜欢
