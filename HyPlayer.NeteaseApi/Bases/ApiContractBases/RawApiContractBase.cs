@@ -38,7 +38,7 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
 
         if (actualRequest is RawApiActualRequestBase rr)
             requestMessage.Content = new FormUrlEncodedContent(rr);
-        
+
         foreach (var additionalParametersHeader in option.AdditionalParameters.Headers)
         {
             if (requestMessage.Headers.Contains(additionalParametersHeader.Key))
@@ -53,6 +53,7 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(
         ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
+        CheckApiPrivileges(option, Request!);
         return await GenerateRequestMessageAsync(ActualRequest!, option, cancellationToken).ConfigureAwait(false);
     }
 
