@@ -74,8 +74,17 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Song
             [JsonPropertyName("level")] public string? Level { get; set; }
             [JsonPropertyName("encodeType")] public string? EncodeType { get; set; }
             [JsonPropertyName("time")] public long Time { get; set; }
-            [JsonPropertyName("freeTrialInfo")] public string? FreeTrialInfo { get; set; }
+            [JsonPropertyName("freeTrialInfo")] public FreeTrialInfoData? FreeTrialInfo { get; set; }
             [JsonPropertyName("gain")] public float? Gain { get; set; }
+
+
+
+            public class FreeTrialInfoData
+            {
+                [JsonPropertyName("fragmentType")] public int FragmentType { get; set; }
+                [JsonPropertyName("start")] public long Start { get; set; }
+                [JsonPropertyName("end")] public long End { get; set; }
+            }
         }
     }
 }
