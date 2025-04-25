@@ -2,6 +2,18 @@
 
 using FluentAssertions;
 using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseApi.ApiContracts.Album;
+using HyPlayer.NeteaseApi.ApiContracts.Artist;
+using HyPlayer.NeteaseApi.ApiContracts.Cloud;
+using HyPlayer.NeteaseApi.ApiContracts.Comment;
+using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
+using HyPlayer.NeteaseApi.ApiContracts.Login;
+using HyPlayer.NeteaseApi.ApiContracts.PersonalFM;
+using HyPlayer.NeteaseApi.ApiContracts.Playlist;
+using HyPlayer.NeteaseApi.ApiContracts.Recommend;
+using HyPlayer.NeteaseApi.ApiContracts.Song;
+using HyPlayer.NeteaseApi.ApiContracts.User;
+using HyPlayer.NeteaseApi.ApiContracts.Video;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Models;
 using HyPlayer.NeteaseProvider.Constants;

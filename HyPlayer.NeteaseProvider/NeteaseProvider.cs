@@ -1,5 +1,9 @@
 using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseApi.ApiContracts.Login;
+using HyPlayer.NeteaseApi.ApiContracts.Playlist;
+using HyPlayer.NeteaseApi.ApiContracts.Recommend;
+using HyPlayer.NeteaseApi.ApiContracts.Song;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
@@ -254,7 +258,8 @@ public class NeteaseProvider : ProviderBase,
                     new LikeRequest
                     {
                         TrackId = inProviderId.Substring(2),
-                        Like = true
+                        Like = true,
+                        UserId = LoginedUser?.ActualId!
                     }, ctk);
             }
             else
@@ -292,7 +297,8 @@ public class NeteaseProvider : ProviderBase,
                     new LikeRequest
                     {
                         TrackId = inProviderId.Substring(2),
-                        Like = false
+                        Like = false,
+                        UserId = LoginedUser?.ActualId!
                     }, ctk);
             }
             else
