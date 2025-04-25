@@ -13,3 +13,8 @@ public class CacheKeyEApiActualRequest : EApiActualRequestBase
 {
     [JsonPropertyName("cache_key")] public string? CacheKey { get; set; }
 }
+
+public interface IFakeCheckTokenApi
+{
+    
+}

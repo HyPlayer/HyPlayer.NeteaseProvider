@@ -22,8 +22,10 @@ public class ApiHandlerOption
 
     public AdditionalParameters AdditionalParameters { get; set; } = new();
 
+    public bool FakeCheckToken { get; set; }
+
     public JsonSerializerOptions JsonSerializerOptions =
-        new(JsonSerializerOptions.Default)
+        new(JsonSerializerOptions.Web)
         {
             NumberHandling = JsonNumberHandling.WriteAsString |
                              JsonNumberHandling.AllowReadingFromString,

@@ -62,6 +62,12 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
             json = JsonSerializer.Serialize(ar, option.JsonSerializerOptions);
         else
             json = JsonSerializer.Serialize(req, option.JsonSerializerOptions);
+
+        if (actualRequest is IFakeCheckTokenApi)
+        {
+            json = json.Substring(0,json.Length - 1) + ",\"checkToken\":\"\"}";
+        }
+        
         byte[] secretKey = new Random().RandomBytes(16);
         secretKey = secretKey.Select(n => (byte)base62[n % 62]).ToArray();
         var paramsData =
