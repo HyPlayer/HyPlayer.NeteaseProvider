@@ -20,6 +20,18 @@
         <PackageReference Include="System.Text.Json" Version="9.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="ApiContracts\AlbumApi.cs" />
+      <Compile Remove="ApiContracts\AlbumSubscribeApi.cs" />
+      <Compile Remove="ApiContracts\ArtistSongsApi.cs" />
+      <Compile Remove="ApiContracts\ArtistTopSongApi.cs" />
+      <Compile Remove="ApiContracts\CloudDeleteApi.cs" />
+      <Compile Remove="ApiContracts\CloudUploadCheck.cs" />
+      <Compile Remove="ApiContracts\CloudUploadCoverTokenAllocApi.cs" />
+      <Compile Remove="ApiContracts\PlaylistCategoryListApi.cs" />
+      <Compile Remove="ApiContracts\MlogDetailApi.cs" />
+    </ItemGroup>
+
 
 
 </Project>
