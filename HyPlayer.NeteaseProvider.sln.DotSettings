@@ -4,35 +4,44 @@
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Reformat/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Shortcut/@EntryValue">neteaseapi</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Text/@EntryValue">public static partial class NeteaseApis
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Text/@EntryValue">namespace HyPlayer.NeteaseApi.ApiContracts
 {
-    public static $ApiName$Api $ApiName$Api =&gt; new();
-}
 
-public class $ApiName$Api : $ApiType$ContractBase&lt;$ApiName$Request, $ApiName$Response, ErrorResultBase, $ApiName$ActualRequest&gt;
-{
-    public override string IdentifyRoute =&gt; "";
-    public override string Url { get; protected set;} = ""; 
-    public override HttpMethod Method =&gt; HttpMethod.Post;
-    public override async Task MapRequest()
+    public static partial class NeteaseApis
     {
-        throw new NotImplementedException();
+        public static $ApiName$Api $ApiName$Api =&gt; new();
     }
 }
 
-public class $ApiName$Request : RequestBase
-{
-    
-}
 
-public class $ApiName$Response : CodedResponseBase
+namespace HyPlayer.NeteaseApi.ApiContracts.Category
 {
-    
-}
 
-public class $ApiName$ActualRequest : $ApiType$ActualRequestBase
-{
+    public class $ApiName$Api : $ApiType$ContractBase&lt;$ApiName$Request, $ApiName$Response, ErrorResultBase, $ApiName$ActualRequest&gt;
+    {
+        public override string IdentifyRoute =&gt; "";
+        public override string Url { get; protected set;} = ""; 
+        public override HttpMethod Method =&gt; HttpMethod.Post;
+        public override async Task MapRequest()
+        {
+            throw new NotImplementedException();
+        }
+    }
     
+    public class $ApiName$Request : RequestBase
+    {
+        
+    }
+    
+    public class $ApiName$Response : CodedResponseBase
+    {
+        
+    }
+    
+    public class $ApiName$ActualRequest : $ApiType$ActualRequestBase
+    {
+        
+    }
 }</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Field/=ApiName/@KeyIndexDefined">True</s:Boolean>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=12C008B710CB1241BC3BBE94DA0A5145/Field/=ApiName/Order/@EntryValue">0</s:Int64>
