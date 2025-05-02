@@ -28,12 +28,6 @@ public abstract class ApiContractBase<TRequest, TResponse, TError, TActualReques
     public abstract Task<Results<TResponseModel, ErrorResultBase>> ProcessResponseAsync<TResponseModel>(
         HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
         where TResponseModel : ResponseBase, new();
-    protected void CheckApiPrivileges(ApiHandlerOption option, RequestBase api)
-    {
-        if (option.AdditionalParameters.HasValue()) return;
-        if (api is not ICheckTokenApi || option.EnableCheckTokenApi is true) return;
-        throw new InvalidOperationException("此操作需要启用 CheckToken 接口");
-    }
 }
 
 public abstract class ApiContractBase

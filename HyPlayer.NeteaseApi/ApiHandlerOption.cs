@@ -18,7 +18,7 @@ public class ApiHandlerOption
     /// <summary>
     /// 启用需要使用CheckToken的接口, 当 AdditionalParameters 被设定时不进行检查
     /// </summary>
-    public bool EnableCheckTokenApi { get; set; } = false;
+    public bool BypassCheckTokenApi { get; set; } = false;
 
     public AdditionalParameters AdditionalParameters { get; set; } = new();
 
