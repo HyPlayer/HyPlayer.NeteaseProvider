@@ -23,7 +23,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Login
         LoginEmailActualRequest>
     {
         public override string IdentifyRoute => "/login";
-        public override string Url { get; protected set; } = "https://interface.163.com/eapi/w/login";
+        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/w/login";
         public override string ApiPath { get; protected set; } = "/api/w/login";
         public override HttpMethod Method => HttpMethod.Post;
         public override string UserAgent => "pc";

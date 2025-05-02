@@ -25,7 +25,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Login
     {
         public override string IdentifyRoute => "/login/cellphone";
         public override string ApiPath { get; protected set; } = "/api/w/login/cellphone";
-        public override string Url { get; protected set; } = "https://interface..163.com/eapi/w/login/cellphone";
+        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/w/login/cellphone";
         public override HttpMethod Method => HttpMethod.Post;
 
         public override Dictionary<string, string> Cookies => new() { { "os", "pc" }, { "appver", "2.9.8" } };
