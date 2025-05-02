@@ -25,7 +25,6 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
     public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(
         ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        CheckApiPrivileges(option, Request!);
         return await GenerateRequestMessageAsync(ActualRequest!, option, cancellationToken).ConfigureAwait(false);
     }
 
@@ -63,7 +62,7 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
         else
             json = JsonSerializer.Serialize(req, option.JsonSerializerOptions);
 
-        if (actualRequest is IFakeCheckTokenApi)
+        if (actualRequest is IFakeCheckTokenApi && option.BypassCheckTokenApi)
         {
             json = json.Substring(0,json.Length - 1) + ",\"checkToken\":\"\"}";
         }

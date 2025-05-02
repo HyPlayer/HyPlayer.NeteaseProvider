@@ -32,6 +32,10 @@
       <Compile Remove="ApiContracts\MlogDetailApi.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ApiContracts\ListenTogether\Multiple\" />
+    </ItemGroup>
+
 
 
 </Project>
