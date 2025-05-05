@@ -1,4 +1,5 @@
-﻿using HyPlayer.NeteaseApi.Extensions;
+﻿using System.Diagnostics;
+using HyPlayer.NeteaseApi.Extensions;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,7 +10,8 @@ namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 public abstract class
     EApiContractBase<TRequest, TResponse, TError, TActualRequest> :
-    ApiContractBase<TRequest, TResponse, TError, TActualRequest>
+    ApiContractBase<TRequest, TResponse, TError, TActualRequest>,
+    IBatchableApi
     where TActualRequest : EApiActualRequestBase
     where TError : ErrorResultBase
     where TRequest : RequestBase
@@ -81,28 +83,13 @@ public abstract class
         if (!string.IsNullOrEmpty(cookies.GetValueOrDefault("MUSIC_A")))
             dataHeader["MUSIC_A"] = cookies.GetValueOrDefault("MUSIC_A");
         dataHeader.MergeDictionary(option.AdditionalParameters.EApiHeaders);
-        var req = actualRequest as EApiActualRequestBase ?? new EApiActualRequestBase();
-        req.Header = JsonSerializer.Serialize(dataHeader, option.JsonSerializerOptions);
-        string json;
-        if (req is TActualRequestMessageModel apiRequest)
-            json = JsonSerializer.Serialize(apiRequest, option.JsonSerializerOptions);
-        else
-            json = JsonSerializer.Serialize(req, option.JsonSerializerOptions);
 
-        if (req is CacheKeyEApiActualRequest)
+
+        if (actualRequest is EApiActualRequestBase eApiActualRequestBase)
         {
-            var map = JsonSerializer.Deserialize<Dictionary<string, string>>(json, option.JsonSerializerOptions);
-            var header = map?.GetValueOrDefault("header");
-            map?.Remove("header");
-            map?.Remove("cache_key");
-            // map to query string.
-            var queryString = string.Join("&", map?.OrderBy(t => t.Key).Select(kv => $"{kv.Key}={kv.Value}") ?? []);
-            var cacheKey = NeteaseUtils.GetCacheKey(queryString);
-            if (!string.IsNullOrEmpty(header))
-                map?.Add("header", header!);
-            map?.Add("cache_key", cacheKey);
-            json = JsonSerializer.Serialize(map, option.JsonSerializerOptions);
+            eApiActualRequestBase.Header = JsonSerializer.Serialize(dataHeader, option.JsonSerializerOptions);
         }
+        var json = GetRequestJson<TActualRequestMessageModel>(actualRequest, option);
 
         var encryptMessage = $"nobody{ApiPath}use{json}md5forencrypt";
         var digest = encryptMessage.ToByteArrayUtf8().ComputeMd5().ToHexStringLower();
@@ -146,52 +133,64 @@ public abstract class
 
         var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
+        var forceDecrypt = false;
+        Exception? cachedException = null;
+        decryptApi:
         try
         {
-            if (buffer[0] != 0x7B && buffer[1] != 0x22)
+            try
             {
-                using var aes = Aes.Create();
-                aes.BlockSize = 128;
-                aes.Key = eapiKey;
-                aes.Mode = CipherMode.ECB;
-                using var decryptor = aes.CreateDecryptor();
-                buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
+                if (buffer[0] != 0x7B || buffer[1] != 0x22 || forceDecrypt)
+                {
+                    using var aes = Aes.Create();
+                    aes.BlockSize = 128;
+                    aes.Key = eapiKey;
+                    aes.Mode = CipherMode.ECB;
+                    using var decryptor = aes.CreateDecryptor();
+                    buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
+                }
             }
+            catch (Exception e)
+            {
+                // ignore
+            }
+
 
             try
             {
                 var result = Encoding.UTF8.GetString(buffer);
-                var ret = JsonSerializer.Deserialize<TResponseModel>(result, option.JsonSerializerOptions);
-#if DEBUG
-                if (ret is null)
-                    ret = new();
-                ret.OriginalResponse = result;
-#endif
+                var ret = GetResponseModel<TResponseModel>(result, option);
+                
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
+                if (ret is null)
+                {
+                    if (forceDecrypt)
+                    {
+                        return new ErrorResultBase(500, "返回 JSON 解析为空");
+                    }
+                    else
+                    {
+                        goto decryptApi;
+                    }
+                }
+                
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
                     return Results<TResponseModel, ErrorResultBase>
                         .CreateError(new ErrorResultBase(codedResponseBase.Code,
                             $"返回不成功({codedResponseBase.Code}): {codedResponseBase.Message}")).WithValue(ret);
                 return ret;
             }
-            catch
+            catch (Exception ex)
             {
                 // 防止加密后开头刚好是 {
                 // return new ErrorResultBase(500, "JSON 解析错误");
-                using var aes = Aes.Create();
-                aes.BlockSize = 128;
-                aes.Key = eapiKey;
-                aes.Mode = CipherMode.ECB;
-                using var decryptor = aes.CreateDecryptor();
-                buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
-                var ret = JsonSerializer.Deserialize<TResponseModel>(Encoding.UTF8.GetString(buffer),
-                    option.JsonSerializerOptions);
-                if (ret is null) return new ErrorResultBase(500, "返回 JSON 解析为空");
-                if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
-                    return Results<TResponseModel, ErrorResultBase>
-                        .CreateError(new ErrorResultBase(codedResponseBase.Code, "返回值不为 200")).WithValue(ret);
-                return ret;
+                cachedException = ex;
+                if (forceDecrypt)
+                {
+                    throw new Exception($"解析 API 失败: {ex.Message}\n初次尝试: {cachedException.Message}");
+                }
+                forceDecrypt = true;
+                goto decryptApi;
             }
         }
         catch when (buffer[0] == 123)
@@ -222,5 +221,56 @@ public abstract class
         {
             return obj.Key.GetHashCode();
         }
+    }
+
+    public string GetRequestJson(ApiHandlerOption option)
+    {
+        return GetRequestJson(ActualRequest!, option);
+    }
+    
+
+    public string GetRequestJson<TActualRequestMessageModel>(TActualRequestMessageModel actualRequest, ApiHandlerOption option)
+    {
+        var json = JsonSerializer.Serialize(actualRequest, option.JsonSerializerOptions);
+        if (actualRequest is CacheKeyEApiActualRequest)
+        {
+            var map = JsonSerializer.Deserialize<Dictionary<string, string>>(json, option.JsonSerializerOptions);
+            var header = map?.GetValueOrDefault("header");
+            map?.Remove("header");
+            map?.Remove("cache_key");
+            // map to query string.
+            var queryString = string.Join("&", map?.OrderBy(t => t.Key).Select(kv => $"{kv.Key}={kv.Value}") ?? []);
+            var cacheKey = NeteaseUtils.GetCacheKey(queryString);
+            if (!string.IsNullOrEmpty(header))
+                map?.Add("header", header!);
+            map?.Add("cache_key", cacheKey);
+            json = JsonSerializer.Serialize(map, option.JsonSerializerOptions);
+        }
+
+        return json;
+    }
+
+    public ResponseBase? GetResponseModel(string json, ApiHandlerOption option)
+    {
+        return GetResponseModel<ResponseBase>(json, option);
+    }
+
+    public TResponseModel? GetResponseModel<TResponseModel>(string json, ApiHandlerOption option) where TResponseModel : ResponseBase
+    {
+        try
+        {
+            var ret = JsonSerializer.Deserialize<TResponseModel>(json, option.JsonSerializerOptions);
+#if DEBUG
+            if (ret is null)
+                ret = (TResponseModel)new ResponseBase();
+            ret.OriginalResponse = json;
+#endif
+            return ret;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+
     }
 }

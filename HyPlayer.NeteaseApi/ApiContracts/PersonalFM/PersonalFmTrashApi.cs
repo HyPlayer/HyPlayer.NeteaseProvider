@@ -24,7 +24,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
         public override string Url { get; protected set; } = "";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new FmTrashActualRequest()

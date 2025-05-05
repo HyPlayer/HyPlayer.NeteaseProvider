@@ -23,7 +23,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Playlist
         public override string Url { get; protected set; } = "https://music.163.com/weapi/playlist/manipulate/tracks";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is null) return Task.CompletedTask;
             var trackIds = Request.ConvertToIdStringList();

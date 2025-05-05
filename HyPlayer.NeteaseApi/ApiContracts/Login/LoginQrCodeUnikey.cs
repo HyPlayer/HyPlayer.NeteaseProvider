@@ -21,7 +21,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Login
         public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/login/qrcode/unikey";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override async Task MapRequest()
+        public override async Task MapRequest(ApiHandlerOption option)
         {
             ActualRequest = new LoginQrCodeUnikeyActualRequest();
             await Task.CompletedTask;

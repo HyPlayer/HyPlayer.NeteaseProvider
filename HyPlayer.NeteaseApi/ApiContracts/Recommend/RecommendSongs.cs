@@ -30,7 +30,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Recommend
 
         public override string? UserAgent => "ios";
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             return Task.CompletedTask;
         }

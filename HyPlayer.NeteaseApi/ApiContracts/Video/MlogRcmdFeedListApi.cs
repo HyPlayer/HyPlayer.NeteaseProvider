@@ -26,7 +26,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Video
 
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override async Task MapRequest()
+        public override async Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
             {

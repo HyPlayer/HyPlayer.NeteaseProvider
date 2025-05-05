@@ -23,7 +23,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Category
         public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/listen/together/status/get";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             return Task.CompletedTask;
         }

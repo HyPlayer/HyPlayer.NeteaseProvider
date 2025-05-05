@@ -25,7 +25,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Playlist
         public override string Url { get; protected set; } = "https://music.163.com/weapi/song/like/get";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new LikelistActualRequest

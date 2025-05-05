@@ -28,7 +28,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
 
         public override string ApiPath { get; protected set; } = "/api/v1/radio/get";
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new PersonalFmActualRequest

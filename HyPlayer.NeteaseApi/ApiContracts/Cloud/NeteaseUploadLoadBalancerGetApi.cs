@@ -21,7 +21,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Cloud
         public override string Url { get; protected set; } = "http://wanproxy.127.net/lbs?version=1.0&bucketname=";
         public override HttpMethod Method => HttpMethod.Get;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             Url += Request?.Bucket ?? "jd-musicrep-privatecloud-audio-public";
             return Task.CompletedTask;

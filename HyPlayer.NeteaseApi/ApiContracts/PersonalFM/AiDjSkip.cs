@@ -21,7 +21,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
         public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/v1/radio/skip";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
             {

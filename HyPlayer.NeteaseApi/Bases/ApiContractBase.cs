@@ -3,7 +3,7 @@ using HyPlayer.NeteaseApi.Extensions;
 namespace HyPlayer.NeteaseApi.Bases;
 
 public abstract class ApiContractBase<TRequest, TResponse, TError, TActualRequest>
-    : ApiContractBase
+    : ApiContractBase, IApiMapRequest
     where TRequest : RequestBase
     where TActualRequest : ActualRequestBase
     where TError : ErrorResultBase
@@ -17,7 +17,6 @@ public abstract class ApiContractBase<TRequest, TResponse, TError, TActualReques
 
     public TActualRequest? ActualRequest { get; set; }
     public virtual string? UserAgent { get; } = null;
-    public abstract Task MapRequest();
 
     public abstract Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestModel>(
         TActualRequestModel actualRequest, ApiHandlerOption option, CancellationToken cancellationToken = default);
@@ -28,6 +27,13 @@ public abstract class ApiContractBase<TRequest, TResponse, TError, TActualReques
     public abstract Task<Results<TResponseModel, ErrorResultBase>> ProcessResponseAsync<TResponseModel>(
         HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
         where TResponseModel : ResponseBase, new();
+
+    public abstract Task MapRequest(ApiHandlerOption option);
+}
+
+public interface IApiMapRequest
+{
+    Task MapRequest(ApiHandlerOption option);
 }
 
 public abstract class ApiContractBase

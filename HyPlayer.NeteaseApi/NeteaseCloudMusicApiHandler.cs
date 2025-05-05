@@ -53,7 +53,7 @@ public class NeteaseCloudMusicApiHandler
         try
         {
             contract.Request = request;
-            await contract.MapRequest().ConfigureAwait(false);
+            await contract.MapRequest(Option).ConfigureAwait(false);
             using var requestMessage = await contract.GenerateRequestMessageAsync(Option, cancellationToken).ConfigureAwait(false);
             using var response = await HttpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
             return await contract.ProcessResponseAsync(response, Option, cancellationToken).ConfigureAwait(false);
@@ -72,7 +72,7 @@ public class NeteaseCloudMusicApiHandler
         try
         {
             contract.Request = request;
-            await contract.MapRequest().ConfigureAwait(false);
+            await contract.MapRequest(Option).ConfigureAwait(false);
             using var requestMessage = await contract.GenerateRequestMessageAsync(Option, cancellationToken).ConfigureAwait(false);
             using var response = await HttpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
             return await contract.ProcessResponseAsync<TCustomResponse>(response, Option, cancellationToken).ConfigureAwait(false);

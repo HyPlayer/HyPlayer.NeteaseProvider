@@ -23,7 +23,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Cloud
         public override string Url { get; protected set; } = "http://musicupload.netease.com/api/whale/token/alloc";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             var rand = new Random();
             if (Request is not null)

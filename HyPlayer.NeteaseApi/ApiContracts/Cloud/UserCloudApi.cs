@@ -26,7 +26,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Cloud
         public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/v1/cloud/get";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             ActualRequest = new()
             {

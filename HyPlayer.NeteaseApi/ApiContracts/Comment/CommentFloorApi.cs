@@ -30,7 +30,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Comment
 
         public override string ApiPath { get; protected set; } = "/api/v2/resource/comment/floor/get";
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
             {

@@ -27,7 +27,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Playlist
         public override string ApiPath { get; protected set; } = "/api/playlist/update/privacy";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new PlaylistPrivacyActualRequest

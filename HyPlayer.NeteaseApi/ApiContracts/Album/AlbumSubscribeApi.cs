@@ -21,7 +21,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Album
         public override string Url { get; protected set; } = "https://music.163.com/api/album/";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
             {
