@@ -252,7 +252,7 @@ public abstract class
 
     public ResponseBase? GetResponseModel(string json, ApiHandlerOption option)
     {
-        return GetResponseModel<ResponseBase>(json, option);
+        return GetResponseModel<TResponse>(json, option);
     }
 
     public TResponseModel? GetResponseModel<TResponseModel>(string json, ApiHandlerOption option) where TResponseModel : ResponseBase
