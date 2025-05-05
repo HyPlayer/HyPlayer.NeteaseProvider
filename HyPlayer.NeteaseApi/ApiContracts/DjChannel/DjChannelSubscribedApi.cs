@@ -28,7 +28,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.DjChannel
 
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new DjChannelSubscribedActualRequest

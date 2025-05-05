@@ -22,7 +22,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Cloud
         public override string IdentifyRoute => "/user/cloud/del";
         public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/cloud/del";
         public override HttpMethod Method => HttpMethod.Post;
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is null) return Task.CompletedTask;
             var ids = Request.ConvertToIdStringList();

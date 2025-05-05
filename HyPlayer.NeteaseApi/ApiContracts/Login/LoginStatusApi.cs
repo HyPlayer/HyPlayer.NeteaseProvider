@@ -24,7 +24,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Login
         public override string ApiPath { get; protected set; } = "/api/w/nuser/account/get";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             ActualRequest = new LoginStatusActualRequest();
             return Task.CompletedTask;

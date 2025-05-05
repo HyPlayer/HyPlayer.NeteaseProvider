@@ -27,7 +27,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Playlist
 
         public override string? UserAgent => "pc";
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new PlaylistCreateActualRequest

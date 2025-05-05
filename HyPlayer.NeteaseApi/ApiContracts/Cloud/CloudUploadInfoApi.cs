@@ -24,7 +24,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Cloud
         public override string ApiPath { get; protected set; } = "/api/upload/cloud/info/v2";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new CloudUploadInfoActualRequest

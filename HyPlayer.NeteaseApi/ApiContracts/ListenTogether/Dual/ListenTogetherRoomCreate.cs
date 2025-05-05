@@ -22,7 +22,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
         public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/listen/together/room/create";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             return Task.CompletedTask;
         }

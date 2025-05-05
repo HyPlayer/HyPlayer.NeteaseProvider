@@ -20,20 +20,22 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 namespace HyPlayer.NeteaseApi.ApiContracts.Song
 {
 
-    public class SongDetailApi : WeApiContractBase<SongDetailRequest, SongDetailResponse, ErrorResultBase,
+    public class SongDetailApi : EApiContractBase<SongDetailRequest, SongDetailResponse, ErrorResultBase,
         SongDetailActualRequest>
     {
         public override string IdentifyRoute => "/song/detail";
-        public override string Url { get; protected set; } = "https://music.163.com/weapi/v3/song/detail";
+        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/v3/song/detail";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is null) return Task.CompletedTask;
             var requestIds = Request.ParseToIdObjects();
             ActualRequest = new SongDetailActualRequest { Ids = requestIds };
             return Task.CompletedTask;
         }
+
+        public override string ApiPath { get; protected set; } = "/api/v3/song/detail";
     }
 
     public class SongDetailRequest : IdOrIdListListRequest
@@ -41,7 +43,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Song
 
     }
 
-    public class SongDetailActualRequest : WeApiActualRequestBase
+    public class SongDetailActualRequest : EApiActualRequestBase
     {
         [JsonPropertyName("c")] public required string Ids { get; set; }
     }

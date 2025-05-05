@@ -35,7 +35,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Playlist
             return req;
         }
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is null) return Task.CompletedTask;
             ActualRequest = new()

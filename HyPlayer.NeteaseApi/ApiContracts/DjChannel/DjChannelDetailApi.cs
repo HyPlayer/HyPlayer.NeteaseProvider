@@ -28,7 +28,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.DjChannel
         public override string Url { get; protected set; } = "https://music.163.com/weapi/djradio/get";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request?.Id is not null)
                 ActualRequest = new DjChannelDetailActualRequest

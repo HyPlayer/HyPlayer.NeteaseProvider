@@ -30,7 +30,7 @@ public class ApiHandlerOption
             NumberHandling = JsonNumberHandling.WriteAsString |
                              JsonNumberHandling.AllowReadingFromString,
             AllowTrailingCommas = true,
-            Converters = { new NumberToStringConverter(), new JsonBooleanConverter() }
+            Converters = { new NumberToStringConverter(), new JsonBooleanConverter(), new JsonObjectStringConverter() }
         };
 }
 

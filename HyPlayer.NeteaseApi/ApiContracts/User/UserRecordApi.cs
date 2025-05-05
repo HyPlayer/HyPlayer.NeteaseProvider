@@ -24,7 +24,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.User
         public override HttpMethod Method => HttpMethod.Post;
         public override string ApiPath { get; protected set; } = "/api/v1/play/record";
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new UserRecordActualRequest

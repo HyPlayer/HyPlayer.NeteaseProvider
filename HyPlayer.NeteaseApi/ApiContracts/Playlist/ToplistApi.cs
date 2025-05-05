@@ -26,7 +26,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Playlist
         public override string Url { get; protected set; } = "https://music.163.com/api/toplist";
         public override HttpMethod Method => HttpMethod.Get;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             return Task.CompletedTask;
         }

@@ -28,7 +28,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Login
         public override HttpMethod Method => HttpMethod.Post;
         public override string UserAgent => "pc";
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is null) return Task.CompletedTask;
             var md5Password = string.IsNullOrEmpty(Request.Md5Password)

@@ -22,7 +22,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Video
         public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/mlog/detail/v1";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new VideoDetailActualRequest

@@ -25,7 +25,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Album
         public override string ApiPath { get; protected set; } = "/api/album/v3/detail";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new AlbumActualRequest

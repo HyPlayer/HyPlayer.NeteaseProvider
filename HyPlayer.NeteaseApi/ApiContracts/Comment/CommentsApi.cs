@@ -30,7 +30,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Comment
         public override HttpMethod Method => HttpMethod.Post;
 
 
-        public override Task MapRequest()
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is null) return Task.CompletedTask;
             var threadId = $"{NeteaseUtils.CommentTypeToThreadPrefix(Request.ResourceType)}{Request.ResourceId}";

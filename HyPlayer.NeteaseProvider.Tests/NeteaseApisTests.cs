@@ -4,6 +4,7 @@ using FluentAssertions;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.ApiContracts.Album;
 using HyPlayer.NeteaseApi.ApiContracts.Artist;
+using HyPlayer.NeteaseApi.ApiContracts.Category;
 using HyPlayer.NeteaseApi.ApiContracts.Cloud;
 using HyPlayer.NeteaseApi.ApiContracts.Comment;
 using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
@@ -810,6 +811,41 @@ public class NeteaseApisTests
                 s.Code.Should().Be(200);
                 s.Data.Should().NotBeNull();
                 s.Data.Url.Should().NotBeEmpty();
+                return true;
+            },
+            e => throw e);
+    }
+    
+    
+    // Batch
+    [Test]
+    [Arguments("2033878955")]
+    public async Task Batch_Should_BeNormal(string id)
+    {
+        var detailApi = NeteaseApis.SongDetailApi;
+        detailApi.Request = new SongDetailRequest
+        {
+            Id = id
+        };
+        
+        var songUrlApi = NeteaseApis.SongUrlApi;
+        songUrlApi.Request = new SongUrlRequest
+        {
+            Id = id,
+            Level = "high"
+        };
+        
+        var result = await _provider.RequestAsync(NeteaseApis.BatchApi, new BatchRequest
+        {
+            Apis = new ()
+            {
+                [detailApi.ApiPath] = detailApi,
+                [songUrlApi.ApiPath] = songUrlApi
+            }
+        });
+        result.Match(s =>
+            {
+                s.Results.Should().NotBeNullOrEmpty();
                 return true;
             },
             e => throw e);
