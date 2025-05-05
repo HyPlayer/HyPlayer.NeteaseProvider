@@ -259,6 +259,23 @@ public class NeteaseApisTests
 
     [Test]
     [Arguments("793914432")]
+    public async Task DjChannelDetail_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.DjChannelDetailApi, new DjChannelDetailRequest()
+        {
+            Id = id
+        });
+        result.Match(s =>
+            {
+                s.Code.Should().Be(200);
+                s.RadioData?.Id.Should().Be(id);
+                return true;
+            },
+            e => throw e);
+    }
+    
+    [Test]
+    [Arguments("793914432")]
     public async Task DjChannelPrograms_Should_BeNormal(string id)
     {
         var result = await _provider.RequestAsync(NeteaseApis.DjChannelProgramsApi, new DjChannelProgramsRequest
@@ -268,7 +285,7 @@ public class NeteaseApisTests
         result.Match(s =>
             {
                 s.Code.Should().Be(200);
-                s.Programs.Should().NotBeEmpty();
+                s.Data?.Programs.Should().NotBeEmpty();
                 return true;
             },
             e => throw e);

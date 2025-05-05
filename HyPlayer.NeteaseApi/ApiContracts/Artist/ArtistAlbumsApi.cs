@@ -17,11 +17,11 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.Artist
 {
-    public class ArtistAlbumsApi : WeApiContractBase<ArtistAlbumsRequest, ArtistAlbumsResponse, ErrorResultBase,
+    public class ArtistAlbumsApi : EApiContractBase<ArtistAlbumsRequest, ArtistAlbumsResponse, ErrorResultBase,
         ArtistAlbumsActualRequest>
     {
         public override string IdentifyRoute => "/artist/albums";
-        public override string Url { get; protected set; } = "https://music.163.com/weapi/artist/albums/";
+        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/artist/albums/";
         public override HttpMethod Method => HttpMethod.Post;
 
         public override Task MapRequest(ApiHandlerOption option)
@@ -29,6 +29,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
             if (Request is not null)
             {
                 Url += Request.ArtistId;
+                ApiPath += Request.ArtistId;
                 ActualRequest = new ArtistAlbumsActualRequest
                 {
                     Limit = Request.Limit,
@@ -38,6 +39,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
 
             return Task.CompletedTask;
         }
+
+        public override string ApiPath { get; protected set; } = "/api/artist/albums/";
     }
 
     public class ArtistAlbumsRequest : RequestBase
@@ -58,7 +61,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
         public required string ArtistId { get; set; }
     }
 
-    public class ArtistAlbumsActualRequest : WeApiActualRequestBase
+    public class ArtistAlbumsActualRequest : EApiActualRequestBase
     {
         [JsonPropertyName("limit")] public int Limit { get; set; }
         [JsonPropertyName("offset")] public int Offset { get; set; }

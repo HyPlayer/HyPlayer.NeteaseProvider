@@ -13,11 +13,11 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.Album
 {
-    public class AlbumDetailDynamicApi : WeApiContractBase<AlbumDetailDynamicRequest, AlbumDetailDynamicResponse,
+    public class AlbumDetailDynamicApi : EApiContractBase<AlbumDetailDynamicRequest, AlbumDetailDynamicResponse,
         ErrorResultBase, AlbumDetailDynamicActualRequest>
     {
         public override string IdentifyRoute => "/album/detail/dynamic";
-        public override string Url { get; protected set; } = "https://music.163.com/api/album/detail/dynamic";
+        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/album/detail/dynamic";
         public override HttpMethod Method => HttpMethod.Post;
 
         public override Task MapRequest(ApiHandlerOption option)
@@ -29,6 +29,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Album
                 };
             return Task.CompletedTask;
         }
+
+        public override string ApiPath { get; protected set; } = "/api/album/detail/dynamic";
     }
 
     public class AlbumDetailDynamicRequest : RequestBase
@@ -47,7 +49,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Album
         [JsonPropertyName("subCount")] public int SubCount { get; set; }
     }
 
-    public class AlbumDetailDynamicActualRequest : WeApiActualRequestBase
+    public class AlbumDetailDynamicActualRequest : EApiActualRequestBase
     {
         [JsonPropertyName("id")] public required string Id { get; set; }
     }

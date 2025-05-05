@@ -20,12 +20,11 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 namespace HyPlayer.NeteaseApi.ApiContracts.DjChannel
 {
 
-    public class DjChannelDetailApi : WeApiContractBase<DjChannelDetailRequest, DjChannelDetailResponse, ErrorResultBase
-        ,
-        DjChannelDetailActualRequest>
+    public class DjChannelDetailApi : EApiContractBase<DjChannelDetailRequest, DjChannelDetailResponse, ErrorResultBase
+        ,DjChannelDetailActualRequest>
     {
         public override string IdentifyRoute => "/dj/detail";
-        public override string Url { get; protected set; } = "https://music.163.com/weapi/djradio/get";
+        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/djradio/v3/get";
         public override HttpMethod Method => HttpMethod.Post;
 
         public override Task MapRequest(ApiHandlerOption option)
@@ -37,6 +36,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.DjChannel
                 };
             return Task.CompletedTask;
         }
+
+        public override string ApiPath { get; protected set; } = "/api/djradio/v3/get";
     }
 
     public class DjChannelDetailRequest : RequestBase
@@ -49,10 +50,10 @@ namespace HyPlayer.NeteaseApi.ApiContracts.DjChannel
 
     public class DjChannelDetailResponse : CodedResponseBase
     {
-        [JsonPropertyName("djRadio")] public DjRadioChannelWithDjDto? RadioData { get; set; }
+        [JsonPropertyName("data")] public DjRadioChannelWithDjDto? RadioData { get; set; }
     }
 
-    public class DjChannelDetailActualRequest : WeApiActualRequestBase
+    public class DjChannelDetailActualRequest : EApiActualRequestBase
     {
         [JsonPropertyName("id")] public required string Id { get; set; }
     }
