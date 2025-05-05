@@ -15,11 +15,11 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.Album
 {
-    public class AlbumSublistApi : WeApiContractBase<AlbumSublistRequest, AlbumSublistResponse, ErrorResultBase,
+    public class AlbumSublistApi : EApiContractBase<AlbumSublistRequest, AlbumSublistResponse, ErrorResultBase,
         AlbumSublistActualRequest>
     {
         public override string IdentifyRoute => "/album/sublist";
-        public override string Url { get; protected set; } = "https://music.163.com/weapi/album/sublist";
+        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/album/sublist";
         public override HttpMethod Method => HttpMethod.Post;
 
         public override Task MapRequest(ApiHandlerOption option)
@@ -33,6 +33,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Album
 
             return Task.CompletedTask;
         }
+
+        public override string ApiPath { get; protected set; } = "/api/album/sublist";
     }
 
     public class AlbumSublistRequest : RequestBase
@@ -57,7 +59,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Album
 
 
 
-    public class AlbumSublistActualRequest : WeApiActualRequestBase
+    public class AlbumSublistActualRequest : EApiActualRequestBase
     {
         [JsonPropertyName("limit")] public int Limit { get; set; } = 25;
         [JsonPropertyName("offset")] public int Offset { get; set; }
