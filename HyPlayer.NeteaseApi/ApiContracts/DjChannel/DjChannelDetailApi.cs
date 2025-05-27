@@ -1,8 +1,8 @@
-﻿using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
+using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -21,7 +21,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.DjChannel
 {
 
     public class DjChannelDetailApi : EApiContractBase<DjChannelDetailRequest, DjChannelDetailResponse, ErrorResultBase
-        ,DjChannelDetailActualRequest>
+        , DjChannelDetailActualRequest>
     {
         public override string IdentifyRoute => "/dj/detail";
         public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/djradio/v3/get";

@@ -1,9 +1,9 @@
-using System.Collections;
 using HyPlayer.NeteaseApi.ApiContracts.Category;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Extensions.JsonSerializer;
+using System.Collections;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {

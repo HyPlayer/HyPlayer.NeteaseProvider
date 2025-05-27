@@ -1,8 +1,7 @@
-using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -45,7 +44,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 
     public class ListenTogetherEndResponse : CodedResponseBase
     {
-        
+
     }
 
     public class ListenTogetherEndActualRequest : EApiActualRequestBase

@@ -1,9 +1,9 @@
-﻿using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.ApiContracts.Video;
+using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.ApiContracts.Video;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -101,7 +101,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Video
         [JsonPropertyName("resolution")] public string Resolution { get; set; } = "480";
         [JsonPropertyName("type")] public int Type => 1;
         [JsonPropertyName("rcmdType")] public int RcmdType => 20;
-        [JsonPropertyName("songId")] public int SongId => 0; 
+        [JsonPropertyName("songId")] public int SongId => 0;
         [JsonPropertyName("firstVideo")] public int FirstVideo => 0;
         [JsonPropertyName("extInfo")] public string? ExtInfo { get; set; }
     }

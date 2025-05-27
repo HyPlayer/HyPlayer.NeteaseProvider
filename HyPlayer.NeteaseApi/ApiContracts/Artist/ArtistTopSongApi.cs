@@ -1,8 +1,8 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.ApiContracts.Artist;
+﻿using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -51,7 +51,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
 
         public override string ApiPath { get; protected set; } = "/api/v1/artist/top/song";
     }
-    
+
     public class ArtistTopSongRequest : RequestBase
     {
         /// <summary>
@@ -63,7 +63,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
         /// 排序类型 hot, time
         /// </summary>
         public ArtistSongsOrderType OrderType { get; set; } = ArtistSongsOrderType.Hot;
-        
+
         /// <summary>
         ///作品类型
         /// </summary>
@@ -79,7 +79,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
         /// </summary>
         public int Limit { get; set; } = 200;
     }
-    
+
 
     public class ArtistTopSongResponse : CodedResponseBase
     {

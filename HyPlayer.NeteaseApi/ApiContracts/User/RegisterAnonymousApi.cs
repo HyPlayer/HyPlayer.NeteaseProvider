@@ -1,17 +1,17 @@
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.ApiContracts.Category;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
 
-public static partial class NeteaseApis
-{
-    public static RegisterAnounymousApi RegisterAnounymousApi => new();
-}
+    public static partial class NeteaseApis
+    {
+        public static RegisterAnounymousApi RegisterAnounymousApi => new();
+    }
 }
 
 
@@ -32,7 +32,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Category
                 };
             return Task.CompletedTask;
         }
-        
+
         private const string ID_XOR_KEY_1 = "3go8&$8*3*3h0k(2)2";
         public static string EncodeId(string someId)
         {
@@ -59,7 +59,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Category
 
     public class RegisterAnounymousResponse : CodedResponseBase
     {
-        
+
     }
 
     public class RegisterAnounymousActualRequest : WeApiActualRequestBase

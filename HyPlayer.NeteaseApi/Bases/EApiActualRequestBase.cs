@@ -16,5 +16,5 @@ public class CacheKeyEApiActualRequest : EApiActualRequestBase
 
 public interface IFakeCheckTokenApi
 {
-    
+
 }
