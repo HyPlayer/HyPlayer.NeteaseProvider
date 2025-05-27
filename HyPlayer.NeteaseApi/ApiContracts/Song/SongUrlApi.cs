@@ -1,7 +1,7 @@
-﻿using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.ApiContracts.Song;
+using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.ApiContracts.Song;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -38,7 +38,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Song
             };
             return Task.CompletedTask;
         }
-        
+
         public override string ApiPath { get; protected set; } = "/api/song/enhance/player/url/v1";
     }
 

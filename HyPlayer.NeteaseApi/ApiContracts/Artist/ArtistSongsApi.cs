@@ -1,8 +1,8 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.ApiContracts.Artist;
+﻿using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -69,7 +69,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
         Hot,
         Time
     }
-    
+
     public enum ArtistSongsWorkType
     {
         All,
@@ -89,7 +89,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
         /// 排序类型 hot, time
         /// </summary>
         public ArtistSongsOrderType OrderType { get; set; } = ArtistSongsOrderType.Hot;
-        
+
         /// <summary>
         ///作品类型
         /// </summary>

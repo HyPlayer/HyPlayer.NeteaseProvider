@@ -1,7 +1,7 @@
-using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -32,10 +32,10 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 
     public class ListenTogetherRoomCreateRequest : RequestBase
     {
-        
+
     }
 
-    
+
     public class ListenTogetherRoomCreateResponse : CodedResponseBase
     {
         [JsonPropertyName("data")] public ListenTogetherRoomCreateResponseData? Data { get; set; }
@@ -46,7 +46,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 
             [JsonPropertyName("roomInfo")] public ListenTogetherRoomInfo? RoomInfo { get; set; }
         }
-        
+
         public class ListenTogetherRoomInfo
         {
             [JsonPropertyName("creatorId")] public string? CreatorId { get; set; }
@@ -56,12 +56,12 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
             [JsonPropertyName("roomCreateTime")] public long RoomCreateTime { get; set; }
             [JsonPropertyName("chatRoomId")] public string? ChatRoomId { get; set; }
             [JsonPropertyName("agoraChannelId")] public string? AgoraChannelId { get; set; }
-            
+
             [JsonPropertyName("roomUsers")] public List<RoomUser>? RoomUsers { get; set; }
             [JsonPropertyName("roomType")] public string? RoomType { get; set; }
             [JsonPropertyName("matchedReason")] public string? MatchedReason { get; set; }
             [JsonPropertyName("alg")] public string? Alg { get; set; }
-            
+
 
             public class RoomUser
             {

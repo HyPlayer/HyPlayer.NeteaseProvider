@@ -64,9 +64,9 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
 
         if (actualRequest is IFakeCheckTokenApi && option.BypassCheckTokenApi)
         {
-            json = json.Substring(0,json.Length - 1) + ",\"checkToken\":\"\"}";
+            json = json.Substring(0, json.Length - 1) + ",\"checkToken\":\"\"}";
         }
-        
+
         byte[] secretKey = new Random().RandomBytes(16);
         secretKey = secretKey.Select(n => (byte)base62[n % 62]).ToArray();
         var paramsData =
