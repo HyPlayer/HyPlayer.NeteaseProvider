@@ -22,7 +22,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
         public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/listen/together/heartbeat";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override async Task MapRequest(ApiHandlerOption option)
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new ListenTogetherHeartBeatActualRequest
@@ -37,6 +37,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
                     PlaylistVersion = $"[{{\"userId\":{Request.UserId},\"version\":{Request.PlaylistVersion}}}]",
                     SongId = Request.SongId
                 };
+            return Task.CompletedTask;
         }
 
         public override string ApiPath { get; protected set; } = "/api/listen/together/heartbeat";

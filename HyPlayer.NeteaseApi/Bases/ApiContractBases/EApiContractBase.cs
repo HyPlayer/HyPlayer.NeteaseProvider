@@ -149,7 +149,7 @@ public abstract class
                     buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
                 }
             }
-            catch (Exception e)
+            catch
             {
                 // ignore
             }
@@ -266,7 +266,7 @@ public abstract class
 #endif
             return ret;
         }
-        catch (Exception e)
+        catch 
         {
             return null;
         }
