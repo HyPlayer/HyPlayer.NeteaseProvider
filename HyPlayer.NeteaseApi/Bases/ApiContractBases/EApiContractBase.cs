@@ -60,18 +60,9 @@ public abstract class
             {
                 "deviceId", cookies.GetValueOrDefault("deviceId", string.Empty)
             },
-            { "appver", cookies.GetValueOrDefault("appver", "8.10.10") },
-            { "versioncode", cookies.GetValueOrDefault("versioncode", "140") },
-            { "mobilename", cookies.GetValueOrDefault("mobilename", string.Empty) },
-            {
-                "buildver",
-                cookies.GetValueOrDefault(
-                    "buildver", DateTimeOffset.Now.ToUnixTimeSeconds().ToString())
-            },
-            { "resolution", cookies.GetValueOrDefault("resolution", "1920x1080") },
+            { "appver", cookies.GetValueOrDefault("appver", "3.1.3.203419") },
             { "__csrf", csrfToken },
-            { "os", cookies.GetValueOrDefault("os", "android") },
-            { "channel", cookies.GetValueOrDefault("channel", string.Empty) },
+            { "os", cookies.GetValueOrDefault("os", "pc") },
             {
                 "requestId",
                 $"{DateTimeOffset.Now.ToUnixTimeMilliseconds()}_{Math.Floor(new Random().NextDouble() * 1000).ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')}"
