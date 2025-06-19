@@ -18,7 +18,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.User
 {
-    public class UserPlaylistApi : WeApiContractBase<UserPlaylistRequest, UserPlaylistResponse, ErrorResultBase,
+    public class UserPlaylistApi : EApiContractBase<UserPlaylistRequest, UserPlaylistResponse, ErrorResultBase,
         UserPlaylistActualRequest>
     {
         public override string IdentifyRoute => "/user/playlist";
@@ -36,6 +36,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.User
                 };
             return Task.CompletedTask;
         }
+
+        public override string ApiPath { get; protected set; } = "/api/user/playlist";
     }
 
     public class UserPlaylistRequest : RequestBase
@@ -48,7 +50,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.User
         /// <summary>
         /// 获取数目
         /// </summary>
-        public int Limit { get; set; } = 30;
+        public int Limit { get; set; } = 1000;
 
         /// <summary>
         /// 起始位置
@@ -61,11 +63,10 @@ namespace HyPlayer.NeteaseApi.ApiContracts.User
         [JsonPropertyName("playlist")] public PlaylistDto[]? Playlists { get; set; }
     }
 
-    public class UserPlaylistActualRequest : WeApiActualRequestBase
+    public class UserPlaylistActualRequest : EApiActualRequestBase
     {
         [JsonPropertyName("uid")] public string? Uid { get; set; }
-        [JsonPropertyName("limit")] public int Limit { get; set; } = 30;
+        [JsonPropertyName("limit")] public int Limit { get; set; } = 1000;
         [JsonPropertyName("offset")] public int Offset { get; set; }
-        [JsonPropertyName("includeVideo")] public bool IncludeVideo => true;
     }
 }
