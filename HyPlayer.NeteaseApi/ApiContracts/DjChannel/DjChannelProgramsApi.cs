@@ -1,8 +1,9 @@
-﻿using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
-using HyPlayer.NeteaseApi.Bases;
+﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -60,7 +61,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.DjChannel
         [JsonPropertyName("more")] public bool More { get; set; }
         [JsonPropertyName("asc")] public bool Asc { get; set; }
     }
-
+    
     public class DjChannelProgramsActualRequest : EApiActualRequestBase
     {
         [JsonPropertyName("radioId")] public required string RadioId { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
-namespace HyPlayer.NeteaseApi.Bases;
+namespace HyPlayer.NeteaseApi.Bases.RawApiContractBases;
 
 public abstract class RawApiActualRequestBase : ActualRequestBase, IDictionary<string, string>
 {

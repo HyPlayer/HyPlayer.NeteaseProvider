@@ -1,6 +1,7 @@
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Extensions;
 using System.Net;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi;
 

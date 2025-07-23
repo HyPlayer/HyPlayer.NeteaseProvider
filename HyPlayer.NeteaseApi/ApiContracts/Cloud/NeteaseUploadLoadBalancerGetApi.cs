@@ -1,7 +1,8 @@
-using HyPlayer.NeteaseApi.ApiContracts.Cloud;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.ApiContracts.Cloud;
+using HyPlayer.NeteaseApi.Bases.RawApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
