@@ -1,24 +1,24 @@
-using HyPlayer.NeteaseApi.ApiContracts.Category;
-using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.ApiContracts.Utils;
+using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
 
-    public static partial class NeteaseApis
-    {
-        public static RegisterAnounymousApi RegisterAnounymousApi => new();
-    }
+public static partial class NeteaseApis
+{
+    public static RegisterAnonymousApi RegisterAnonymousApi => new();
+}
 }
 
 
-namespace HyPlayer.NeteaseApi.ApiContracts.Category
+namespace HyPlayer.NeteaseApi.ApiContracts.Utils
 {
 
-    public class RegisterAnounymousApi : WeApiContractBase<RegisterAnounymousRequest, RegisterAnounymousResponse, ErrorResultBase, RegisterAnounymousActualRequest>
+    public class RegisterAnonymousApi : WeApiContractBase<RegisterAnonymousRequest, RegisterAnonymousResponse, ErrorResultBase, RegisterAnonymousActualRequest>
     {
         public override string IdentifyRoute => "/register/anonimous";
         public override string Url { get; protected set; } = "https://music.163.com/weapi/register/anonimous";
@@ -26,13 +26,13 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Category
         public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
-                ActualRequest = new RegisterAnounymousActualRequest()
+                ActualRequest = new RegisterAnonymousActualRequest()
                 {
                     Username = EncodeId(Request.DeviceId)
                 };
             return Task.CompletedTask;
         }
-
+        
         private const string ID_XOR_KEY_1 = "3go8&$8*3*3h0k(2)2";
         public static string EncodeId(string someId)
         {
@@ -52,17 +52,17 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Category
         }
     }
 
-    public class RegisterAnounymousRequest : RequestBase
+    public class RegisterAnonymousRequest : RequestBase
     {
         public required string DeviceId { get; set; }
     }
 
-    public class RegisterAnounymousResponse : CodedResponseBase
+    public class RegisterAnonymousResponse : CodedResponseBase
     {
-
+        
     }
 
-    public class RegisterAnounymousActualRequest : WeApiActualRequestBase
+    public class RegisterAnonymousActualRequest : WeApiActualRequestBase
     {
         [JsonPropertyName("username")] public required string Username { get; set; }
     }

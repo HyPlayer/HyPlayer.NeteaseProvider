@@ -17,7 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Text.Json" Version="9.0.3" />
+        <PackageReference Include="System.Text.Json" Version="9.0.6" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,10 +30,14 @@
       <Compile Remove="ApiContracts\CloudUploadCoverTokenAllocApi.cs" />
       <Compile Remove="ApiContracts\PlaylistCategoryListApi.cs" />
       <Compile Remove="ApiContracts\MlogDetailApi.cs" />
+      <Compile Remove="Bases\WeApiActualRequestBase.cs" />
+      <Compile Remove="Bases\LinuxApiActualRequestBase.cs" />
+      <Compile Remove="Bases\RawApiActualRequestBase.cs" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="ApiContracts\ListenTogether\Multiple\" />
+      <Folder Include="ApiContracts\Misc\" />
     </ItemGroup>
 
 

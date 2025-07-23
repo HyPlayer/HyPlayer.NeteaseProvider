@@ -1,7 +1,8 @@
-using HyPlayer.NeteaseApi.ApiContracts.Category;
+using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.ApiContracts.Utils;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
-using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -13,7 +14,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 }
 
 
-namespace HyPlayer.NeteaseApi.ApiContracts.Category
+namespace HyPlayer.NeteaseApi.ApiContracts.Utils
 {
 
     public class PasswordUrlDecodeApi : EApiContractBase<PasswordUrlDecodeRequest, PasswordUrlDecodeResponse, ErrorResultBase, PasswordUrlDecodeActualRequest>

@@ -1,20 +1,21 @@
-using HyPlayer.NeteaseApi.ApiContracts.Category;
+using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
-using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
 
-    public static partial class NeteaseApis
-    {
-        public static ListenTogetherStatusApi ListenTogetherStatusApi => new();
-    }
+public static partial class NeteaseApis
+{
+    public static ListenTogetherStatusApi ListenTogetherStatusApi => new();
+}
 }
 
 
-namespace HyPlayer.NeteaseApi.ApiContracts.Category
+namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 {
 
     public class ListenTogetherStatusApi : EApiContractBase<ListenTogetherStatusRequest, ListenTogetherStatusResponse, ErrorResultBase, ListenTogetherStatusActualRequest>

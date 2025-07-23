@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 
 namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
 

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 namespace HyPlayer.NeteaseApi.Bases;
 

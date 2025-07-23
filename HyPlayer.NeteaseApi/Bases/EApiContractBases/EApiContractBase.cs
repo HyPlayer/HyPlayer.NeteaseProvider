@@ -1,11 +1,11 @@
-﻿using HyPlayer.NeteaseApi.Extensions;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using HyPlayer.NeteaseApi.Extensions;
 
-namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
+namespace HyPlayer.NeteaseApi.Bases.EApiContractBases;
 
 public abstract class
     EApiContractBase<TRequest, TResponse, TError, TActualRequest> :
@@ -60,9 +60,18 @@ public abstract class
             {
                 "deviceId", cookies.GetValueOrDefault("deviceId", string.Empty)
             },
-            { "appver", cookies.GetValueOrDefault("appver", "3.1.3.203419") },
+            { "appver", cookies.GetValueOrDefault("appver", "8.10.10") },
+            { "versioncode", cookies.GetValueOrDefault("versioncode", "140") },
+            { "mobilename", cookies.GetValueOrDefault("mobilename", string.Empty) },
+            {
+                "buildver",
+                cookies.GetValueOrDefault(
+                    "buildver", DateTimeOffset.Now.ToUnixTimeSeconds().ToString())
+            },
+            { "resolution", cookies.GetValueOrDefault("resolution", "1920x1080") },
             { "__csrf", csrfToken },
-            { "os", cookies.GetValueOrDefault("os", "pc") },
+            { "os", cookies.GetValueOrDefault("os", "android") },
+            { "channel", cookies.GetValueOrDefault("channel", string.Empty) },
             {
                 "requestId",
                 $"{DateTimeOffset.Now.ToUnixTimeMilliseconds()}_{Math.Floor(new Random().NextDouble() * 1000).ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')}"
@@ -125,7 +134,7 @@ public abstract class
         if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
         var forceDecrypt = false;
         Exception? cachedException = null;
-    decryptApi:
+        decryptApi:
         try
         {
             try
@@ -140,7 +149,7 @@ public abstract class
                     buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
                 }
             }
-            catch
+            catch (Exception e)
             {
                 // ignore
             }
@@ -150,7 +159,7 @@ public abstract class
             {
                 var result = Encoding.UTF8.GetString(buffer);
                 var ret = GetResponseModel<TResponseModel>(result, option);
-
+                
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 if (ret is null)
                 {
@@ -163,7 +172,7 @@ public abstract class
                         goto decryptApi;
                     }
                 }
-
+                
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
                     return Results<TResponseModel, ErrorResultBase>
                         .CreateError(new ErrorResultBase(codedResponseBase.Code,
@@ -217,7 +226,7 @@ public abstract class
     {
         return GetRequestJson(ActualRequest!, option);
     }
-
+    
 
     public string GetRequestJson<TActualRequestMessageModel>(TActualRequestMessageModel actualRequest, ApiHandlerOption option)
     {
@@ -257,7 +266,7 @@ public abstract class
 #endif
             return ret;
         }
-        catch 
+        catch (Exception e)
         {
             return null;
         }

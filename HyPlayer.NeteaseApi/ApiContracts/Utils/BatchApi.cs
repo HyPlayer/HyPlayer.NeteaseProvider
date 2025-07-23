@@ -1,6 +1,7 @@
-using HyPlayer.NeteaseApi.ApiContracts.Category;
+using HyPlayer.NeteaseApi.ApiContracts.Utils;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Extensions.JsonSerializer;
 using System.Collections;
@@ -14,7 +15,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 }
 
 
-namespace HyPlayer.NeteaseApi.ApiContracts.Category
+namespace HyPlayer.NeteaseApi.ApiContracts.Utils
 {
     public class BatchApi : EApiContractBase<BatchRequest, BatchResponse, ErrorResultBase, BatchActualRequest>
     {
