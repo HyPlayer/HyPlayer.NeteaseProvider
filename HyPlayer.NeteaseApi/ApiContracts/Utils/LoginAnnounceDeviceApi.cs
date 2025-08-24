@@ -1,17 +1,16 @@
-using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.ApiContracts.Utils;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
 
-public static partial class NeteaseApis
-{
-    public static LoginAnnounceDeviceApi LoginAnnounceDeviceApi => new();
-}
+    public static partial class NeteaseApis
+    {
+        public static LoginAnnounceDeviceApi LoginAnnounceDeviceApi => new();
+    }
 }
 
 
@@ -33,7 +32,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Utils
             option.Cookies["deviceType"] = Request.DeviceType;
             return Task.CompletedTask;
         }
-        
+
         public override string ApiPath { get; protected set; } = "/api/login/anon/device";
     }
 
@@ -48,7 +47,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Utils
         public string OS { get; set; } = "andrcar";
         public string Channel { get; set; } = "release";
         public string DeviceType { get; set; } = "andrcar";
-        
+
     }
 
     public class LoginAnnounceDeviceResponse : CodedResponseBase
@@ -62,6 +61,6 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Utils
 
     public class LoginAnnounceDeviceActualRequest : EApiActualRequestBase
     {
-        
+
     }
 }

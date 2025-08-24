@@ -1,8 +1,7 @@
-using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -44,13 +43,13 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
     public class ListenTogetherSyncListGetResponse : CodedResponseBase
     {
         [JsonPropertyName("data")] public ListenTogetherSyncListGetResponseData? Data { get; set; }
-        
+
         public class ListenTogetherSyncListGetResponseData
         {
             [JsonPropertyName("playlist")] public ListenTogetherSyncListGetResponsePlaylist? Playlist { get; set; }
             [JsonPropertyName("playCommand")] public ListenTogetherSyncListGetResponsePlayCommand? PlayCommand { get; set; }
-            
-            
+
+
             public class ListenTogetherSyncListGetResponsePlaylist
             {
                 [JsonPropertyName("displayList")] public ListenTogetherSyncListGetResponseListInfo? DisplayList { get; set; }
@@ -59,7 +58,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
                 [JsonPropertyName("replace")] public bool Replace { get; set; }
                 [JsonPropertyName("version")] public ListenTogetherSyncListGetResponseVersion[]? Version { get; set; }
             }
-            
+
             public class ListenTogetherSyncListGetResponseListInfo
             {
                 [JsonPropertyName("changed")] public required bool Changed { get; set; }
@@ -89,8 +88,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
                 [JsonPropertyName("anotherOuterId")] public string? AnotherOuterId { get; set; }
             }
         }
-        
-        
+
+
     }
 
     public class ListenTogetherSyncListGetActualRequest : EApiActualRequestBase

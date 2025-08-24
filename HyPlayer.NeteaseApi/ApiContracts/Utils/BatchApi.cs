@@ -1,6 +1,5 @@
 using HyPlayer.NeteaseApi.ApiContracts.Utils;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Extensions.JsonSerializer;
@@ -51,10 +50,10 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Utils
                 {
                     if (kvp.Key == "code")
                     {
-                        if (kvp.Value.Value != "200")
+                        if (kvp.Value?.Value != "200")
                         {
                             return Results<BatchResponse, ErrorResultBase>.CreateError(
-                                new ErrorResultBase(int.Parse(kvp.Value.Value ?? "500"), "返回值不为 200"));
+                                new ErrorResultBase(int.Parse(kvp.Value?.Value ?? "500"), "返回值不为 200"));
                         }
                         continue;
                     }

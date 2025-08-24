@@ -1,5 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+﻿using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.Bases;
 

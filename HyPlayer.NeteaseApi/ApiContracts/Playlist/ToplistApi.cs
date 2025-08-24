@@ -1,9 +1,8 @@
-﻿using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+﻿using HyPlayer.NeteaseApi.ApiContracts.Playlist;
+using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Bases.RawApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json.Serialization;
-using HyPlayer.NeteaseApi.ApiContracts.Playlist;
-using HyPlayer.NeteaseApi.Bases.RawApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {

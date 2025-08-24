@@ -1,6 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts.Album;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json.Serialization;

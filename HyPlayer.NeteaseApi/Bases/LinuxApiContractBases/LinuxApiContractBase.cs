@@ -1,8 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿using HyPlayer.NeteaseApi.Extensions;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using HyPlayer.NeteaseApi.Extensions;
 
 namespace HyPlayer.NeteaseApi.Bases.LinuxApiContractBases;
 

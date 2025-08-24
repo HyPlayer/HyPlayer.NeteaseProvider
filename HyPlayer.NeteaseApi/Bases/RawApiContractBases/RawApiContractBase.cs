@@ -1,6 +1,6 @@
-﻿using System.Text;
+﻿using HyPlayer.NeteaseApi.Extensions;
+using System.Text;
 using System.Text.Json;
-using HyPlayer.NeteaseApi.Extensions;
 
 namespace HyPlayer.NeteaseApi.Bases.RawApiContractBases;
 

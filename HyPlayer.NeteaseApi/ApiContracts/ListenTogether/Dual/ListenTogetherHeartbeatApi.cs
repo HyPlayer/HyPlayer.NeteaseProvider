@@ -1,16 +1,15 @@
-using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
 
-public static partial class NeteaseApis
-{
-    public static ListenTogetherHeartBeatApi ListenTogetherHeartBeatApi => new();
-}
+    public static partial class NeteaseApis
+    {
+        public static ListenTogetherHeartBeatApi ListenTogetherHeartBeatApi => new();
+    }
 }
 
 
@@ -23,7 +22,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
         public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/listen/together/heartbeat";
         public override HttpMethod Method => HttpMethod.Post;
 
-        public override async Task MapRequest(ApiHandlerOption option)
+        public override Task MapRequest(ApiHandlerOption option)
         {
             if (Request is not null)
                 ActualRequest = new ListenTogetherHeartBeatActualRequest
@@ -38,11 +37,12 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
                     PlaylistVersion = $"[{{\"userId\":{Request.UserId},\"version\":{Request.PlaylistVersion}}}]",
                     SongId = Request.SongId
                 };
+            return Task.CompletedTask;
         }
 
         public override string ApiPath { get; protected set; } = "/api/listen/together/heartbeat";
     }
-    
+
     public class ListenTogetherHeartBeatRequest : RequestBase
     {
         public required ListenTogetherPlayStatus PlayStatus { get; set; }
@@ -51,7 +51,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
         public required int PlaylistVersion { get; set; }
         public required string UserId { get; set; }
         public required string SongId { get; set; }
-        
+
         public enum ListenTogetherPlayStatus
         {
             Play,
