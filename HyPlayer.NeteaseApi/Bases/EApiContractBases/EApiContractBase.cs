@@ -1,9 +1,9 @@
-﻿using System.Globalization;
+﻿using HyPlayer.NeteaseApi.Extensions;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using HyPlayer.NeteaseApi.Extensions;
 
 namespace HyPlayer.NeteaseApi.Bases.EApiContractBases;
 
@@ -134,7 +134,7 @@ public abstract class
         if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");
         var forceDecrypt = false;
         Exception? cachedException = null;
-        decryptApi:
+    decryptApi:
         try
         {
             try
@@ -149,7 +149,7 @@ public abstract class
                     buffer = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
                 }
             }
-            catch (Exception e)
+            catch
             {
                 // ignore
             }
@@ -159,7 +159,7 @@ public abstract class
             {
                 var result = Encoding.UTF8.GetString(buffer);
                 var ret = GetResponseModel<TResponseModel>(result, option);
-                
+
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 if (ret is null)
                 {
@@ -172,7 +172,7 @@ public abstract class
                         goto decryptApi;
                     }
                 }
-                
+
                 if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
                     return Results<TResponseModel, ErrorResultBase>
                         .CreateError(new ErrorResultBase(codedResponseBase.Code,
@@ -226,7 +226,7 @@ public abstract class
     {
         return GetRequestJson(ActualRequest!, option);
     }
-    
+
 
     public string GetRequestJson<TActualRequestMessageModel>(TActualRequestMessageModel actualRequest, ApiHandlerOption option)
     {
@@ -266,7 +266,7 @@ public abstract class
 #endif
             return ret;
         }
-        catch (Exception e)
+        catch
         {
             return null;
         }

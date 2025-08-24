@@ -1,9 +1,8 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -33,38 +32,38 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
                 var playlistParam =
                     new ListenTogetherSyncListReportActualRequest.
                         ListenTogetherSyncListReportActualRequestPlaylistParam()
+                    {
+                        AnchorPosition = Request.AnchorPosition,
+                        AnchorSongId = Request.AnchorSongId,
+                        ClientSeq = Request.ClientSeq,
+                        CommandType = Request.CommandType switch
                         {
-                            AnchorPosition = Request.AnchorPosition,
-                            AnchorSongId = Request.AnchorSongId,
-                            ClientSeq = Request.ClientSeq,
-                            CommandType = Request.CommandType switch
-                            {
-                                ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportCommandType.Replace =>
-                                    "REPLACE",
-                                ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportCommandType.PlayModeChange =>
-                                    "PLAYMODE_CHANGE",
-                                _ => throw new ArgumentOutOfRangeException()
-                            },
-                            DisplayList = Request.DisplaySongList,
-                            RandomList = Request.RandomSongList,
-                            PlayMode = Request.PlayMode switch
-                            {
-                                ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.OrderLoop =>
-                                    "ORDER_LOOP",
-                                ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.Random =>
-                                    "RANDOM",
-                                ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.SingleLoop =>
-                                    "SINGLE_LOOP",
-                                _ => throw new ArgumentOutOfRangeException()
-                            },
-                            Version = [
+                            ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportCommandType.Replace =>
+                                "REPLACE",
+                            ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportCommandType.PlayModeChange =>
+                                "PLAYMODE_CHANGE",
+                            _ => throw new ArgumentOutOfRangeException()
+                        },
+                        DisplayList = Request.DisplaySongList,
+                        RandomList = Request.RandomSongList,
+                        PlayMode = Request.PlayMode switch
+                        {
+                            ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.OrderLoop =>
+                                "ORDER_LOOP",
+                            ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.Random =>
+                                "RANDOM",
+                            ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.SingleLoop =>
+                                "SINGLE_LOOP",
+                            _ => throw new ArgumentOutOfRangeException()
+                        },
+                        Version = [
                                 new ListenTogetherSyncListReportActualRequest.ListenTogetherSyncListReportActualRequestPlaylistParam.ListenTogetherSyncListReportActualRequestVersion()
                                 {
                                     UserId = long.Parse(Request.UserId),
                                     Version = Request.ClientSeq
                                 }
                             ]
-                        };
+                    };
                 var playlistParamJson = JsonSerializer.Serialize(playlistParam, new JsonSerializerOptions(JsonSerializerDefaults.Web)
                 {
                     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull

@@ -36,14 +36,14 @@ public class NeteaseUtils
         var result = encryptor.TransformFinalBlock(buffer, 0, buffer.Length);
         return Convert.ToBase64String(result);
     }
-    
+
     public static string GetDeviceId(string? imei = null, string? mac = null, string? androidId = null, string? localId = null)
     {
         if (string.IsNullOrEmpty(imei)) imei = "null";
         if (string.IsNullOrEmpty(mac)) imei = "02:00:00:00:00:00";
-        if (string.IsNullOrEmpty(androidId)) androidId = Guid.NewGuid().ToString("N").Substring(0,16);
+        if (string.IsNullOrEmpty(androidId)) androidId = Guid.NewGuid().ToString("N").Substring(0, 16);
         if (string.IsNullOrEmpty(localId)) localId = "null";
-        
+
         var input = $"{imei}\t{mac}\t{androidId}\t{localId}";
         var bytes = Encoding.UTF8.GetBytes(input);
         var base64 = Convert.ToBase64String(bytes);

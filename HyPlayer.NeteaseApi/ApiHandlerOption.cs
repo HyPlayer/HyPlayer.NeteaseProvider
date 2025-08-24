@@ -57,7 +57,7 @@ public class AdditionalParameters
         public string? AppSecret { get; set; }
         public string? RsaPrivateKey { get; set; }
         public DeviceInfoData? DeviceInfo { get; set; }
-        
+
         public class DeviceInfoData
         {
             public string? Channel { get; set; }

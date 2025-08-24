@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+﻿using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Collections;
 
 namespace HyPlayer.NeteaseApi.Bases.RawApiContractBases;
 
