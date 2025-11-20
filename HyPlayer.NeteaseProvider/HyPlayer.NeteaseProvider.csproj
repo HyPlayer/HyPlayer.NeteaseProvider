@@ -19,7 +19,7 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Depository.Abstraction" Version="3.2.0" />
+        <PackageReference Include="Depository.Abstraction" Version="3.2.2" />
         <PackageReference Include="HyPlayer.PlayCore.Abstraction" Version="0.1.4" />
 
 
