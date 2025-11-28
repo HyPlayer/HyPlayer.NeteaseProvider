@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Phono (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Phono (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
