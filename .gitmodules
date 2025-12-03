@@ -1,0 +1,6 @@
+[submodule "refs/HyPlayer.PlayCore"]
+	path = refs/HyPlayer.PlayCore
+	url = https://github.com/HyPlayer/HyPlayer.PlayCore.git
+[submodule "refs/HyPlayer.NeteaseProvider"]
+	path = refs/HyPlayer.NeteaseProvider
+	url = https://github.com/HyPlayer/HyPlayer.NeteaseProvider.git
