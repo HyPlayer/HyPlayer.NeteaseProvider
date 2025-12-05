@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
+using Phono.Views.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,6 +49,16 @@ namespace Phono
             if (playCore != null)
             {
                 await playCore.RegisterMusicProviderAsync(typeof(NeteaseProvider));
+            }
+
+            var rootFrame = MainWindow.Current.Content as Frame;
+            if (rootFrame is null)
+            {
+                rootFrame = new Frame();
+                MainWindow.Current.Content = rootFrame;
+#if DEBUG
+                rootFrame.Navigate(typeof(TestPage), args.Arguments);
+#endif
             }
 
            MainWindow.Current.Activate();
