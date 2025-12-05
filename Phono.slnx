@@ -12,7 +12,9 @@
     <Project Path="refs/HyPlayer.PlayCore/HyPlayer.PlayCore/HyPlayer.PlayCore.csproj" />
   </Folder>
   <Folder Name="/解决方案项/">
+    <File Path=".gitattributes" />
     <File Path=".gitignore" />
+    <File Path=".gitmodules" />
   </Folder>
   <Project Path="sources/Phono/Phono.csproj">
     <Platform Solution="*|ARM64" Project="ARM64" />

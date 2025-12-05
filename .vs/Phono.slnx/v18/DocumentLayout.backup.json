@@ -3,12 +3,64 @@
   "WorkspaceRootPath": "C:\\Users\\zhh13\\source\\repos\\Phono\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\views\\settings\\testpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\views\\settings\\testpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\phono.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\phono.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\license.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\license.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCE85972-C601-3E31-0F23-6F886044FA5A}|\u89E3\u51B3\u65B9\u6848\u9879{FCE85972-C601-3E31-0F23-6F886044FA5A}|C:\\Users\\zhh13\\source\\repos\\Phono\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{FCE85972-C601-3E31-0F23-6F886044FA5A}|\u89E3\u51B3\u65B9\u6848\u9879{FCE85972-C601-3E31-0F23-6F886044FA5A}|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\helpers\\windowhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\helpers\\windowhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|c:\\users\\zhh13\\source\\repos\\phono\\refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\audiographservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|solutionrelative:refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\audiographservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|c:\\users\\zhh13\\source\\repos\\phono\\refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\notifications\\audiographticketreachesendnotification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|solutionrelative:refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\notifications\\audiographticketreachesendnotification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|c:\\users\\zhh13\\source\\repos\\phono\\refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\notifications\\audiographplaybackpositionchangednotification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|solutionrelative:refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\notifications\\audiographplaybackpositionchangednotification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|c:\\users\\zhh13\\source\\repos\\phono\\refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\notifications\\audiographmasterticketchangednotification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|solutionrelative:refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\notifications\\audiographmasterticketchangednotification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|c:\\users\\zhh13\\source\\repos\\phono\\refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\audiographservicesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|solutionrelative:refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\audiographservicesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|c:\\users\\zhh13\\source\\repos\\phono\\refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\audiographoutputdevice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|solutionrelative:refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\abstractions\\audiographoutputdevice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\locator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\locator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|c:\\users\\zhh13\\source\\repos\\phono\\refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\hyplayer.playcore.implementation.audiographservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{B1A094F7-71F4-7F3C-D17B-FCB51BB145AD}|refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj|solutionrelative:refs\\hyplayer.playcore\\hyplayer.playcore.implementation.audiograph\\hyplayer.playcore.implementation.audiographservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DDDED9D9-309E-CE0C-F93F-A891381D03E6}|refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseApi\\HyPlayer.NeteaseApi.csproj|c:\\users\\zhh13\\source\\repos\\phono\\refs\\hyplayer.neteaseprovider\\hyplayer.neteaseapi\\hyplayer.neteaseapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
@@ -57,10 +109,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\contracts\\viewmodels\\iconnectedviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\contracts\\viewmodels\\iconnectedviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|c:\\users\\zhh13\\source\\repos\\phono\\sources\\phono\\phono.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{29BEBDF7-EDBE-5B34-3CF6-0E9436984CEB}|sources\\Phono\\Phono.csproj|solutionrelative:sources\\phono\\phono.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,7 +118,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 194,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -94,47 +142,169 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "HyPlayer.PlayCore.Abstraction",
-              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Abstraction\\HyPlayer.PlayCore.Abstraction.csproj",
-              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Abstraction\\HyPlayer.PlayCore.Abstraction.csproj",
-              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Abstraction\\HyPlayer.PlayCore.Abstraction.csproj",
-              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Abstraction\\HyPlayer.PlayCore.Abstraction.csproj",
+              "DocumentIndex": 0,
+              "Title": "TestPage.xaml",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Views\\Settings\\TestPage.xaml",
+              "RelativeDocumentMoniker": "sources\\Phono\\Views\\Settings\\TestPage.xaml",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Views\\Settings\\TestPage.xaml",
+              "RelativeToolTip": "sources\\Phono\\Views\\Settings\\TestPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-12-03T09:12:17.291Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "HyPlayer.PlayCore",
-              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore\\HyPlayer.PlayCore.csproj",
-              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore\\HyPlayer.PlayCore.csproj",
-              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore\\HyPlayer.PlayCore.csproj",
-              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore\\HyPlayer.PlayCore.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-12-03T09:12:15.882Z",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-05T05:38:38.005Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "HyPlayer.NeteaseProvider",
-              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider.csproj",
-              "RelativeDocumentMoniker": "refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider.csproj",
-              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider.csproj",
-              "RelativeToolTip": "refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider.csproj",
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\.gitignore",
+              "RelativeToolTip": ".gitignore",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-12-03T09:12:13.009Z",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-03T09:58:36.427Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "HyPlayer.NeteaseApi",
+              "Title": "LICENSE.txt",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\LICENSE.txt",
+              "RelativeDocumentMoniker": "sources\\Phono\\LICENSE.txt",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\LICENSE.txt",
+              "RelativeToolTip": "sources\\Phono\\LICENSE.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-12-03T09:55:44.845Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AudioGraphService.cs",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\AudioGraphService.cs",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\AudioGraphService.cs",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\AudioGraphService.cs",
+              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\AudioGraphService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACQAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T09:54:54.551Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AudioGraphTicketReachesEndNotification.cs",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphTicketReachesEndNotification.cs",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphTicketReachesEndNotification.cs",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphTicketReachesEndNotification.cs",
+              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphTicketReachesEndNotification.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T09:55:30.416Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AudioGraphPlaybackPositionChangedNotification.cs",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphPlaybackPositionChangedNotification.cs",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphPlaybackPositionChangedNotification.cs",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphPlaybackPositionChangedNotification.cs",
+              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphPlaybackPositionChangedNotification.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T09:55:29.425Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AudioGraphMasterTicketChangedNotification.cs",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphMasterTicketChangedNotification.cs",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphMasterTicketChangedNotification.cs",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphMasterTicketChangedNotification.cs",
+              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\Notifications\\AudioGraphMasterTicketChangedNotification.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T09:55:28.471Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Phono.csproj",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Phono.csproj",
+              "RelativeDocumentMoniker": "sources\\Phono\\Phono.csproj",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Phono.csproj*",
+              "RelativeToolTip": "sources\\Phono\\Phono.csproj*",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAB4AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-11-29T08:51:15.773Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WindowHelper.cs",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Helpers\\WindowHelper.cs",
+              "RelativeDocumentMoniker": "sources\\Phono\\Helpers\\WindowHelper.cs",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Helpers\\WindowHelper.cs",
+              "RelativeToolTip": "sources\\Phono\\Helpers\\WindowHelper.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAIwCwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T09:20:04.423Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AudioGraphServiceSettings.cs",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\AudioGraphServiceSettings.cs",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\AudioGraphServiceSettings.cs",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\AudioGraphServiceSettings.cs",
+              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\AudioGraphServiceSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T09:55:23.829Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AudioGraphOutputDevice.cs",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\AudioGraphOutputDevice.cs",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\AudioGraphOutputDevice.cs",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\AudioGraphOutputDevice.cs",
+              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\Abstractions\\AudioGraphOutputDevice.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T09:55:22.67Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "HyPlayer.PlayCore.Implementation.AudioGraphService.csproj",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj",
+              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Implementation.AudioGraph\\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-03T09:36:15.483Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "sources\\Phono\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\MainWindow.xaml.cs",
+              "RelativeToolTip": "sources\\Phono\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T09:17:06.929Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "HyPlayer.NeteaseApi.csproj",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseApi\\HyPlayer.NeteaseApi.csproj",
               "RelativeDocumentMoniker": "refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseApi\\HyPlayer.NeteaseApi.csproj",
               "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseApi\\HyPlayer.NeteaseApi.csproj",
@@ -146,33 +316,70 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 12,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\App.xaml.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\App.xaml.cs",
-              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\App.xaml.cs*",
-              "RelativeToolTip": "sources\\Phono\\App.xaml.cs*",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAAADUAAAAfAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\App.xaml.cs",
+              "RelativeToolTip": "sources\\Phono\\App.xaml.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAADQAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T09:06:21.514Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-03T09:06:21.514Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 11,
               "Title": "Locator.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Locator.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\Locator.cs",
               "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Locator.cs",
               "RelativeToolTip": "sources\\Phono\\Locator.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABgAAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T08:52:49.22Z",
+              "WhenOpened": "2025-11-29T08:52:49.22Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "HyPlayer.NeteaseProvider.csproj",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider.csproj",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider.csproj",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider.csproj",
+              "RelativeToolTip": "refs\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider\\HyPlayer.NeteaseProvider.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-03T09:12:13.009Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 18,
+              "Title": "HyPlayer.PlayCore.csproj",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore\\HyPlayer.PlayCore.csproj",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore\\HyPlayer.PlayCore.csproj",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore\\HyPlayer.PlayCore.csproj",
+              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore\\HyPlayer.PlayCore.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-03T09:12:15.882Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "HyPlayer.PlayCore.Abstraction.csproj",
+              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Abstraction\\HyPlayer.PlayCore.Abstraction.csproj",
+              "RelativeDocumentMoniker": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Abstraction\\HyPlayer.PlayCore.Abstraction.csproj",
+              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Abstraction\\HyPlayer.PlayCore.Abstraction.csproj",
+              "RelativeToolTip": "refs\\HyPlayer.PlayCore\\HyPlayer.PlayCore.Abstraction\\HyPlayer.PlayCore.Abstraction.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-03T09:12:17.291Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
               "Title": "DIAddExtensions.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Extensions\\DependencyInjectionExtensions\\DIAddExtensions.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\Extensions\\DependencyInjectionExtensions\\DIAddExtensions.cs",
@@ -180,12 +387,11 @@
               "RelativeToolTip": "sources\\Phono\\Extensions\\DependencyInjectionExtensions\\DIAddExtensions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T10:04:02.557Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-29T10:04:02.557Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 23,
               "Title": "IViewModel.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Contracts\\ViewModels\\IViewModel.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\Contracts\\ViewModels\\IViewModel.cs",
@@ -193,12 +399,11 @@
               "RelativeToolTip": "sources\\Phono\\Contracts\\ViewModels\\IViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T10:09:30.428Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-29T10:09:30.428Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 22,
               "Title": "ITransientViewModel.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Contracts\\ViewModels\\ITransientViewModel.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\Contracts\\ViewModels\\ITransientViewModel.cs",
@@ -206,12 +411,11 @@
               "RelativeToolTip": "sources\\Phono\\Contracts\\ViewModels\\ITransientViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T10:09:22.663Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-29T10:09:22.663Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 19,
               "Title": "IScopedViewModel.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Contracts\\ViewModels\\IScopedViewModel.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\Contracts\\ViewModels\\IScopedViewModel.cs",
@@ -219,12 +423,11 @@
               "RelativeToolTip": "sources\\Phono\\Contracts\\ViewModels\\IScopedViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T10:09:01.243Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-29T10:09:01.243Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 25,
               "Title": "MvvmExtensions.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Extensions\\DependencyInjectionExtensions\\MvvmExtensions.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\Extensions\\DependencyInjectionExtensions\\MvvmExtensions.cs",
@@ -232,12 +435,11 @@
               "RelativeToolTip": "sources\\Phono\\Extensions\\DependencyInjectionExtensions\\MvvmExtensions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T10:04:20.645Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-29T10:04:20.645Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 21,
               "Title": "ISingletonViewModel.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Contracts\\ViewModels\\ISingletonViewModel.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\Contracts\\ViewModels\\ISingletonViewModel.cs",
@@ -245,12 +447,11 @@
               "RelativeToolTip": "sources\\Phono\\Contracts\\ViewModels\\ISingletonViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T10:09:17.461Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-29T10:09:17.461Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 20,
               "Title": "IScrollableViewModel.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Contracts\\ViewModels\\IScrollableViewModel.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\Contracts\\ViewModels\\IScrollableViewModel.cs",
@@ -258,12 +459,11 @@
               "RelativeToolTip": "sources\\Phono\\Contracts\\ViewModels\\IScrollableViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T10:09:07.67Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-29T10:09:07.67Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 26,
               "Title": "IConnectedViewModel.cs",
               "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Contracts\\ViewModels\\IConnectedViewModel.cs",
               "RelativeDocumentMoniker": "sources\\Phono\\Contracts\\ViewModels\\IConnectedViewModel.cs",
@@ -271,21 +471,7 @@
               "RelativeToolTip": "sources\\Phono\\Contracts\\ViewModels\\IConnectedViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T10:05:27.575Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Phono.csproj",
-              "DocumentMoniker": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Phono.csproj",
-              "RelativeDocumentMoniker": "sources\\Phono\\Phono.csproj",
-              "ToolTip": "C:\\Users\\zhh13\\source\\repos\\Phono\\sources\\Phono\\Phono.csproj",
-              "RelativeToolTip": "sources\\Phono\\Phono.csproj",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAABsAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-11-29T08:51:15.773Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-29T10:05:27.575Z"
             }
           ]
         }
