@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -28,9 +29,20 @@ namespace Phono
         public MainWindow()
         {
             InitializeComponent();
-            WindowHelper.TrackWindow(this);
+            EnsureWindow();
         }
 
+
+        private void EnsureWindow()
+        {
+            WindowHelper.TrackWindow(this);
+            var appWindow = this.AppWindow;
+            if (appWindow != null)
+            {
+                appWindow.Title = "Phono";// TO-DO : Localize
+                this.ExtendsContentIntoTitleBar = true;
+            }
+        }
         
     }
 }

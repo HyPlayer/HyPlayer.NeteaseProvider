@@ -66,7 +66,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\" />
+    <Folder Include="Controls\PlayBar\" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\App\ShellPage.xaml">
