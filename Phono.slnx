@@ -5,6 +5,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/refs/">
+    <Project Path="Phono.LocalMusicProvider/Phono.LocalMusicProvider.csproj" Id="abd52b1f-4ca5-4dbd-bf5b-19b4f752fdf5" />
     <Project Path="refs/HyPlayer.NeteaseProvider/HyPlayer.NeteaseApi/HyPlayer.NeteaseApi.csproj" />
     <Project Path="refs/HyPlayer.NeteaseProvider/HyPlayer.NeteaseProvider/HyPlayer.NeteaseProvider.csproj" />
     <Project Path="refs/HyPlayer.PlayCore/HyPlayer.PlayCore.Abstraction/HyPlayer.PlayCore.Abstraction.csproj" />
