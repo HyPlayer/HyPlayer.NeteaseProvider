@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Phono.Contracts.Views;
+using Phono.ViewModels.AudioPlay;
+
 
 namespace Phono.Controls.Base
 {
-    public partial class PlayBarBase
+    public partial class PlayBarBase : ControlBase<PlayBarViewModel>
     {
+        public PlayBarBase() 
+        {
+        
+        }
     }
 }

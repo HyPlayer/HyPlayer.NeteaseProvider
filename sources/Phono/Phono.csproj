@@ -14,6 +14,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Controls\PlayBar\PlayBarView.xaml" />
     <None Remove="Views\App\RootPage.xaml" />
     <None Remove="Views\App\ShellPage.xaml" />
     <None Remove="Views\Settings\TestPage.xaml" />
@@ -66,7 +67,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\PlayBar\" />
+    <Page Update="Controls\PlayBar\PlayBarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\App\ShellPage.xaml">

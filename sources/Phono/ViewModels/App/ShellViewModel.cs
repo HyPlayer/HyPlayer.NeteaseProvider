@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Phono.Contracts.ViewModels;
+
 
 namespace Phono.ViewModels.App
 {
-    internal class ShellViewModel
+    public partial class ShellViewModel :
+        ObservableRecipient, IViewModel, ISingletonViewModel
     {
+        public ShellViewModel()
+        {
+        }
     }
 }

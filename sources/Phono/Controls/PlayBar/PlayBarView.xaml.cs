@@ -5,7 +5,6 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Phono.Views.Base;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,15 +13,14 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
+// To learn more about WinUI, the WinUI project structure,
+// and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Phono.Views.App
+namespace Phono.Controls.PlayBar
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class ShellPage : ShellPageBase
+    public sealed partial class PlayBarView : Base.PlayBarBase
     {
-        public ShellPage()
+        public PlayBarView()
         {
             InitializeComponent();
         }
