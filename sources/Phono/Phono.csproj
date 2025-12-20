@@ -15,6 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Controls\PlayBar\PlayBarView.xaml" />
+    <None Remove="Resources\Styles\ToggleButton.xaml" />
     <None Remove="Views\App\RootPage.xaml" />
     <None Remove="Views\App\ShellPage.xaml" />
     <None Remove="Views\Settings\TestPage.xaml" />
@@ -78,6 +79,11 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\App\RootPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Resources\Styles\ToggleButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

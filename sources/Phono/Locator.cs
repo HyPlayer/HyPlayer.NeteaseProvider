@@ -22,6 +22,7 @@ namespace Phono
 
             depository?.AddSingleton<PlayCoreBase, Chopin>();
             depository?.AddSingleton<IActivationService, ActivationService>();
+            depository?.AddSingleton<INavigationService, NavigationService>();
             depository?.AddSingleton<IPageService, PageService>();
 
             depository?.AddMvvm();

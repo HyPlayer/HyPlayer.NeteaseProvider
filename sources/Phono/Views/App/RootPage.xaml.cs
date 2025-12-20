@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.UI.Windowing;
 using Phono.Views.Base;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,17 @@ namespace Phono.Views.App
         public RootPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            var appWindow = MainWindow.Current.AppWindow;
+            var titleBar = appWindow.TitleBar;
+            titleBar.IconShowOptions = IconShowOptions.HideIconAndSystemMenu;
+            titleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
+            titleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
         }
     }
 }

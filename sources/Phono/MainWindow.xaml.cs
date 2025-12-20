@@ -26,6 +26,8 @@ namespace Phono
         public static new MainWindow Current => _current ??= new MainWindow();
         private static MainWindow _current;
 
+        public Frame RootFrame => this.rootFrame;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,7 +38,7 @@ namespace Phono
         private void EnsureWindow()
         {
             WindowHelper.TrackWindow(this);
-            var appWindow = this.AppWindow;
+            var appWindow = AppWindow;
             if (appWindow != null)
             {
                 appWindow.Title = "Phono";// TO-DO : Localize

@@ -22,10 +22,20 @@ namespace Phono.Services.App
 
         public void RegisterForFrame(Frame targetFrame, TargetFrameOption option)
         {
-            var frame = getTargetFrame(option);
-            frame.NavigationFailed += OnNavigationFailed;
-            frame.Navigated += OnNavigated;
-            frame = targetFrame;
+            switch (option) 
+            {
+                case 0:
+                    _rootFrame = targetFrame;
+                    break;
+                case TargetFrameOption.ShellFrame:
+                    _shellFrame = targetFrame;
+                    break;
+                case TargetFrameOption.SideFrame:
+                    _sideFrame = targetFrame;
+                    break;
+            };
+            targetFrame.NavigationFailed += OnNavigationFailed;
+            targetFrame.Navigated += OnNavigated;
         }
 
         private void OnNavigated(object sender, NavigationEventArgs e)
@@ -40,10 +50,25 @@ namespace Phono.Services.App
 
         public void UnregisterForFrame(TargetFrameOption option)
         {
-            var frame = getTargetFrame(option);
-            frame.NavigationFailed -= OnNavigationFailed;
-            frame.Navigated -= OnNavigated;
-            frame = null;
+            switch (option)
+            {
+                case 0:
+                    _rootFrame = null;
+                    _rootFrame.NavigationFailed += OnNavigationFailed;
+                    _rootFrame.Navigated += OnNavigated;
+                    break;
+                case TargetFrameOption.ShellFrame:
+                    _shellFrame = null;
+                    _shellFrame.NavigationFailed += OnNavigationFailed;
+                    _shellFrame.Navigated += OnNavigated;
+                    break;
+                case TargetFrameOption.SideFrame:
+                    _sideFrame = null;
+                    _sideFrame.NavigationFailed += OnNavigationFailed;
+                    _sideFrame.Navigated += OnNavigated;
+                    break;
+            };
+            
         }
 
         public void NavigateTo(Type sourcePageType, object? parameter = null, NavigationTransitionInfo infoOverride = null, TargetFrameOption option = TargetFrameOption.RootFrame)

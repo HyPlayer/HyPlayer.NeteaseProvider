@@ -10,7 +10,7 @@ namespace Phono.Contracts.Views
         where TViewModel : class, IViewModel
     {
         public static DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel), typeof(TViewModel),
-                typeof(AppPageBase<TViewModel>), new PropertyMetadata(default(TViewModel)));
+                typeof(ControlBase<TViewModel>), new PropertyMetadata(default(TViewModel)));
         private bool disposedValue;
 
         public TViewModel ViewModel
