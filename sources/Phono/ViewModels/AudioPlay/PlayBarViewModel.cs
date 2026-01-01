@@ -10,12 +10,15 @@ using HyPlayer.PlayCore.Abstraction.Models.Notifications;
 using Depository.Abstraction.Interfaces.NotificationHub;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Input;
+using AsyncAwaitBestPractices;
 
 namespace Phono.ViewModels.AudioPlay
 {
     public partial class PlayBarViewModel :
         ObservableRecipient ,IViewModel, ISingletonViewModel, IDisposable,
-        INotificationSubscriber<CurrentSongChangedNotification>
+        INotificationSubscriber<CurrentSongChangedNotification>,
+        INotificationSubscriber<PlaybackPositionChangedNotification>
     {
         [ObservableProperty] private bool _isPlaying;
         [ObservableProperty] private ImageResourceBase? _currentSongCover;
@@ -24,11 +27,17 @@ namespace Phono.ViewModels.AudioPlay
         [ObservableProperty] private AlbumBase? _currentAlbum;
         [ObservableProperty] private TimeSpan? _currentPosition;
 
+        // Expose seconds-based values for easy binding to ProgressBar
+        [ObservableProperty] private double _currentPositionSeconds;
+        [ObservableProperty] private double _currentSongDurationSeconds;
+
         private readonly PlayCoreBase? _playCore;
         private bool _disposed;
 
         public PlayBarViewModel(PlayCoreBase playCore)
         {
+            IsPlaying = false;
+
             _playCore = playCore;
 
             // Initialize from current state if available
@@ -45,6 +54,24 @@ namespace Phono.ViewModels.AudioPlay
             }
 
             UpdatePlayingStateFromPlayCore();
+        }
+
+        // Called when CurrentSong property changes by CommunityToolkit source generator
+        partial void OnCurrentSongChanged(SingleSongBase? value)
+        {
+            // Reset position
+            CurrentPositionSeconds = 0;
+            CurrentPosition = TimeSpan.Zero;
+
+            if (value != null && value.Duration > 0)
+            {
+                // Duration stored as long in the model. Treat it as milliseconds and convert to seconds for the progress bar.
+                CurrentSongDurationSeconds = value.Duration / 1000.0;
+            }
+            else
+            {
+                CurrentSongDurationSeconds = 0;
+            }
         }
 
         public Task HandleNotificationAsync(CurrentSongChangedNotification notification, CancellationToken ctk = new())
@@ -71,6 +98,25 @@ namespace Phono.ViewModels.AudioPlay
             return Task.CompletedTask;
         }
 
+        public Task HandleNotificationAsync(PlaybackPositionChangedNotification notification, CancellationToken ctk = new())
+        {
+            ctk.ThrowIfCancellationRequested();
+
+            try
+            {
+                // Notification value represents current playback position in seconds (double)
+                var seconds = notification.CurrentPlaybackPosition;
+                CurrentPositionSeconds = seconds;
+                CurrentPosition = TimeSpan.FromSeconds(seconds);
+            }
+            catch (Exception)
+            {
+                // ignore non-fatal errors updating UI state
+            }
+
+            return Task.CompletedTask;
+        }
+
         private void UpdatePlayingStateFromPlayCore()
         {
             try
@@ -83,6 +129,28 @@ namespace Phono.ViewModels.AudioPlay
             {
                 // ignore
             }
+        }
+
+        [RelayCommand]
+        private void TogglePlayPause()
+        {
+            
+            if (_playCore == null) return;
+            var ticket = _playCore.CurrentPlayingTicket;
+            if (ticket == null) return;
+            if (ticket.Status == HyPlayer.PlayCore.Abstraction.Models.AudioServiceComponents.AudioTicketStatus.Playing)
+            {
+                _playCore.PauseAsync().SafeFireAndForget();
+                IsPlaying = false;
+            }
+            else
+            {
+                _playCore.PlayAsync().SafeFireAndForget();
+                IsPlaying = true;
+            }
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine($"[PlayBarViewModel] TogglePlayPause executed. New IsPlaying: {IsPlaying}");
+#endif
         }
 
         protected virtual void Dispose(bool disposing)

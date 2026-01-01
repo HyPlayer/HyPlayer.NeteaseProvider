@@ -10,6 +10,9 @@
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <!-- Other merged dictionaries here -->
                 <ResourceDictionary Source="/Resources/Styles/ToggleButton.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/NavigationView.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/SplitView.xaml" />
+                <ResourceDictionary Source="ms-appx:///Richasy.WinUIKernel.Share/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
         </ResourceDictionary>

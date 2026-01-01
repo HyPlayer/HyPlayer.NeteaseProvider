@@ -10,6 +10,7 @@ using Phono.Views.Settings;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Phono.Services.App
 {
@@ -32,19 +33,36 @@ namespace Phono.Services.App
                 await playCore.RegisterPlayListControllerAsync(typeof(DefaultPlayListManager));
                 await playCore.RegisterPlayListControllerAsync(typeof(OrderedRollPlayController));
             }
-
-            var rootFrame = MainWindow.Current.RootFrame;
-
-            if (rootFrame is null)
-            {
-                rootFrame = new Frame();
-                MainWindow.Current.Content = rootFrame;
-            }
-
-            _navigationService.RegisterForFrame(rootFrame, TargetFrameOption.RootFrame);
-            _navigationService.NavigateTo("RootPage", args, new DrillInNavigationTransitionInfo(), TargetFrameOption.RootFrame);
+            
 
             MainWindow.Current.Activate();
+
+            // Ensure root frame is registered before navigating
+            try
+            {
+                // if navigation service can report registration, wait for it; otherwise wait for MainWindow's readiness
+                if (_navigationService is Phono.Services.App.NavigationService navService)
+                {
+                    // check immediately
+                    if (!navService.IsFrameRegistered(Contracts.Services.App.TargetFrameOption.RootFrame))
+                    {
+                        // wait for MainWindow's frame ready signal
+                        await MainWindow.Current.WaitForRootFrameAsync();
+                    }
+                }
+                else
+                {
+                    // Fallback - wait briefly for window to finish loading
+                    await Task.Delay(100);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log and continue - navigation may still fail but we shouldn't crash the activation path
+                System.Diagnostics.Debug.WriteLine($"ActivationService: error while waiting for root frame: {ex}");
+            }
+
+            _navigationService.NavigateTo("ShellPage", args, new DrillInNavigationTransitionInfo(), TargetFrameOption.RootFrame);
         }
     }
 }

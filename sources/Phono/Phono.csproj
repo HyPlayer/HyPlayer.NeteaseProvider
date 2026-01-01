@@ -12,12 +12,17 @@
     <WinUISDKReferences>false</WinUISDKReferences>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+	<NoWarn>$(NoWarn);MVVMTK0045;MSB3030;IL2059;WMC1510</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Controls\HeaderImageControl.xaml" />
     <None Remove="Controls\PlayBar\PlayBarView.xaml" />
+    <None Remove="Resources\Styles\NavigationView.xaml" />
+    <None Remove="Resources\Styles\SplitView.xaml" />
     <None Remove="Resources\Styles\ToggleButton.xaml" />
     <None Remove="Views\App\RootPage.xaml" />
     <None Remove="Views\App\ShellPage.xaml" />
+    <None Remove="Views\Netease\HomePage.xaml" />
     <None Remove="Views\Settings\TestPage.xaml" />
   </ItemGroup>
 
@@ -45,15 +50,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.2.250402" />
-    <PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.250402" />
-    <PackageReference Include="CommunityToolkit.WinUI.Extensions" Version="8.2.250402" />
-    <PackageReference Include="CommunityToolkit.WinUI.Helpers" Version="8.2.250402" />
-    <PackageReference Include="CommunityToolkit.WinUI.Media" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.2.251219" />
+    <PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.251219" />
+    <PackageReference Include="CommunityToolkit.WinUI.Extensions" Version="8.2.251219" />
+    <PackageReference Include="CommunityToolkit.WinUI.Helpers" Version="8.2.251219" />
+    <PackageReference Include="CommunityToolkit.WinUI.Media" Version="8.2.251219" />
     <PackageReference Include="Depository" Version="3.2.2" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.3.0-prerelease.251115.2" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.1-RTM" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.0.0-experimental3" />
+    <PackageReference Include="Richasy.WinUIKernel.Share" Version="0.0.12-preview4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\refs\HyPlayer.NeteaseProvider\HyPlayer.NeteaseApi\HyPlayer.NeteaseApi.csproj" />
@@ -61,6 +67,21 @@
     <ProjectReference Include="..\..\refs\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj" />
     <ProjectReference Include="..\..\refs\HyPlayer.PlayCore\HyPlayer.PlayCore.Implementation.AudioGraph\HyPlayer.PlayCore.Implementation.AudioGraphService.csproj" />
     <ProjectReference Include="..\..\refs\HyPlayer.PlayCore\HyPlayer.PlayCore\HyPlayer.PlayCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Controls\HeaderImageControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Resources\Styles\SplitView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Resources\Styles\NavigationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Settings\TestPage.xaml">
@@ -86,6 +107,14 @@
     <Page Update="Resources\Styles\ToggleButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Netease\HomePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\App\" />
   </ItemGroup>
 
   <!--

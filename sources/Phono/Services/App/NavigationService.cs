@@ -3,8 +3,6 @@ using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 using Phono.Contracts.Services.App;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Phono.Services.App
 {
@@ -22,7 +20,7 @@ namespace Phono.Services.App
 
         public void RegisterForFrame(Frame targetFrame, TargetFrameOption option)
         {
-            switch (option) 
+            switch (option)
             {
                 case 0:
                     _rootFrame = targetFrame;
@@ -33,19 +31,20 @@ namespace Phono.Services.App
                 case TargetFrameOption.SideFrame:
                     _sideFrame = targetFrame;
                     break;
-            };
+            }
+            ;
             targetFrame.NavigationFailed += OnNavigationFailed;
             targetFrame.Navigated += OnNavigated;
         }
 
         private void OnNavigated(object sender, NavigationEventArgs e)
         {
-            
+
         }
 
         private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
-            
+
         }
 
         public void UnregisterForFrame(TargetFrameOption option)
@@ -53,33 +52,53 @@ namespace Phono.Services.App
             switch (option)
             {
                 case 0:
-                    _rootFrame = null;
-                    _rootFrame.NavigationFailed += OnNavigationFailed;
-                    _rootFrame.Navigated += OnNavigated;
+                    if (_rootFrame != null)
+                    {
+                        _rootFrame.NavigationFailed -= OnNavigationFailed;
+                        _rootFrame.Navigated -= OnNavigated;
+                        _rootFrame = null;
+                    }
                     break;
                 case TargetFrameOption.ShellFrame:
-                    _shellFrame = null;
-                    _shellFrame.NavigationFailed += OnNavigationFailed;
-                    _shellFrame.Navigated += OnNavigated;
+                    if (_shellFrame != null)
+                    {
+                        _shellFrame.NavigationFailed -= OnNavigationFailed;
+                        _shellFrame.Navigated -= OnNavigated;
+                        _shellFrame = null;
+                    }
                     break;
                 case TargetFrameOption.SideFrame:
-                    _sideFrame = null;
-                    _sideFrame.NavigationFailed += OnNavigationFailed;
-                    _sideFrame.Navigated += OnNavigated;
+                    if (_sideFrame != null)
+                    {
+                        _sideFrame.NavigationFailed -= OnNavigationFailed;
+                        _sideFrame.Navigated -= OnNavigated;
+                        _sideFrame = null;
+                    }
                     break;
-            };
-            
+            }
+            ;
+
         }
 
         public void NavigateTo(Type sourcePageType, object? parameter = null, NavigationTransitionInfo infoOverride = null, TargetFrameOption option = TargetFrameOption.RootFrame)
         {
             var frame = getTargetFrame(option);
+            if (frame == null)
+            {
+                throw new InvalidOperationException($"No frame registered for {option}. Call RegisterForFrame before navigating.");
+            }
+
             frame.Navigate(sourcePageType, parameter, infoOverride);
         }
 
         public void NavigateTo(string pageId, object? parameter = null, NavigationTransitionInfo infoOverride = null, TargetFrameOption option = TargetFrameOption.RootFrame)
         {
             var frame = getTargetFrame(option);
+            if (frame == null)
+            {
+                throw new InvalidOperationException($"No frame registered for {option}. Call RegisterForFrame before navigating.");
+            }
+
             Type page = _pageService.GetPageType(pageId);
             frame.Navigate(page, parameter, infoOverride);
         }
@@ -94,5 +113,18 @@ namespace Phono.Services.App
                 _ => throw new NotImplementedException(),
             };
         }
+
+        // Expose registration check to allow callers to await readiness
+        public bool IsFrameRegistered(TargetFrameOption option)
+        {
+            return option switch
+            {
+                TargetFrameOption.RootFrame => _rootFrame != null,
+                TargetFrameOption.ShellFrame => _shellFrame != null,
+                TargetFrameOption.SideFrame => _sideFrame != null,
+            };
+        }
     }
 }
+    
+

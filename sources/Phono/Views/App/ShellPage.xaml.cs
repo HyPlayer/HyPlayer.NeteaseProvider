@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Phono.Views.Base;
+using Phono.Views.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +26,14 @@ namespace Phono.Views.App
         public ShellPage()
         {
             InitializeComponent();
+            ShellFrame.Navigate(typeof(TestPage));
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            ViewModel.Initialize();
         }
     }
 }

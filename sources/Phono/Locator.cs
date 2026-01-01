@@ -6,6 +6,7 @@ using HyPlayer.PlayCore.Abstraction;
 using Phono.Contracts.Services.App;
 using Phono.Extensions.DependencyInjectionExtensions;
 using Phono.Services.App;
+using Richasy.WinUIKernel.Share.Toolkits;
 using System;
 
 namespace Phono
@@ -24,6 +25,11 @@ namespace Phono
             depository?.AddSingleton<IActivationService, ActivationService>();
             depository?.AddSingleton<INavigationService, NavigationService>();
             depository?.AddSingleton<IPageService, PageService>();
+
+            // Toolkits
+            depository?.AddSingleton<IAppToolkit, SharedAppToolkit>();
+            depository?.AddSingleton<IFileToolkit, SharedFileToolkit>();
+            depository?.AddSingleton<ISettingsToolkit, SharedSettingsToolkit>();
 
             depository?.AddMvvm();
         }

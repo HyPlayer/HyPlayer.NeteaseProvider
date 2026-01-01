@@ -27,7 +27,10 @@
                 Width="40"
                 Height="40"
                 VerticalAlignment="Center"
-                CornerRadius="4">
+                CornerRadius="4"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
                 <Grid>
                     <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE90B;" />
                     <Image x:Name="CoverImage" Stretch="UniformToFill" />
@@ -61,7 +64,9 @@
             <ToggleButton
                 x:Name="PlayButton"
                 Grid.Column="2"
-                Style="{ThemeResource PlayButtonStyle}" />
+                Style="{ThemeResource PlayButtonStyle}" 
+                IsChecked="{x:Bind ViewModel.IsPlaying, Mode=OneWay}"
+                Command="{x:Bind ViewModel.TogglePlayPauseCommand, Mode=OneWay}"/>
 
             <!--  More button  -->
             <Button
@@ -69,17 +74,20 @@
                 Grid.Column="3"
                 Width="40"
                 Height="40"
-                Margin="4"
+                CornerRadius="20"
                 VerticalAlignment="Center"
                 Background="Transparent"
                 BorderThickness="0"
-                Content="⋯"
                 FontSize="20"
-                ToolTipService.ToolTip="More" />
+                ToolTipService.ToolTip="More" >
+                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE712;" />
+            </Button>
         </Grid>
         <ProgressBar
             Grid.Row="1"
             HorizontalAlignment="Stretch"
-            Value="10"/>
+            Minimum="0"
+            Value="{x:Bind ViewModel.CurrentPositionSeconds, Mode=OneWay}"
+            Maximum="{x:Bind ViewModel.CurrentSongDurationSeconds, Mode=OneWay}" />
     </Grid>
 </base:PlayBarBase>

@@ -14,6 +14,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Phono.Services.App;
+using Phono.Contracts.Services.App;
 
 
 namespace Phono.Views.App
@@ -23,19 +25,28 @@ namespace Phono.Views.App
     /// </summary>
     public sealed partial class RootPage : RootPageBase
     {
+        private readonly INavigationService _navigationService;
+
         public RootPage()
         {
             InitializeComponent();
+            _navigationService = Locator.Instance.GetService<INavigationService>();
+
+            Loaded += RootPage_Loaded;
+            Unloaded += RootPage_Unloaded;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void RootPage_Unloaded(object sender, RoutedEventArgs e)
         {
-            base.OnNavigatedTo(e);
+            _navigationService.UnregisterForFrame(TargetFrameOption.RootFrame);
+        }
 
+        private void RootPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            _navigationService.RegisterForFrame(RootFrame, TargetFrameOption.RootFrame);
             var appWindow = MainWindow.Current.AppWindow;
             var titleBar = appWindow.TitleBar;
             titleBar.IconShowOptions = IconShowOptions.HideIconAndSystemMenu;
-            titleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
             titleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
         }
     }

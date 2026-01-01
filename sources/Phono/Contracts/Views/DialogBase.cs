@@ -1,6 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Phono.Contracts.ViewModels;
+using Richasy.WinUIKernel.Share;
+using Richasy.WinUIKernel.Share.Toolkits;
 using System;
 
 
@@ -13,6 +15,8 @@ namespace Phono.Contracts.Views
                 typeof(DialogBase<TViewModel>), new PropertyMetadata(default(TViewModel)));
         private bool disposedValue;
 
+        private readonly IAppToolkit appToolkit;
+
         public TViewModel ViewModel
         {
             get => (TViewModel)GetValue(ViewModelProperty);
@@ -22,7 +26,11 @@ namespace Phono.Contracts.Views
         public DialogBase()
         {
             ViewModel = Locator.Instance.GetService<TViewModel>();
+            appToolkit = Locator.Instance.GetService<IAppToolkit>();
             DataContext = ViewModel;
+
+            XamlRoot = MainWindow.Current.Content.XamlRoot;
+            appToolkit.ResetControlTheme(this);
         }
 
         protected virtual void Dispose(bool disposing)
