@@ -74,7 +74,8 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
             AesEncrypt(
                 AesEncrypt(json.ToByteArrayUtf8(), CipherMode.CBC, presetKey, iv).ToBase64String().ToByteArrayUtf8(),
                 CipherMode.CBC, secretKey, iv).ToBase64String();
-        var encSecKey = RsaEncrypt(((IEnumerable<byte>)secretKey).Reverse().ToArray(), publicKey).ToHexStringLower();
+        secretKey.Reverse();
+        var encSecKey = RsaEncrypt(secretKey, publicKey).ToHexStringLower();
         var data = new Dictionary<string, string>()
                    {
                        { "params", paramsData },
