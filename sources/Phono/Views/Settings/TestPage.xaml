@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Button Content="Hi, there!" />
+        <Button VerticalAlignment="Top" Content="Hi, there!" Click="Button_Click"/>
 
     </Grid>
 </Page>

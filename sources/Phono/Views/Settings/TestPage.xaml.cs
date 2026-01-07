@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Phono.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +27,12 @@ namespace Phono.Views.Settings
         public TestPage()
         {
             InitializeComponent();
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var a = new TestDialog();
+            await a.ShowAsync();
         }
     }
 }

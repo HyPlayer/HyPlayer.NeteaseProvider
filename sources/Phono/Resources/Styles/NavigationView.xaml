@@ -7,6 +7,8 @@
     xmlns:ic="using:FluentIcons.WinUI"
     xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives">
 
+    <CornerRadius x:Key="NavigationViewContentGridCornerRadius">8</CornerRadius>
+
     <Style x:Key="AppNavigationViewStyle" TargetType="NavigationView">
         <Setter Property="PaneToggleButtonStyle" Value="{StaticResource PaneToggleButtonStyle}" />
         <Setter Property="IsTabStop" Value="False" />
@@ -18,7 +20,7 @@
         <Setter Property="IsPaneOpen" Value="True" />
         <Setter Property="OpenPaneLength" Value="80" />
         <Setter Property="CompactPaneLength" Value="0" />
-        <Setter Property="CornerRadius" Value="{ThemeResource OverlayCornerRadius}" />
+        <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="NavigationView">
@@ -224,11 +226,11 @@
                                 <SplitView.Content>
                                     <Grid
                                         x:Name="ContentGrid"
-                                        Margin="{ThemeResource NavigationViewContentMargin}"
                                         Background="{ThemeResource NavigationViewContentBackground}"
                                         BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}"
                                         BorderThickness="{ThemeResource NavigationViewContentGridBorderThickness}"
-                                        CornerRadius="{ThemeResource NavigationViewContentGridCornerRadius}">
+                                        Margin="4"
+                                        CornerRadius="8">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />

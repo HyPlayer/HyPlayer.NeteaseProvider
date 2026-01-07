@@ -25,12 +25,35 @@ namespace Phono.Contracts.Views
 
         public DialogBase()
         {
-            ViewModel = Locator.Instance.GetService<TViewModel>();
+            // Defer resolving ViewModel until the control is loaded to ensure any required
+            // dependency scope has been created by the caller. Resolving scoped services
+            // during construction can fail if there is no active scope.
+            this.Loaded += DialogBase_Loaded;
+
             appToolkit = Locator.Instance.GetService<IAppToolkit>();
-            DataContext = ViewModel;
 
             XamlRoot = MainWindow.Current.Content.XamlRoot;
             appToolkit.ResetControlTheme(this);
+        }
+
+        private void DialogBase_Loaded(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (ViewModel == null)
+                {
+                    ViewModel = Locator.Instance.GetService<TViewModel>();
+                    DataContext = ViewModel;
+                }
+            }
+            catch
+            {
+                // Swallow here to avoid crashing the navigation path; downstream null checks will protect usage.
+            }
+            finally
+            {
+                this.Loaded -= DialogBase_Loaded;
+            }
         }
 
         protected virtual void Dispose(bool disposing)

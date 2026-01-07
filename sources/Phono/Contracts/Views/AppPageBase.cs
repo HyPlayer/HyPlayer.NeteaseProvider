@@ -22,8 +22,31 @@ namespace Phono.Contracts.Views
 
         public ScopedAppPageBase()
         {
-            ViewModel = Locator.Instance.GetService<TViewModel>();
-            DataContext = ViewModel;
+            // Delay resolving scoped page view models until Loaded to ensure proper scope creation
+            Loaded += ScopedAppPageBase_Loaded;
+            Unloaded += ScopedAppPageBase_Unloaded;
+        }
+
+        private void ScopedAppPageBase_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel == null)
+            {
+                try
+                {
+                    ViewModel = Locator.Instance.GetService<TViewModel>();
+                    DataContext = ViewModel;
+                }
+                catch
+                {
+                    // swallow to avoid breaking UI initialization; failing cases should be logged if needed
+                }
+            }
+        }
+
+        private void ScopedAppPageBase_Unloaded(object sender, RoutedEventArgs e)
+        {
+            DataContext = null;
+            ViewModel = null;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -75,8 +98,31 @@ namespace Phono.Contracts.Views
 
         public SingletonAppPageBase()
         {
-            ViewModel = Locator.Instance.GetService<TViewModel>();
-            DataContext = ViewModel;
+            // Delay resolving singleton app page view models until Loaded
+            Loaded += SingletonAppPageBase_Loaded;
+            Unloaded += SingletonAppPageBase_Unloaded;
+        }
+
+        private void SingletonAppPageBase_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel == null)
+            {
+                try
+                {
+                    ViewModel = Locator.Instance.GetService<TViewModel>();
+                    DataContext = ViewModel;
+                }
+                catch
+                {
+                    // swallow to avoid breaking UI initialization; failing cases should be logged if needed
+                }
+            }
+        }
+
+        private void SingletonAppPageBase_Unloaded(object sender, RoutedEventArgs e)
+        {
+            DataContext = null;
+            ViewModel = null;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

@@ -24,21 +24,20 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom">
                 <Border>
-                <Grid
-                    x:Name="PlayBarArea"
-                    Width="512"
-                    Height="66"
-                    ui:Effects.Shadow="{ThemeResource PlayBarShadow}"
-                    CornerRadius="6"
-                    Margin="8">
-                    <Border x:Name="PlayBarBackground" Background="{ThemeResource AcrylicInAppFillColorBaseBrush}" />
-                    <playbar:PlayBarView Margin="2" />
-                </Grid>
+                    <Grid
+                        x:Name="PlayBarArea"
+                        Width="512"
+                        Height="66"
+                        Margin="8"
+                        ui:Effects.Shadow="{ThemeResource PlayBarShadow}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultSolidBrush}" BorderThickness="1"
+                        CornerRadius="8">
+                        <Border x:Name="PlayBarBackground" Background="{ThemeResource AcrylicInAppFillColorBaseBrush}" />
+                        <playbar:PlayBarView Margin="2" />
+                    </Grid>
                 </Border>
 
             </Grid>
         </Grid>
-
-        <Frame x:Name="ShellFrame" />
     </Grid>
 </base:RootPageBase>

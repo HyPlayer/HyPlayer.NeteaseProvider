@@ -8,6 +8,8 @@ namespace Phono.Contracts.Services.App
 {
     public interface INavigationService
     {
+        bool CanGoBack { get; }
+
         void RegisterForFrame(Frame targetFrame, TargetFrameOption option);
 
         void UnregisterForFrame(TargetFrameOption option);
@@ -15,6 +17,8 @@ namespace Phono.Contracts.Services.App
         void NavigateTo(Type sourcePageType, object? parameter = null, NavigationTransitionInfo infoOverride = null, TargetFrameOption option = TargetFrameOption.RootFrame);
 
         void NavigateTo(string pageId, object? parameter = null, NavigationTransitionInfo infoOverride = null, TargetFrameOption option = TargetFrameOption.RootFrame);
+
+        void GoBack(TargetFrameOption option = TargetFrameOption.RootFrame);
 
     }
 

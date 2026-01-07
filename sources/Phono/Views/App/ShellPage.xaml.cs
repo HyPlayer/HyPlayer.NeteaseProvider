@@ -33,7 +33,26 @@ namespace Phono.Views.App
         {
             base.OnNavigatedTo(e);
 
-            ViewModel.Initialize();
+            // Ensure ViewModel is resolved before using it. Singleton view models are normally
+            // resolved in the base class Loaded handler, but OnNavigatedTo can run before Loaded
+            // in some navigation scenarios. Try to restore from DataContext or the service locator.
+            if (ViewModel == null)
+            {
+                try
+                {
+                    ViewModel = DataContext as global::Phono.ViewModels.App.ShellViewModel ?? Locator.Instance.GetService<global::Phono.ViewModels.App.ShellViewModel>();
+                    DataContext = ViewModel;
+                }
+                catch
+                {
+                    // Swallow here to avoid crashing the navigation path; downstream null checks will protect usage.
+                }
+            }
+
+            ViewModel?.Initialize();
+
+            // Use the ViewModel API to initialize NavigationView service rather than touching its internal field.
+            ViewModel?.InitializeNavigationView(AppNavigationView, ShellFrame);
         }
     }
 }

@@ -21,8 +21,32 @@ namespace Phono.Contracts.Views
 
         public ControlBase()
         {
-            ViewModel = Locator.Instance.GetService<TViewModel>();
-            DataContext = ViewModel;
+            // Delay resolving ViewModel until control is loaded to avoid resolving scoped services during XAML construction
+            Loaded += ControlBase_Loaded;
+            Unloaded += ControlBase_Unloaded;
+        }
+
+        private void ControlBase_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel == null)
+            {
+                try
+                {
+                    ViewModel = Locator.Instance.GetService<TViewModel>();
+                    DataContext = ViewModel;
+                }
+                catch
+                {
+                    // swallow to avoid breaking UI initialization; failing cases should be logged if needed
+                }
+            }
+        }
+
+        private void ControlBase_Unloaded(object sender, RoutedEventArgs e)
+        {
+            // Optionally clear DataContext when unloaded to break references
+            DataContext = null;
+            ViewModel = null;
         }
 
         protected virtual void Dispose(bool disposing)

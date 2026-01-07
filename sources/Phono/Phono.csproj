@@ -15,8 +15,13 @@
 	<NoWarn>$(NoWarn);MVVMTK0045;MSB3030;IL2059;WMC1510</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Assets\01.jpg" />
+    <Content Remove="Assets\02.jpg" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Controls\HeaderImageControl.xaml" />
     <None Remove="Controls\PlayBar\PlayBarView.xaml" />
+    <None Remove="Dialogs\TestDialog.xaml" />
     <None Remove="Resources\Styles\NavigationView.xaml" />
     <None Remove="Resources\Styles\SplitView.xaml" />
     <None Remove="Resources\Styles\ToggleButton.xaml" />
@@ -115,6 +120,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\App\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Dialogs\TestDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!--

@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 using Phono.Contracts.Services.App;
 using System;
+using System.ComponentModel;
 
 namespace Phono.Services.App
 {
@@ -13,10 +14,27 @@ namespace Phono.Services.App
         private Frame _shellFrame { get; set; }
         private Frame _sideFrame { get; set; }
 
+        public bool CanGoBack
+        {
+            get
+            {
+                if (_shellFrame != null && _shellFrame.CanGoBack)
+                {
+                    return true;
+                }
+                else if(_rootFrame != null && _rootFrame.CanGoBack)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
         public NavigationService(IPageService pageService)
         {
             _pageService = pageService;
         }
+
 
         public void RegisterForFrame(Frame targetFrame, TargetFrameOption option)
         {
@@ -123,6 +141,16 @@ namespace Phono.Services.App
                 TargetFrameOption.ShellFrame => _shellFrame != null,
                 TargetFrameOption.SideFrame => _sideFrame != null,
             };
+        }
+
+        public void GoBack(TargetFrameOption option)
+        {
+            var frame = getTargetFrame(option);
+
+            if (frame != null && frame.CanGoBack)
+            {
+                frame.GoBack();
+            }
         }
     }
 }

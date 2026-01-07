@@ -20,7 +20,7 @@ namespace Phono.Helpers
             {
                 Title = name,
                 Symbol = icon,
-                PageId = typeof(TPage).FullName
+                PageId = typeof(TPage).Name
             };
 
         }

@@ -7,6 +7,9 @@
     xmlns:local="using:Phono.Controls.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="using:CommunityToolkit.WinUI"
+    Loaded="OnLoaded"
+    Loading="OnLoading"
+    Unloaded="OnUnloaded"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -37,14 +40,14 @@
                 x:Name="HeroImage"
                 toolkit:VisualExtensions.NormalizedCenterPoint="0.5"
                 ImageOpened="OnImageOpened"
-                Source="{x:Bind HeroImageSource, Mode=OneWay}"
+                Source="https://flarum.csur.fun/2022-12-25/1671970508-774457-image.png"
                 Stretch="UniformToFill" />
 
             <Image
                 x:Name="HeroOverlayImage"
                 toolkit:VisualExtensions.NormalizedCenterPoint="0.5"
                 Opacity="0.5"
-                Source="{x:Bind HeroImageSource, Mode=OneWay}"
+                Source="https://flarum.csur.fun/2022-12-25/1671970508-774457-image.png"
                 Stretch="UniformToFill" />
 
         </Grid>

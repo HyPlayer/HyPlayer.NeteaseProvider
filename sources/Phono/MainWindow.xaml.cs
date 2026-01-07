@@ -26,6 +26,8 @@ namespace Phono
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        private INavigationService _navigationService;
+
         public static new MainWindow Current => _current ??= new MainWindow();
         private static MainWindow _current;
 
@@ -61,8 +63,8 @@ namespace Phono
 
         private void TryRegisterRootFrame()
         {
-            var nav = Locator.Instance.GetService<INavigationService>();
-            if (nav == null)
+            _navigationService = Locator.Instance.GetService<INavigationService>();
+            if (_navigationService == null)
             {
                 return;
             }
@@ -75,7 +77,7 @@ namespace Phono
                 {
                     try
                     {
-                        nav.RegisterForFrame(rootFrame, Contracts.Services.App.TargetFrameOption.RootFrame);
+                        _navigationService.RegisterForFrame(rootFrame, Contracts.Services.App.TargetFrameOption.RootFrame);
                         // Signal any awaiters that root frame is ready
                         _rootFrameReadyTcs.TrySetResult(true);
                     }
@@ -105,8 +107,10 @@ namespace Phono
                 this.ExtendsContentIntoTitleBar = true;
                 appWindow.TitleBar.IconShowOptions = IconShowOptions.HideIconAndSystemMenu;
                 appWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
+
+                SetTitleBar(TitleBar);
             }
         }
-        
+
     }
 }

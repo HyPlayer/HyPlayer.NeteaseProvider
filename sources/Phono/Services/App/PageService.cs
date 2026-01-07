@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using Phono.Contracts.Services.App;
 using Phono.Views.App;
+using Phono.Views.Netease;
 using Phono.Views.Settings;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace Phono.Services.App
             Configure<RootPage>();
             Configure<ShellPage>();
             Configure<TestPage>();
+            Configure<HomePage>();
         }
 
         public Type GetPageType(string key)
