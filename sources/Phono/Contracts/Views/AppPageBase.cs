@@ -22,6 +22,9 @@ namespace Phono.Contracts.Views
 
         public ScopedAppPageBase()
         {
+            ViewModel = Locator.Instance.GetService<TViewModel>();
+            DataContext = ViewModel;
+
             // Delay resolving scoped page view models until Loaded to ensure proper scope creation
             Loaded += ScopedAppPageBase_Loaded;
             Unloaded += ScopedAppPageBase_Unloaded;
@@ -29,18 +32,7 @@ namespace Phono.Contracts.Views
 
         private void ScopedAppPageBase_Loaded(object sender, RoutedEventArgs e)
         {
-            if (ViewModel == null)
-            {
-                try
-                {
-                    ViewModel = Locator.Instance.GetService<TViewModel>();
-                    DataContext = ViewModel;
-                }
-                catch
-                {
-                    // swallow to avoid breaking UI initialization; failing cases should be logged if needed
-                }
-            }
+            
         }
 
         private void ScopedAppPageBase_Unloaded(object sender, RoutedEventArgs e)

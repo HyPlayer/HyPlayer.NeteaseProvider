@@ -13,6 +13,9 @@
                 <ResourceDictionary Source="/Resources/Styles/NavigationView.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/SplitView.xaml" />
                 <ResourceDictionary Source="ms-appx:///Richasy.WinUIKernel.Share/Themes/Generic.xaml" />
+
+                <ResourceDictionary Source="/Resources/Layouts.xaml" />
+                <ResourceDictionary Source="/Resources/Converters.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
         </ResourceDictionary>

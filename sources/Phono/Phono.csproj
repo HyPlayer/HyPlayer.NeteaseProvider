@@ -22,6 +22,8 @@
     <None Remove="Controls\HeaderImageControl.xaml" />
     <None Remove="Controls\PlayBar\PlayBarView.xaml" />
     <None Remove="Dialogs\TestDialog.xaml" />
+    <None Remove="Resources\Converters.xaml" />
+    <None Remove="Resources\Layouts.xaml" />
     <None Remove="Resources\Styles\NavigationView.xaml" />
     <None Remove="Resources\Styles\SplitView.xaml" />
     <None Remove="Resources\Styles\ToggleButton.xaml" />
@@ -54,6 +56,7 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AsyncAwaitBestPractices" Version="9.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.2.251219" />
     <PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.251219" />
@@ -61,9 +64,11 @@
     <PackageReference Include="CommunityToolkit.WinUI.Helpers" Version="8.2.251219" />
     <PackageReference Include="CommunityToolkit.WinUI.Media" Version="8.2.251219" />
     <PackageReference Include="Depository" Version="3.2.2" />
+    <PackageReference Include="ImageEx.WinUI" Version="4.0.0" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.3.0-prerelease.251115.2" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.1-RTM" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.0.0-experimental3" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="3.0.0" />
     <PackageReference Include="Richasy.WinUIKernel.Share" Version="0.0.12-preview4" />
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +125,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\App\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Resources\Converters.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Resources\Layouts.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Dialogs\TestDialog.xaml">
