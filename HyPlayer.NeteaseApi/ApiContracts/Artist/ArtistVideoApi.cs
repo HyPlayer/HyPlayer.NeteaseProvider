@@ -40,7 +40,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
                     ArtistId = Request.ArtistId,
                     Tab = Request.Tab,
                     Order = Request.Order,
-                    Page = JsonSerializer.Serialize(page)
+                    Page = JsonSerializer.Serialize(page, ApiHandlerOption.JsonSerializerOptionsOnlyTypeInfo)
                 };
             }
 

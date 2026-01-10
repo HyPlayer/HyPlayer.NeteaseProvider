@@ -41,7 +41,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Video
                     {
                         ["songId"] = Request.SongId!,
                         ["keyword"] = ""
-                    });
+                    }, ApiHandlerOption.JsonSerializerOptionsOnlyTypeInfo);
                 }
             }
 

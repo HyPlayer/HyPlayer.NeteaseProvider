@@ -56,7 +56,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
                             FormerSongId = Request.FormerSongId,
                             TargetSongId = Request.TargetSongId,
                             ClientSeq = Request.ClientSeq
-                        })
+                        }, ApiHandlerOption.JsonSerializerOptionsOnlyTypeInfo)
                 };
             return Task.CompletedTask;
         }

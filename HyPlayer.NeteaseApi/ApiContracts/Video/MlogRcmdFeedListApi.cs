@@ -42,7 +42,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Video
                     ActualRequest.ExtInfo = JsonSerializer.Serialize(new Dictionary<string, string>()
                     {
                         ["songId"] = Request.SongId!
-                    });
+                    }, ApiHandlerOption.JsonSerializerOptionsOnlyTypeInfo);
                 }
             }
 

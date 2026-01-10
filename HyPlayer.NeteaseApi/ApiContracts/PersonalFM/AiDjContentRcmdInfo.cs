@@ -52,7 +52,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
 
             ActualRequest = new AiDjContentRcmdInfoActualRequest
             {
-                ExtInfo = JsonSerializer.Serialize(extInfo)
+                ExtInfo = JsonSerializer.Serialize(extInfo, ApiHandlerOption.JsonSerializerOptionsOnlyTypeInfo)
             };
             return Task.CompletedTask;
         }
