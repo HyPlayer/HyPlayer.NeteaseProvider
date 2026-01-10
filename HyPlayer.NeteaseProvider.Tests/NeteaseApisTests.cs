@@ -777,7 +777,7 @@ public class NeteaseApisTests
     // [Arguments("8645419738", UserRecordType.WeekData)] // TODO: uncomment this line when the test account's weekly listen record accumulates
     public async Task UserRecordApi_Should_BeNormal(string id, UserRecordType type)
     {
-        var result =
+            var result =
             await _provider
                 .RequestAsync<UserRecordAllResponse, UserRecordRequest, UserRecordResponse, ErrorResultBase,
                     UserRecordActualRequest>(NeteaseApis.UserRecordApi, new UserRecordRequest
