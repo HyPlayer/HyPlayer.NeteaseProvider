@@ -1,6 +1,6 @@
 #region
 
-using FluentAssertions;
+using AwesomeAssertions;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.ApiContracts.Album;
 using HyPlayer.NeteaseApi.ApiContracts.Artist;
@@ -370,7 +370,7 @@ public class NeteaseApisTests
     // [DependsOn(nameof(LoginQrCodeUnikey_Should_BeNormal))]
     public async Task LoginQrCodeCheck_Should_BeNormal()
     {
-        var unikey = TestContext.Current!.ObjectBag["unikey"] as string;
+        var unikey = TestContext.Current!.StateBag["unikey"] as string;
         var result = await _provider.RequestAsync(NeteaseApis.LoginQrCodeCheckApi, new LoginQrCodeCheckRequest
         {
             Unikey = unikey!
@@ -385,7 +385,7 @@ public class NeteaseApisTests
         var result = await _provider.RequestAsync(NeteaseApis.LoginQrCodeUnikeyApi, new LoginQrCodeUnikeyRequest());
         result.Match(s => s.Code.Should().Be(200),
             e => throw e);
-        TestContext.Current!.ObjectBag["unikey"] = result.Value?.Unikey;
+        TestContext.Current!.StateBag["unikey"] = result.Value?.Unikey;
     }
 
     // LoginStatusApi
