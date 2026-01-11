@@ -169,6 +169,7 @@ public abstract class
                     }
                     else
                     {
+                        forceDecrypt = true;
                         goto decryptApi;
                     }
                 }
@@ -230,6 +231,8 @@ public abstract class
 
     public string GetRequestJson<TActualRequestMessageModel>(TActualRequestMessageModel actualRequest, ApiHandlerOption option)
     {
+        if (actualRequest is null)
+            return "{}";
         var json = JsonSerializer.Serialize(actualRequest, option.JsonSerializerOptions);
         if (actualRequest is CacheKeyEApiActualRequest)
         {

@@ -326,7 +326,7 @@ public class NeteaseApisTests
     }
 
     // [Test]
-    public async Task LoginCellphone_Should_LoginWithInfo(string phone, string password)
+    private async Task LoginCellphone_Should_LoginWithInfo(string phone, string password)
     {
         var result =
             await _provider.RequestAsync(NeteaseApis.LoginCellphoneApi,
@@ -347,7 +347,7 @@ public class NeteaseApisTests
     }
 
     //[Test]
-    public async Task LoginEmail_Should_LoginWithInfo(string email, string password)
+    private async Task LoginEmail_Should_LoginWithInfo(string email, string password)
     {
         var result = await _provider.RequestAsync(NeteaseApis.LoginEmailApi,
             new LoginEmailRequest
@@ -368,7 +368,7 @@ public class NeteaseApisTests
 
     // [Test]
     // [DependsOn(nameof(LoginQrCodeUnikey_Should_BeNormal))]
-    public async Task LoginQrCodeCheck_Should_BeNormal()
+    private async Task LoginQrCodeCheck_Should_BeNormal()
     {
         var unikey = TestContext.Current!.StateBag["unikey"] as string;
         var result = await _provider.RequestAsync(NeteaseApis.LoginQrCodeCheckApi, new LoginQrCodeCheckRequest
@@ -380,7 +380,7 @@ public class NeteaseApisTests
     }
 
     // [Test]
-    public async Task LoginQrCodeUnikey_Should_BeNormal()
+    private async Task LoginQrCodeUnikey_Should_BeNormal()
     {
         var result = await _provider.RequestAsync(NeteaseApis.LoginQrCodeUnikeyApi, new LoginQrCodeUnikeyRequest());
         result.Match(s => s.Code.Should().Be(200),

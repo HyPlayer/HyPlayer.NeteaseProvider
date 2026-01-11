@@ -1,5 +1,6 @@
 ﻿using HyPlayer.NeteaseApi.Extensions.JsonSerializer;
 using System.Net;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.ApiContracts;
@@ -31,6 +32,7 @@ public class ApiHandlerOption
             NumberHandling = JsonNumberHandling.WriteAsString |
                              JsonNumberHandling.AllowReadingFromString,
             AllowTrailingCommas = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             Converters = { new NumberToStringConverter(), new JsonBooleanConverter(), new JsonObjectStringConverter() },
             TypeInfoResolver = NeteaseApiContractJsonContext.Default
 
