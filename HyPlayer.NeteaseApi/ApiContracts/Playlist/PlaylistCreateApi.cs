@@ -3,6 +3,7 @@ using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.Bases.WeApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {

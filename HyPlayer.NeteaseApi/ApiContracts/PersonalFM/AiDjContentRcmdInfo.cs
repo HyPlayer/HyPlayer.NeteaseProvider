@@ -128,6 +128,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
         [JsonPropertyName("extInfo")] public string? ExtInfo { get; set; }
     }
 
+    [JsonContextSerializable(typeof(AiDjActualRequestExtInfo))]
     public class AiDjActualRequestExtInfo
     {
         [JsonPropertyName("lastRequestTimestamp")]

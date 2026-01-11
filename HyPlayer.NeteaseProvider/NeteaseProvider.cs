@@ -237,7 +237,7 @@ public class NeteaseProvider : ProviderBase,
                 Time = response.SongUrls[0].Time,
                 MusicType = response.SongUrls[0].Type,
                 Level = response.SongUrls[0].Level,
-                Uri = new Uri(response.SongUrls[0].Url)
+                Uri = new Uri(response.SongUrls[0].Url ?? string.Empty)
             };
         }
 

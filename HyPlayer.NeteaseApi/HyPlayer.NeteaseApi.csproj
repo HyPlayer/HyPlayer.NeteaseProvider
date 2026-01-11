@@ -18,6 +18,7 @@
 
     <ItemGroup>
         <PackageReference Include="System.Text.Json" Version="10.0.1" />
+        <PackageReference Include="T4.Build" Version="0.2.5" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,11 +34,28 @@
       <Compile Remove="Bases\WeApiActualRequestBase.cs" />
       <Compile Remove="Bases\LinuxApiActualRequestBase.cs" />
       <Compile Remove="Bases\RawApiActualRequestBase.cs" />
+      <Compile Update="Extensions\JsonSerializer\NeteaseJsonSerializeContext.g.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>NeteaseJsonSerializeContext.tt</DependentUpon>
+      </Compile>
+      <Compile Update="Extensions\JsonSerializer\NeteaseJsonSerializeContext.g.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>NeteaseJsonSerializeContext.tt</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="ApiContracts\ListenTogether\Multiple\" />
       <Folder Include="ApiContracts\Misc\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Extensions\JsonSerializer\NeteaseJsonSerializeContext.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>NeteaseJsonSerializeContext.g.cs</LastGenOutput>
+      </None>
     </ItemGroup>
 
 

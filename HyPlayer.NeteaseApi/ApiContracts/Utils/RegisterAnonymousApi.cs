@@ -4,6 +4,7 @@ using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.Bases.WeApiContractBases;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {

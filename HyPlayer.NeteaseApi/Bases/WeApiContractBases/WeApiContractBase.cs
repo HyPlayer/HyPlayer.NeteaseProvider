@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using HyPlayer.NeteaseApi.Bases.WeApiContractBases;
 
 namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
@@ -136,8 +137,8 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
     private static byte[] RsaEncrypt(byte[] buffer, RSAParameters key)
     {
         return GetByteArrayBigEndian(BigInteger.ModPow(GetBigIntegerBigEndian(buffer),
-                                                       GetBigIntegerBigEndian(key.Exponent),
-                                                       GetBigIntegerBigEndian(key.Modulus)));
+                                                       GetBigIntegerBigEndian(key.Exponent!),
+                                                       GetBigIntegerBigEndian(key.Modulus!)));
 
         static byte[] GetByteArrayBigEndian(BigInteger value)
         {

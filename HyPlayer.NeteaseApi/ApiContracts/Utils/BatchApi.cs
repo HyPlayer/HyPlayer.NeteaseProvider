@@ -136,7 +136,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Utils
 
         public bool TryGetValue(string key, out JsonObjectStringWrapper value)
         {
-            return _backingDictionary.TryGetValue(key, out value);
+            return _backingDictionary.TryGetValue(key, out value!);
         }
 
         public JsonObjectStringWrapper this[string key]

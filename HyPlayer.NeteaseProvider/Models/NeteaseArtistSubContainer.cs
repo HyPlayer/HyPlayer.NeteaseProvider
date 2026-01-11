@@ -34,7 +34,7 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
                         });
                     return result.Match(
                         success =>
-                            success.Songs.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList(),
+                            success.Songs?.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList() ?? [],
                         error => new List<ProvidableItemBase>()
                     );
                 case "tim":
@@ -49,7 +49,7 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
                         });
                     return resTime.Match(
                         success =>
-                            success.Songs.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList(),
+                            success.Songs?.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList() ?? [],
                         error => new List<ProvidableItemBase>()
                     );
                 case "alb":

@@ -67,7 +67,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
                 var playlistParamJson = JsonSerializer.Serialize(playlistParam, new JsonSerializerOptions(JsonSerializerDefaults.Web)
                 {
                     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                    TypeInfoResolver = DefaultContext.Default
+                    TypeInfoResolver = NeteaseApiContractJsonContext.Default
                 });
                 ActualRequest = new ListenTogetherSyncListReportActualRequest()
                 {

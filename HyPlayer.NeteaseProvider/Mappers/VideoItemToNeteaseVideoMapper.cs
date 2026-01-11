@@ -12,7 +12,7 @@ public static class VideoItemToNeteaseVideoMapper
         return new NeteaseVideo
         {
             ActualId = videoItem.Id,
-            Name = videoItem.Title,
+            Name = videoItem.Title ?? "",
         };
     }
 }

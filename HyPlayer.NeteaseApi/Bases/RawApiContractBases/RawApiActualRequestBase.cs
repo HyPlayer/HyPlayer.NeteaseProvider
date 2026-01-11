@@ -63,7 +63,7 @@ public abstract class RawApiActualRequestBase : ActualRequestBase, IDictionary<s
 
     public bool TryGetValue(string key, out string value)
     {
-        return _backingDictionary.TryGetValue(key, out value);
+        return _backingDictionary.TryGetValue(key, out value!);
     }
 
     public string this[string key]

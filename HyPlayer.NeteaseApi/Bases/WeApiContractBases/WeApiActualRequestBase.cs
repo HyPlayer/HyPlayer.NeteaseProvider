@@ -1,7 +1,7 @@
 ﻿using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using System.Text.Json.Serialization;
 
-namespace HyPlayer.NeteaseApi.Bases;
+namespace HyPlayer.NeteaseApi.Bases.WeApiContractBases;
 
 public class WeApiActualRequestBase : ActualRequestBase
 {
