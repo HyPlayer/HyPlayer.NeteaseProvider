@@ -45,14 +45,14 @@ jobs:
 
       - name: Upload test results
         if: always()  # Run even if tests fail
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-results-${{ matrix.os }}-${{ matrix.dotnet-version }}
           path: ./TestResults/*.trx
 
       - name: Upload coverage
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-${{ matrix.os }}-${{ matrix.dotnet-version }}
           path: ./TestResults/*.coverage
@@ -65,7 +65,7 @@ jobs:
 
     steps:
       - name: Download all test results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           pattern: test-results-*
           path: ./TestResults
