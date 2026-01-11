@@ -1,0 +1,35 @@
+name: NativeAOT Test
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+jobs:
+  test-aot:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+  
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+          
+      - name: Write Secret into file
+        uses: "DamianReeves/write-file-action@master"
+        with:
+          path: HyPlayer.NeteaseProvider.Tests/Secrets.cs
+          write-mode: overwrite
+          contents: |
+            ${{ secrets.NETEASE_LOGIN_SECRET }}
+            
+      - name: Restore
+        run: dotnet restore
+  
+      - name: Publish with AOT
+        run: dotnet publish -c Release -p:PublishAot=true --use-current-runtime
+  
+      - name: Run AOT tests
+        run: ./bin/Release/net9.0/linux-x64/publish/HyPlayer.NeteaseProvider.Tests

@@ -29,9 +29,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore --configuration Release
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --configuration Release --no-build -- --coverage --report-trx --results-directory ./TestResults
       - name: Build NuGet Packages
         run: |
           dotnet pack HyPlayer.NeteaseApi/HyPlayer.NeteaseApi.csproj -c Release -o Packages/
