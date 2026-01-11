@@ -20,7 +20,8 @@
                 <kernel:CardControl
                     x:Name="Card"
                     Width="240"
-                    Height="128">
+                    Height="128"
+                    CornerRadius="6">
                     <Grid
                         Padding="16"
                         HorizontalAlignment="Stretch"
@@ -34,7 +35,7 @@
                             Height="84"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            CornerRadius="8"
+                            CornerRadius="4"
                             Source="{x:Bind Converter={StaticResource CoverToImageSourceConverter}, ConverterParameter=84}"
                             Stretch="UniformToFill" />
                         <Grid
@@ -71,8 +72,8 @@
         </DataTemplate>
     </base:HomePageBase.Resources>
 
-    <ScrollView>
-        <RefreshContainer RefreshRequested="{x:Bind ViewModel.LoadDataAsync}">
+    <ScrollViewer>
+        <RefreshContainer RefreshRequested="RefreshContainer_RefreshRequested">
             <Grid>
                 <controls:HeaderImageControl
                     x:Name="HeaderImage"
@@ -80,8 +81,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top"
                     HeroImageSource="https://flarum.csur.fun/2022-12-25/1671970508-774457-image.png" />
-                <Grid x:Name="ContentArea" Margin="108,48">
-
+                <Grid x:Name="ContentArea" Margin="{StaticResource PageContentThickness}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="300" />
@@ -92,12 +92,17 @@
                                 Home
                             </TextBlock>
                         </Grid>
-
-
                         <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid x:Name="GridLoginedContent">
+                                
+                            </Grid>
                             <Grid
                                 x:Name="GridTopchart"
-                                Grid.Row="3"
+                                Grid.Row="1"
                                 Grid.ColumnSpan="2"
                                 Margin="0,12,0,0"
                                 RowSpacing="8">
@@ -137,6 +142,6 @@
 
             </Grid>
         </RefreshContainer>
-    </ScrollView>
+    </ScrollViewer>
 
 </base:HomePageBase>

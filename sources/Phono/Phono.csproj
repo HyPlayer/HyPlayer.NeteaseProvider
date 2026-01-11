@@ -24,9 +24,11 @@
     <None Remove="Dialogs\TestDialog.xaml" />
     <None Remove="Resources\Converters.xaml" />
     <None Remove="Resources\Layouts.xaml" />
+    <None Remove="Resources\Styles\ContentDialog.xaml" />
     <None Remove="Resources\Styles\NavigationView.xaml" />
     <None Remove="Resources\Styles\SplitView.xaml" />
     <None Remove="Resources\Styles\ToggleButton.xaml" />
+    <None Remove="Resources\Styles\_Thickness.xaml" />
     <None Remove="Views\App\RootPage.xaml" />
     <None Remove="Views\App\ShellPage.xaml" />
     <None Remove="Views\Netease\HomePage.xaml" />
@@ -125,6 +127,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\App\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Resources\Styles\ContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Resources\Styles\_Thickness.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Resources\Converters.xaml">

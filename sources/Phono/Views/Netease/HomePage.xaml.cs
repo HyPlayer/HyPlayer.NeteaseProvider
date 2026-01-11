@@ -53,4 +53,9 @@ public sealed partial class HomePage : HomePageBase
         // 安全调用：如果 ViewModel 仍为 null 则不会触发 NRE
         (DataContext as HomeViewModel)?.LoadDataAsync().SafeFireAndForget();
     }
+
+    private void RefreshContainer_RefreshRequested(RefreshContainer sender, RefreshRequestedEventArgs args)
+    {
+        ViewModel.LoadDataAsync().SafeFireAndForget();
+    }
 }

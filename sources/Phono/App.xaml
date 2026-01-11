@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Application
     x:Class="Phono.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,16 +8,18 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
+                <!--  Other merged dictionaries here  -->
                 <ResourceDictionary Source="/Resources/Styles/ToggleButton.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/NavigationView.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/SplitView.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/_Thickness.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/ContentDialog.xaml" />
                 <ResourceDictionary Source="ms-appx:///Richasy.WinUIKernel.Share/Themes/Generic.xaml" />
 
                 <ResourceDictionary Source="/Resources/Layouts.xaml" />
                 <ResourceDictionary Source="/Resources/Converters.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
+            <!--  Other app resources here  -->
         </ResourceDictionary>
     </Application.Resources>
 </Application>
