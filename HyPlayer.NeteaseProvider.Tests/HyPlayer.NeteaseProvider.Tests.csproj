@@ -12,6 +12,7 @@
         <IsAotCompatible>true</IsAotCompatible>
         <IsTestProject>true</IsTestProject>
         <EnableMSTestRunner>true</EnableMSTestRunner>
+		<NoWarn>IL2026;IL3050</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

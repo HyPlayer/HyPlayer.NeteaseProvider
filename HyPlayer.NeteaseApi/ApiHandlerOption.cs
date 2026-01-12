@@ -51,10 +51,15 @@ public class ApiHandlerOption
 
 public class AdditionalParameters
 {
+    [JsonPropertyName("Cookies")]
     public Dictionary<string, string?> Cookies { get; set; } = [];
+    [JsonPropertyName("Headers")]
     public Dictionary<string, string?> Headers { get; set; } = [];
+    [JsonPropertyName("EApiHeaders")]
     public Dictionary<string, string?> EApiHeaders { get; set; } = [];
+    [JsonPropertyName("DataTokens")] 
     public Dictionary<string, string?> DataTokens { get; set; } = [];
+    [JsonPropertyName("OpenAPIConfig")]
     public OpenAPIConfigData? OpenAPIConfig { get; set; } = null;
     public bool HasValue()
     {
