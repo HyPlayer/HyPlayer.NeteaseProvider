@@ -1,6 +1,6 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts.Cloud;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
@@ -16,7 +16,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.Cloud
 {
-    public class UserCloudDeleteApi : EApiContractBase<IdOrIdListListRequest, UserCloudDeleteResponse, ErrorResultBase
+    public class UserCloudDeleteApi : EApiContractBase<UserCloudDeleteRequest,UserCloudDeleteResponse, ErrorResultBase
         , UserCloudDeleteActualRequest>
     {
         public override string IdentifyRoute => "/user/cloud/del";
@@ -35,6 +35,10 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Cloud
 
         public override string ApiPath { get; protected set; } = "/api/cloud/del";
 
+    }
+    
+    public class UserCloudDeleteRequest : IdOrIdListListRequest
+    {
     }
 
     public class UserCloudDeleteResponse : CodedResponseBase

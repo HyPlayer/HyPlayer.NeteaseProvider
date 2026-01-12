@@ -1,6 +1,6 @@
 using HyPlayer.NeteaseApi.ApiContracts.PersonalFM;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -52,7 +52,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
 
             ActualRequest = new AiDjContentRcmdInfoActualRequest
             {
-                ExtInfo = JsonSerializer.Serialize(extInfo)
+                ExtInfo = JsonSerializer.Serialize(extInfo, ApiHandlerOption.JsonSerializerOptionsOnlyTypeInfo)
             };
             return Task.CompletedTask;
         }
@@ -86,7 +86,6 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
 
             public class AiDjContentRcmdAudioSong : AiDjContentRcmdInfoResource
             {
-                [JsonPropertyName("type")] public string? Type { get; set; }
                 [JsonPropertyName("value")] public AiDjContentRcmdAudioSongValue? Value { get; set; }
 
                 public class AiDjContentRcmdAudioSongValue
@@ -101,7 +100,6 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
             {
                 [JsonPropertyName("value")] public AiDjContentRcmdAudioResourceValue? Value { get; set; }
 
-                [JsonPropertyName("type")] public string? Type { get; set; }
 
                 public class AiDjContentRcmdAudioResourceValue
                 {
@@ -130,7 +128,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
         [JsonPropertyName("extInfo")] public string? ExtInfo { get; set; }
     }
 
-    class AiDjActualRequestExtInfo
+    [JsonContextSerializable(typeof(AiDjActualRequestExtInfo))]
+    public class AiDjActualRequestExtInfo
     {
         [JsonPropertyName("lastRequestTimestamp")]
         public long LastRequestTimestamp { get; set; }
@@ -139,7 +138,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.PersonalFM
         [JsonPropertyName("listenedTs")] public bool ListenedTs { get; set; }
         [JsonPropertyName("noAidjToAidj")] public bool NoAidjToAidj { get; set; }
 
-        internal class LbsInfo
+        public class LbsInfo
         {
             [JsonPropertyName("lat")] public float Latitude { get; set; }
             [JsonPropertyName("lon")] public float Longitude { get; set; }

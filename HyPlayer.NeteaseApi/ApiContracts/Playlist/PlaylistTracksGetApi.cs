@@ -1,6 +1,6 @@
 using HyPlayer.NeteaseApi.ApiContracts.Playlist;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts

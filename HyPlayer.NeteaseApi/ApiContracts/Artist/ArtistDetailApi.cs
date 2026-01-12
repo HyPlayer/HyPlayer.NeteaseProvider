@@ -1,6 +1,6 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json.Serialization;
 
@@ -53,14 +53,15 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
             [JsonPropertyName("name")] public string? Name { get; set; }
             [JsonPropertyName("alias")] public string[]? Alias { get; set; }
             [JsonPropertyName("followed")] public bool Followed { get; set; }
-            [JsonPropertyName("cover")] public string? PicUrl { get; set; }
-            [JsonPropertyName("avatar")] public string? Img1v1Url { get; set; }
+            [JsonPropertyName("picUrl")] public string? PicUrl { get; set; }
+            [JsonPropertyName("img1v1Url")] public string? Img1v1Url { get; set; }
             [JsonPropertyName("briefDesc")] public string? BriefDesc { get; set; }
             [JsonPropertyName("trans")] public string? Translation { get; set; }
             [JsonPropertyName("musicSize")] public int MusicSize { get; set; }
             [JsonPropertyName("albumSize")] public int AlbumSize { get; set; }
             [JsonPropertyName("mvSize")] public int MvSize { get; set; }
             [JsonPropertyName("transNames")] public string[]? TransNames { get; set; }
+            [JsonPropertyName("accountId")] public string? AccountId { get; set; }
         }
     }
 

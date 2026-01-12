@@ -28,9 +28,25 @@ public class NumberToStringConverter : JsonConverter<string>
             throw new JsonException("Unexpected token type within NumberToStringConverter");
         }
     }
+    public override string ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.PropertyName)
+        {
+            return reader.GetString()!;
+        }
+        else
+        {
+            throw new JsonException("Unexpected token type within NumberToStringConverter");
+        }
+    }
 
     public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
     {
         writer.WriteStringValue(value);
+    }
+
+    public override void WriteAsPropertyName(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
+    {
+        writer.WritePropertyName(value);
     }
 }

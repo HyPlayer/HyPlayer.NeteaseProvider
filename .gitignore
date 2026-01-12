@@ -1,4 +1,4 @@
-﻿# Created by https://www.toptal.com/developers/gitignore/api/rider,csharp,dotnetcore,visualstudio
+# Created by https://www.toptal.com/developers/gitignore/api/rider,csharp,dotnetcore,visualstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=rider,csharp,dotnetcore,visualstudio
 
 ### Csharp ###
@@ -682,3 +682,4 @@ fabric.properties
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/rider,csharp,dotnetcore,visualstudio
+HyPlayer.NeteaseApi/Extensions/JsonSerializer/NeteaseJsonSerializeContext.g.g.cs

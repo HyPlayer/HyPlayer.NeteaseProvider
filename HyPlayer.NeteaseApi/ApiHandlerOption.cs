@@ -1,7 +1,9 @@
 ﻿using HyPlayer.NeteaseApi.Extensions.JsonSerializer;
 using System.Net;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.ApiContracts;
 
 namespace HyPlayer.NeteaseApi;
 
@@ -30,7 +32,20 @@ public class ApiHandlerOption
             NumberHandling = JsonNumberHandling.WriteAsString |
                              JsonNumberHandling.AllowReadingFromString,
             AllowTrailingCommas = true,
-            Converters = { new NumberToStringConverter(), new JsonBooleanConverter(), new JsonObjectStringConverter() }
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters = { new NumberToStringConverter(), new JsonBooleanConverter(), new JsonObjectStringConverter() },
+            TypeInfoResolver = NeteaseApiContractJsonContext.Default
+
+        };
+    public static readonly JsonSerializerOptions JsonSerializerOptionsOnlyTypeInfo =
+        new(JsonSerializerOptions.Default)
+        {
+            TypeInfoResolver = NeteaseApiContractJsonContext.Default
+        };
+    public static readonly JsonSerializerOptions JsonSerializerOptionsWebOnlyTypeInfo =
+        new(JsonSerializerOptions.Web)
+        {
+            TypeInfoResolver = NeteaseApiContractJsonContext.Default
         };
 }
 
@@ -40,6 +55,7 @@ public class AdditionalParameters
     public Dictionary<string, string?> Headers { get; set; } = [];
     public Dictionary<string, string?> EApiHeaders { get; set; } = [];
     public Dictionary<string, string?> DataTokens { get; set; } = [];
+    public OpenAPIConfigData? OpenAPIConfig { get; set; } = null;
     public bool HasValue()
     {
         if (Cookies.Count > 0 ||
@@ -47,5 +63,27 @@ public class AdditionalParameters
             EApiHeaders.Count > 0 ||
             DataTokens.Count > 0) return true;
         return false;
+    }
+
+
+    public class OpenAPIConfigData
+    {
+        public string? AppId { get; set; }
+        public string? AppSecret { get; set; }
+        public string? RsaPrivateKey { get; set; }
+        public DeviceInfoData? DeviceInfo { get; set; }
+
+        public class DeviceInfoData
+        {
+            public string? Channel { get; set; }
+            public string? DeviceId { get; set; }
+            public string? DeviceType { get; set; }
+            public string? AppVer { get; set; }
+            public string? OS { get; set; }
+            public string? OSVer { get; set; }
+            public string? Brand { get; set; }
+            public string? Model { get; set; }
+            public string? ClientIp { get; set; }
+        }
     }
 }

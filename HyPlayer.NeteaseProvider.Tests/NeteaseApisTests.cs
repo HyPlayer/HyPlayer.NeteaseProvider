@@ -1,10 +1,9 @@
 #region
 
-using FluentAssertions;
+using AwesomeAssertions;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.ApiContracts.Album;
 using HyPlayer.NeteaseApi.ApiContracts.Artist;
-using HyPlayer.NeteaseApi.ApiContracts.Category;
 using HyPlayer.NeteaseApi.ApiContracts.Cloud;
 using HyPlayer.NeteaseApi.ApiContracts.Comment;
 using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
@@ -14,6 +13,7 @@ using HyPlayer.NeteaseApi.ApiContracts.Playlist;
 using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.ApiContracts.Song;
 using HyPlayer.NeteaseApi.ApiContracts.User;
+using HyPlayer.NeteaseApi.ApiContracts.Utils;
 using HyPlayer.NeteaseApi.ApiContracts.Video;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Models;
@@ -326,7 +326,7 @@ public class NeteaseApisTests
     }
 
     // [Test]
-    public async Task LoginCellphone_Should_LoginWithInfo(string phone, string password)
+    private async Task LoginCellphone_Should_LoginWithInfo(string phone, string password)
     {
         var result =
             await _provider.RequestAsync(NeteaseApis.LoginCellphoneApi,
@@ -347,7 +347,7 @@ public class NeteaseApisTests
     }
 
     //[Test]
-    public async Task LoginEmail_Should_LoginWithInfo(string email, string password)
+    private async Task LoginEmail_Should_LoginWithInfo(string email, string password)
     {
         var result = await _provider.RequestAsync(NeteaseApis.LoginEmailApi,
             new LoginEmailRequest
@@ -368,9 +368,9 @@ public class NeteaseApisTests
 
     // [Test]
     // [DependsOn(nameof(LoginQrCodeUnikey_Should_BeNormal))]
-    public async Task LoginQrCodeCheck_Should_BeNormal()
+    private async Task LoginQrCodeCheck_Should_BeNormal()
     {
-        var unikey = TestContext.Current!.ObjectBag["unikey"] as string;
+        var unikey = TestContext.Current!.StateBag["unikey"] as string;
         var result = await _provider.RequestAsync(NeteaseApis.LoginQrCodeCheckApi, new LoginQrCodeCheckRequest
         {
             Unikey = unikey!
@@ -380,12 +380,12 @@ public class NeteaseApisTests
     }
 
     // [Test]
-    public async Task LoginQrCodeUnikey_Should_BeNormal()
+    private async Task LoginQrCodeUnikey_Should_BeNormal()
     {
         var result = await _provider.RequestAsync(NeteaseApis.LoginQrCodeUnikeyApi, new LoginQrCodeUnikeyRequest());
         result.Match(s => s.Code.Should().Be(200),
             e => throw e);
-        TestContext.Current!.ObjectBag["unikey"] = result.Value?.Unikey;
+        TestContext.Current!.StateBag["unikey"] = result.Value?.Unikey;
     }
 
     // LoginStatusApi
@@ -777,7 +777,7 @@ public class NeteaseApisTests
     // [Arguments("8645419738", UserRecordType.WeekData)] // TODO: uncomment this line when the test account's weekly listen record accumulates
     public async Task UserRecordApi_Should_BeNormal(string id, UserRecordType type)
     {
-        var result =
+            var result =
             await _provider
                 .RequestAsync<UserRecordAllResponse, UserRecordRequest, UserRecordResponse, ErrorResultBase,
                     UserRecordActualRequest>(NeteaseApis.UserRecordApi, new UserRecordRequest

@@ -1,0 +1,10 @@
+﻿using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using System.Text.Json.Serialization;
+
+namespace HyPlayer.NeteaseApi.Bases.WeApiContractBases;
+
+public class WeApiActualRequestBase : ActualRequestBase
+{
+    [JsonPropertyName("csrf_token")]
+    public string? CsrfToken { get; set; }
+}

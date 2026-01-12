@@ -1,6 +1,6 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -40,7 +40,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
                     ArtistId = Request.ArtistId,
                     Tab = Request.Tab,
                     Order = Request.Order,
-                    Page = JsonSerializer.Serialize(page)
+                    Page = JsonSerializer.Serialize(page, ApiHandlerOption.JsonSerializerOptionsOnlyTypeInfo)
                 };
             }
 

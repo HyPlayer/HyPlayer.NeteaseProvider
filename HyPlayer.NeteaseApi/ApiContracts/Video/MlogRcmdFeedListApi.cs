@@ -1,7 +1,7 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseApi.ApiContracts.Video;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -41,8 +41,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Video
                 {
                     ActualRequest.ExtInfo = JsonSerializer.Serialize(new Dictionary<string, string>()
                     {
-                        ["songId"] = Request.SongId
-                    });
+                        ["songId"] = Request.SongId!
+                    }, ApiHandlerOption.JsonSerializerOptionsOnlyTypeInfo);
                 }
             }
 

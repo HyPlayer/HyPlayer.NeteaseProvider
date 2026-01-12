@@ -5,6 +5,7 @@ using HyPlayer.NeteaseApi.ApiContracts.Playlist;
 using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.ApiContracts.Song;
 using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.NeteaseProvider.Models;
@@ -236,7 +237,7 @@ public class NeteaseProvider : ProviderBase,
                 Time = response.SongUrls[0].Time,
                 MusicType = response.SongUrls[0].Type,
                 Level = response.SongUrls[0].Level,
-                Uri = new Uri(response.SongUrls[0].Url)
+                Uri = new Uri(response.SongUrls[0].Url ?? string.Empty)
             };
         }
 

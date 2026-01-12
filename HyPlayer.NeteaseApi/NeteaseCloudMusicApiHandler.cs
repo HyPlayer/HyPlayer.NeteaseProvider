@@ -1,4 +1,5 @@
 using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using System.Net;
 
@@ -35,6 +36,7 @@ public class NeteaseCloudMusicApiHandler
     {
         try
         {
+            await contract.MapRequest(Option).ConfigureAwait(false);
             using var requestMessage = await contract.GenerateRequestMessageAsync(Option, cancellationToken);
             using var response = await HttpClient.SendAsync(requestMessage,
                                                   cancellationToken).ConfigureAwait(false);

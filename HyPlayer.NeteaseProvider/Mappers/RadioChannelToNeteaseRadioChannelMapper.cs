@@ -11,7 +11,7 @@ public static class RadioChannelToNeteaseRadioChannelMapper
         return new NeteaseRadioChannel
         {
             ActualId = radioChannel.Id,
-            Name = radioChannel.Name,
+            Name = radioChannel.Name ?? "",
             Description = radioChannel.Description,
         };
     }

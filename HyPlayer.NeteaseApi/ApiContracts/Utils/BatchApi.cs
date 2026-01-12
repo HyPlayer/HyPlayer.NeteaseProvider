@@ -1,6 +1,6 @@
-using HyPlayer.NeteaseApi.ApiContracts.Category;
+using HyPlayer.NeteaseApi.ApiContracts.Utils;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Extensions.JsonSerializer;
 using System.Collections;
@@ -14,7 +14,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 }
 
 
-namespace HyPlayer.NeteaseApi.ApiContracts.Category
+namespace HyPlayer.NeteaseApi.ApiContracts.Utils
 {
     public class BatchApi : EApiContractBase<BatchRequest, BatchResponse, ErrorResultBase, BatchActualRequest>
     {
@@ -50,10 +50,10 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Category
                 {
                     if (kvp.Key == "code")
                     {
-                        if (kvp.Value.Value != "200")
+                        if (kvp.Value?.Value != "200")
                         {
                             return Results<BatchResponse, ErrorResultBase>.CreateError(
-                                new ErrorResultBase(int.Parse(kvp.Value.Value ?? "500"), "返回值不为 200"));
+                                new ErrorResultBase(int.Parse(kvp.Value?.Value ?? "500"), "返回值不为 200"));
                         }
                         continue;
                     }
@@ -136,7 +136,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Category
 
         public bool TryGetValue(string key, out JsonObjectStringWrapper value)
         {
-            return _backingDictionary.TryGetValue(key, out value);
+            return _backingDictionary.TryGetValue(key, out value!);
         }
 
         public JsonObjectStringWrapper this[string key]

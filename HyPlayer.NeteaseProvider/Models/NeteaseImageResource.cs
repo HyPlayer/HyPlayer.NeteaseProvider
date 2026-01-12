@@ -7,12 +7,12 @@ public class NeteaseImageResource : ImageResourceBase
 {
     public override Task<ResourceResultBase> GetResourceAsync(ResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
-        return Task.FromResult(new NeteaseImageResourceResult
+        return Task.FromResult<ResourceResultBase>(new NeteaseImageResourceResult
         {
             ExternalException = null,
             ResourceStatus = ResourceStatus.Success,
-            Uri = new Uri(Uri, $"?{qualityTag?.ToString()}")
-        } as ResourceResultBase);
+            Uri = new Uri(Uri!, $"?{qualityTag}")
+        });
     }
 }
 public class NeteaseImageResourceResult : ResourceResultBase, IResourceResultOf<Uri?>

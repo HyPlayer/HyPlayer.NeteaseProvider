@@ -1,6 +1,6 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts.User;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using System.Text.Json.Serialization;
 
@@ -52,11 +52,13 @@ namespace HyPlayer.NeteaseApi.ApiContracts.User
         WeekData = 1
     }
 
+    [JsonContextSerializable(typeof(UserRecordWeekResponse))]
     public class UserRecordWeekResponse : UserRecordResponse
     {
         [JsonPropertyName("weekData")] public UserRecordResponseItem[]? WeekData { get; set; }
     }
 
+    [JsonContextSerializable(typeof(UserRecordAllResponse))]
     public class UserRecordAllResponse : UserRecordResponse
     {
         [JsonPropertyName("allData")] public UserRecordResponseItem[]? AllData { get; set; }

@@ -1,6 +1,6 @@
-using HyPlayer.NeteaseApi.ApiContracts.Category;
+using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -13,7 +13,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 }
 
 
-namespace HyPlayer.NeteaseApi.ApiContracts.Category
+namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 {
     public class ListenTogetherSyncListReportApi : EApiContractBase<ListenTogetherSyncListReportRequest,
         ListenTogetherSyncListReportResponse, ErrorResultBase, ListenTogetherSyncListReportActualRequest>
@@ -66,7 +66,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Category
                     };
                 var playlistParamJson = JsonSerializer.Serialize(playlistParam, new JsonSerializerOptions(JsonSerializerDefaults.Web)
                 {
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    TypeInfoResolver = NeteaseApiContractJsonContext.Default
                 });
                 ActualRequest = new ListenTogetherSyncListReportActualRequest()
                 {
