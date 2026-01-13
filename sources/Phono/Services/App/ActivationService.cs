@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
 using Phono.Contracts.Services.App;
 using Phono.Views.Settings;
+using Phono.Forms;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -63,6 +64,9 @@ namespace Phono.Services.App
             }
 
             _navigationService.NavigateTo("ShellPage", args, new DrillInNavigationTransitionInfo(), TargetFrameOption.RootFrame);
+
+            var signInTest = new SignInWindow();     
+            signInTest.Activate();
         }
     }
 }

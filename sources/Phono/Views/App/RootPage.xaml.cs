@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Windowing;
 using Phono.Views.Base;
+using Phono.Forms;
 using System;
 using System.Collections.Generic;
 using System.IO;

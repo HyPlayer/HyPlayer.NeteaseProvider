@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Window
-    x:Class="Phono.MainWindow"
+    x:Class="Phono.Forms.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:app="using:Phono.Views.App"
     xmlns:base="using:Richasy.WinUIKernel.Share.Base"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:Phono"
+    xmlns:local="using:Phono.Forms"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Phono"
     mc:Ignorable="d">

@@ -17,11 +17,13 @@
   <ItemGroup>
     <Content Remove="Assets\01.jpg" />
     <Content Remove="Assets\02.jpg" />
+    <Content Remove="Assets\deviceid.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controls\HeaderImageControl.xaml" />
     <None Remove="Controls\PlayBar\PlayBarView.xaml" />
     <None Remove="Dialogs\TestDialog.xaml" />
+    <None Remove="Forms\SignInWindow.xaml" />
     <None Remove="Resources\Converters.xaml" />
     <None Remove="Resources\Layouts.xaml" />
     <None Remove="Resources\Styles\ContentDialog.xaml" />
@@ -127,6 +129,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\App\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Forms\SignInWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Resources\Styles\ContentDialog.xaml">
