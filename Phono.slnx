@@ -1,0 +1,26 @@
+<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/refs/">
+    <Project Path="Phono.LocalMusicProvider/Phono.LocalMusicProvider.csproj" Id="abd52b1f-4ca5-4dbd-bf5b-19b4f752fdf5" />
+    <Project Path="refs/HyPlayer.NeteaseProvider/HyPlayer.NeteaseApi/HyPlayer.NeteaseApi.csproj" />
+    <Project Path="refs/HyPlayer.NeteaseProvider/HyPlayer.NeteaseProvider/HyPlayer.NeteaseProvider.csproj" />
+    <Project Path="refs/HyPlayer.PlayCore/HyPlayer.PlayCore.Abstraction/HyPlayer.PlayCore.Abstraction.csproj" />
+    <Project Path="refs/HyPlayer.PlayCore/HyPlayer.PlayCore.Implementation.AudioGraph/HyPlayer.PlayCore.Implementation.AudioGraphService.csproj" />
+    <Project Path="refs/HyPlayer.PlayCore/HyPlayer.PlayCore/HyPlayer.PlayCore.csproj" />
+  </Folder>
+  <Folder Name="/解决方案项/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path=".gitmodules" />
+  </Folder>
+  <Project Path="sources/Phono/Phono.csproj">
+    <Platform Solution="*|ARM64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+    <Deploy />
+  </Project>
+</Solution>
