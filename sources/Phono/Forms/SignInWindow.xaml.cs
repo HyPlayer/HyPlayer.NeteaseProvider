@@ -17,11 +17,15 @@ using Richasy.WinUIKernel.Share;
 using Richasy.WinUIKernel.Share.Base;
 using WinUIEx;
 using Microsoft.UI;
+using Phono.ViewModels.Netease;
+using AsyncAwaitBestPractices;
 
 namespace Phono.Forms
 {
     public sealed partial class SignInWindow : WindowBase
     {
+        private SignInViewModel ViewModel => Locator.Instance.GetService<SignInViewModel>();
+
         public SignInWindow()
         {
             InitializeComponent();
@@ -36,5 +40,10 @@ namespace Phono.Forms
 
             SetTitleBar(TitleBarArea);
         }
+
+        private void ImageEx_Loaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel.LoadDataAsync(QRCodePresenter).SafeFireAndForget();
+        }       
     }
 }

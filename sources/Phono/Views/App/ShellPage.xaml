@@ -28,7 +28,7 @@
         MenuItemTemplate="{StaticResource AppNavigationViewItemTemplate}"
         FooterMenuItemsSource="{x:Bind ViewModel.FooterNavigationViewItems, Mode=OneWay}"
         MenuItemsSource="{x:Bind ViewModel.NavigationViewItems, Mode=OneWay}"
-        Style="{ThemeResource AppNavigationViewStyle}">
+        Style="{ThemeResource MainNavigationViewStyle}">
 
         <!--  Navigation content frame  -->
         <Frame x:Name="ShellFrame" />

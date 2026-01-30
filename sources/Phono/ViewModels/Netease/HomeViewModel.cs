@@ -20,7 +20,7 @@ namespace Phono.ViewModels.Netease
         public ObservableCollection<NeteasePlaylist> TopPlaylists { get; } = new ObservableCollection<NeteasePlaylist>();
 
         private readonly NeteaseProvider _neteaseProvider;
-        
+
         public HomeViewModel(NeteaseProvider neteaseProvider)
         {
             _neteaseProvider = neteaseProvider;
@@ -32,7 +32,7 @@ namespace Phono.ViewModels.Netease
             {
                 var recommendedSongs = await _neteaseProvider.GetRecommendationAsync("sg") as NeteaseActionGettableContainer;
                 RecommendedSongs.Clear();
-        
+
                 var recommendedPlaylists = await _neteaseProvider.GetRecommendationAsync("pl") as NeteaseActionGettableContainer;
                 RecommendedPlaylists.Clear();
 
@@ -86,5 +86,13 @@ namespace Phono.ViewModels.Netease
             }
 
         }
+
+        public void OnPlaylistCardClicked(NeteasePlaylist playlist)
+        {
+        }
+
+        public void OnSongCardClicked(NeteaseSong song)
+        {
+        }
+        }
     }
-}

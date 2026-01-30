@@ -48,15 +48,35 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Style="{ThemeResource TitleTextBlockStyle}">Sign In</TextBlock>
+                    <Grid>
+                        <TextBlock Style="{ThemeResource TitleTextBlockStyle}" HorizontalAlignment="Left" >Sign In</TextBlock>
+                        <Button x:Name="SignInToolButton">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <HyperlinkButton x:Name="RegisterCurrentIdBtn" Command="{x:Bind ViewModel.RegisterByCurrentDeviceIdCommand, Mode=OneWay}">
+                                        注册当前设备 ID
+                                    </HyperlinkButton>
+                                </Flyout>
+                            </Button.Flyout>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" />
+                            
+                        </Button>
+                    </Grid>
+                    
                     <Grid Grid.Row="1">
                         <Border
                             Width="198"
                             Height="198"
                             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            CornerRadius="{ThemeResource ControlCornerRadius}"
                             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1">
+                            BorderThickness="1"
+                            CornerRadius="{ThemeResource ControlCornerRadius}">
+                            <Image
+                                x:Name="QRCodePresenter"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Source="{x:Bind ViewModel.QrCodeImage, Mode=OneWay}"
+                                Loaded="ImageEx_Loaded" />
                         </Border>
                     </Grid>
                 </Grid>
