@@ -13,7 +13,7 @@
         <RepositoryType>git</RepositoryType>
         <AssemblyVersion>0.1.0</AssemblyVersion>
         <FileVersion>0.1.0</FileVersion>
-        <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net9.0</TargetFrameworks>
 		<NoWarn>IL2026;IL3050</NoWarn>
         <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
         <Platforms>AnyCPU;x64</Platforms>
