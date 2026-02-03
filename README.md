@@ -70,7 +70,18 @@ High-level provider implementing HyPlayer provider abstraction for seamless inte
 
 ## Building
 
-Requires `.NET SDK 10.0.0` or later .
+Requires `.NET SDK 10.0.0` or later (as specified in `global.json`).
+
+```
+# Build all projects
+dotnet build
+
+# Build specific project
+dotnet build HyPlayer.NeteaseProvider/HyPlayer.NeteaseProvider.csproj
+
+# Run tests
+dotnet test
+```
 
 ## Contributing
 
