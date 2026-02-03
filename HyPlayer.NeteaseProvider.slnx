@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="global.json" />
+    <File Path="HyPlayer.NeteaseProvider.sln.DotSettings" />
+    <File Path="LICENCE" />
+    <File Path="renovate.json" />
+  </Folder>
+  <Folder Name="/Solution Items/workflows/">
+    <File Path=".github/workflows/nativeaot-test.yml" />
+    <File Path=".github/workflows/nuget-push.yml" />
+    <File Path=".github/workflows/test.yml" />
+  </Folder>
+  <Folder Name="/sources/">
+    <Project Path="EasyDumper/EasyDumper.csproj" />
+    <Project Path="HyPlayer.NeteaseApi/HyPlayer.NeteaseApi.csproj" />
+    <Project Path="HyPlayer.NeteaseProvider.Tests/HyPlayer.NeteaseProvider.Tests.csproj" />
+    <Project Path="HyPlayer.NeteaseProvider/HyPlayer.NeteaseProvider.csproj" />
+  </Folder>
+</Solution>
