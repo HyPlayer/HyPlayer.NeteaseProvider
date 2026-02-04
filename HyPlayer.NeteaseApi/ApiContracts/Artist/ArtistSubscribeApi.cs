@@ -1,6 +1,7 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.WeApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
+using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -15,30 +16,42 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.Artist
 {
-    public class ArtistSubscribeApi : WeApiContractBase<ArtistSubscribeRequest, ArtistSubscribeResponse, ErrorResultBase,
+    public class ArtistSubscribeApi : EApiContractBase<ArtistSubscribeRequest, ArtistSubscribeResponse, ErrorResultBase,
         ArtistSubscribeActualRequest>
     {
-        public override string IdentifyRoute => "/subscribeartist";
+        public override string ApiPath { get; protected set; } = "/api/artist/sub";
 
-        public override string Url { get; protected set; } = "https://music.163.com/weapi/artist/sub";
+        public override string IdentifyRoute => "/artist/subscribe";
+
+        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/artist/";
 
         public override HttpMethod Method => HttpMethod.Post;
 
         public override Task MapRequest(ApiHandlerOption option)
         {
-            throw new NotImplementedException();
+            if (Request is not null)
+            {
+                ActualRequest = new ArtistSubscribeActualRequest
+                {
+                    ArtistId = Request.ArtistId
+                };
+                Url += "sub";
+            }
+            return Task.CompletedTask;
         }
     }
 
     public class ArtistSubscribeRequest : RequestBase
     {
+        public required string ArtistId { get; set; }
     }
 
     public class ArtistSubscribeResponse : CodedResponseBase
     {
     }
 
-    public class ArtistSubscribeActualRequest : WeApiActualRequestBase
+    public class ArtistSubscribeActualRequest : EApiActualRequestBase
     {
+        [JsonPropertyName("artistId")] public required string ArtistId { get; set; }
     }
 }
