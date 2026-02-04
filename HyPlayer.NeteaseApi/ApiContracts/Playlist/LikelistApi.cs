@@ -1,6 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts.Playlist;
 using HyPlayer.NeteaseApi.Bases;
-using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases.WeApiContractBases;
 
@@ -40,7 +39,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Playlist
     public class LikelistRequest : RequestBase
     {
         /// <summary>
-        /// 用户 ID
+        /// 歌单 ID
         /// </summary>
         public required string Uid { get; set; }
     }

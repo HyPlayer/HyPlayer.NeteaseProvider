@@ -16,6 +16,7 @@ using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
 using HyPlayer.NeteaseApi.Extensions;
+using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
 
 namespace HyPlayer.NeteaseProvider;
 
@@ -323,7 +324,11 @@ public class NeteaseProvider : ProviderBase,
                                    PlaylistId = inProviderId.Substring(2)
                                }, ctk);
         }
-        // TODO
+
+        else if (inProviderId.StartsWith(NeteaseTypeIds.User))
+        {
+            // TODO: Implement follow user API
+        }
     }
 
     public async Task<List<string>> GetLikedProvidableIdsAsync(string typeId, CancellationToken ctk = new())

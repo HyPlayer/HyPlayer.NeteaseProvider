@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using HyPlayer.NeteaseApi.Bases.WeApiContractBases;
 
-namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
+namespace HyPlayer.NeteaseApi.Bases.WeApiContractBases;
 
 public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequest> :
     ApiContractBase<TRequest, TResponse, TError, TActualRequest>
