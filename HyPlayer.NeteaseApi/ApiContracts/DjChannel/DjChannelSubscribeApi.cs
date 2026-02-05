@@ -1,6 +1,15 @@
 ﻿using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
+
+namespace HyPlayer.NeteaseApi.ApiContracts
+{
+    public static partial class NeteaseApis
+    {
+        public static DjChannelSubscribeApi DjChannelSubscribeApi => new();
+    }
+}
 
 namespace HyPlayer.NeteaseApi.ApiContracts.DjChannel
 {
