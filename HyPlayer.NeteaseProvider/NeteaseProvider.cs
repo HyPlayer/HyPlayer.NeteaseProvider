@@ -2,6 +2,10 @@ using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.ApiContracts.Login;
 using HyPlayer.NeteaseApi.ApiContracts.Playlist;
+using HyPlayer.NeteaseApi.ApiContracts.Artist;
+using HyPlayer.NeteaseApi.ApiContracts.Album;
+using HyPlayer.NeteaseApi.ApiContracts.Video;
+using HyPlayer.NeteaseApi.ApiContracts.User;
 using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.ApiContracts.Song;
 using HyPlayer.NeteaseApi.Bases;
@@ -285,7 +289,49 @@ public class NeteaseProvider : ProviderBase,
                                    PlaylistId = inProviderId.Substring(2)
                                }, ctk);
         }
-        // TODO
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Artist))
+        {
+            await RequestAsync(NeteaseApis.ArtistSubscribeApi,
+                new ArtistSubscribeRequest()
+                {
+                    ArtistId = inProviderId.Substring(2)
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Album))
+        {
+            await RequestAsync(NeteaseApis.AlbumSubscribeApi,
+                new AlbumSubscribeRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsSubscribe = true
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Mv))
+        {
+            await RequestAsync(NeteaseApis.VideoSubscribeApi,
+                new VideoSubscribeRequest()
+                {
+                    MvId = inProviderId.Substring(2)
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.RadioChannel))
+        {
+            await RequestAsync(NeteaseApis.DjChannelSubscribeApi,
+                new DjChannelSubscribeRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsSubscribe = true
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.User))
+        {
+            await RequestAsync(NeteaseApis.UserFollowApi,
+                new UserFollowRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsFollow = true
+                }, ctk);
+        }
     }
 
     public async Task UnlikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = new())
@@ -325,9 +371,52 @@ public class NeteaseProvider : ProviderBase,
                                }, ctk);
         }
 
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Artist))
+        {
+            var id = inProviderId.Substring(2);
+            if (long.TryParse(id, out var lid))
+            {
+                await RequestAsync(NeteaseApis.ArtistUnsubscribeApi,
+                    new ArtistUnsubscribeRequest()
+                    {
+                        ArtistIds = new[] { lid }
+                    }, ctk);
+            }
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Album))
+        {
+            await RequestAsync(NeteaseApis.AlbumSubscribeApi,
+                new AlbumSubscribeRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsSubscribe = false
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Mv))
+        {
+            await RequestAsync(NeteaseApis.VideoUnsubscribeApi,
+                new VideoUnsubscribeRequest()
+                {
+                    VideoIds = new[] { inProviderId.Substring(2) }
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.RadioChannel))
+        {
+            await RequestAsync(NeteaseApis.DjChannelSubscribeApi,
+                new DjChannelSubscribeRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsSubscribe = false
+                }, ctk);
+        }
         else if (inProviderId.StartsWith(NeteaseTypeIds.User))
         {
-            // TODO: Implement follow user API
+            await RequestAsync(NeteaseApis.UserFollowApi,
+                new UserFollowRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsFollow = false
+                }, ctk);
         }
     }
 

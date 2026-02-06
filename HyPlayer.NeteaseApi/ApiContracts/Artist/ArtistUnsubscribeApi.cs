@@ -45,7 +45,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
         /// <summary>
         /// Array of artist ids. Will be converted to a JSON array string in the request, e.g. new long[] { 35374786 } -> "[35374786]"
         /// </summary>
-        public required string[] ArtistIds { get; set; }
+        public required long[] ArtistIds { get; set; }
     }
 
     public class ArtistUnsubscribeResponse : CodedResponseBase
