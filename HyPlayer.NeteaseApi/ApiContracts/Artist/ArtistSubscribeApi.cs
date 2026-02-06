@@ -17,7 +17,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 namespace HyPlayer.NeteaseApi.ApiContracts.Artist
 {
     public class ArtistSubscribeApi : EApiContractBase<ArtistSubscribeRequest, ArtistSubscribeResponse, ErrorResultBase,
-        ArtistSubscribeActualRequest>
+        ArtistSubscribeActualRequest>, IFakeCheckTokenApi
     {
         public override string ApiPath { get; protected set; } = "/api/artist/sub";
 

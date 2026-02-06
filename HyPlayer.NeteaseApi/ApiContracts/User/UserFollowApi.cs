@@ -12,7 +12,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.User
 {
-    public class UserFollowApi : EApiContractBase<UserFollowRequest, UserFollowResponse, ErrorResultBase, UserFollowActualRequestBase>
+    public class UserFollowApi : EApiContractBase<UserFollowRequest, UserFollowResponse, ErrorResultBase, UserFollowActualRequestBase>, IFakeCheckTokenApi
     {
         public override string ApiPath { get; protected set; } = "/user/follow";
 
