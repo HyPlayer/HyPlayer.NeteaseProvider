@@ -1,5 +1,6 @@
 using HyPlayer.NeteaseApi.ApiContracts.Utils;
 using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;

@@ -1,7 +1,9 @@
 ﻿using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.Bases;
 using System.Text.Json.Serialization;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Bases.WeApiContractBases;
+
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {

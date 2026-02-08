@@ -1,4 +1,4 @@
-﻿using HyPlayer.NeteaseApi.Bases.EApiContractBases;
+﻿using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -6,8 +6,9 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using HyPlayer.NeteaseApi.Bases.WeApiContractBases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 
-namespace HyPlayer.NeteaseApi.Bases.WeApiContractBases;
+namespace HyPlayer.NeteaseApi.Bases.ApiContractBases;
 
 public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequest> :
     ApiContractBase<TRequest, TResponse, TError, TActualRequest>

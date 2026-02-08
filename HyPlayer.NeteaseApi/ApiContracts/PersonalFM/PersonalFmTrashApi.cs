@@ -1,5 +1,6 @@
 using HyPlayer.NeteaseApi.ApiContracts.PersonalFM;
 using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Bases.ApiContractBases;
 using System.Text.Json.Serialization;
 using HyPlayer.NeteaseApi.Bases.WeApiContractBases;
 
