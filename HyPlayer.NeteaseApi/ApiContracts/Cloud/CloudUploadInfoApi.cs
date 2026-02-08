@@ -51,11 +51,11 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Cloud
         public string Album { get; set; } = "未知专辑";
         public string Artist { get; set; } = "未知歌手";
         public int Bitrate { get; set; } = 0;
-        public required string CoverId { get; set; }
+        public string? CoverId { get; set; }
         public required string FileName { get; set; }
         public required string Md5 { get; set; }
-        public required string ObjectKey { get; set; }
-        public required string ResourceId { get; set; }
+        public string? ObjectKey { get; set; }
+        public string? ResourceId { get; set; }
         public string Song { get; set; } = "未知歌曲";
         public required string SongId { get; set; }
     }
