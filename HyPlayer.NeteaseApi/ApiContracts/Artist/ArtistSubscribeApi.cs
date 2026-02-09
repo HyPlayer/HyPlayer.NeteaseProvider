@@ -23,7 +23,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
 
         public override string IdentifyRoute => "/artist/subscribe";
 
-        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/artist/";
+        public override string Url { get; protected set; } = "https://interface.music.163.com/eapi/artist/sub";
 
         public override HttpMethod Method => HttpMethod.Post;
 
@@ -35,7 +35,6 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
                 {
                     ArtistId = Request.ArtistId
                 };
-                Url += "sub";
             }
             return Task.CompletedTask;
         }

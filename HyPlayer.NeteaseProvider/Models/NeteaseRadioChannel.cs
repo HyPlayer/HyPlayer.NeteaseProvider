@@ -121,8 +121,6 @@ IHasCreators
     /// </summary>
     public NeteaseUser? Host { get; set; }
 
-    private NeteaseRadioProgram[]? _cachedPrograms;
-
     /// <summary>
     /// 获取所有节目
     /// </summary>

@@ -40,7 +40,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Playlist
     public class LikelistRequest : RequestBase
     {
         /// <summary>
-        /// 歌单 ID
+        /// 用户 ID
         /// </summary>
         public required string Uid { get; set; }
     }

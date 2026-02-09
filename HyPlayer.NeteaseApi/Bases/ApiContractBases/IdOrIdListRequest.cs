@@ -3,12 +3,12 @@
 public class IdOrIdListListRequest : RequestBase
 {
     /// <summary>
-    /// 歌曲 ID 列表
+    /// 资源 ID 列表
     /// </summary>
     public List<string>? IdList { get; set; }
 
     /// <summary>
-    /// 歌曲 ID
+    /// 资源 ID
     /// </summary>
     public string? Id { get; set; }
 

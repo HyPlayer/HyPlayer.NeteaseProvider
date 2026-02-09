@@ -328,8 +328,7 @@ public class NeteaseProvider : ProviderBase,
             await RequestAsync(NeteaseApis.UserFollowApi,
                 new UserFollowRequest()
                 {
-                    Id = inProviderId.Substring(2),
-                    IsFollow = true
+                    Id = inProviderId.Substring(2)
                 }, ctk);
         }
     }
@@ -397,7 +396,7 @@ public class NeteaseProvider : ProviderBase,
             await RequestAsync(NeteaseApis.VideoUnsubscribeApi,
                 new VideoUnsubscribeRequest()
                 {
-                    VideoIds = new[] { inProviderId.Substring(2) }
+                    IdList = [ inProviderId.Substring(2)]
                 }, ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.RadioChannel))
@@ -411,11 +410,10 @@ public class NeteaseProvider : ProviderBase,
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.User))
         {
-            await RequestAsync(NeteaseApis.UserFollowApi,
-                new UserFollowRequest()
+            await RequestAsync(NeteaseApis.UserUnfollowApi,
+                new UserUnfollowRequest()
                 {
-                    Id = inProviderId.Substring(2),
-                    IsFollow = false
+                    Id = inProviderId.Substring(2)
                 }, ctk);
         }
     }

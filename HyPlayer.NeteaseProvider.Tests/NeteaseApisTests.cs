@@ -867,4 +867,97 @@ public class NeteaseApisTests
             },
             e => throw e);
     }
+    [Test]
+    [Arguments("14548918")]
+    public async Task VideoSubscribe_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.VideoSubscribeApi, new VideoSubscribeRequest
+        {
+            MvId = id
+        });
+        result.Match(s =>
+        {
+            s.Code.Should().Be(200);
+            return true;
+        },
+            e => throw e);
+    }
+    [Test]
+    [Arguments("14548918")]
+    public async Task VideoUnsubscribe_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.VideoUnsubscribeApi, new VideoUnsubscribeRequest
+        {
+            Id = id
+        });
+        result.Match(s =>
+        {
+            s.Code.Should().Be(200);
+            return true;
+        },
+            e => throw e);
+    }
+
+    [Test]
+    [Arguments("793914432")]
+    public async Task DJChannelSubscribe_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.DjChannelSubscribeApi, new DjChannelSubscribeRequest
+        {
+            Id = id,
+            IsSubscribe = true
+        });
+        result.Match(s =>
+        {
+            s.Code.Should().Be(200);
+            return true;
+        },
+            e => throw e);
+    }
+    [Test]
+    [Arguments("793914432")]
+    public async Task DJChannelUnsubscribe_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.DjChannelSubscribeApi, new DjChannelSubscribeRequest
+        {
+            Id = id,
+            IsSubscribe = false
+        });
+        result.Match(s =>
+        {
+            s.Code.Should().Be(200);
+            return true;
+        },
+            e => throw e);
+    }
+    [Test]
+    [Arguments("8645419738")]
+    public async Task UserFollow_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.UserFollowApi, new UserFollowRequest
+        {
+            Id = id
+        });
+        result.Match(s =>
+        {
+            s.Code.Should().Be(200);
+            return true;
+        },
+            e => throw e);
+    }
+    [Test]
+    [Arguments("8645419738")]
+    public async Task UserUnfollow_Should_BeNormal(string id)
+    {
+        var result = await _provider.RequestAsync(NeteaseApis.UserUnfollowApi, new UserUnfollowRequest
+        {
+            Id = id
+        });
+        result.Match(s =>
+        {
+            s.Code.Should().Be(200);
+            return true;
+        },
+            e => throw e);
+    }
 }

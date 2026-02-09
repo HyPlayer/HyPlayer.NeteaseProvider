@@ -84,11 +84,6 @@ public class NeteaseRadioProgram : SingleSongBase, IHasCover, IHasDescription, I
     public string? Description { get; set; }
 
     /// <summary>
-    /// 主播列表
-    /// </summary>
-    public List<string>? CreatorList { get; init; }
-
-    /// <summary>
     /// 主播信息
     /// </summary>
     public NeteaseUser? Host { get; set; }
