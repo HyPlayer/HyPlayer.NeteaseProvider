@@ -1,4 +1,4 @@
-namespace HyPlayer.NeteaseApi.Bases.EApiContractBases;
+﻿namespace HyPlayer.NeteaseApi.Bases.EApiContractBases;
 
 public interface IBatchableApi
 {

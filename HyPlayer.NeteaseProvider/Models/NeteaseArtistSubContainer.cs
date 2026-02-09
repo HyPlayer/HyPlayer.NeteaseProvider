@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseApi.ApiContracts;
+﻿using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;

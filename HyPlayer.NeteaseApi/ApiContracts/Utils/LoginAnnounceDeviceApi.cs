@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseApi.ApiContracts.Utils;
+﻿using HyPlayer.NeteaseApi.ApiContracts.Utils;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;

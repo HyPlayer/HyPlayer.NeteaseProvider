@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseProvider.Constants;
+﻿using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;

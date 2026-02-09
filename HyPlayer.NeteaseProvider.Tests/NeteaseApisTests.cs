@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using AwesomeAssertions;
 using HyPlayer.NeteaseApi.ApiContracts;

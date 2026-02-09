@@ -1,4 +1,4 @@
-using HyPlayer.PlayCore.Abstraction.Models;
+﻿using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 
 namespace HyPlayer.NeteaseProvider.Models;

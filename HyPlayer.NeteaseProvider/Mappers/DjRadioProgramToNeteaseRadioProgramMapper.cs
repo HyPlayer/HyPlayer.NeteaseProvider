@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseApi.Models.ResponseModels;
+锘縰sing HyPlayer.NeteaseApi.Models.ResponseModels;
 using HyPlayer.NeteaseProvider.Models;
 
 namespace HyPlayer.NeteaseProvider.Mappers;
@@ -10,7 +10,7 @@ public static class DjRadioProgramToNeteaseRadioProgramMapper
         return new NeteaseRadioProgram
         {
             ActualId = program.Id!,
-            Name = program.Name ?? "未知节目",
+            Name = program.Name ?? "鏈煡鑺傜洰",
             PictureUrl = program.PictureUrl,
             CoverUrl = program.CoverUrl,
             Description = program.Description,
@@ -27,7 +27,7 @@ public static class DjRadioProgramToNeteaseRadioProgramMapper
             SerialNum = program.SerialNum,
             Host = program.Owner?.MapToNeteaseUser(),
             CreatorList = program.Owner != null
-                ? new List<string> { program.Owner.Nickname ?? program.Owner.UserId ?? "未知主播" }
+                ? new List<string> { program.Owner.Nickname ?? program.Owner.UserId ?? "鏈煡涓绘挱" }
                 : new List<string>(),
             Duration = program.MainSong?.Duration ?? program.Duration,
             Available = true

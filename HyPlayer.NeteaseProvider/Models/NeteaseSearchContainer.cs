@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseApi.ApiContracts;
+﻿using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Models;

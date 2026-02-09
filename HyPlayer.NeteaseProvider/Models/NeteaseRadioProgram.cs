@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseProvider.Constants;
+ï»¿using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.PlayCore.Abstraction.Interfaces.PlayListContainer;
 using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models;
@@ -14,82 +14,82 @@ public class NeteaseRadioProgram : SingleSongBase, IHasCover, IHasDescription, I
     public override string TypeId => NeteaseTypeIds.RadioProgram;
 
     /// <summary>
-    /// ½ÚÄ¿·âÃæ URL
+    /// èŠ‚ç›®å°é¢ URL
     /// </summary>
     public string? PictureUrl { get; set; }
 
     /// <summary>
-    /// ½ÚÄ¿·âÃæ URL (±¸ÓÃ)
+    /// èŠ‚ç›®å°é¢ URL (å¤‡ç”¨)
     /// </summary>
     public string? CoverUrl { get; set; }
 
     /// <summary>
-    /// ½ÚÄ¿Ê±³¤
+    /// èŠ‚ç›®æ—¶é•¿
     /// </summary>
     public long ProgramDuration { get; set; }
 
     /// <summary>
-    /// ½ÚÄ¿ËùÊôµçÌ¨
+    /// èŠ‚ç›®æ‰€å±ç”µå°
     /// </summary>
     public NeteaseRadioChannel? RadioChannel { get; set; }
 
     /// <summary>
-    /// ½ÚÄ¿Ö÷¸èÇú
+    /// èŠ‚ç›®ä¸»æ­Œæ›²
     /// </summary>
     public NeteaseSong? MainSong { get; set; }
 
     /// <summary>
-    /// ÊÇ·ñÒÑ¹ºÂò
+    /// æ˜¯å¦å·²è´­ä¹°
     /// </summary>
     public bool Bought { get; set; }
 
     /// <summary>
-    /// ¼àÌıÈËÊı
+    /// ç›‘å¬äººæ•°
     /// </summary>
     public long ListenerCount { get; set; }
 
     /// <summary>
-    /// ¶©ÔÄÈËÊı
+    /// è®¢é˜…äººæ•°
     /// </summary>
     public long SubscribedCount { get; set; }
 
     /// <summary>
-    /// ÆÀÂÛÊı
+    /// è¯„è®ºæ•°
     /// </summary>
     public long CommentCount { get; set; }
 
     /// <summary>
-    /// ·ÖÏíÊı
+    /// åˆ†äº«æ•°
     /// </summary>
     public long ShareCount { get; set; }
 
     /// <summary>
-    /// µãÔŞÊı
+    /// ç‚¹èµæ•°
     /// </summary>
     public long LikedCount { get; set; }
 
     /// <summary>
-    /// ´´½¨Ê±¼ä´Á (ºÁÃë)
+    /// åˆ›å»ºæ—¶é—´æˆ³ (æ¯«ç§’)
     /// </summary>
     public long CreateTime { get; set; }
 
     /// <summary>
-    /// ÆÚÊı
+    /// æœŸæ•°
     /// </summary>
     public int SerialNum { get; set; }
 
     /// <summary>
-    /// ½ÚÄ¿ÃèÊö
+    /// èŠ‚ç›®æè¿°
     /// </summary>
     public string? Description { get; set; }
 
     /// <summary>
-    /// Ö÷²¥ÁĞ±í
+    /// ä¸»æ’­åˆ—è¡¨
     /// </summary>
     public List<string>? CreatorList { get; init; }
 
     /// <summary>
-    /// Ö÷²¥ĞÅÏ¢
+    /// ä¸»æ’­ä¿¡æ¯
     /// </summary>
     public NeteaseUser? Host { get; set; }
 

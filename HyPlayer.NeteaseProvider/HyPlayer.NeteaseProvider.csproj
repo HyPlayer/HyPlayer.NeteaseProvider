@@ -4,11 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
-<<<<<<< HEAD
-        <Version>0.1.0</Version>
-=======
         <Version>0.0.12</Version>
->>>>>>> a116ed35614328753f05586a6294022afce6b52a
         <Title>HyPlayer.NeteaseProvider</Title>
         <Authors>HyPlayer Team</Authors>
         <Description>The NeteaseProvider for HyPlayer</Description>
@@ -16,13 +12,8 @@
         <PackageLicenseUrl>https://github.com/HyPlayer/HyPlayer.NeteaseProvider/blob/main/LICENCE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/HyPlayer/HyPlayer.NeteaseProvider</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-<<<<<<< HEAD
-        <AssemblyVersion>0.1.0</AssemblyVersion>
-        <FileVersion>0.1.0</FileVersion>
-=======
         <AssemblyVersion>0.0.12</AssemblyVersion>
         <FileVersion>0.0.12</FileVersion>
->>>>>>> a116ed35614328753f05586a6294022afce6b52a
         <TargetFrameworks>netstandard2.0;net9.0</TargetFrameworks>
         <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
     </PropertyGroup>
