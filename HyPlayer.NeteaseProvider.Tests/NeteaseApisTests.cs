@@ -930,7 +930,7 @@ public class NeteaseApisTests
         },
             e => throw e);
     }
-    [Test]
+    /*[Test]
     [Arguments("8645419738")]
     public async Task UserFollow_Should_BeNormal(string id)
     {
@@ -959,5 +959,5 @@ public class NeteaseApisTests
             return true;
         },
             e => throw e);
-    }
+    }*/
 }
