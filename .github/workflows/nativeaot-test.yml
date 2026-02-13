@@ -26,10 +26,10 @@ jobs:
             ${{ secrets.NETEASE_LOGIN_SECRET }}
             
       - name: Restore
-        run: dotnet restore -r linux-x64
+        run: dotnet restore -r linux-x64 -f net10.0
   
       - name: Publish with AOT
-        run: dotnet publish -c Release -r linux-x64 --no-restore
+        run: dotnet publish -c Release -r linux-x64 -f net10.0 --no-restore
   
       - name: Run AOT tests
         run: ./HyPlayer.NeteaseProvider.Tests/bin/Release/net9.0/linux-x64/publish/HyPlayer.NeteaseProvider.Tests
