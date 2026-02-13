@@ -26,7 +26,7 @@ jobs:
             ${{ secrets.NETEASE_LOGIN_SECRET }}
             
       - name: Restore
-        run: dotnet restore -r linux-x64 -p:TargetFramework=net10.0
+        run: dotnet restore -r linux-x64 -p:TargetFramework=net10.0 -p:RuntimeIdentifier=linux-x64
   
       - name: Publish with AOT
         run: dotnet publish -c Release -f net10.0 -r linux-x64 --no-restore
