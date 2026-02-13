@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Text.Json" Version="10.0.1" />
+        <PackageReference Include="System.Text.Json" Version="10.0.3" />
         <PackageReference Include="T4.Build" Version="0.2.5" PrivateAssets="All" />
     </ItemGroup>
 
