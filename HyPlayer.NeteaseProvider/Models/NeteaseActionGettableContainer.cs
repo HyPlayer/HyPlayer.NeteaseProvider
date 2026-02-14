@@ -38,7 +38,7 @@ public class NeteaseActionGettableProgressiveContainer : NeteaseActionGettableCo
     public Func<int, int, Task<(bool, List<ProvidableItemBase>)>>? ProgressiveGetter { get; set; }
 
 
-    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = default))
+    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = default)
     {
         return await (ProgressiveGetter?.Invoke(start, count) ??
                       Task.FromResult((false, new List<ProvidableItemBase>())));
