@@ -22,7 +22,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
     public class ArtistSongsApi : EApiContractBase<ArtistSongsRequest, ArtistSongsResponse, ErrorResultBase,
         ArtistSongsActualRequest>
     {
-        public override string IdentifyRoute => "/api/v2/artist/songs";
+        public override string IdentifyRoute => "/artist/songs";
         public override string Url { get; protected set; } = "https://interfacepc.music.163.com/eapi/v2/artist/songs";
         public override HttpMethod Method => HttpMethod.Post;
 
