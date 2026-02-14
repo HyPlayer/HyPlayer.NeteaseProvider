@@ -378,7 +378,7 @@ public class NeteaseProvider : ProviderBase,
                 await RequestAsync(NeteaseApis.ArtistUnsubscribeApi,
                     new ArtistUnsubscribeRequest()
                     {
-                        ArtistIds = new[] { lid }
+                        ArtistIds = [lid]
                     }, ctk);
             }
         }
