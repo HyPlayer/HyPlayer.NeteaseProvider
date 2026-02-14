@@ -135,8 +135,7 @@ public class NeteaseApisTests
     {
         var result = await _provider.RequestAsync(NeteaseApis.ArtistSongsApi, new ArtistSongsRequest
         {
-            ArtistId = id,
-            OrderType = orderType
+            ArtistId = id
         });
         result.Match(s =>
             {
