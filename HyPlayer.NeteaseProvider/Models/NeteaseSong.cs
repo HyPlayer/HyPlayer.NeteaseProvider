@@ -21,7 +21,7 @@ public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover
 
     public required List<PersonBase>? Artists { get; init; }
 
-    public override Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = new())
+    public override Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = default)
     {
         return Task.FromResult(Artists);
     }

@@ -9,7 +9,7 @@ public class NeteaseArtist : ArtistBase
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.Artist;
 
-    public override Task<List<ContainerBase>> GetSubContainerAsync(CancellationToken ctk = new())
+    public override Task<List<ContainerBase>> GetSubContainerAsync(CancellationToken ctk = default)
     {
         return
             Task.FromResult(new List<ContainerBase>()

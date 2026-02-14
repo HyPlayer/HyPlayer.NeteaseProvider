@@ -124,7 +124,7 @@ IHasCreators
     /// <summary>
     /// 获取所有节目
     /// </summary>
-    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = new CancellationToken())
+    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
         var programs = new List<NeteaseRadioProgram>();
         int offset = 0;
@@ -147,7 +147,7 @@ IHasCreators
     /// </summary>
     public int MaxProgressiveCount => 100;
 
-    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = new CancellationToken())
+    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = default)
     {
         var result = await NeteaseProvider.Instance.RequestAsync(
             NeteaseApis.DjChannelProgramsApi,
@@ -174,7 +174,7 @@ IHasCreators
     /// <summary>
     /// 获取电台封面
     /// </summary>
-    public async Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = new CancellationToken())
+    public async Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
         var coverUrl = CoverUrl ?? "";
         if (string.IsNullOrEmpty(coverUrl))
@@ -218,7 +218,7 @@ IHasCreators
     /// <summary>
     /// 获取电台主播列表
     /// </summary>
-    public Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = new CancellationToken())
+    public Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = default)
     {
         if (Host != null)
             return Task.FromResult<List<PersonBase>?>(new List<PersonBase> { Host });

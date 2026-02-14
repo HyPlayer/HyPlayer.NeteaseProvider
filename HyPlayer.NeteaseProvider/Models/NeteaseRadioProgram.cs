@@ -88,7 +88,7 @@ public class NeteaseRadioProgram : SingleSongBase, IHasCover, IHasDescription, I
     /// </summary>
     public NeteaseUser? Host { get; set; }
 
-    public override Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = new())
+    public override Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = default)
     {
         if (Host != null)
             return Task.FromResult<List<PersonBase>?>(new List<PersonBase> { Host });

@@ -21,7 +21,7 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
 
     public string? AvatarUrl { get; set; }
 
-    public override async Task<List<ContainerBase>> GetSubContainerAsync(CancellationToken ctk = new())
+    public override async Task<List<ContainerBase>> GetSubContainerAsync(CancellationToken ctk = default)
     {
         var results = await NeteaseProvider.Instance.RequestAsync(NeteaseApis.UserPlaylistApi,
                                                     new UserPlaylistRequest

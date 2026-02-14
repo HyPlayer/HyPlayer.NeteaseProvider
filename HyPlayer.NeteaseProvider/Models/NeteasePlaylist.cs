@@ -28,7 +28,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
     public long ShareCount { get; set; }
     public bool IsNewImported { get; set; }
 
-    public async Task UpdatePlaylistInfoAsync(CancellationToken ctk = new())
+    public async Task UpdatePlaylistInfoAsync(CancellationToken ctk = default)
     {
         var results = await NeteaseProvider.Instance.RequestAsync(
             NeteaseApis.PlaylistDetailApi,
@@ -59,7 +59,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
             }, error => false);
     }
 
-    public async Task UpdateTrackListAsync(CancellationToken ctk = new())
+    public async Task UpdateTrackListAsync(CancellationToken ctk = default)
     {
         if (ActualId == null) throw new ArgumentNullException();
         _trackIds = (await NeteaseProvider.Instance.RequestAsync(NeteaseApis.PlaylistTracksGetApi,
@@ -71,7 +71,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
             error => { return Array.Empty<PlaylistTracksGetResponse.PlaylistWithTracksInfoDto.TrackIdItem>(); });
     }
 
-    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = new())
+    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
         if (_trackIds is null)
             await UpdateTrackListAsync(ctk);
@@ -82,7 +82,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
     }
 
     public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(
-        int start, int count, CancellationToken ctk = new())
+        int start, int count, CancellationToken ctk = default)
     {
         if (_trackIds is null)
             await UpdatePlaylistInfoAsync(ctk);
@@ -98,7 +98,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
 
     public string? Description { get; set; }
 
-    public Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = new())
+    public Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = default)
     {
         return Task.FromResult(new List<PersonBase> { Creator! })!;
     }

@@ -162,7 +162,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
     public async Task<bool> LoginEmailAsync(string email, string password, bool isMd5 = false,
-                                            CancellationToken ctk = new())
+                                            CancellationToken ctk = default)
     {
         var request = new LoginEmailRequest()
         {
@@ -184,7 +184,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
     public async Task<bool> LoginCellphoneAsync(string cellphone, string password, bool isMd5 = false,
-                                                CancellationToken ctk = new())
+                                                CancellationToken ctk = default)
     {
         var request = new LoginCellphoneRequest()
         {
@@ -206,7 +206,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
 
-    public async Task<List<RawLyricInfo>> GetLyricInfoAsync(SingleSongBase song, CancellationToken ctk = new())
+    public async Task<List<RawLyricInfo>> GetLyricInfoAsync(SingleSongBase song, CancellationToken ctk = default)
     {
         if (song.ActualId == null) throw new ArgumentNullException();
         var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = song.ActualId }, ctk);
@@ -217,7 +217,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
     public async Task<MusicResourceBase?> GetMusicResourceAsync(SingleSongBase song, ResourceQualityTag qualityTag,
-                                                                CancellationToken ctk = new())
+                                                                CancellationToken ctk = default)
     {
         var quality = "exhigh";
         if (qualityTag is NeteaseMusicQualityTag neteaseMusicQualityTag)
@@ -253,7 +253,7 @@ public class NeteaseProvider : ProviderBase,
         );
     }
 
-    public async Task LikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = new())
+    public async Task LikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = default)
     {
         if (inProviderId.StartsWith(NeteaseTypeIds.SingleSong))
         {
@@ -333,7 +333,7 @@ public class NeteaseProvider : ProviderBase,
         }
     }
 
-    public async Task UnlikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = new())
+    public async Task UnlikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = default)
     {
         if (inProviderId.StartsWith(NeteaseTypeIds.SingleSong))
         {
@@ -418,7 +418,7 @@ public class NeteaseProvider : ProviderBase,
         }
     }
 
-    public async Task<List<string>> GetLikedProvidableIdsAsync(string typeId, CancellationToken ctk = new())
+    public async Task<List<string>> GetLikedProvidableIdsAsync(string typeId, CancellationToken ctk = default)
     {
         var result = await RequestAsync(NeteaseApis.LikelistApi, new LikelistRequest()
         {
@@ -431,7 +431,7 @@ public class NeteaseProvider : ProviderBase,
 
 
     public async Task<ProvidableItemBase?> GetProvidableItemByIdAsync(string inProviderId,
-                                                                      CancellationToken ctk = new())
+                                                                      CancellationToken ctk = default)
     {
         var typeId = inProviderId.Substring(0, 2);
         var actualId = inProviderId.Substring(2);
@@ -447,7 +447,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
     public async Task<List<ProvidableItemBase>> GetProvidableItemsRangeAsync(
-        List<string> inProviderIds, CancellationToken ctk = new())
+        List<string> inProviderIds, CancellationToken ctk = default)
     {
         if (inProviderIds.Count == 0) return new List<ProvidableItemBase>();
         var grouped = inProviderIds.GroupBy(t => t.Substring(0, 2)).ToList();
@@ -526,7 +526,7 @@ public class NeteaseProvider : ProviderBase,
     #endregion
 
     public Task<ContainerBase> SearchProvidableItemsAsync(string keyword, string typeId,
-                                                                 CancellationToken ctk = new())
+                                                                 CancellationToken ctk = default)
     {
         return Task.FromResult(new NeteaseSearchContainer
         {
@@ -537,7 +537,7 @@ public class NeteaseProvider : ProviderBase,
         } as ContainerBase);
     }
 
-    public Task<ContainerBase?> GetStoredItemsAsync(string typeId, CancellationToken ctk = new())
+    public Task<ContainerBase?> GetStoredItemsAsync(string typeId, CancellationToken ctk = default)
     {
         switch (typeId)
         {
@@ -548,7 +548,7 @@ public class NeteaseProvider : ProviderBase,
         }
     }
 
-    public Task<ContainerBase> GetRecommendationAsync(string? typeId = null, CancellationToken ctk = new())
+    public Task<ContainerBase> GetRecommendationAsync(string? typeId = null, CancellationToken ctk = default)
     {
         // ReSharper disable once ConvertIfStatementToSwitchStatement
         if (typeId == NeteaseTypeIds.Playlist) // 推荐歌单

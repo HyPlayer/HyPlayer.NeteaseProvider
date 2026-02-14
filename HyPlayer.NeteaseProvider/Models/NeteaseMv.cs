@@ -10,7 +10,7 @@ public class NeteaseMv : ProvidableItemBase, IHasCover
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.Mv;
     public string? CoverUrl { get; set; }
-    public async Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = new CancellationToken())
+    public async Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
         if (qualityTag is NeteaseImageResourceQualityTag neteaseImageResourceQualityTag)
         {
