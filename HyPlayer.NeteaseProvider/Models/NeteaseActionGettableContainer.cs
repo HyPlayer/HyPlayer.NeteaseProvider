@@ -21,7 +21,7 @@ public class NeteaseActionGettableContainer : LinerContainerBase
 
     public Func<Task<List<ProvidableItemBase>>>? Getter { get; set; }
 
-    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = new())
+    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
         return await (Getter?.Invoke() ?? Task.FromResult(new List<ProvidableItemBase>()));
     }
@@ -38,13 +38,13 @@ public class NeteaseActionGettableProgressiveContainer : NeteaseActionGettableCo
     public Func<int, int, Task<(bool, List<ProvidableItemBase>)>>? ProgressiveGetter { get; set; }
 
 
-    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = new())
+    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = default)
     {
         return await (ProgressiveGetter?.Invoke(start, count) ??
                       Task.FromResult((false, new List<ProvidableItemBase>())));
     }
 
-    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = new())
+    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
         return (await GetProgressiveItemsListAsync(0, MaxProgressiveCount, ctk)).Item2;
     }
@@ -64,7 +64,7 @@ public class NeteaseActionGettableUndetermindContainer : UndeterminedContainerBa
     public Func<Task<List<ProvidableItemBase>>>? ProgressiveGetter { get; set; }
 
 
-    public override async Task<List<ProvidableItemBase>> GetNextItemsRangeAsync(CancellationToken ctk = new CancellationToken())
+    public override async Task<List<ProvidableItemBase>> GetNextItemsRangeAsync(CancellationToken ctk = default)
     {
         return await (ProgressiveGetter?.Invoke() ??
                       Task.FromResult(new List<ProvidableItemBase>()));

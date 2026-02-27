@@ -1,4 +1,4 @@
-#pragma warning disable
+﻿#pragma warning disable
 #nullable enable annotations
 
 // Licensed to the .NET Foundation under one or more agreements.

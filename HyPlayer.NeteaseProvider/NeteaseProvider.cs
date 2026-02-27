@@ -1,7 +1,11 @@
-using HyPlayer.NeteaseApi;
+﻿using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.ApiContracts.Login;
 using HyPlayer.NeteaseApi.ApiContracts.Playlist;
+using HyPlayer.NeteaseApi.ApiContracts.Artist;
+using HyPlayer.NeteaseApi.ApiContracts.Album;
+using HyPlayer.NeteaseApi.ApiContracts.Video;
+using HyPlayer.NeteaseApi.ApiContracts.User;
 using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.ApiContracts.Song;
 using HyPlayer.NeteaseApi.Bases;
@@ -16,6 +20,7 @@ using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
 using HyPlayer.NeteaseApi.Extensions;
+using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
 
 namespace HyPlayer.NeteaseProvider;
 
@@ -157,7 +162,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
     public async Task<bool> LoginEmailAsync(string email, string password, bool isMd5 = false,
-                                            CancellationToken ctk = new())
+                                            CancellationToken ctk = default)
     {
         var request = new LoginEmailRequest()
         {
@@ -179,7 +184,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
     public async Task<bool> LoginCellphoneAsync(string cellphone, string password, bool isMd5 = false,
-                                                CancellationToken ctk = new())
+                                                CancellationToken ctk = default)
     {
         var request = new LoginCellphoneRequest()
         {
@@ -201,7 +206,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
 
-    public async Task<List<RawLyricInfo>> GetLyricInfoAsync(SingleSongBase song, CancellationToken ctk = new())
+    public async Task<List<RawLyricInfo>> GetLyricInfoAsync(SingleSongBase song, CancellationToken ctk = default)
     {
         if (song.ActualId == null) throw new ArgumentNullException();
         var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = song.ActualId }, ctk);
@@ -212,7 +217,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
     public async Task<MusicResourceBase?> GetMusicResourceAsync(SingleSongBase song, ResourceQualityTag qualityTag,
-                                                                CancellationToken ctk = new())
+                                                                CancellationToken ctk = default)
     {
         var quality = "exhigh";
         if (qualityTag is NeteaseMusicQualityTag neteaseMusicQualityTag)
@@ -248,7 +253,7 @@ public class NeteaseProvider : ProviderBase,
         );
     }
 
-    public async Task LikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = new())
+    public async Task LikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = default)
     {
         if (inProviderId.StartsWith(NeteaseTypeIds.SingleSong))
         {
@@ -284,10 +289,51 @@ public class NeteaseProvider : ProviderBase,
                                    PlaylistId = inProviderId.Substring(2)
                                }, ctk);
         }
-        // TODO
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Artist))
+        {
+            await RequestAsync(NeteaseApis.ArtistSubscribeApi,
+                new ArtistSubscribeRequest()
+                {
+                    ArtistId = inProviderId.Substring(2)
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Album))
+        {
+            await RequestAsync(NeteaseApis.AlbumSubscribeApi,
+                new AlbumSubscribeRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsSubscribe = true
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Mv))
+        {
+            await RequestAsync(NeteaseApis.VideoSubscribeApi,
+                new VideoSubscribeRequest()
+                {
+                    MvId = inProviderId.Substring(2)
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.RadioChannel))
+        {
+            await RequestAsync(NeteaseApis.DjChannelSubscribeApi,
+                new DjChannelSubscribeRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsSubscribe = true
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.User))
+        {
+            await RequestAsync(NeteaseApis.UserFollowApi,
+                new UserFollowRequest()
+                {
+                    Id = inProviderId.Substring(2)
+                }, ctk);
+        }
     }
 
-    public async Task UnlikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = new())
+    public async Task UnlikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = default)
     {
         if (inProviderId.StartsWith(NeteaseTypeIds.SingleSong))
         {
@@ -323,10 +369,56 @@ public class NeteaseProvider : ProviderBase,
                                    PlaylistId = inProviderId.Substring(2)
                                }, ctk);
         }
-        // TODO
+
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Artist))
+        {
+            var id = inProviderId.Substring(2);
+            if (long.TryParse(id, out var lid))
+            {
+                await RequestAsync(NeteaseApis.ArtistUnsubscribeApi,
+                    new ArtistUnsubscribeRequest()
+                    {
+                        ArtistIds = [lid]
+                    }, ctk);
+            }
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Album))
+        {
+            await RequestAsync(NeteaseApis.AlbumSubscribeApi,
+                new AlbumSubscribeRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsSubscribe = false
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.Mv))
+        {
+            await RequestAsync(NeteaseApis.VideoUnsubscribeApi,
+                new VideoUnsubscribeRequest()
+                {
+                    IdList = [ inProviderId.Substring(2)]
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.RadioChannel))
+        {
+            await RequestAsync(NeteaseApis.DjChannelSubscribeApi,
+                new DjChannelSubscribeRequest()
+                {
+                    Id = inProviderId.Substring(2),
+                    IsSubscribe = false
+                }, ctk);
+        }
+        else if (inProviderId.StartsWith(NeteaseTypeIds.User))
+        {
+            await RequestAsync(NeteaseApis.UserUnfollowApi,
+                new UserUnfollowRequest()
+                {
+                    Id = inProviderId.Substring(2)
+                }, ctk);
+        }
     }
 
-    public async Task<List<string>> GetLikedProvidableIdsAsync(string typeId, CancellationToken ctk = new())
+    public async Task<List<string>> GetLikedProvidableIdsAsync(string typeId, CancellationToken ctk = default)
     {
         var result = await RequestAsync(NeteaseApis.LikelistApi, new LikelistRequest()
         {
@@ -339,7 +431,7 @@ public class NeteaseProvider : ProviderBase,
 
 
     public async Task<ProvidableItemBase?> GetProvidableItemByIdAsync(string inProviderId,
-                                                                      CancellationToken ctk = new())
+                                                                      CancellationToken ctk = default)
     {
         var typeId = inProviderId.Substring(0, 2);
         var actualId = inProviderId.Substring(2);
@@ -355,7 +447,7 @@ public class NeteaseProvider : ProviderBase,
     }
 
     public async Task<List<ProvidableItemBase>> GetProvidableItemsRangeAsync(
-        List<string> inProviderIds, CancellationToken ctk = new())
+        List<string> inProviderIds, CancellationToken ctk = default)
     {
         if (inProviderIds.Count == 0) return new List<ProvidableItemBase>();
         var grouped = inProviderIds.GroupBy(t => t.Substring(0, 2)).ToList();
@@ -434,7 +526,7 @@ public class NeteaseProvider : ProviderBase,
     #endregion
 
     public Task<ContainerBase> SearchProvidableItemsAsync(string keyword, string typeId,
-                                                                 CancellationToken ctk = new())
+                                                                 CancellationToken ctk = default)
     {
         return Task.FromResult(new NeteaseSearchContainer
         {
@@ -445,7 +537,7 @@ public class NeteaseProvider : ProviderBase,
         } as ContainerBase);
     }
 
-    public Task<ContainerBase?> GetStoredItemsAsync(string typeId, CancellationToken ctk = new())
+    public Task<ContainerBase?> GetStoredItemsAsync(string typeId, CancellationToken ctk = default)
     {
         switch (typeId)
         {
@@ -456,7 +548,7 @@ public class NeteaseProvider : ProviderBase,
         }
     }
 
-    public Task<ContainerBase> GetRecommendationAsync(string? typeId = null, CancellationToken ctk = new())
+    public Task<ContainerBase> GetRecommendationAsync(string? typeId = null, CancellationToken ctk = default)
     {
         // ReSharper disable once ConvertIfStatementToSwitchStatement
         if (typeId == NeteaseTypeIds.Playlist) // 推荐歌单

@@ -4,6 +4,7 @@
     <File Path="global.json" />
     <File Path="HyPlayer.NeteaseProvider.sln.DotSettings" />
     <File Path="LICENCE" />
+    <File Path="README.md" />
     <File Path="renovate.json" />
   </Folder>
   <Folder Name="/Solution Items/workflows/">

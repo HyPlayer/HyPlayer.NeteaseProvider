@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
+﻿using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;

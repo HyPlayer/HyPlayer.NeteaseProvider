@@ -23,7 +23,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
         ArtistSongsActualRequest>
     {
         public override string IdentifyRoute => "/artist/songs";
-        public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/v2/artist/songs";
+        public override string Url { get; protected set; } = "https://interfacepc.music.163.com/eapi/v2/artist/songs";
         public override HttpMethod Method => HttpMethod.Post;
 
         public override Task MapRequest(ApiHandlerOption option)
@@ -32,19 +32,6 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
                 ActualRequest = new ArtistSongsActualRequest
                 {
                     Id = Request.ArtistId,
-                    OrderType = Request.OrderType switch
-                    {
-                        ArtistSongsOrderType.Time => "time",
-                        _ => "hot"
-                    },
-                    WorkType = Request.WorkType switch
-                    {
-                        ArtistSongsWorkType.All => 1,
-                        ArtistSongsWorkType.Sing => 5,
-                        ArtistSongsWorkType.Lyric => 6,
-                        ArtistSongsWorkType.Compose => 7,
-                        _ => 1
-                    },
                     Offset = Request.Offset,
                     Limit = Request.Limit
                 };
@@ -57,25 +44,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
     public class ArtistSongsActualRequest : EApiActualRequestBase
     {
         [JsonPropertyName("id")] public required string Id { get; set; }
-        [JsonPropertyName("private_cloud")] public bool PrivateCloud => true;
-        [JsonPropertyName("work_type")] public int WorkType = 1;
-        [JsonPropertyName("order")] public string OrderType { get; set; } = "hot";
         [JsonPropertyName("offset")] public int Offset { get; set; } = 0;
         [JsonPropertyName("limit")] public int Limit { get; set; } = 100;
-    }
-
-    public enum ArtistSongsOrderType
-    {
-        Hot,
-        Time
-    }
-
-    public enum ArtistSongsWorkType
-    {
-        All,
-        Sing,
-        Lyric,
-        Compose
     }
 
     public class ArtistSongsRequest : RequestBase
@@ -84,16 +54,6 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
         /// 歌手 ID
         /// </summary>
         public required string ArtistId { get; set; }
-
-        /// <summary>
-        /// 排序类型 hot, time
-        /// </summary>
-        public ArtistSongsOrderType OrderType { get; set; } = ArtistSongsOrderType.Hot;
-
-        /// <summary>
-        ///作品类型
-        /// </summary>
-        public ArtistSongsWorkType WorkType { get; set; } = ArtistSongsWorkType.All;
 
         /// <summary>
         /// 起始位置
@@ -110,6 +70,6 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
     {
         [JsonPropertyName("total")] public int Total { get; set; }
         [JsonPropertyName("more")] public bool HasMore { get; set; }
-        [JsonPropertyName("songs")] public EmittedSongDtoWithPrivilege[]? Songs { get; set; }
+        [JsonPropertyName("songs")] public ArtistSongDto[]? Songs { get; set; }
     }
 }

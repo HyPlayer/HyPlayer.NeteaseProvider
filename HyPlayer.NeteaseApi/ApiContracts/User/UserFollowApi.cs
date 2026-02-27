@@ -1,0 +1,51 @@
+﻿using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
+using HyPlayer.NeteaseApi.ApiContracts.User;
+
+namespace HyPlayer.NeteaseApi.ApiContracts
+{
+    public static partial class NeteaseApis
+    {
+        public static UserFollowApi UserFollowApi => new();
+    }
+}
+
+namespace HyPlayer.NeteaseApi.ApiContracts.User
+{
+    public class UserFollowApi : EApiContractBase<UserFollowRequest, UserFollowResponse, ErrorResultBase, UserFollowActualRequestBase>, IFakeCheckTokenApi
+    {
+        public override string ApiPath { get; protected set; } = "/api/user/follow/";
+
+        public override string IdentifyRoute => "/user/follow";
+
+        public override string Url { get; protected set; } = "https://interfacepc.music.163.com/eapi/user/follow/";
+
+        public override HttpMethod Method => HttpMethod.Post;
+
+        public override Task MapRequest(ApiHandlerOption option)
+        {
+            ActualRequest = new UserFollowActualRequestBase();
+            if (Request is not null)
+            {
+                Url += Request.Id;
+                ApiPath += Request.Id;
+            }
+                
+
+            return Task.CompletedTask;
+        }
+    }
+
+    public class UserFollowActualRequestBase : EApiActualRequestBase
+    {
+    }
+
+    public class UserFollowResponse : CodedResponseBase
+    {
+    }
+
+    public class UserFollowRequest : RequestBase
+    {
+        public required string Id { get; set; }
+    }
+}

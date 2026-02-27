@@ -95,4 +95,17 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Artist
         [JsonPropertyName("offset")] public int Offset { get; set; } = 0;
         [JsonPropertyName("limit")] public int Limit { get; set; } = 100;
     }
+    public enum ArtistSongsOrderType
+    {
+        Hot,
+        Time
+    }
+
+    public enum ArtistSongsWorkType
+    {
+        All,
+        Sing,
+        Lyric,
+        Compose
+    }
 }

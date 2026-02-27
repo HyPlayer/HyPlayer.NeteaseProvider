@@ -14,7 +14,7 @@ public class NeteasePersonalFMContainer : UndeterminedContainerBase
 
     public string RecommendType = "DEFAULT";
 
-    public override async Task<List<ProvidableItemBase>> GetNextItemsRangeAsync(CancellationToken ctk = new CancellationToken())
+    public override async Task<List<ProvidableItemBase>> GetNextItemsRangeAsync(CancellationToken ctk = default)
     {
         return (await NeteaseProvider.Instance.RequestAsync(NeteaseApis.PersonalFmApi, new PersonalFmRequest() { Mode = RecommendType }, ctk))
             .Match(s => s.Items?.Select(t => (ProvidableItemBase)t.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),

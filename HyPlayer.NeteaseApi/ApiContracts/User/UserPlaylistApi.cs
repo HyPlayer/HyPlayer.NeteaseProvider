@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseApi.ApiContracts.User;
+﻿using HyPlayer.NeteaseApi.ApiContracts.User;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Models.ResponseModels;

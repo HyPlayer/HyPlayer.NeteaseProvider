@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseApi.ApiContracts;
+﻿using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Models;
@@ -24,12 +24,12 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
         Name = "搜索结果";
     }
 
-    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = new())
+    public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
         return (await GetProgressiveItemsListAsync(0, MaxProgressiveCount, ctk)).Item2;
     }
 
-    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = new())
+    public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = default)
     {
         switch (SearchTypeId)
         {

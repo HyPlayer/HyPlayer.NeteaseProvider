@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseProvider.Constants;
+﻿using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
@@ -21,7 +21,7 @@ public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover
 
     public required List<PersonBase>? Artists { get; init; }
 
-    public override Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = new())
+    public override Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = default)
     {
         return Task.FromResult(Artists);
     }

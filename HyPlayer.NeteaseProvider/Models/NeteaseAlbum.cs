@@ -1,4 +1,4 @@
-using HyPlayer.NeteaseProvider.Constants;
+﻿using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.PlayCore.Abstraction.Interfaces.ProvidableItem;
 using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
@@ -48,7 +48,7 @@ public class NeteaseAlbum : AlbumBase, IHasCover, IHasTranslation, IHasDescripti
 
     public string? Translation { get; set; }
     public string? Description { get; set; }
-    public Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = new())
+    public Task<List<PersonBase>?> GetCreatorsAsync(CancellationToken ctk = default)
     {
         if (Artists is null) return Task.FromResult<List<PersonBase>?>(null);
         return Task.FromResult(Artists?.Select(ar => (PersonBase)ar).ToList());
