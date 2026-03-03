@@ -5,7 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
-
+    /// <summary>
+    /// 删除云盘歌曲
+    /// </summary>
     public static partial class NeteaseApis
     {
         public static CloudDeleteApi CloudDeleteApi => new();

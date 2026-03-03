@@ -74,11 +74,11 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Cloud
         [JsonPropertyName("album")] public string? Album { get; set; }
         [JsonPropertyName("artist")] public string? Artist { get; set; }
         [JsonPropertyName("bitrate")] public int Bitrate { get; set; }
-        [JsonPropertyName("coverid")] public required string CoverId { get; set; }
+        [JsonPropertyName("coverid")] public string? CoverId { get; set; }
         [JsonPropertyName("filename")] public required string FileName { get; set; }
         [JsonPropertyName("md5")] public required string Md5 { get; set; }
-        [JsonPropertyName("objectKey")] public required string ObjectKey { get; set; }
-        [JsonPropertyName("resourceId")] public required string ResourceId { get; set; }
+        [JsonPropertyName("objectKey")] public string? ObjectKey { get; set; }
+        [JsonPropertyName("resourceId")] public string? ResourceId { get; set; }
         [JsonPropertyName("song")] public string? Song { get; set; }
         [JsonPropertyName("songid")] public required string SongId { get; set; }
     }
