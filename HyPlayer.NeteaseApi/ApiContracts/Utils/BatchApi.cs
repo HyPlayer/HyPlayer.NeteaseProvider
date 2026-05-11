@@ -4,6 +4,7 @@ using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.Extensions.JsonSerializer;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
@@ -216,7 +217,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Utils
 
         public bool TryGetValue(string key, out string value)
         {
-            return _backingDictionary.TryGetValue(key, out value);
+            return _backingDictionary.TryGetValue(key, out value!);
         }
 
         public string this[string key]

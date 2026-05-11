@@ -6,7 +6,9 @@ using System.Text.Json.Serialization;
 
 namespace HyPlayer.NeteaseApi.ApiContracts
 {
-
+    /// <summary>
+    /// 获取云盘歌曲
+    /// </summary>
     public static partial class NeteaseApis
     {
         public static CloudGetApi CloudGetApi => new();
