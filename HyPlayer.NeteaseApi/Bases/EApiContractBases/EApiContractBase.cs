@@ -19,38 +19,18 @@ public abstract class
     public static readonly byte[] eapiKey = "e82ckenh8dichen8"u8.ToArray();
     public abstract string ApiPath { get; protected set; }
 
-    public override async Task<HttpRequestMessage> GenerateRequestMessageAsync(ApiHandlerOption option,
-        CancellationToken cancellationToken = default)
-    {
-        return await GenerateRequestMessageAsync(ActualRequest!, option, cancellationToken).ConfigureAwait(false);
-    }
-
     public override Task<HttpRequestMessage> GenerateRequestMessageAsync<TActualRequestMessageModel>(
         TActualRequestMessageModel actualRequest, ApiHandlerOption option,
         CancellationToken cancellationToken = default)
     {
         var url = Regex.Replace(Url, @"\w*api", "eapi");
-        if (option.DegradeHttp)
-            url = url.Replace("https://", "http://");
+        url = ApplyHttpDegrade(url, option);
         var requestMessage = new HttpRequestMessage(Method, url);
-        if (Url.Contains("music.163.com"))
-            requestMessage.Headers.Referrer = new Uri("https://music.163.com");
-        if (!string.IsNullOrWhiteSpace(option.XRealIP))
-            requestMessage.Headers.Add("X-Real-IP", option.XRealIP);
-        requestMessage.Headers.UserAgent.Clear();
-        requestMessage.Headers.TryAddWithoutValidation("User-Agent",
-            UserAgentHelper.GetRandomUserAgent(UserAgent ?? option.UserAgent));
-        var cookies = option.Cookies.ToDictionary(t => t.Key, t => t.Value);
-
-        foreach (var keyValuePair in Cookies)
-        {
-            cookies[keyValuePair.Key] = keyValuePair.Value;
-        }
-
-        cookies!.MergeDictionary(option.AdditionalParameters.Cookies);
-
-        if (cookies.Count > 0)
-            requestMessage.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Key}={c.Value}")));
+        ApplyMusic163Referrer(requestMessage);
+        ApplyXRealIp(requestMessage, option);
+        ApplyUserAgent(requestMessage, option);
+        var cookies = BuildRequestCookies(option);
+        ApplyCookieHeader(requestMessage, cookies);
 
         var csrfToken = cookies.GetValueOrDefault("__csrf");
 
@@ -103,14 +83,7 @@ public abstract class
         var reqBytes = cryptoTransform.TransformFinalBlock(reqDataBytes, 0, reqDataBytes.Length);
         requestMessage.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
             { { "params", reqBytes.ToHexStringUpper() } });
-        foreach (var additionalParametersHeader in option.AdditionalParameters.Headers)
-        {
-            if (requestMessage.Headers.Contains(additionalParametersHeader.Key))
-                requestMessage.Headers.Remove(additionalParametersHeader.Key);
-            if (additionalParametersHeader.Value is not null)
-                requestMessage.Headers.TryAddWithoutValidation(additionalParametersHeader.Key,
-                    additionalParametersHeader.Value);
-        }
+        ApplyAdditionalHeaders(requestMessage, option);
 
         return Task.FromResult(requestMessage);
     }
@@ -118,17 +91,10 @@ public abstract class
     public override async Task<Results<TResponseModel, ErrorResultBase>> ProcessResponseAsync<TResponseModel>(
         HttpResponseMessage response, ApiHandlerOption option, CancellationToken cancellationToken = default)
     {
-        if (!response.IsSuccessStatusCode)
-            return new ErrorResultBase((int)response.StatusCode, $"请求返回 HTTP 代码: {response.StatusCode}");
-        if (response.Headers.TryGetValues("Set-Cookie", out var rawSetCookies))
-        {
-            foreach (var rawSetCookie in rawSetCookies)
-            {
-                var arr1 = rawSetCookie.Split(';');
-                var arr2 = arr1[0].TrimStart().Split('=');
-                option.Cookies[arr2[0]] = arr2[1];
-            }
-        }
+        var statusError = TryCreateHttpStatusError(response);
+        if (statusError is not null)
+            return statusError;
+        MergeSetCookies(response, option);
 
         var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         if (buffer is null || buffer.Length == 0) return new ErrorResultBase(500, "返回体预读取错误");

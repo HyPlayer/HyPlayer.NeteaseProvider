@@ -23,6 +23,8 @@
     types.Add("HyPlayer.NeteaseApi.Bases.IdOrIdListListRequest");
     types.Add("HyPlayer.NeteaseApi.Bases.RawApiContractBases.RawApiActualRequestBase");
     types.Add("HyPlayer.NeteaseApi.Bases.WeApiContractBases.WeApiActualRequestBase");
+    types.Add("HyPlayer.NeteaseApi.Bases.OpenApiContractBases.OpenApiActualRequestBase");
+    types.Add("HyPlayer.NeteaseApi.AdditionalParameters.OpenAPIConfigData.DeviceInfoData");
     
     
 
@@ -42,7 +44,7 @@
                                 : $"HyPlayer.NeteaseApi.ApiContracts.{subNamespace.TrimEnd('.')}";
 
 
-            var typeMatches = Regex.Matches(fileContent, @"ApiContractBase\s*<\s*([\w\.]+)\s*,\s*([\w\.]+)\s*,\s*([\w\.]+)\s*,\s*([\w\.]+)\s*>");
+            var typeMatches = Regex.Matches(fileContent, @"\w*ApiContractBase\s*<\s*([\w\.]+)\s*,\s*([\w\.]+)\s*,\s*([\w\.]+)\s*,\s*([\w\.]+)\s*>");
             
             foreach (Match m in typeMatches)
             {
