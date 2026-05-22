@@ -54,9 +54,9 @@ public abstract class OpenApiContractBase<TRequest, TResponse, TError, TActualRe
         if (string.IsNullOrWhiteSpace(option.AdditionalParameters.OpenAPIConfig.RsaPrivateKey))
             throw new InvalidOperationException("OpenAPIConfig.RsaPrivateKey is required for OpenAPI requests.");
 
-        var requestParameters = actualRequest is OpenApiActualRequestBase openApiActualRequest
-            ? openApiActualRequest.ToDictionary(t => t.Key, t => t.Value)
-            : new Dictionary<string, string>();
+        var requestParameters = new Dictionary<string, string>();
+        if (actualRequest is OpenApiActualRequestBase { AccessToken: not null } openApiActualRequest)
+            requestParameters["accessToken"] = openApiActualRequest.AccessToken;
 
         var openApiConfig = option.AdditionalParameters.OpenAPIConfig;
         var appId = openApiConfig.AppId;
@@ -72,12 +72,20 @@ public abstract class OpenApiContractBase<TRequest, TResponse, TError, TActualRe
             : JsonSerializer.Serialize(openApiConfig.DeviceInfo,
                 ApiHandlerOption.JsonSerializerOptionsOnlyTypeInfo);
 
-        if (!requestParameters.ContainsKey("bizContent"))
-            requestParameters["bizContent"] = string.Empty;
+        requestParameters["bizContent"] = CreateBizContent(actualRequest, option);
 
         requestParameters.Remove("sign");
         requestParameters["sign"] = RsaSha256Sign(GetSignCheckContent(requestParameters), rsaPrivateKey!);
         return requestParameters;
+    }
+
+    private static string CreateBizContent<TActualRequestModel>(TActualRequestModel actualRequest, ApiHandlerOption option)
+    {
+        if (actualRequest is null)
+            return string.Empty;
+
+        var json = JsonSerializer.Serialize(actualRequest, option.JsonSerializerOptions);
+        return json == "{}" ? string.Empty : json;
     }
 
     private static string GetSignCheckContent(Dictionary<string, string> parameters)
