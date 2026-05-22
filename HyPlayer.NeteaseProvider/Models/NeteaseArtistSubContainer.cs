@@ -18,21 +18,19 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
     {
         if (ActualId != null)
         {
-            var itemType = ActualId.Substring(0, 3);
-            var artistId = ActualId.Substring(3);
-            var resTime = await NeteaseProvider.Instance.RequestAsync(
-                        NeteaseApis.ArtistSongsApi,
-                        new ArtistSongsRequest
-                        {
-                            ArtistId = artistId,
-                            Offset = 0,
-                            Limit = 50
-                        });
-            return resTime.Match(
-                success =>
-                    success.Songs?.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList() ?? [],
-                error => new List<ProvidableItemBase>()
-            );
+            var items = new List<ProvidableItemBase>();
+            var start = 0;
+            bool hasMore;
+
+            do
+            {
+                var result = await GetProgressiveItemsListAsync(start, MaxProgressiveCount, ctk);
+                hasMore = result.Item1;
+                items.AddRange(result.Item2);
+                start += MaxProgressiveCount;
+            } while (hasMore);
+
+            return items;
         }
         else throw new ArgumentNullException();
     }
@@ -42,18 +40,52 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
         if(ActualId!= null) {
         var itemType = ActualId.Substring(0, 3);
         var artistId = ActualId.Substring(3);
-            var resTime = await NeteaseProvider.Instance.RequestAsync(
+        switch (itemType)
+        {
+            case "hot":
+                if (start > 0) return (false, new List<ProvidableItemBase>());
+                var hotResult = await NeteaseProvider.Instance.RequestAsync(
+                    NeteaseApis.ArtistDetailApi,
+                    new ArtistDetailRequest
+                    {
+                        ArtistId = artistId,
+                        TopSong = count
+                    }, ctk);
+                return hotResult.Match(
+                    success => (false,
+                        success.HotSongs?.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList()
+                        ?? new List<ProvidableItemBase>()),
+                    error => (false, new List<ProvidableItemBase>()));
+            case "tim":
+                var resTime = await NeteaseProvider.Instance.RequestAsync(
                         NeteaseApis.ArtistSongsApi,
                         new ArtistSongsRequest
                         {
                             ArtistId = artistId,
-                            Offset = 0,
-                            Limit = 50
-                        });
-            return resTime.Match(
+                            Offset = start,
+                            Limit = count
+                        }, ctk);
+                return resTime.Match(
                     success => (success.HasMore,
                         success.Songs?.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>()),
                     error => (false, new List<ProvidableItemBase>()));
+            case "alb":
+                var albumResult = await NeteaseProvider.Instance.RequestAsync(
+                    NeteaseApis.ArtistAlbumsApi,
+                    new ArtistAlbumsRequest
+                    {
+                        ArtistId = artistId,
+                        Start = start,
+                        Limit = count
+                    }, ctk);
+                return albumResult.Match(
+                    success => (success.HasMore,
+                        success.Albums?.Select(album => (ProvidableItemBase)album.MapToNeteaseAlbum()!).ToList()
+                        ?? new List<ProvidableItemBase>()),
+                    error => (false, new List<ProvidableItemBase>()));
+            default:
+                return (false, new List<ProvidableItemBase>());
+        }
         }
         else throw new ArgumentNullException();
     }

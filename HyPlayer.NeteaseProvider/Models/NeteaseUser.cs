@@ -31,7 +31,31 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
                                                         Offset = 0
                                                     });
         return results.Match(
-            success => success.Playlists?.Select(t => (ContainerBase)t.MapToNeteasePlaylist()).ToList() ?? new List<ContainerBase>(),
+            success =>
+            {
+                var playlists = success.Playlists?.Select(t => t.MapToNeteasePlaylist()).ToList() ?? new List<NeteasePlaylist>();
+                var created = playlists.Where(t => t.Creator?.ActualId == ActualId).ToList();
+                var subscribed = playlists.Where(t => t.Creator?.ActualId != ActualId).ToList();
+                var containers = new List<ContainerBase>();
+
+                if (created.Count > 0)
+                    containers.Add(new NeteaseUserPlaylistSubContainer
+                    {
+                        ActualId = $"created{ActualId}",
+                        Name = "创建的歌单",
+                        Playlists = created
+                    });
+
+                if (subscribed.Count > 0)
+                    containers.Add(new NeteaseUserPlaylistSubContainer
+                    {
+                        ActualId = $"subscribed{ActualId}",
+                        Name = "收藏的歌单",
+                        Playlists = subscribed
+                    });
+
+                return containers;
+            },
             error => new List<ContainerBase>()
             );
     }
