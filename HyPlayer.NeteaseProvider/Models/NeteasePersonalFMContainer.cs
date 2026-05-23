@@ -20,4 +20,9 @@ public class NeteasePersonalFMContainer : UndeterminedContainerBase
             .Match(s => s.Items?.Select(t => (ProvidableItemBase)t.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
                    e => new List<ProvidableItemBase>());
     }
+
+    public async Task MoveItemToTrashAsync(string itemId, CancellationToken ctk = default)
+    {
+        await NeteaseProvider.Instance.RequestAsync(NeteaseApis.PersonalFmTrashApi, new FmTrashRequest { Id = itemId }, ctk);
+    }
 }
