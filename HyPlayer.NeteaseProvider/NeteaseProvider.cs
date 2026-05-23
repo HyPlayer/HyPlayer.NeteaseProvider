@@ -44,6 +44,7 @@ public partial class NeteaseProvider : ProviderBase,
                                  IUserLibraryProvidable,
                                  IContextRecommendationProvidable,
                                  IListenTogetherProvidable,
+                                 ICloudUploadProvidable,
                                  IScopedItemRangeProvidable,
                                  IProvidableItemDynamicMetadataProvidable
 {

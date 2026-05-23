@@ -21,12 +21,20 @@ using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction.Interfaces.PlayListContainer;
 using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
+using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
+using System.Net.Http.Headers;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace HyPlayer.NeteaseProvider;
 
 public partial class NeteaseProvider
 {
+    private const string CloudAudioBucket = "jd-musicrep-privatecloud-audio-public";
+    private const string CloudCoverBucket = "yyimgs";
+    private static readonly HttpClient CloudUploadHttpClient = new();
+
     private static readonly string[] DefaultPlaylistCategories =
     [
         "华语",
@@ -373,6 +381,88 @@ public partial class NeteaseProvider
         await RequestAsync(NeteaseApis.CloudDeleteApi, new CloudDeleteRequest { Id = itemId }, ctk);
     }
 
+    public async Task<CloudLibraryItemBase> UploadCloudLibraryItemAsync(
+        ResourceBase resource,
+        IReadOnlyDictionary<string, string> metadata,
+        CancellationToken ctk = default)
+    {
+        var streamResult = await resource.GetResourceAsync(ctk: ctk);
+        if (streamResult is not IResourceResultOf<Stream> streamResource)
+            throw new InvalidOperationException("Cloud upload requires a stream resource.");
+
+        await using var stream = await streamResource.GetResourceAsync(ctk)
+            ?? throw new InvalidOperationException("Cloud upload stream is empty.");
+        using var memoryStream = new MemoryStream();
+        await stream.CopyToAsync(memoryStream, ctk);
+        var bytes = memoryStream.ToArray();
+        var md5 = Convert.ToHexString(MD5.HashData(bytes)).ToLowerInvariant();
+
+        var extension = GetMetadata(metadata, "extension", resource.ExtensionName ?? string.Empty).TrimStart('.');
+        var bitrate = int.TryParse(GetMetadata(metadata, "bitrate", "0"), out var parsedBitrate) ? parsedBitrate : 0;
+        var fileName = GetMetadata(metadata, "fileName", resource.ResourceName ?? $"upload.{extension}");
+        var contentType = GetMetadata(metadata, "contentType", "application/octet-stream");
+        var title = GetMetadata(metadata, "title", Path.GetFileNameWithoutExtension(fileName));
+
+        var checkResult = await RequestAsync(NeteaseApis.CloudUploadCheckApi,
+            new CloudUploadCheckRequest
+            {
+                Ext = extension,
+                Md5 = md5,
+                Bitrate = bitrate,
+                Length = bytes.LongLength
+            }, ctk);
+        if (checkResult.IsError)
+            throw new InvalidOperationException(checkResult.Error?.Message ?? "Cloud upload check failed.");
+
+        var infoRequest = new CloudUploadInfoRequest
+        {
+            Md5 = md5,
+            SongId = checkResult.Value!.SongId!,
+            FileName = fileName,
+            Song = title,
+            Album = GetMetadata(metadata, "album", string.Empty),
+            Artist = GetMetadata(metadata, "artist", string.Empty),
+            Bitrate = bitrate
+        };
+
+        if (checkResult.Value?.NeedUpload is not false)
+        {
+            var tokenResult = await RequestAsync(NeteaseApis.CloudUploadTokenAllocApi,
+                new CloudUploadTokenAllocRequest { FileName = fileName, Md5 = md5 }, ctk);
+            if (tokenResult.IsError)
+                throw new InvalidOperationException(tokenResult.Error?.Message ?? "Cloud upload token allocation failed.");
+
+            var objectKey = tokenResult.Value!.Data!.ObjectKey;
+            var loadBalancer = await GetUploadLoadBalancerAsync(CloudAudioBucket, ctk);
+            var targetLink = $"{loadBalancer}/{CloudAudioBucket}/{objectKey}?version=1.0";
+            await UploadToNosAsync(targetLink, new MemoryStream(bytes), md5, tokenResult.Value.Data.Token, contentType, ctk: ctk);
+            infoRequest.ResourceId = tokenResult.Value.Data.ResourceId!;
+            infoRequest.ObjectKey = $"{CloudAudioBucket}/{objectKey}";
+        }
+
+        if (metadata.TryGetValue("coverBase64", out var coverBase64) && !string.IsNullOrWhiteSpace(coverBase64))
+            infoRequest.CoverId = await UploadCloudCoverAsync(fileName, Convert.FromBase64String(coverBase64), ctk);
+
+        var infoResult = await RequestAsync(NeteaseApis.CloudUploadInfoApi, infoRequest, ctk);
+        if (infoResult.IsError)
+            throw new InvalidOperationException(infoResult.Error?.Message ?? "Cloud upload info failed.");
+
+        var pubResult = await RequestAsync(NeteaseApis.CloudPubApi,
+            new CloudPubRequest { SongId = infoResult.Value!.SongId! }, ctk);
+        if (pubResult.IsError)
+            throw new InvalidOperationException(pubResult.Error?.Message ?? "Cloud publish failed.");
+
+        return infoResult.Value.PrivateCloud?.MapToNeteaseCloudLibraryItem()
+               ?? new NeteaseCloudLibraryItem
+               {
+                   ActualId = infoResult.Value.SongId,
+                   Name = title,
+                   FileName = fileName,
+                   FileSize = bytes.LongLength,
+                   UploadedAt = DateTimeOffset.Now
+               };
+    }
+
     public async Task<ProviderPageResult<ProvidableItemBase>> GetScopedItemsPageAsync(string parentId, string parentTypeId, string itemTypeId, int offset, int count, CancellationToken ctk = default)
     {
         if (parentTypeId == NeteaseTypeIds.Artist)
@@ -586,5 +676,81 @@ public partial class NeteaseProvider
             "shn" => ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.Random,
             _ => ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.OrderLoop
         };
+    }
+
+    private async Task<string> UploadCloudCoverAsync(string fileName, byte[] coverBytes, CancellationToken ctk)
+    {
+        var coverMd5 = Convert.ToHexString(MD5.HashData(coverBytes)).ToLowerInvariant();
+        var coverAllocResult = await RequestAsync(NeteaseApis.CloudUploadCoverTokenAllocApi,
+            new CloudUploadCoverTokenAllocRequest
+            {
+                Ext = "png",
+                Filename = $"{fileName}_cover"
+            }, ctk);
+        if (coverAllocResult.IsError)
+            throw new InvalidOperationException(coverAllocResult.Error?.Message ?? "Cloud cover token allocation failed.");
+
+        var loadBalancer = await GetUploadLoadBalancerAsync(CloudCoverBucket, ctk);
+        var targetLink = $"{loadBalancer}/{CloudCoverBucket}/{coverAllocResult.Value?.Result?.ObjectKey}?version=1.0";
+        await UploadToNosAsync(targetLink, new MemoryStream(coverBytes), coverMd5, coverAllocResult.Value?.Result?.Token, "image/png", ctk: ctk);
+        return coverAllocResult.Value?.Result?.DocId ?? string.Empty;
+    }
+
+    private async Task<string> GetUploadLoadBalancerAsync(string bucket, CancellationToken ctk)
+    {
+        const string fallback = "http://45.127.129.8";
+        var result = await RequestAsync(NeteaseApis.NeteaseUploadLoadBalancerGetApi,
+            new NeteaseUploadLoadBalancerGetRequest { Bucket = bucket }, ctk);
+        return result.IsSuccess ? result.Value!.Upload?.FirstOrDefault() ?? fallback : fallback;
+    }
+
+    private static async Task UploadToNosAsync(
+        string targetLink,
+        Stream stream,
+        string md5,
+        string? token,
+        string contentType,
+        int chunkSize = 1048576,
+        CancellationToken ctk = default)
+    {
+        if (string.IsNullOrEmpty(token)) throw new ArgumentException("Token must not be null or empty", nameof(token));
+        if (stream.CanSeek) stream.Seek(0, SeekOrigin.Begin);
+
+        string? context = null;
+        var isEnd = false;
+        var offset = 0;
+        while (!isEnd && !ctk.IsCancellationRequested)
+        {
+            var buffer = new byte[chunkSize];
+            var bytesRead = await stream.ReadAsync(buffer, 0, chunkSize, ctk);
+            isEnd = bytesRead < chunkSize;
+            if (bytesRead == 0) break;
+
+            using var request = new HttpRequestMessage(
+                HttpMethod.Post,
+                new Uri($"{targetLink}&offset={offset * chunkSize}&complete={isEnd.ToString().ToLowerInvariant()}&context={context}"));
+            using var content = new ByteArrayContent(buffer, 0, bytesRead);
+            content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+            content.Headers.Add("Content-MD5", md5);
+            request.Headers.Add("x-nos-token", token);
+            request.Content = content;
+
+            using var response = await CloudUploadHttpClient.SendAsync(request, ctk);
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync(ctk);
+                throw new HttpRequestException($"Upload failed with status {response.StatusCode}: {errorContent}");
+            }
+
+            var responseText = await response.Content.ReadAsStringAsync(ctk);
+            var match = System.Text.RegularExpressions.Regex.Match(responseText, "\"context\"\\s*:\\s*\"([^\"]*)\"");
+            if (match.Success) context = match.Groups[1].Value;
+            offset++;
+        }
+    }
+
+    private static string GetMetadata(IReadOnlyDictionary<string, string> metadata, string key, string fallback)
+    {
+        return metadata.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value) ? value : fallback;
     }
 }
