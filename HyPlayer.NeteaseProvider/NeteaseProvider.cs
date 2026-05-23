@@ -681,70 +681,30 @@ public partial class NeteaseProvider : ProviderBase,
     {
         // ReSharper disable once ConvertIfStatementToSwitchStatement
         if (typeId == NeteaseTypeIds.Playlist) // 推荐歌单
-            return Task.FromResult(
-                new NeteaseActionGettableContainer(async () =>
-                {
-                    return (await RequestAsync(
-                            NeteaseApis.RecommendPlaylistsApi,
-                            new RecommendPlaylistsRequest(), ctk))
-                        .Match(success => success.Recommends?.Select(
-                                   t => (ProvidableItemBase)
-                                       t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
-                               error => throw error);
-                })
+            return Task.FromResult(new NeteaseRecommendPlaylistContainer
                 {
                     Name = "推荐歌单",
                     ActualId = "rcpl"
                 } as ContainerBase);
         if (typeId == NeteaseTypeIds.SingleSong) // 推荐歌曲
-            return Task.FromResult(new NeteaseActionGettableContainer(async () =>
-            {
-                return (await RequestAsync(
-                        NeteaseApis.RecommendSongsApi,
-                        new RecommendSongsRequest(), ctk))
-                    .Match(success => success.Data?.DailySongs?.Select(
-                               t => (ProvidableItemBase)
-                                   t.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
-                           error => throw error);
-            })
+            return Task.FromResult(new NeteaseRecommendSongContainer
             {
                 Name = "推荐歌曲",
                 ActualId = "rcsg"
             } as ContainerBase);
         if (typeId == NeteaseTypeIds.Chart) // 排行榜
-            return Task.FromResult(new NeteaseActionGettableContainer(async () =>
-                   {
-                       return (await RequestAsync(
-                               NeteaseApis.ToplistApi,
-                               new ToplistRequest(), ctk))
-                           .Match(success => success.List?.Select(
-                                      t => (ProvidableItemBase)
-                                          t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
-                                  error => throw error);
-                   })
+            return Task.FromResult(new NeteaseToplistContainer
             {
                 Name = "排行榜",
                 ActualId = "chart"
             } as ContainerBase);
         if (typeId?.StartsWith(NeteaseTypeIds.PlaylistCategory) is true)
         {
-            return Task.FromResult(new NeteaseActionGettableProgressiveContainer(async (start, count) =>
-                   {
-                       return (true, (await RequestAsync(
-                                   NeteaseApis.PlaylistCategoryListApi,
-                                   new PlaylistCategoryListRequest
-                                   {
-                                       Category = typeId.Substring(2),
-                                       Limit = count
-                                   }, ctk))
-                               .Match(success => success.Playlists?.Select(
-                                          t => (ProvidableItemBase)
-                                              t.MapToNeteasePlaylist()).ToList() ?? new List<ProvidableItemBase>(),
-                                      error => throw error));
-                   })
+            return Task.FromResult(new NeteasePlaylistCategoryContainer
             {
                 Name = "官方推荐歌单",
                 ActualId = typeId.Substring(2),
+                Category = typeId.Substring(2),
                 MaxProgressiveCount = 15
             } as ContainerBase);
         }
