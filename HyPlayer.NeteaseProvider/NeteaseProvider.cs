@@ -21,6 +21,8 @@ using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
 using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace HyPlayer.NeteaseProvider;
 
@@ -43,6 +45,43 @@ public partial class NeteaseProvider : ProviderBase,
                                   IProvidableItemDynamicMetadataProvidable
 {
     public readonly NeteaseCloudMusicApiHandler Handler = new();
+
+    public void ConfigureAdditionalParameters(AdditionalParameters additionalParameters)
+    {
+        Handler.Option.AdditionalParameters = additionalParameters;
+    }
+
+    public void ConfigureFakeCheckToken(bool enabled)
+    {
+        Handler.Option.FakeCheckToken = enabled;
+    }
+
+    public void ConfigureXRealIP(string? xRealIp)
+    {
+        Handler.Option.XRealIP = xRealIp;
+    }
+
+    public void ConfigureDegradeHttp(bool enabled)
+    {
+        Handler.Option.DegradeHttp = enabled;
+    }
+
+    public bool HasAdditionalCookies => Handler.Option.AdditionalParameters.Cookies.Count > 0;
+
+    public Dictionary<string, string> GetRuntimeCookiesSnapshot()
+    {
+        return Handler.Option.Cookies.ToDictionary();
+    }
+
+    public void ClearRuntimeCookies()
+    {
+        Handler.Option.Cookies.Clear();
+    }
+
+    public void SetRuntimeCookie(string name, string value)
+    {
+        Handler.Option.Cookies[name] = value;
+    }
     public override string Name => "网易云音乐";
     public override string Id => "ncm";
 
