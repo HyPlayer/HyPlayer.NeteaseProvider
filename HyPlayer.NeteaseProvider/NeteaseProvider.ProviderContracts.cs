@@ -4,6 +4,8 @@ using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseApi.ApiContracts.Cloud;
 using HyPlayer.NeteaseApi.ApiContracts.Comment;
 using HyPlayer.NeteaseApi.ApiContracts.Login;
+using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
+using HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual;
 using HyPlayer.NeteaseApi.ApiContracts.PersonalFM;
 using HyPlayer.NeteaseApi.ApiContracts.Playlist;
 using HyPlayer.NeteaseApi.ApiContracts.Recommend;
@@ -419,6 +421,79 @@ public partial class NeteaseProvider
             _ => new NeteaseActionGettableContainer { ActualId = itemId, Name = "相关推荐" });
     }
 
+    public async Task<string> CreateListenTogetherRoomAsync(List<SingleSongBase> queue, CancellationToken ctk = default)
+    {
+        var result = await RequestAsync(NeteaseApis.ListenTogetherRoomCreateApi, new ListenTogetherRoomCreateRequest(), ctk);
+        return result.Match(success => success.Data?.RoomInfo?.RoomId ?? string.Empty, _ => string.Empty);
+    }
+
+    public async Task<bool> CanJoinListenTogetherRoomAsync(string roomId, CancellationToken ctk = default)
+    {
+        var result = await RequestAsync(NeteaseApis.ListenTogetherRoomCheckApi,
+            new ListenTogetherRoomCheckRequest { RoomId = roomId }, ctk);
+        return result.Match(success => success.Data?.Joinable is true, _ => false);
+    }
+
+    public Task SendListenTogetherPlaybackCommandAsync(
+        string roomId,
+        ProviderListenTogetherPlaybackCommand command,
+        CancellationToken ctk = default)
+    {
+        return RequestAsync(NeteaseApis.ListenTogetherPlayCommandApi,
+            new ListenTogetherPlayCommandRequest
+            {
+                RoomId = roomId,
+                CommandType = MapListenTogetherPlaybackCommand(command.CommandId),
+                PlayStatus = command.IsPlaying
+                    ? ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus.Play
+                    : ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus.Pause,
+                FormerSongId = command.FormerItemId ?? string.Empty,
+                TargetSongId = command.TargetItemId ?? string.Empty,
+                ClientSeq = command.ClientSeq,
+                Progress = (long)command.Position.TotalMilliseconds
+            }, ctk);
+    }
+
+    public Task ReportListenTogetherQueueAsync(
+        string roomId,
+        ProviderListenTogetherQueueReport report,
+        CancellationToken ctk = default)
+    {
+        return RequestAsync(NeteaseApis.ListenTogetherSyncListReportApi,
+            new ListenTogetherSyncListReportRequest
+            {
+                RoomId = roomId,
+                CommandType = ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportCommandType.PlayModeChange,
+                PlayMode = MapListenTogetherPlayMode(report.PlayModeId),
+                UserId = report.UserId ?? LoginedUser?.ActualId ?? string.Empty,
+                ClientSeq = report.ClientSeq,
+                AnchorPosition = report.AnchorPosition,
+                AnchorSongId = report.AnchorItemId ?? string.Empty,
+                DisplaySongList = report.Queue.Select(song => song.ActualId ?? string.Empty).Where(id => !string.IsNullOrWhiteSpace(id)).ToArray()
+            }, ctk);
+    }
+
+    public async Task<ProviderListenTogetherStatus?> GetListenTogetherStatusAsync(string roomId, CancellationToken ctk = default)
+    {
+        var result = await RequestAsync(NeteaseApis.ListenTogetherStatusApi, new ListenTogetherStatusRequest(), ctk);
+        return result.Match(success =>
+            {
+                var roomInfo = success.Data?.RoomInfo;
+                return new ProviderListenTogetherStatus
+                {
+                    IsInRoom = success.Data?.IsInRoom is true,
+                    RoomId = roomInfo?.RoomId,
+                    Users = roomInfo?.RoomUsers?.Select(user => new ProviderListenTogetherUser
+                    {
+                        UserId = user.UserId ?? string.Empty,
+                        Nickname = user.Nickname ?? string.Empty,
+                        AvatarUrl = user.AvatarUrl ?? string.Empty
+                    }).ToList() ?? []
+                };
+            },
+            _ => (ProviderListenTogetherStatus?)null);
+    }
+
     public async Task<ProvidableItemDynamicMetadata> GetDynamicMetadataAsync(string itemId, string typeId, CancellationToken ctk = default)
     {
         if (typeId == NeteaseTypeIds.Album)
@@ -487,6 +562,29 @@ public partial class NeteaseProvider
             NeteaseTypeIds.Album => "alb",
             NeteaseTypeIds.SingleSong => "tim",
             _ => "hot"
+        };
+    }
+
+    private static ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType MapListenTogetherPlaybackCommand(string commandId)
+    {
+        return commandId switch
+        {
+            "pause" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Pause,
+            "previous" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Previous,
+            "next" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Next,
+            "goto" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Goto,
+            "progress" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Progress,
+            _ => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Play
+        };
+    }
+
+    private static ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode MapListenTogetherPlayMode(string playModeId)
+    {
+        return playModeId switch
+        {
+            "sgl" => ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.SingleLoop,
+            "shn" => ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.Random,
+            _ => ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportPlayMode.OrderLoop
         };
     }
 }

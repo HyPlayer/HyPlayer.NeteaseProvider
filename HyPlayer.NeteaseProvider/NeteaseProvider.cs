@@ -40,11 +40,12 @@ public partial class NeteaseProvider : ProviderBase,
                                 IQrAuthenticationProvidable,
                                 ICommentProvidable,
                                 IProvidableItemCommentProvidable,
-                                IContainerCategoryProvidable,
-                                IUserLibraryProvidable,
-                                IContextRecommendationProvidable,
-                                IScopedItemRangeProvidable,
-                                IProvidableItemDynamicMetadataProvidable
+                                 IContainerCategoryProvidable,
+                                 IUserLibraryProvidable,
+                                 IContextRecommendationProvidable,
+                                 IListenTogetherProvidable,
+                                 IScopedItemRangeProvidable,
+                                 IProvidableItemDynamicMetadataProvidable
 {
     public readonly NeteaseCloudMusicApiHandler Handler = new();
     public override string Name => "网易云音乐";
