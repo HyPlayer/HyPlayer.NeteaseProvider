@@ -1,4 +1,7 @@
 using AwesomeAssertions;
+using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Extensions;
+using HyPlayer.NeteaseProvider.Extensions;
 using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction.Interfaces.Provider;
 using HyPlayer.PlayCore.Abstraction.Models;
@@ -108,6 +111,48 @@ public class NeteaseProviderContractTests
         trashMethod!.ReturnType.Should().Be(typeof(Task));
         contextMethod.Should().NotBeNull();
         contextMethod!.ReturnType.Should().Be(typeof(Task<ContainerBase>));
+        await Task.CompletedTask;
+    }
+
+    [Test]
+    public async Task NeteaseApiResults_Should_MapToPlayCoreResultSuccess()
+    {
+        Results<string, ErrorResultBase> result = Results<string, ErrorResultBase>.CreateSuccess("ok");
+
+        var playCoreResult = result.ToPlayCoreResult();
+
+        playCoreResult.IsSuccess.Should().BeTrue();
+        playCoreResult.Value.Should().Be("ok");
+        playCoreResult.Match(value => value, error => error.ErrorMessage).Should().Be("ok");
+        await Task.CompletedTask;
+    }
+
+    [Test]
+    public async Task NeteaseApiResults_Should_MapToPlayCoreResultError()
+    {
+        var inner = new InvalidOperationException("network failed");
+        Results<string, ErrorResultBase> result = Results<string, ErrorResultBase>.CreateError(
+            new ExceptionedErrorBase(401, "login required", inner));
+
+        var playCoreResult = result.ToPlayCoreResult();
+
+        playCoreResult.IsError.Should().BeTrue();
+        playCoreResult.ErrorCode.Should().Be("401");
+        playCoreResult.ErrorMessage.Should().Be("login required");
+        playCoreResult.Exception.Should().BeSameAs(inner);
+        playCoreResult.Match(value => value, error => error.ErrorCode).Should().Be("401");
+        await Task.CompletedTask;
+    }
+
+    [Test]
+    public async Task NeteaseApiResults_Should_MapSuccessfulValueThroughProjection()
+    {
+        Results<string, ErrorResultBase> result = Results<string, ErrorResultBase>.CreateSuccess("42");
+
+        var playCoreResult = result.ToPlayCoreResult(int.Parse);
+
+        playCoreResult.IsSuccess.Should().BeTrue();
+        playCoreResult.Value.Should().Be(42);
         await Task.CompletedTask;
     }
 }
