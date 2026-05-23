@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using AwesomeAssertions;
 using HyPlayer.NeteaseApi.ApiContracts;
@@ -18,6 +18,8 @@ using HyPlayer.NeteaseApi.ApiContracts.Video;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Models;
 using HyPlayer.NeteaseProvider.Constants;
+using HyPlayer.PlayCore.Abstraction.Interfaces.Provider;
+using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 
 #endregion
@@ -634,6 +636,48 @@ public class NeteaseApisTests
             e => throw e);
     }
 
+
+    [Test]
+    [Arguments("ヰ世界情緒")]
+    public async Task ProviderSearchSuggestions_Should_ReturnPlayCoreContainer(string keyword)
+    {
+        var provider = _provider.Should().BeAssignableTo<ISearchSuggestionProvidable>().Subject;
+        var container = await provider.GetSearchSuggestionsAsync(keyword);
+        var items = await container.Should().BeAssignableTo<LinerContainerBase>().Subject.GetAllItemsAsync();
+
+        items.Should().NotBeEmpty();
+        items.Should().AllBeAssignableTo<ProvidableItemBase>();
+    }
+
+    [Test]
+    [Arguments("2034742057", NeteaseTypeIds.SingleSong)]
+    public async Task ProviderComments_Should_ReturnPlayCoreComments(string itemId, string typeId)
+    {
+        var provider = _provider.Should().BeAssignableTo<IProvidableItemCommentProvidable>().Subject;
+        var comments = await provider.GetCommentsAsync(itemId, typeId, 0, 20);
+
+        comments.Items.Should().NotBeEmpty();
+        comments.TotalCount.Should().BeGreaterThan(0);
+    }
+
+    [Test]
+    public async Task ProviderPersonalFm_Should_ReturnPlayCoreSongs()
+    {
+        var provider = _provider.Should().BeAssignableTo<IPersonalFmProvidable>().Subject;
+        var songs = await provider.GetPersonalFmQueueAsync();
+
+        songs.Should().NotBeEmpty();
+    }
+
+    [Test]
+    [Arguments("960103064")]
+    public async Task ProviderContainerPage_Should_ReturnPlayCoreItems(string playlistId)
+    {
+        var provider = _provider.Should().BeAssignableTo<IContainerPageProvidable>().Subject;
+        var page = await provider.GetContainerItemsPageAsync(playlistId, 0, 10);
+
+        page.Items.Should().NotBeEmpty();
+    }
     [Test]
     [Arguments("2034742057", "1811209786", "1953828605")]
     public async Task SongDetail_Multiple_Should_HasInfo(params string[] ids)

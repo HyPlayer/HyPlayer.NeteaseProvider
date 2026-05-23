@@ -1,4 +1,4 @@
-﻿using HyPlayer.NeteaseApi;
+using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
 using HyPlayer.NeteaseApi.ApiContracts.Login;
 using HyPlayer.NeteaseApi.ApiContracts.Playlist;
@@ -24,14 +24,27 @@ using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
 
 namespace HyPlayer.NeteaseProvider;
 
-public class NeteaseProvider : ProviderBase,
+public partial class NeteaseProvider : ProviderBase,
                                ILyricProvidable,
                                IMusicResourceProvidable,
                                IProvableItemLikable,
-                               IProvidableItemProvidable,
-                               IProvidableItemRangeProvidable,
-                               ISearchableProvider,
-                               IRecommendationProvidable
+                                IProvidableItemProvidable,
+                                IProvidableItemRangeProvidable,
+                                ISearchableProvider,
+                                IRecommendationProvidable,
+                                IAuthenticationProvidable,
+                                IContainerManagementProvidable,
+                                ISearchSuggestionProvidable,
+                                IContainerPageProvidable,
+                                IPersonalFmProvidable,
+                                IQrAuthenticationProvidable,
+                                ICommentProvidable,
+                                IProvidableItemCommentProvidable,
+                                IContainerCategoryProvidable,
+                                IUserLibraryProvidable,
+                                IContextRecommendationProvidable,
+                                IScopedItemRangeProvidable,
+                                IProvidableItemDynamicMetadataProvidable
 {
     public readonly NeteaseCloudMusicApiHandler Handler = new();
     public override string Name => "网易云音乐";

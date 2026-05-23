@@ -85,7 +85,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
         int start, int count, CancellationToken ctk = default)
     {
         if (_trackIds is null)
-            await UpdatePlaylistInfoAsync(ctk);
+            await UpdateTrackListAsync(ctk);
         if (_trackIds is not null)
             return (start + count < _trackIds.Length,
                     (await NeteaseProvider.Instance.GetSingleSongRangeByIds(
