@@ -58,6 +58,21 @@ public class NeteaseUserLibrarySubContainer : LinerContainerBase, IProgressiveLo
         await NeteaseProvider.Instance.RequestAsync(NeteaseApis.CloudDeleteApi, new CloudDeleteRequest { Id = itemId }, ctk);
     }
 
+    public async Task<List<string>> GetLikedSongIdsAsync(CancellationToken ctk = default)
+    {
+        if (Kind != LikedSongsKind)
+            throw new InvalidOperationException("Only liked-song library containers can load liked song ids.");
+
+        var result = await NeteaseProvider.Instance.RequestAsync(NeteaseApis.LikelistApi, new LikelistRequest
+        {
+            Uid = NeteaseProvider.Instance.LoginedUser?.ActualId!
+        }, ctk);
+
+        return result.Match(
+            success => success.TrackIds?.ToList() ?? [],
+            _ => []);
+    }
+
     private static async Task<(bool HasMore, List<ProvidableItemBase> Items)> GetCloudItemsAsync(int offset, int count, CancellationToken ctk)
     {
         var result = await NeteaseProvider.Instance.RequestAsync(NeteaseApis.CloudGetApi,

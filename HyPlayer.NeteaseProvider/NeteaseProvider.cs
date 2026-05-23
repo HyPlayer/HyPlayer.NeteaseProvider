@@ -307,77 +307,36 @@ public partial class NeteaseProvider : ProviderBase,
         {
             if (targetId is null)
             {
-                await RequestAsync(
-                    NeteaseApis.LikeApi,
-                    new LikeRequest
-                    {
-                        TrackId = inProviderId.Substring(2),
-                        Like = true,
-                        UserId = LoginedUser?.ActualId!
-                    }, ctk);
+                await new NeteaseSong { ActualId = inProviderId.Substring(2), Name = string.Empty, Artists = [] }.LikeAsync(ctk);
             }
             else
             {
-                await RequestAsync(
-                    NeteaseApis.PlaylistTracksEditApi,
-                    new PlaylistTracksEditRequest()
-                    {
-                        IsAdd = true,
-                        PlaylistId = targetId,
-                        Id = inProviderId.Substring(2)
-                    }, ctk);
+                await new NeteasePlaylist { ActualId = targetId, Name = string.Empty }.AddSongAsync(inProviderId.Substring(2), ctk);
             }
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.Playlist))
         {
-            await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
-                               new PlaylistSubscribeRequest()
-                               {
-                                   IsSubscribe = true,
-                                   PlaylistId = inProviderId.Substring(2)
-                               }, ctk);
+            await new NeteasePlaylist { ActualId = inProviderId.Substring(2), Name = string.Empty }.SubscribeAsync(ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.Artist))
         {
-            await RequestAsync(NeteaseApis.ArtistSubscribeApi,
-                new ArtistSubscribeRequest()
-                {
-                    ArtistId = inProviderId.Substring(2)
-                }, ctk);
+            await new NeteaseArtist { ActualId = inProviderId.Substring(2), Name = string.Empty }.SubscribeAsync(ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.Album))
         {
-            await RequestAsync(NeteaseApis.AlbumSubscribeApi,
-                new AlbumSubscribeRequest()
-                {
-                    Id = inProviderId.Substring(2),
-                    IsSubscribe = true
-                }, ctk);
+            await new NeteaseAlbum { ActualId = inProviderId.Substring(2), Name = string.Empty }.SubscribeAsync(ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.Mv))
         {
-            await RequestAsync(NeteaseApis.VideoSubscribeApi,
-                new VideoSubscribeRequest()
-                {
-                    MvId = inProviderId.Substring(2)
-                }, ctk);
+            await NeteaseItemActions.SubscribeMvAsync(inProviderId.Substring(2), ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.RadioChannel))
         {
-            await RequestAsync(NeteaseApis.DjChannelSubscribeApi,
-                new DjChannelSubscribeRequest()
-                {
-                    Id = inProviderId.Substring(2),
-                    IsSubscribe = true
-                }, ctk);
+            await new NeteaseRadioChannel { ActualId = inProviderId.Substring(2), Name = string.Empty }.SubscribeAsync(ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.User))
         {
-            await RequestAsync(NeteaseApis.UserFollowApi,
-                new UserFollowRequest()
-                {
-                    Id = inProviderId.Substring(2)
-                }, ctk);
+            await new NeteaseUser { ActualId = inProviderId.Substring(2), Name = string.Empty }.FollowAsync(ctk);
         }
     }
 
@@ -387,94 +346,48 @@ public partial class NeteaseProvider : ProviderBase,
         {
             if (targetId is null)
             {
-                await RequestAsync(
-                    NeteaseApis.LikeApi,
-                    new LikeRequest
-                    {
-                        TrackId = inProviderId.Substring(2),
-                        Like = false,
-                        UserId = LoginedUser?.ActualId!
-                    }, ctk);
+                await new NeteaseSong { ActualId = inProviderId.Substring(2), Name = string.Empty, Artists = [] }.UnlikeAsync(ctk);
             }
             else
             {
-                await RequestAsync(
-                    NeteaseApis.PlaylistTracksEditApi,
-                    new PlaylistTracksEditRequest()
-                    {
-                        IsAdd = false,
-                        PlaylistId = targetId,
-                        Id = inProviderId.Substring(2)
-                    }, ctk);
+                await new NeteasePlaylist { ActualId = targetId, Name = string.Empty }.RemoveSongAsync(inProviderId.Substring(2), ctk);
             }
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.Playlist))
         {
-            await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
-                               new PlaylistSubscribeRequest()
-                               {
-                                   IsSubscribe = false,
-                                   PlaylistId = inProviderId.Substring(2)
-                               }, ctk);
+            await new NeteasePlaylist { ActualId = inProviderId.Substring(2), Name = string.Empty }.UnsubscribeAsync(ctk);
         }
 
         else if (inProviderId.StartsWith(NeteaseTypeIds.Artist))
         {
-            var id = inProviderId.Substring(2);
-            if (long.TryParse(id, out var lid))
-            {
-                await RequestAsync(NeteaseApis.ArtistUnsubscribeApi,
-                    new ArtistUnsubscribeRequest()
-                    {
-                        ArtistIds = [lid]
-                    }, ctk);
-            }
+            await new NeteaseArtist { ActualId = inProviderId.Substring(2), Name = string.Empty }.UnsubscribeAsync(ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.Album))
         {
-            await RequestAsync(NeteaseApis.AlbumSubscribeApi,
-                new AlbumSubscribeRequest()
-                {
-                    Id = inProviderId.Substring(2),
-                    IsSubscribe = false
-                }, ctk);
+            await new NeteaseAlbum { ActualId = inProviderId.Substring(2), Name = string.Empty }.UnsubscribeAsync(ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.Mv))
         {
-            await RequestAsync(NeteaseApis.VideoUnsubscribeApi,
-                new VideoUnsubscribeRequest()
-                {
-                    IdList = [ inProviderId.Substring(2)]
-                }, ctk);
+            await NeteaseItemActions.UnsubscribeMvAsync(inProviderId.Substring(2), ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.RadioChannel))
         {
-            await RequestAsync(NeteaseApis.DjChannelSubscribeApi,
-                new DjChannelSubscribeRequest()
-                {
-                    Id = inProviderId.Substring(2),
-                    IsSubscribe = false
-                }, ctk);
+            await new NeteaseRadioChannel { ActualId = inProviderId.Substring(2), Name = string.Empty }.UnsubscribeAsync(ctk);
         }
         else if (inProviderId.StartsWith(NeteaseTypeIds.User))
         {
-            await RequestAsync(NeteaseApis.UserUnfollowApi,
-                new UserUnfollowRequest()
-                {
-                    Id = inProviderId.Substring(2)
-                }, ctk);
+            await new NeteaseUser { ActualId = inProviderId.Substring(2), Name = string.Empty }.UnfollowAsync(ctk);
         }
     }
 
     public async Task<List<string>> GetLikedProvidableIdsAsync(string typeId, CancellationToken ctk = default)
     {
-        var result = await RequestAsync(NeteaseApis.LikelistApi, new LikelistRequest()
+        return await new NeteaseUserLibrarySubContainer
         {
-            Uid = LoginedUser?.ActualId!
-        }, ctk);
-        return result.Match(
-            success => success.TrackIds?.ToList() ?? new List<string>(),
-            _ => new List<string>());
+            ActualId = "liked-songs",
+            Kind = NeteaseUserLibrarySubContainer.LikedSongsKind,
+            Name = "我喜欢的音乐"
+        }.GetLikedSongIdsAsync(ctk);
     }
 
 
