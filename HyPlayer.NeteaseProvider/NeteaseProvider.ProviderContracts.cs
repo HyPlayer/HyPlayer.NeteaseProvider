@@ -252,114 +252,68 @@ public partial class NeteaseProvider
 
     public async Task<ProviderPageResult<ProvidableItemBase>> GetUserLibraryItemsAsync(string typeId, int offset, int count, CancellationToken ctk = default)
     {
-        if (typeId == NeteaseTypeIds.SingleSong)
+        var kind = typeId == NeteaseTypeIds.SingleSong ? NeteaseUserLibrarySubContainer.CloudKind : typeId;
+        var container = new NeteaseUserLibrarySubContainer
         {
-            var cloudItems = await GetCloudLibraryItemsAsync(offset, count, ctk);
-            return new ProviderPageResult<ProvidableItemBase>
-            {
-                Items = cloudItems.Items.Cast<ProvidableItemBase>().ToList(),
-                HasMore = cloudItems.HasMore,
-                NextOffset = cloudItems.NextOffset,
-                TotalCount = cloudItems.TotalCount
-            };
-        }
+            ActualId = $"library-{kind}",
+            Name = "用户资料库",
+            Kind = kind,
+            UserId = LoginedUser?.ActualId,
+            MaxProgressiveCount = count
+        };
 
-        if (typeId == NeteaseTypeIds.RadioChannel)
+        var (hasMore, items) = await container.GetProgressiveItemsListAsync(offset, count, ctk);
+        return new ProviderPageResult<ProvidableItemBase>
         {
-            var result = await RequestAsync(NeteaseApis.DjChannelSubscribedApi, new DjChannelSubscribedRequest { Limit = count }, ctk);
-            return result.Match(success => new ProviderPageResult<ProvidableItemBase>
-                {
-                    Items = success.Data?.Data?.Select(channel => (ProvidableItemBase)new NeteaseRadioChannel
-                    {
-                        ActualId = channel.Id,
-                        Name = channel.Name ?? channel.Id ?? string.Empty,
-                        Description = channel.Description,
-                        CoverUrl = channel.CoverUrl,
-                        LastProgramCreateTime = channel.LastProgramCreateTime,
-                        LastProgramId = channel.LastProgramId,
-                        LastProgramName = channel.LastVoiceName,
-                        ProgramCount = channel.VoiceCount,
-                        SubscribedCount = channel.SubscribedCount,
-                        PlayCount = channel.PlayCount,
-                        CategoryId = channel.CategoryId,
-                        Category = channel.Category,
-                        SecondCategoryId = channel.SecondCategoryId,
-                        SecondCategory = channel.SecondCategory,
-                        CreatorList = string.IsNullOrWhiteSpace(channel.UserName) ? [] : [channel.UserName]
-                    }).ToList() ?? [],
-                    HasMore = success.Data?.HasMore ?? false,
-                    TotalCount = success.Data?.Count
-                },
-                _ => EmptyPage<ProvidableItemBase>());
-        }
-
-        if (typeId == NeteaseTypeIds.Artist)
-        {
-            var result = await RequestAsync(NeteaseApis.ArtistSublistApi, new ArtistSublistRequest { Offset = offset, Limit = count }, ctk);
-            return result.Match(success => new ProviderPageResult<ProvidableItemBase>
-                {
-                    Items = success.Artists?.Select(artist => (ProvidableItemBase)artist.MapToNeteaseArtist()).ToList() ?? [],
-                    HasMore = success.HasMore,
-                    NextOffset = success.HasMore ? offset + count : null,
-                    TotalCount = success.Count
-                },
-                _ => EmptyPage<ProvidableItemBase>());
-        }
-
-        if (typeId == NeteaseTypeIds.Album)
-        {
-            var result = await RequestAsync(NeteaseApis.AlbumSublistApi, new AlbumSublistRequest { Offset = offset, Limit = count }, ctk);
-            return result.Match(success => new ProviderPageResult<ProvidableItemBase>
-                {
-                    Items = success.Data?.Select(album => album.MapToNeteaseAlbum()).Where(album => album is not null).Cast<ProvidableItemBase>().ToList() ?? [],
-                    HasMore = success.HasMore,
-                    NextOffset = success.HasMore ? offset + count : null,
-                    TotalCount = success.Count
-                },
-                _ => EmptyPage<ProvidableItemBase>());
-        }
-
-        return EmptyPage<ProvidableItemBase>();
+            Items = items,
+            HasMore = hasMore,
+            NextOffset = hasMore ? offset + count : null
+        };
     }
 
     public async Task<List<ProvidableItemBase>> GetUserListeningHistoryAsync(string userId, string rangeId, CancellationToken ctk = default)
     {
-        if (rangeId.Equals("recent", StringComparison.OrdinalIgnoreCase))
+        var container = new NeteaseUserLibrarySubContainer
         {
-            var result = await RequestAsync<UserRecordWeekResponse, UserRecordRequest, UserRecordResponse, ErrorResultBase, UserRecordActualRequest>(
-                NeteaseApis.UserRecordApi,
-                new UserRecordRequest { UserId = userId, RecordType = UserRecordType.WeekData, Count = 120 }, ctk);
-            return result.Match(
-                success => success.WeekData?.Select(item => item.Song).Where(song => song is not null).Select(song => (ProvidableItemBase)song!.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
-                _ => new List<ProvidableItemBase>());
-        }
-
-        var allResult = await RequestAsync<UserRecordAllResponse, UserRecordRequest, UserRecordResponse, ErrorResultBase, UserRecordActualRequest>(
-            NeteaseApis.UserRecordApi,
-            new UserRecordRequest { UserId = userId, RecordType = UserRecordType.All, Count = 120 }, ctk);
-        return allResult.Match(
-            success => success.AllData?.Select(item => item.Song).Where(song => song is not null).Select(song => (ProvidableItemBase)song!.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
-            _ => new List<ProvidableItemBase>());
+            ActualId = $"history-{rangeId}{userId}",
+            Name = "听歌排行",
+            Kind = rangeId.Equals("recent", StringComparison.OrdinalIgnoreCase)
+                ? NeteaseUserLibrarySubContainer.ListeningHistoryRecentKind
+                : NeteaseUserLibrarySubContainer.ListeningHistoryAllKind,
+            UserId = userId,
+            MaxProgressiveCount = 120
+        };
+        return await container.GetAllItemsAsync(ctk);
     }
 
     public async Task<ProviderPageResult<CloudLibraryItemBase>> GetCloudLibraryItemsAsync(int offset, int count, CancellationToken ctk = default)
     {
-        var result = await RequestAsync(NeteaseApis.CloudGetApi,
-            new CloudGetRequest { Offset = offset, Limit = count }, ctk);
-
-        return result.Match(success => new ProviderPageResult<CloudLibraryItemBase>
+        var container = new NeteaseUserLibrarySubContainer
+        {
+            ActualId = "cloud",
+            Name = "音乐云盘",
+            Kind = NeteaseUserLibrarySubContainer.CloudKind,
+            UserId = LoginedUser?.ActualId,
+            MaxProgressiveCount = count
+        };
+        var (hasMore, items) = await container.GetProgressiveItemsListAsync(offset, count, ctk);
+        return new ProviderPageResult<CloudLibraryItemBase>
             {
-                Items = success.Songs?.Select(song => (CloudLibraryItemBase)song.MapToNeteaseCloudLibraryItem()).ToList() ?? new List<CloudLibraryItemBase>(),
-                HasMore = success.HasMore,
-                NextOffset = success.HasMore ? offset + count : null,
-                TotalCount = success.Count
-            },
-            _ => EmptyPage<CloudLibraryItemBase>());
+                Items = items.OfType<CloudLibraryItemBase>().ToList(),
+                HasMore = hasMore,
+                NextOffset = hasMore ? offset + count : null
+            };
     }
 
     public async Task DeleteCloudLibraryItemAsync(string itemId, CancellationToken ctk = default)
     {
-        await RequestAsync(NeteaseApis.CloudDeleteApi, new CloudDeleteRequest { Id = itemId }, ctk);
+        await new NeteaseUserLibrarySubContainer
+        {
+            ActualId = "cloud",
+            Name = "音乐云盘",
+            Kind = NeteaseUserLibrarySubContainer.CloudKind,
+            UserId = LoginedUser?.ActualId
+        }.DeleteCloudItemAsync(itemId, ctk);
     }
 
     public async Task<CloudLibraryItemBase> UploadCloudLibraryItemAsync(

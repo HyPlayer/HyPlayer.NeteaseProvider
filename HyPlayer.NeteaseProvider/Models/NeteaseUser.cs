@@ -54,10 +54,75 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
                         Playlists = subscribed
                     });
 
+                containers.AddRange(CreateLibraryContainers());
+
                 return containers;
             },
             error => new List<ContainerBase>()
             );
+    }
+
+    private List<ContainerBase> CreateLibraryContainers()
+    {
+        return
+        [
+            new NeteaseUserLibrarySubContainer
+            {
+                ActualId = $"liked-songs{ActualId}",
+                Name = "喜欢的音乐",
+                Kind = NeteaseUserLibrarySubContainer.LikedSongsKind,
+                UserId = ActualId,
+                MaxProgressiveCount = 1000
+            },
+            new NeteaseUserLibrarySubContainer
+            {
+                ActualId = $"cloud{ActualId}",
+                Name = "音乐云盘",
+                Kind = NeteaseUserLibrarySubContainer.CloudKind,
+                UserId = ActualId,
+                MaxProgressiveCount = 749
+            },
+            new NeteaseUserLibrarySubContainer
+            {
+                ActualId = $"radio{ActualId}",
+                Name = "收藏的电台",
+                Kind = NeteaseTypeIds.RadioChannel,
+                UserId = ActualId,
+                MaxProgressiveCount = 200
+            },
+            new NeteaseUserLibrarySubContainer
+            {
+                ActualId = $"artist{ActualId}",
+                Name = "收藏的歌手",
+                Kind = NeteaseTypeIds.Artist,
+                UserId = ActualId,
+                MaxProgressiveCount = 25
+            },
+            new NeteaseUserLibrarySubContainer
+            {
+                ActualId = $"album{ActualId}",
+                Name = "收藏的专辑",
+                Kind = NeteaseTypeIds.Album,
+                UserId = ActualId,
+                MaxProgressiveCount = 25
+            },
+            new NeteaseUserLibrarySubContainer
+            {
+                ActualId = $"history-recent{ActualId}",
+                Name = "最近播放",
+                Kind = NeteaseUserLibrarySubContainer.ListeningHistoryRecentKind,
+                UserId = ActualId,
+                MaxProgressiveCount = 120
+            },
+            new NeteaseUserLibrarySubContainer
+            {
+                ActualId = $"history-all{ActualId}",
+                Name = "全部听歌排行",
+                Kind = NeteaseUserLibrarySubContainer.ListeningHistoryAllKind,
+                UserId = ActualId,
+                MaxProgressiveCount = 120
+            }
+        ];
     }
 
     public Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
