@@ -300,12 +300,15 @@ public partial class NeteaseProvider
         return await GetContextRecommendationAsync(songId, NeteaseTypeIds.SingleSong, 10, ctk);
     }
 
-    public Task<ProvidableItemBase?> GetUserAsync(string? userId = null, CancellationToken ctk = default)
+    public async Task<ProvidableItemBase?> GetUserAsync(string? userId = null, CancellationToken ctk = default)
     {
         if (userId is null)
-            return Task.FromResult<ProvidableItemBase?>(LoginedUser);
+            return LoginedUser;
 
-        return Task.FromResult<ProvidableItemBase?>(new NeteaseUser { ActualId = userId, Name = userId });
+        var result = await RequestAsync(NeteaseApis.UserDetailApi, new UserDetailRequest { UserId = userId }, ctk);
+        return result.Match(
+            success => success.Profile?.MapToNeteaseUser(),
+            _ => new NeteaseUser { ActualId = userId, Name = userId });
     }
 
     public async Task<ProviderPageResult<ContainerBase>> GetUserContainersAsync(string? userId, int offset, int count, CancellationToken ctk = default)
