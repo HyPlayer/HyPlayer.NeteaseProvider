@@ -29,7 +29,7 @@ public class NeteaseProviderContractTests
         _provider.Should().BeAssignableTo<IContainerManagementProvidable>();
         _provider.Should().BeAssignableTo<ISearchSuggestionProvidable>();
         _provider.Should().BeAssignableTo<IContainerPageProvidable>();
-        _provider.Should().BeAssignableTo<IPersonalFmProvidable>();
+        _provider.Should().BeAssignableTo<IContextRecommendationProvidable>();
         await Task.CompletedTask;
     }
 
@@ -99,16 +99,10 @@ public class NeteaseProviderContractTests
     }
 
     [Test]
-    public async Task PersonalFmMethods_Should_ExposePlayCoreContractTypes()
+    public async Task ContextRecommendationMethods_Should_ExposePlayCoreContractTypes()
     {
-        var queueMethod = typeof(IPersonalFmProvidable).GetMethod(nameof(IPersonalFmProvidable.GetPersonalFmQueueAsync));
-        var trashMethod = typeof(IPersonalFmProvidable).GetMethod(nameof(IPersonalFmProvidable.TrashPersonalFmSongAsync));
-        var contextMethod = typeof(IPersonalFmProvidable).GetMethod(nameof(IPersonalFmProvidable.GetPersonalFmContextAsync));
+        var contextMethod = typeof(IContextRecommendationProvidable).GetMethod(nameof(IContextRecommendationProvidable.GetContextRecommendationAsync));
 
-        queueMethod.Should().NotBeNull();
-        queueMethod!.ReturnType.Should().Be(typeof(Task<List<SingleSongBase>>));
-        trashMethod.Should().NotBeNull();
-        trashMethod!.ReturnType.Should().Be(typeof(Task));
         contextMethod.Should().NotBeNull();
         contextMethod!.ReturnType.Should().Be(typeof(Task<ContainerBase>));
         await Task.CompletedTask;

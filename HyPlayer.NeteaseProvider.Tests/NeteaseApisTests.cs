@@ -663,8 +663,7 @@ public class NeteaseApisTests
     [Test]
     public async Task ProviderPersonalFm_Should_ReturnPlayCoreSongs()
     {
-        var provider = _provider.Should().BeAssignableTo<IPersonalFmProvidable>().Subject;
-        var songs = await provider.GetPersonalFmQueueAsync();
+        var songs = await new NeteasePersonalFMContainer { ActualId = "default", Name = "私人 FM" }.GetNextItemsRangeAsync();
 
         songs.Should().NotBeEmpty();
     }

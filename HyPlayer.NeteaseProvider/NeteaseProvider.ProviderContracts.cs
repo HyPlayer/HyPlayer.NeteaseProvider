@@ -7,7 +7,6 @@ using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
 using HyPlayer.NeteaseApi.ApiContracts.Login;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual;
-using HyPlayer.NeteaseApi.ApiContracts.PersonalFM;
 using HyPlayer.NeteaseApi.ApiContracts.Playlist;
 using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.ApiContracts.Song;
@@ -20,7 +19,6 @@ using HyPlayer.NeteaseApi.Models.ResponseModels;
 using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.NeteaseProvider.Models;
-using HyPlayer.PlayCore.Abstraction.Interfaces.PlayListContainer;
 using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
@@ -36,20 +34,6 @@ public partial class NeteaseProvider
     private const string CloudAudioBucket = "jd-musicrep-privatecloud-audio-public";
     private const string CloudCoverBucket = "yyimgs";
     private static readonly HttpClient CloudUploadHttpClient = new();
-
-    private static readonly string[] DefaultPlaylistCategories =
-    [
-        "华语",
-        "流行",
-        "摇滚",
-        "民谣",
-        "电子",
-        "轻音乐",
-        "ACG",
-        "学习",
-        "工作",
-        "治愈"
-    ];
 
     public async Task<ProviderSessionInfo> LoginAsync(string accountId, string secret, CancellationToken ctk = default)
     {
@@ -134,8 +118,15 @@ public partial class NeteaseProvider
         var userId = LoginedUser?.ActualId ?? (await GetSessionInfoAsync(ctk)).UserId;
         if (userId is not null)
         {
-            var containers = await GetUserContainersAsync(userId, 0, 50, ctk);
-            var created = containers.Items.OfType<NeteasePlaylist>().FirstOrDefault(playlist => playlist.Name == name);
+            var containers = await new NeteaseUser { ActualId = userId, Name = userId }.GetSubContainerAsync(ctk);
+            var playlists = new List<NeteasePlaylist>();
+            foreach (var subContainer in containers.OfType<NeteaseUserPlaylistSubContainer>())
+            {
+                var items = await subContainer.GetAllItemsAsync(ctk);
+                playlists.AddRange(items.OfType<NeteasePlaylist>());
+            }
+
+            var created = playlists.FirstOrDefault(playlist => playlist.Name == name);
             if (created is not null) return created;
         }
 
@@ -153,18 +144,6 @@ public partial class NeteaseProvider
             throw new NotSupportedException("NetEase only exposes conversion to a private playlist through the current API contract.");
 
         await RequestAsync(NeteaseApis.PlaylistPrivacyApi, new PlaylistPrivacyRequest { Id = containerId }, ctk);
-    }
-
-    public async Task SubscribeContainerAsync(string containerId, CancellationToken ctk = default)
-    {
-        await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
-            new PlaylistSubscribeRequest { PlaylistId = containerId, IsSubscribe = true }, ctk);
-    }
-
-    public async Task UnsubscribeContainerAsync(string containerId, CancellationToken ctk = default)
-    {
-        await RequestAsync(NeteaseApis.PlaylistSubscribeApi,
-            new PlaylistSubscribeRequest { PlaylistId = containerId, IsSubscribe = false }, ctk);
     }
 
     public Task<ContainerBase?> GetCommentContainerAsync(CancellationToken ctk = default)
@@ -269,68 +248,6 @@ public partial class NeteaseProvider
             NextOffset = result.Item1 ? offset + count : null,
             TotalCount = playlist.TrackCount > 0 ? playlist.TrackCount : null
         };
-    }
-
-    public Task<List<ProviderCategory>> GetContainerCategoriesAsync(string? typeId = null, CancellationToken ctk = default)
-    {
-        return Task.FromResult(DefaultPlaylistCategories.Select(category => new ProviderCategory
-        {
-            Id = category,
-            Name = category,
-            ParentId = typeId
-        }).ToList());
-    }
-
-    public async Task<List<SingleSongBase>> GetPersonalFmQueueAsync(CancellationToken ctk = default)
-    {
-        var result = await RequestAsync(NeteaseApis.PersonalFmApi,
-            new PersonalFmRequest { Mode = "DEFAULT" }, ctk);
-        return result.Match(
-            success => success.Items?.Select(item => (SingleSongBase)item.MapToNeteaseMusic()).ToList() ?? new List<SingleSongBase>(),
-            _ => new List<SingleSongBase>());
-    }
-
-    public async Task TrashPersonalFmSongAsync(string songId, CancellationToken ctk = default)
-    {
-        await RequestAsync(NeteaseApis.PersonalFmTrashApi, new FmTrashRequest { Id = songId }, ctk);
-    }
-
-    public async Task<ContainerBase> GetPersonalFmContextAsync(string songId, CancellationToken ctk = default)
-    {
-        return await GetContextRecommendationAsync(songId, NeteaseTypeIds.SingleSong, 10, ctk);
-    }
-
-    public async Task<ProvidableItemBase?> GetUserAsync(string? userId = null, CancellationToken ctk = default)
-    {
-        if (userId is null)
-            return LoginedUser;
-
-        var result = await RequestAsync(NeteaseApis.UserDetailApi, new UserDetailRequest { UserId = userId }, ctk);
-        return result.Match(
-            success => success.Profile?.MapToNeteaseUser(),
-            _ => new NeteaseUser { ActualId = userId, Name = userId });
-    }
-
-    public async Task<ProviderPageResult<ContainerBase>> GetUserContainersAsync(string? userId, int offset, int count, CancellationToken ctk = default)
-    {
-        userId ??= LoginedUser?.ActualId;
-        if (userId is null)
-            return EmptyPage<ContainerBase>();
-
-        var result = await RequestAsync(NeteaseApis.UserPlaylistApi,
-            new UserPlaylistRequest { Uid = userId, Offset = offset, Limit = count }, ctk);
-
-        return result.Match(success =>
-            {
-                var items = success.Playlists?.Select(playlist => (ContainerBase)playlist.MapToNeteasePlaylist()).ToList() ?? new List<ContainerBase>();
-                return new ProviderPageResult<ContainerBase>
-                {
-                    Items = items,
-                    HasMore = items.Count == count,
-                    NextOffset = items.Count == count ? offset + count : null
-                };
-            },
-            _ => EmptyPage<ContainerBase>());
     }
 
     public async Task<ProviderPageResult<ProvidableItemBase>> GetUserLibraryItemsAsync(string typeId, int offset, int count, CancellationToken ctk = default)
@@ -630,30 +547,6 @@ public partial class NeteaseProvider
             _ => EmptyPage<RichMediaBase>());
     }
 
-    public async Task<ProviderPageResult<ProvidableItemBase>> GetScopedItemsPageAsync(string parentId, string parentTypeId, string itemTypeId, int offset, int count, CancellationToken ctk = default)
-    {
-        if (parentTypeId == NeteaseTypeIds.Artist)
-        {
-            var container = new NeteaseArtistSubContainer
-            {
-                ActualId = $"{MapArtistScopedPrefix(itemTypeId)}{parentId}",
-                Name = parentId
-            };
-            var result = await container.GetProgressiveItemsListAsync(offset, count, ctk);
-            return new ProviderPageResult<ProvidableItemBase>
-            {
-                Items = result.Item2,
-                HasMore = result.Item1,
-                NextOffset = result.Item1 ? offset + count : null
-            };
-        }
-
-        if (parentTypeId == NeteaseTypeIds.Playlist && itemTypeId == NeteaseTypeIds.SingleSong)
-            return await GetContainerItemsPageAsync(parentId, offset, count, ctk);
-
-        return EmptyPage<ProvidableItemBase>();
-    }
-
     public async Task<ContainerBase> GetContextRecommendationAsync(string itemId, string typeId, int count, CancellationToken ctk = default)
     {
         if (typeId != NeteaseTypeIds.SingleSong)
@@ -809,16 +702,6 @@ public partial class NeteaseProvider
         {
             Items = new List<T>(),
             HasMore = false
-        };
-    }
-
-    private static string MapArtistScopedPrefix(string itemTypeId)
-    {
-        return itemTypeId switch
-        {
-            NeteaseTypeIds.Album => "alb",
-            NeteaseTypeIds.SingleSong => "tim",
-            _ => "hot"
         };
     }
 
