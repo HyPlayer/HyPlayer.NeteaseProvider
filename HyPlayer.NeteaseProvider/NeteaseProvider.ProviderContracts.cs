@@ -108,7 +108,7 @@ public partial class NeteaseProvider
         return result.Match(success => new ProviderQrLoginState
             {
                 Status = MapQrStatus(success.Code),
-                SessionInfo = success.Code == 200 ? CreateSessionInfo(LoginedUser) : null,
+                SessionInfo = success.Code is 200 or 803 ? CreateSessionInfo(LoginedUser) : null,
                 Message = success.Message
             },
             error => throw error);
@@ -463,7 +463,7 @@ public partial class NeteaseProvider
     {
         return code switch
         {
-            200 => ProviderQrLoginStatus.Authorized,
+            200 or 803 => ProviderQrLoginStatus.Authorized,
             800 => ProviderQrLoginStatus.Expired,
             801 => ProviderQrLoginStatus.WaitingForScan,
             802 => ProviderQrLoginStatus.WaitingForConfirmation,
