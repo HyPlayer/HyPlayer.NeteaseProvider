@@ -506,23 +506,13 @@ public partial class NeteaseProvider
         if (typeId != NeteaseTypeIds.SingleSong)
             return new NeteaseActionGettableContainer { ActualId = itemId, Name = "相关推荐" };
 
-        var result = await RequestAsync(NeteaseApis.PlaymodeIntelligenceListApi,
-            new PlaymodeIntelligenceListRequest
-            {
-                SongId = itemId,
-                PlaylistId = string.Empty,
-                StartMusicId = itemId,
-                Count = count
-            }, ctk);
-
-        return result.Match(success => new NeteaseActionGettableContainer(() => Task.FromResult(
-                success.Data?.Select(item => item.SongInfo).Where(song => song is not null).Select(song => (ProvidableItemBase)song!.MapToNeteaseMusic()).ToList()
-                ?? new List<ProvidableItemBase>()))
-            {
-                ActualId = itemId,
-                Name = "相关推荐"
-            } as ContainerBase,
-            _ => new NeteaseActionGettableContainer { ActualId = itemId, Name = "相关推荐" });
+        return new NeteaseContextRecommendationContainer
+        {
+            ActualId = itemId,
+            SeedItemId = itemId,
+            Name = "相关推荐",
+            Count = count
+        };
     }
 
     public async Task<string> CreateListenTogetherRoomAsync(List<SingleSongBase> queue, CancellationToken ctk = default)
