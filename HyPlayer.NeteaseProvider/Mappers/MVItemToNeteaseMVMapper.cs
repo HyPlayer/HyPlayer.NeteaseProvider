@@ -12,6 +12,10 @@ public static class MVItemToNeteaseMVMapper
             Name = item.Name ?? "未知MV",
             ActualId = item.Id!,
             CoverUrl = item.Cover,
+            Description = item.Description ?? item.BriefDescription,
+            CreatorName = item.ArtistName,
+            Duration = item.Duration,
+            PlayCount = item.PlayCount
         };
     }
 }

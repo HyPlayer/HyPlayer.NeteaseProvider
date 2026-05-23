@@ -12,6 +12,7 @@ using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.ApiContracts.Song;
 using HyPlayer.NeteaseApi.ApiContracts.User;
 using HyPlayer.NeteaseApi.ApiContracts.Utils;
+using HyPlayer.NeteaseApi.ApiContracts.Video;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Models;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
@@ -461,6 +462,109 @@ public partial class NeteaseProvider
                    FileSize = bytes.LongLength,
                    UploadedAt = DateTimeOffset.Now
                };
+    }
+
+    public async Task<RichMediaBase?> GetRichMediaAsync(string mediaId, string typeId, CancellationToken ctk = default)
+    {
+        if (typeId == NeteaseTypeIds.Mv)
+        {
+            var result = await RequestAsync(NeteaseApis.VideoDetailApi, new VideoDetailRequest { Id = mediaId }, ctk);
+            return result.Match(success =>
+                {
+                    var data = success.Data?.Resource?.Data;
+                    if (data is null) return null;
+                    return new NeteaseMv
+                    {
+                        ActualId = data.Id ?? mediaId,
+                        Name = data.Name ?? mediaId,
+                        Description = data.Description,
+                        CreatorName = data.ArtistName,
+                        PublishTime = data.PublishTime,
+                        Duration = data.Duration,
+                        PlayCount = data.PlayCount,
+                        SubCount = data.SubCount,
+                        LikedCount = success.Data?.Resource?.LikedCount ?? 0,
+                        AvailableQualities = data.Brs?.Select(item => item.Br).ToList() ?? [],
+                        CoverUrl = null
+                    } as RichMediaBase;
+                },
+                _ => null);
+        }
+
+        if (typeId == NeteaseTypeIds.MBlog)
+        {
+            var result = await RequestAsync(NeteaseApis.MlogDetailApi, new MlogDetailRequest { MlogId = mediaId }, ctk);
+            return result.Match(success =>
+                {
+                    var resource = success.Data?.Resource;
+                    if (resource is null) return null;
+                    return new NeteaseMlog
+                    {
+                        ActualId = resource.Id ?? mediaId,
+                        Name = resource.Content?.Title ?? mediaId,
+                        Description = resource.Content?.Text,
+                        CreatorName = resource.Profile?.Nickname,
+                        PublishTime = resource.PublishTime,
+                        LikedCount = resource.LikedCount,
+                        Duration = resource.Content?.Video?.Duration ?? 0,
+                        CoverUrl = resource.Content?.Video?.CoverUrl
+                    } as RichMediaBase;
+                },
+                _ => null);
+        }
+
+        return null;
+    }
+
+    public async Task<ResourceBase?> GetRichMediaResourceAsync(string mediaId, string typeId, string? qualityId = null, CancellationToken ctk = default)
+    {
+        if (typeId == NeteaseTypeIds.Mv)
+        {
+            var result = await RequestAsync(NeteaseApis.VideoUrlApi,
+                new VideoUrlRequest { Id = mediaId, Resolution = qualityId ?? "1080" }, ctk);
+            return result.Match(success => string.IsNullOrWhiteSpace(success.Data?.Url)
+                    ? null
+                    : new NeteaseRichMediaResource { ResourceName = mediaId, Url = success.Data.Url } as ResourceBase,
+                _ => null);
+        }
+
+        if (typeId == NeteaseTypeIds.MBlog)
+        {
+            var result = await RequestAsync(NeteaseApis.MlogUrlApi,
+                new MlogUrlRequest { Id = mediaId, Resolution = qualityId ?? "1080" }, ctk);
+            return result.Match(success =>
+                {
+                    var url = success.Data?.GetValueOrDefault(mediaId)?.UrlInfo?.Url;
+                    return string.IsNullOrWhiteSpace(url)
+                        ? null
+                        : new NeteaseRichMediaResource { ResourceName = mediaId, Url = url } as ResourceBase;
+                },
+                _ => null);
+        }
+
+        return null;
+    }
+
+    public async Task<ProviderPageResult<RichMediaBase>> GetRichMediaFeedAsync(string? typeId, int offset, int count, CancellationToken ctk = default)
+    {
+        var itemId = typeId?.Length > 2 ? typeId[2..] : string.Empty;
+        var songId = typeId?.StartsWith("song:", StringComparison.OrdinalIgnoreCase) is true ? itemId : null;
+        var result = await RequestAsync(NeteaseApis.MlogRcmdFeedListApi,
+            new MlogRcmdFeedListRequest { Id = itemId, SongId = songId, Limit = count }, ctk);
+
+        return result.Match(success => new ProviderPageResult<RichMediaBase>
+            {
+                Items = success.Data?.Feeds?.Select(feed => feed.Resource?.BaseData).Where(item => item is not null).Select(item => (RichMediaBase)new NeteaseMlog
+                {
+                    ActualId = item!.Id,
+                    Name = item.Title ?? item.OriginalTitle ?? item.Id ?? string.Empty,
+                    Description = item.Description,
+                    Duration = item.Duration,
+                    CoverUrl = item.CoverUrl
+                }).ToList() ?? [],
+                HasMore = false
+            },
+            _ => EmptyPage<RichMediaBase>());
     }
 
     public async Task<ProviderPageResult<ProvidableItemBase>> GetScopedItemsPageAsync(string parentId, string parentTypeId, string itemTypeId, int offset, int count, CancellationToken ctk = default)
