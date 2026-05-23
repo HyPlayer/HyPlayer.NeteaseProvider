@@ -250,72 +250,6 @@ public partial class NeteaseProvider
         };
     }
 
-    public async Task<ProviderPageResult<ProvidableItemBase>> GetUserLibraryItemsAsync(string typeId, int offset, int count, CancellationToken ctk = default)
-    {
-        var kind = typeId == NeteaseTypeIds.SingleSong ? NeteaseUserLibrarySubContainer.CloudKind : typeId;
-        var container = new NeteaseUserLibrarySubContainer
-        {
-            ActualId = $"library-{kind}",
-            Name = "用户资料库",
-            Kind = kind,
-            UserId = LoginedUser?.ActualId,
-            MaxProgressiveCount = count
-        };
-
-        var (hasMore, items) = await container.GetProgressiveItemsListAsync(offset, count, ctk);
-        return new ProviderPageResult<ProvidableItemBase>
-        {
-            Items = items,
-            HasMore = hasMore,
-            NextOffset = hasMore ? offset + count : null
-        };
-    }
-
-    public async Task<List<ProvidableItemBase>> GetUserListeningHistoryAsync(string userId, string rangeId, CancellationToken ctk = default)
-    {
-        var container = new NeteaseUserLibrarySubContainer
-        {
-            ActualId = $"history-{rangeId}{userId}",
-            Name = "听歌排行",
-            Kind = rangeId.Equals("recent", StringComparison.OrdinalIgnoreCase)
-                ? NeteaseUserLibrarySubContainer.ListeningHistoryRecentKind
-                : NeteaseUserLibrarySubContainer.ListeningHistoryAllKind,
-            UserId = userId,
-            MaxProgressiveCount = 120
-        };
-        return await container.GetAllItemsAsync(ctk);
-    }
-
-    public async Task<ProviderPageResult<CloudLibraryItemBase>> GetCloudLibraryItemsAsync(int offset, int count, CancellationToken ctk = default)
-    {
-        var container = new NeteaseUserLibrarySubContainer
-        {
-            ActualId = "cloud",
-            Name = "音乐云盘",
-            Kind = NeteaseUserLibrarySubContainer.CloudKind,
-            UserId = LoginedUser?.ActualId,
-            MaxProgressiveCount = count
-        };
-        var (hasMore, items) = await container.GetProgressiveItemsListAsync(offset, count, ctk);
-        return new ProviderPageResult<CloudLibraryItemBase>
-            {
-                Items = items.OfType<CloudLibraryItemBase>().ToList(),
-                HasMore = hasMore,
-                NextOffset = hasMore ? offset + count : null
-            };
-    }
-
-    public async Task DeleteCloudLibraryItemAsync(string itemId, CancellationToken ctk = default)
-    {
-        await new NeteaseUserLibrarySubContainer
-        {
-            ActualId = "cloud",
-            Name = "音乐云盘",
-            Kind = NeteaseUserLibrarySubContainer.CloudKind,
-            UserId = LoginedUser?.ActualId
-        }.DeleteCloudItemAsync(itemId, ctk);
-    }
-
     public async Task<CloudLibraryItemBase> UploadCloudLibraryItemAsync(
         ResourceBase resource,
         IReadOnlyDictionary<string, string> metadata,
@@ -499,20 +433,6 @@ public partial class NeteaseProvider
                 HasMore = false
             },
             _ => EmptyPage<RichMediaBase>());
-    }
-
-    public async Task<ContainerBase> GetContextRecommendationAsync(string itemId, string typeId, int count, CancellationToken ctk = default)
-    {
-        if (typeId != NeteaseTypeIds.SingleSong)
-            return new NeteaseActionGettableContainer { ActualId = itemId, Name = "相关推荐" };
-
-        return new NeteaseContextRecommendationContainer
-        {
-            ActualId = itemId,
-            SeedItemId = itemId,
-            Name = "相关推荐",
-            Count = count
-        };
     }
 
     public async Task<string> CreateListenTogetherRoomAsync(List<SingleSongBase> queue, CancellationToken ctk = default)

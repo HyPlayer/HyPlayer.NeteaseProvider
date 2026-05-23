@@ -583,7 +583,7 @@ public class NeteaseApisTests
             error => throw error
         );
 
-        (await (await _provider.GetRecommendationAsync(NeteaseTypeIds.Playlist))
+        (await new NeteaseRecommendPlaylistContainer { ActualId = "rcpl", Name = "推荐歌单" }
             .Should().BeAssignableTo<LinerContainerBase>().Subject
             .GetAllItemsAsync()).Should().NotBeEmpty();
     }
