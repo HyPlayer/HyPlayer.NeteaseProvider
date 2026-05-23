@@ -348,16 +348,20 @@ public partial class NeteaseProvider
 
     public async Task<List<ProvidableItemBase>> GetUserListeningHistoryAsync(string userId, string rangeId, CancellationToken ctk = default)
     {
-        var result = await RequestAsync<UserRecordAllResponse, UserRecordRequest, UserRecordResponse, ErrorResultBase, UserRecordActualRequest>(
-            NeteaseApis.UserRecordApi,
-            new UserRecordRequest
-            {
-                UserId = userId,
-                RecordType = rangeId.Equals("recent", StringComparison.OrdinalIgnoreCase) ? UserRecordType.WeekData : UserRecordType.All,
-                Count = 120
-            }, ctk);
+        if (rangeId.Equals("recent", StringComparison.OrdinalIgnoreCase))
+        {
+            var result = await RequestAsync<UserRecordWeekResponse, UserRecordRequest, UserRecordResponse, ErrorResultBase, UserRecordActualRequest>(
+                NeteaseApis.UserRecordApi,
+                new UserRecordRequest { UserId = userId, RecordType = UserRecordType.WeekData, Count = 120 }, ctk);
+            return result.Match(
+                success => success.WeekData?.Select(item => item.Song).Where(song => song is not null).Select(song => (ProvidableItemBase)song!.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
+                _ => new List<ProvidableItemBase>());
+        }
 
-        return result.Match(
+        var allResult = await RequestAsync<UserRecordAllResponse, UserRecordRequest, UserRecordResponse, ErrorResultBase, UserRecordActualRequest>(
+            NeteaseApis.UserRecordApi,
+            new UserRecordRequest { UserId = userId, RecordType = UserRecordType.All, Count = 120 }, ctk);
+        return allResult.Match(
             success => success.AllData?.Select(item => item.Song).Where(song => song is not null).Select(song => (ProvidableItemBase)song!.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>(),
             _ => new List<ProvidableItemBase>());
     }
