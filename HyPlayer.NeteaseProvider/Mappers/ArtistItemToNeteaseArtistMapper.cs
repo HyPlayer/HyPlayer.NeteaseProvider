@@ -10,7 +10,12 @@ public static class ArtistItemToNeteaseArtistMapper
         return new NeteaseArtist
         {
             Name = item.Name!,
-            ActualId = item.Id!
+            ActualId = item.Id!,
+            Translation = item.Translation,
+            Alias = item.Alias,
+            CoverUrl = item.Img1v1Url ?? item.PicUrl,
+            AlbumSize = item.AlbumSize,
+            MvSize = item.MvSize
         };
     }
 }

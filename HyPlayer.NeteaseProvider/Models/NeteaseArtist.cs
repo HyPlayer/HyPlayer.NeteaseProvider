@@ -8,6 +8,11 @@ public class NeteaseArtist : ArtistBase
 {
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.Artist;
+    public string? Translation { get; set; }
+    public string[]? Alias { get; set; }
+    public string? CoverUrl { get; set; }
+    public int AlbumSize { get; set; }
+    public int MvSize { get; set; }
 
     public override Task<List<ContainerBase>> GetSubContainerAsync(CancellationToken ctk = default)
     {

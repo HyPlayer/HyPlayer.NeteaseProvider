@@ -3,6 +3,7 @@ using HyPlayer.NeteaseApi.ApiContracts.Album;
 using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseApi.ApiContracts.Cloud;
 using HyPlayer.NeteaseApi.ApiContracts.Comment;
+using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
 using HyPlayer.NeteaseApi.ApiContracts.Login;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether;
 using HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual;
@@ -341,6 +342,61 @@ public partial class NeteaseProvider
                 NextOffset = cloudItems.NextOffset,
                 TotalCount = cloudItems.TotalCount
             };
+        }
+
+        if (typeId == NeteaseTypeIds.RadioChannel)
+        {
+            var result = await RequestAsync(NeteaseApis.DjChannelSubscribedApi, new DjChannelSubscribedRequest { Limit = count }, ctk);
+            return result.Match(success => new ProviderPageResult<ProvidableItemBase>
+                {
+                    Items = success.Data?.Data?.Select(channel => (ProvidableItemBase)new NeteaseRadioChannel
+                    {
+                        ActualId = channel.Id,
+                        Name = channel.Name ?? channel.Id ?? string.Empty,
+                        Description = channel.Description,
+                        CoverUrl = channel.CoverUrl,
+                        LastProgramCreateTime = channel.LastProgramCreateTime,
+                        LastProgramId = channel.LastProgramId,
+                        LastProgramName = channel.LastVoiceName,
+                        ProgramCount = channel.VoiceCount,
+                        SubscribedCount = channel.SubscribedCount,
+                        PlayCount = channel.PlayCount,
+                        CategoryId = channel.CategoryId,
+                        Category = channel.Category,
+                        SecondCategoryId = channel.SecondCategoryId,
+                        SecondCategory = channel.SecondCategory,
+                        CreatorList = string.IsNullOrWhiteSpace(channel.UserName) ? [] : [channel.UserName]
+                    }).ToList() ?? [],
+                    HasMore = success.Data?.HasMore ?? false,
+                    TotalCount = success.Data?.Count
+                },
+                _ => EmptyPage<ProvidableItemBase>());
+        }
+
+        if (typeId == NeteaseTypeIds.Artist)
+        {
+            var result = await RequestAsync(NeteaseApis.ArtistSublistApi, new ArtistSublistRequest { Offset = offset, Limit = count }, ctk);
+            return result.Match(success => new ProviderPageResult<ProvidableItemBase>
+                {
+                    Items = success.Artists?.Select(artist => (ProvidableItemBase)artist.MapToNeteaseArtist()).ToList() ?? [],
+                    HasMore = success.HasMore,
+                    NextOffset = success.HasMore ? offset + count : null,
+                    TotalCount = success.Count
+                },
+                _ => EmptyPage<ProvidableItemBase>());
+        }
+
+        if (typeId == NeteaseTypeIds.Album)
+        {
+            var result = await RequestAsync(NeteaseApis.AlbumSublistApi, new AlbumSublistRequest { Offset = offset, Limit = count }, ctk);
+            return result.Match(success => new ProviderPageResult<ProvidableItemBase>
+                {
+                    Items = success.Data?.Select(album => album.MapToNeteaseAlbum()).Where(album => album is not null).Cast<ProvidableItemBase>().ToList() ?? [],
+                    HasMore = success.HasMore,
+                    NextOffset = success.HasMore ? offset + count : null,
+                    TotalCount = success.Count
+                },
+                _ => EmptyPage<ProvidableItemBase>());
         }
 
         return EmptyPage<ProvidableItemBase>();
