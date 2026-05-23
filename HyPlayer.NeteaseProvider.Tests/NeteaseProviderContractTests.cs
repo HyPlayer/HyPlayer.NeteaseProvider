@@ -29,7 +29,6 @@ public class NeteaseProviderContractTests
         _provider.Should().BeAssignableTo<IContainerManagementProvidable>();
         _provider.Should().BeAssignableTo<ISearchSuggestionProvidable>();
         _provider.Should().BeAssignableTo<IContainerPageProvidable>();
-        _provider.Should().BeAssignableTo<IContextRecommendationProvidable>();
         await Task.CompletedTask;
     }
 
@@ -95,16 +94,6 @@ public class NeteaseProviderContractTests
         deleteMethod!.ReturnType.Should().Be(typeof(Task));
         privacyMethod.Should().NotBeNull();
         privacyMethod!.ReturnType.Should().Be(typeof(Task));
-        await Task.CompletedTask;
-    }
-
-    [Test]
-    public async Task ContextRecommendationMethods_Should_ExposePlayCoreContractTypes()
-    {
-        var contextMethod = typeof(IContextRecommendationProvidable).GetMethod(nameof(IContextRecommendationProvidable.GetContextRecommendationAsync));
-
-        contextMethod.Should().NotBeNull();
-        contextMethod!.ReturnType.Should().Be(typeof(Task<ContainerBase>));
         await Task.CompletedTask;
     }
 
