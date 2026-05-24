@@ -66,6 +66,15 @@ public partial class NeteaseProvider : ProviderBase,
         Handler.Option.DegradeHttp = enabled;
     }
 
+    public HttpClient ConfigureHttpClient(bool useProxy)
+    {
+        var handler = NeteaseCloudMusicApiHandler.HttpClientHandler;
+        handler.UseProxy = useProxy;
+        var client = new HttpClient(handler);
+        Handler.HttpClient = client;
+        return client;
+    }
+
     public bool HasAdditionalCookies => Handler.Option.AdditionalParameters.Cookies.Count > 0;
 
     public Dictionary<string, string> GetRuntimeCookiesSnapshot()
