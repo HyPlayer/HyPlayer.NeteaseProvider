@@ -1,5 +1,7 @@
 ﻿using HyPlayer.NeteaseApi;
 using HyPlayer.NeteaseApi.ApiContracts;
+using HyPlayer.NeteaseApi.ApiContracts.Comment;
+using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
 using HyPlayer.NeteaseApi.ApiContracts.Login;
 using HyPlayer.NeteaseApi.ApiContracts.Playlist;
 using HyPlayer.NeteaseApi.ApiContracts.Artist;
@@ -10,6 +12,8 @@ using HyPlayer.NeteaseApi.ApiContracts.Recommend;
 using HyPlayer.NeteaseApi.ApiContracts.Song;
 using HyPlayer.NeteaseApi.Bases;
 using HyPlayer.NeteaseApi.Bases.ApiContractBases;
+using HyPlayer.NeteaseApi.Extensions;
+using HyPlayer.NeteaseApi.Models;
 using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.NeteaseProvider.Models;
@@ -19,8 +23,6 @@ using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
-using HyPlayer.NeteaseApi.Extensions;
-using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
 
 namespace HyPlayer.NeteaseProvider;
 
@@ -30,8 +32,10 @@ public class NeteaseProvider : ProviderBase,
                                IProvableItemLikable,
                                IProvidableItemProvidable,
                                IProvidableItemRangeProvidable,
+                               IProvidableItemCommentProvidable,
                                ISearchableProvider,
-                               IRecommendationProvidable
+                               IRecommendationProvidable,
+                               ICommentProvidable
 {
     public readonly NeteaseCloudMusicApiHandler Handler = new();
     public override string Name => "网易云音乐";
@@ -441,6 +445,14 @@ public class NeteaseProvider : ProviderBase,
                 return await GetSingleSongById(actualId, ctk);
             case NeteaseTypeIds.Playlist:
                 return await GetPlaylistById(actualId, ctk);
+            case NeteaseTypeIds.Artist:
+                return await GetArtistById(actualId, ctk);
+            case NeteaseTypeIds.Album:
+                return await GetAlbumById(actualId, ctk);
+            case NeteaseTypeIds.User:
+                return await GetUserById(actualId, ctk);
+            case NeteaseTypeIds.RadioChannel:
+                return await GetRadioChannelById(actualId, ctk);
         }
 
         throw new NotImplementedException();
@@ -489,6 +501,64 @@ public class NeteaseProvider : ProviderBase,
                                             }, cancellationToken);
         return songResult.Match(
             success => success.Playlists?[0].MapToNeteasePlaylist(),
+            _ => null
+        );
+    }
+
+    public async Task<NeteaseArtist?> GetArtistById(string id, CancellationToken cancellationToken = default)
+    {
+        var result = await RequestAsync(NeteaseApis.ArtistDetailApi,
+                                        new ArtistDetailRequest()
+                                        {
+                                            ArtistId = id
+                                        }, cancellationToken);
+        return result.Match(
+            success => success.Artist is not null
+                ? new NeteaseArtist
+                {
+                    Name = success.Artist.Name!,
+                    ActualId = success.Artist.Id!
+                }
+                : null,
+            _ => null
+        );
+    }
+
+    public async Task<NeteaseAlbum?> GetAlbumById(string id, CancellationToken cancellationToken = default)
+    {
+        var result = await RequestAsync(NeteaseApis.AlbumApi,
+                                        new AlbumRequest()
+                                        {
+                                            Id = id
+                                        }, cancellationToken);
+        return result.Match(
+            success => success.Album?.MapToNeteaseAlbum(),
+            _ => null
+        );
+    }
+
+    public async Task<NeteaseUser?> GetUserById(string id, CancellationToken cancellationToken = default)
+    {
+        var result = await RequestAsync(NeteaseApis.UserDetailApi,
+                                        new UserDetailRequest()
+                                        {
+                                            UserId = id
+                                        }, cancellationToken);
+        return result.Match(
+            success => success.Profile?.MapToNeteaseUser(),
+            _ => null
+        );
+    }
+
+    public async Task<NeteaseRadioChannel?> GetRadioChannelById(string id, CancellationToken cancellationToken = default)
+    {
+        var result = await RequestAsync(NeteaseApis.DjChannelDetailApi,
+                                        new DjChannelDetailRequest()
+                                        {
+                                            Id = id
+                                        }, cancellationToken);
+        return result.Match(
+            success => success.RadioData?.MapToNeteaseRadioChannel(),
             _ => null
         );
     }
@@ -631,4 +701,118 @@ public class NeteaseProvider : ProviderBase,
 
         throw new ArgumentException(typeId);
     }
+
+    #region ICommentProvidable
+
+    public Task<ContainerBase?> GetCommentContainerAsync(CancellationToken ctk = default)
+    {
+        return Task.FromResult<ContainerBase?>(null);
+    }
+
+    public async Task<ProviderPageResult<CommentBase>> GetCommentsAsync(string itemId, string typeId, int offset,
+                                                                         int count, CancellationToken ctk = default)
+    {
+        var resourceType = MapTypeIdToResourceType(typeId);
+        var request = new CommentsRequest
+        {
+            ResourceId = itemId,
+            ResourceType = resourceType,
+            PageSize = count,
+            Cursor = offset.ToString(),
+            CommentSortType = CommentSortType.Recommend
+        };
+        var result = await RequestAsync(NeteaseApis.CommentsApi, request, ctk);
+        return result.Match(
+            success =>
+            {
+                var comments = success.Data?.Comments?
+                    .Select(c => (CommentBase)c.MapToNeteaseComment(itemId, typeId))
+                    .ToList() ?? new List<CommentBase>();
+                return new ProviderPageResult<CommentBase>
+                {
+                    Items = comments,
+                    HasMore = success.Data?.HasMore ?? false,
+                    NextOffset = int.TryParse(success.Data?.Cursor, out var nextCursor) ? nextCursor : null,
+                    TotalCount = (int?)(success.Data?.TotalCount)
+                };
+            },
+            _ => new ProviderPageResult<CommentBase>
+            {
+                Items = new List<CommentBase>(),
+                HasMore = false
+            });
+    }
+
+    public async Task<ProviderPageResult<CommentBase>> GetThreadedCommentsAsync(string itemId, string typeId,
+                                                                                 string commentId, int offset,
+                                                                                 int count,
+                                                                                 CancellationToken ctk = default)
+    {
+        var resourceType = MapTypeIdToResourceType(typeId);
+        var request = new CommentFloorRequest
+        {
+            ResourceId = itemId,
+            ResourceType = resourceType,
+            ParentCommentId = commentId,
+            Time = offset,
+            Limit = count
+        };
+        var result = await RequestAsync(NeteaseApis.CommentFloorApi, request, ctk);
+        return result.Match(
+            success =>
+            {
+                var comments = success.Data?.Comments?
+                    .Select(c => (CommentBase)c.MapToNeteaseComment(itemId, typeId))
+                    .ToList() ?? new List<CommentBase>();
+                return new ProviderPageResult<CommentBase>
+                {
+                    Items = comments,
+                    HasMore = success.Data?.HasMore ?? false,
+                    NextOffset = (int?)success.Data?.Time,
+                    TotalCount = success.Data?.TotalCount
+                };
+            },
+            _ => new ProviderPageResult<CommentBase>
+            {
+                Items = new List<CommentBase>(),
+                HasMore = false
+            });
+    }
+
+    public Task<CommentBase?> PostCommentAsync(string itemId, string typeId, string content,
+                                                string? replyToCommentId = null, CancellationToken ctk = default)
+    {
+        throw new NotSupportedException("评论功能暂时关闭");
+    }
+
+    public async Task SetCommentLikeStateAsync(string itemId, string typeId, string commentId, bool like,
+                                                CancellationToken ctk = default)
+    {
+        var resourceType = MapTypeIdToResourceType(typeId);
+        var request = new CommentLikeRequest
+        {
+            CommentId = commentId,
+            ResourceType = resourceType,
+            IsLike = like
+        };
+        await RequestAsync(NeteaseApis.CommentLikeApi, request, ctk);
+    }
+
+    private static NeteaseResourceType MapTypeIdToResourceType(string typeId)
+    {
+        return typeId switch
+        {
+            NeteaseTypeIds.SingleSong => NeteaseResourceType.Song,
+            NeteaseTypeIds.Mv => NeteaseResourceType.MV,
+            NeteaseTypeIds.Playlist => NeteaseResourceType.Playlist,
+            NeteaseTypeIds.Album => NeteaseResourceType.Album,
+            NeteaseTypeIds.RadioProgram => NeteaseResourceType.RadioProgram,
+            NeteaseTypeIds.MBlog => NeteaseResourceType.MLog,
+            NeteaseTypeIds.Dynamic => NeteaseResourceType.Dynamic,
+            NeteaseTypeIds.RadioChannel => NeteaseResourceType.RadioChannel,
+            _ => NeteaseResourceType.Song
+        };
+    }
+
+    #endregion
 }

@@ -13,12 +13,12 @@ public static class NeteaseTypeIds
     public const string Playlist = "pl";
 
     /// <summary>
-    /// 专辑
+    /// 歌手
     /// </summary>
     public const string Artist = "ar";
 
     /// <summary>
-    /// 歌手
+    /// 专辑
     /// </summary>
     public const string Album = "al";
 
@@ -81,4 +81,9 @@ public static class NeteaseTypeIds
     /// 私人 FM
     /// </summary>
     public const string PersonalFm = "fm";
+
+    /// <summary>
+    /// 评论
+    /// </summary>
+    public const string Comment = "cm";
 }
