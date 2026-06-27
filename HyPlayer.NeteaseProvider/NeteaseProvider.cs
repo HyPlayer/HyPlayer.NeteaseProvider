@@ -18,8 +18,10 @@ using HyPlayer.NeteaseProvider.Constants;
 using HyPlayer.NeteaseProvider.Mappers;
 using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction;
+using HyPlayer.PlayCore.Abstraction.Interfaces.PlayListContainer;
 using HyPlayer.PlayCore.Abstraction.Interfaces.Provider;
 using HyPlayer.PlayCore.Abstraction.Models;
+using HyPlayer.PlayCore.Abstraction.Models.Containers;
 using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
@@ -35,6 +37,8 @@ public class NeteaseProvider : ProviderBase,
                                IProvidableItemCommentProvidable,
                                ISearchableProvider,
                                IRecommendationProvidable,
+                               IContainerPageProvidable,
+                               IProviderKnownTypeIds,
                                ICommentProvidable
 {
     public readonly NeteaseCloudMusicApiHandler Handler = new();
@@ -44,6 +48,14 @@ public class NeteaseProvider : ProviderBase,
     public static NeteaseProvider Instance = null!;
 
     public NeteaseUser? LoginedUser { get; set; }
+
+    public string SingleSongTypeId => NeteaseTypeIds.SingleSong;
+    public string PlaylistTypeId => NeteaseTypeIds.Playlist;
+    public string ArtistTypeId => NeteaseTypeIds.Artist;
+    public string AlbumTypeId => NeteaseTypeIds.Album;
+    public string UserTypeId => NeteaseTypeIds.User;
+    public string? RadioChannelTypeId => NeteaseTypeIds.RadioChannel;
+    public string? RichMediaTypeId => NeteaseTypeIds.Mv;
 
     public NeteaseProvider()
     {
@@ -605,6 +617,59 @@ public class NeteaseProvider : ProviderBase,
             SearchTypeId = TypeIdToSearchIdMapper.MapToResourceId(typeId),
             SearchKeyword = keyword,
         } as ContainerBase);
+    }
+
+    public async Task<ProviderPageResult<ProvidableItemBase>> GetContainerItemsPageAsync(
+        string containerId, int offset, int count, CancellationToken ctk = default)
+    {
+        if (containerId.StartsWith("hot", StringComparison.Ordinal) || containerId.StartsWith(NeteaseTypeIds.Artist, StringComparison.Ordinal))
+        {
+            var actualId = containerId.StartsWith("hot", StringComparison.Ordinal)
+                ? containerId
+                : $"hot{containerId[NeteaseTypeIds.Artist.Length..]}";
+            var container = new NeteaseArtistSubContainer { ActualId = actualId, Name = actualId };
+            var (hasMore, items) = await container.GetProgressiveItemsListAsync(offset, count, ctk);
+            return new ProviderPageResult<ProvidableItemBase>
+            {
+                Items = items,
+                HasMore = hasMore,
+                NextOffset = hasMore ? offset + count : null
+            };
+        }
+
+        var item = await GetProvidableItemByIdAsync(
+            containerId.StartsWith(NeteaseTypeIds.Playlist, StringComparison.Ordinal) ? containerId : NeteaseTypeIds.Playlist + containerId,
+            ctk);
+        if (item is IProgressiveLoadingContainer progressive)
+        {
+            var (hasMore, items) = await progressive.GetProgressiveItemsListAsync(offset, count, ctk);
+            return new ProviderPageResult<ProvidableItemBase>
+            {
+                Items = items,
+                HasMore = hasMore,
+                NextOffset = hasMore ? offset + count : null
+            };
+        }
+
+        if (item is LinerContainerBase liner)
+        {
+            var items = await liner.GetAllItemsAsync(ctk);
+            var page = items.Skip(offset).Take(count).ToList();
+            var hasMore = offset + page.Count < items.Count;
+            return new ProviderPageResult<ProvidableItemBase>
+            {
+                Items = page,
+                HasMore = hasMore,
+                NextOffset = hasMore ? offset + page.Count : null,
+                TotalCount = items.Count
+            };
+        }
+
+        return new ProviderPageResult<ProvidableItemBase>
+        {
+            Items = [],
+            HasMore = false
+        };
     }
 
     public Task<ContainerBase?> GetStoredItemsAsync(string typeId, CancellationToken ctk = default)

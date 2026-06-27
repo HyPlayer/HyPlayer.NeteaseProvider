@@ -16,46 +16,50 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
 
     public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
-        if (ActualId != null)
-        {
-            var itemType = ActualId.Substring(0, 3);
-            var artistId = ActualId.Substring(3);
-            var resTime = await NeteaseProvider.Instance.RequestAsync(
-                        NeteaseApis.ArtistSongsApi,
-                        new ArtistSongsRequest
-                        {
-                            ArtistId = artistId,
-                            Offset = 0,
-                            Limit = 50
-                        });
-            return resTime.Match(
-                success =>
-                    success.Songs?.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList() ?? [],
-                error => new List<ProvidableItemBase>()
-            );
-        }
-        else throw new ArgumentNullException();
+        return (await GetProgressiveItemsListAsync(0, MaxProgressiveCount, ctk)).Item2;
     }
 
     public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start = 0, int count = 50, CancellationToken ctk = default)
     {
-        if(ActualId!= null) {
+        if (ActualId is null)
+            throw new ArgumentNullException();
+
         var itemType = ActualId.Substring(0, 3);
         var artistId = ActualId.Substring(3);
-            var resTime = await NeteaseProvider.Instance.RequestAsync(
-                        NeteaseApis.ArtistSongsApi,
-                        new ArtistSongsRequest
-                        {
-                            ArtistId = artistId,
-                            Offset = 0,
-                            Limit = 50
-                        });
-            return resTime.Match(
+
+        switch (itemType)
+        {
+            case "hot":
+            case "tim":
+                var songs = await NeteaseProvider.Instance.RequestAsync(
+                    NeteaseApis.ArtistTopSongApi,
+                    new ArtistTopSongRequest
+                    {
+                        ArtistId = artistId,
+                        OrderType = itemType == "tim" ? ArtistSongsOrderType.Time : ArtistSongsOrderType.Hot,
+                        Offset = start,
+                        Limit = count
+                    }, ctk);
+                return songs.Match(
+                    success => (success.More,
+                        success.Songs?.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList() ?? []),
+                    error => (false, []));
+            case "alb":
+                var albums = await NeteaseProvider.Instance.RequestAsync(
+                    NeteaseApis.ArtistAlbumsApi,
+                    new ArtistAlbumsRequest
+                    {
+                        ArtistId = artistId,
+                        Start = start,
+                        Limit = count
+                    }, ctk);
+                return albums.Match(
                     success => (success.HasMore,
-                        success.Songs?.Select(song => (ProvidableItemBase)song.MapToNeteaseMusic()).ToList() ?? new List<ProvidableItemBase>()),
-                    error => (false, new List<ProvidableItemBase>()));
+                        success.Albums?.Select(album => (ProvidableItemBase)album.MapToNeteaseAlbum()!).ToList() ?? []),
+                    error => (false, []));
+            default:
+                return (false, []);
         }
-        else throw new ArgumentNullException();
     }
 
     public int MaxProgressiveCount => 50;

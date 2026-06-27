@@ -10,7 +10,7 @@ public static class ResponseToRawLyricInfosMapper
     public static NeteaseSongLyricInfos Map(this LyricResponse response)
     {
         var ret = new NeteaseSongLyricInfos();
-        if (string.IsNullOrEmpty(response.Lyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.Lyric?.Lyric))
         {
             ret.Add(new NeteaseRawLyricInfo
             {
@@ -24,7 +24,7 @@ public static class ResponseToRawLyricInfosMapper
             });
         }
 
-        if (string.IsNullOrEmpty(response.TranslationLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.TranslationLyric?.Lyric))
         {
             ret.HasTranslation = true;
             ret.Add(new NeteaseRawLyricInfo
@@ -40,7 +40,7 @@ public static class ResponseToRawLyricInfosMapper
             );
         }
 
-        if (string.IsNullOrEmpty(response.RomajiLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.RomajiLyric?.Lyric))
         {
             ret.Add(new NeteaseRawLyricInfo
             {
@@ -55,7 +55,7 @@ public static class ResponseToRawLyricInfosMapper
             );
         }
 
-        if (string.IsNullOrEmpty(response.YunLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.YunLyric?.Lyric))
         {
             ret.HasWordLyric = true;
             ret.Add(new NeteaseRawLyricInfo
@@ -71,7 +71,7 @@ public static class ResponseToRawLyricInfosMapper
             });
         }
 
-        if (string.IsNullOrEmpty(response.YunTranslationLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.YunTranslationLyric?.Lyric))
         {
             ret.HasTranslation = true;
             ret.Add(new NeteaseRawLyricInfo
@@ -88,11 +88,12 @@ public static class ResponseToRawLyricInfosMapper
         }
 
 
-        if (string.IsNullOrEmpty(response.YunRomajiLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.YunRomajiLyric?.Lyric))
         {
             ret.Add(new NeteaseRawLyricInfo
             {
                 LyricText = response.YunRomajiLyric?.Lyric!,
+                IsWord = true,
                 LyricTypeActual = LyricType.Romaji,
                 Author = new()
                 {

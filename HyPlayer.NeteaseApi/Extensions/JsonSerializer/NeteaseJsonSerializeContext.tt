@@ -16,6 +16,7 @@
     types.Add("System.Collections.Generic.Dictionary<string, string>");
     types.Add("System.Collections.Generic.Dictionary<string, int>");
     types.Add("System.String");
+    types.Add("HyPlayer.NeteaseApi.AdditionalParameters");
     types.Add("HyPlayer.NeteaseApi.Bases.ErrorResultBase");
     types.Add("HyPlayer.NeteaseApi.Bases.IdOrIdListListRequest");
     types.Add("HyPlayer.NeteaseApi.Bases.EApiContractBases.EApiActualRequestBase");

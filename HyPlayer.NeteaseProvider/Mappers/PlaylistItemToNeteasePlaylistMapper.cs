@@ -60,6 +60,7 @@ public static class PlaylistItemToNeteasePlaylistMapper
             PlayCount = data.PlayCount,
             SubscribedCount = data.SubscribedCount,
             CoverUrl = data.CoverUrl,
+            IsNewImported = data.IsNewImported
         };
     }
 }

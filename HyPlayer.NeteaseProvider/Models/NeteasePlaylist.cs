@@ -11,7 +11,7 @@ using HyPlayer.PlayCore.Abstraction.Models.Resources;
 namespace HyPlayer.NeteaseProvider.Models;
 
 public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer, IHasCover, IHasDescription,
-                               IHasCreators
+                               IHasCreators, IHasLibraryState
 {
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.Playlist;
@@ -20,6 +20,8 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
     public string? CoverUrl;
     public NeteaseUser? Creator;
     public bool Subscribed { get; set; }
+    public bool IsOwnedByCurrentUser => !Subscribed;
+    public bool IsInCurrentUserLibrary => Subscribed;
     public long UpdateTime { get; set; }
     public int TrackCount { get; set; }
     public long PlayCount { get; set; }
@@ -85,7 +87,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
         int start, int count, CancellationToken ctk = default)
     {
         if (_trackIds is null)
-            await UpdatePlaylistInfoAsync(ctk);
+            await UpdateTrackListAsync(ctk);
         if (_trackIds is not null)
             return (start + count < _trackIds.Length,
                     (await NeteaseProvider.Instance.GetSingleSongRangeByIds(
