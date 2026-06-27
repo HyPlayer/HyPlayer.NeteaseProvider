@@ -28,7 +28,10 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj" />
+      <ProjectReference Include="..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj"
+                        Condition="Exists('..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj')" />
+      <ProjectReference Include="..\..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj"
+                        Condition="!Exists('..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj') And Exists('..\..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj')" />
       <ProjectReference Include="..\HyPlayer.NeteaseApi\HyPlayer.NeteaseApi.csproj" />
     </ItemGroup>
 
