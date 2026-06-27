@@ -26,6 +26,7 @@ public abstract class
         var url = Regex.Replace(Url, @"\w*api", "eapi");
         url = ApplyHttpDegrade(url, option);
         var requestMessage = new HttpRequestMessage(Method, url);
+        Console.WriteLine($"[EAPI] Request URL: {url}");
         ApplyMusic163Referrer(requestMessage);
         ApplyXRealIp(requestMessage, option);
         ApplyUserAgent(requestMessage, option);
@@ -215,7 +216,7 @@ public abstract class
             json = JsonSerializer.Serialize(map, option.JsonSerializerOptions);
         }
 
-        return json;
+        return ApplyAdditionalDataTokens(json, option);
     }
 
     public ResponseBase? GetResponseModel(string json, ApiHandlerOption option)

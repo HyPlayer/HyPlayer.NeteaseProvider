@@ -16,6 +16,7 @@ using HyPlayer.NeteaseProvider.Models;
 using HyPlayer.PlayCore.Abstraction;
 using HyPlayer.PlayCore.Abstraction.Interfaces.Provider;
 using HyPlayer.PlayCore.Abstraction.Models;
+using HyPlayer.PlayCore.Abstraction.Models.Containers;
 using HyPlayer.PlayCore.Abstraction.Models.Lyric;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
@@ -23,12 +24,14 @@ using HyPlayer.NeteaseApi.Extensions;
 using HyPlayer.NeteaseApi.ApiContracts.DjChannel;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 namespace HyPlayer.NeteaseProvider;
 
 public partial class NeteaseProvider : ProviderBase,
                                ILyricProvidable,
                                IMusicResourceProvidable,
+                                 IProvableItemLikable,
                                  IProvidableItemProvidable,
                                 IProvidableItemRangeProvidable,
                                 ISearchableProvider,
@@ -36,19 +39,44 @@ public partial class NeteaseProvider : ProviderBase,
                                 IContainerManagementProvidable,
                                 ISearchSuggestionProvidable,
                                  IContainerPageProvidable,
+                                 IProviderKnownTypeIds,
                                  IQrAuthenticationProvidable,
                                  ICommentProvidable,
                                   IProvidableItemCommentProvidable,
                                    IListenTogetherProvidable,
                                   ICloudUploadProvidable,
                                   IRichMediaProvidable,
-                                  IProvidableItemDynamicMetadataProvidable
+                                  IProvidableItemDynamicMetadataProvidable,
+                                  IPersonalRadioProvidable,
+                                  IProviderNetworkConfigurationProvidable,
+                                  IContainerItemManagementProvidable,
+                                  IProviderAdditionalConfigurationProvidable,
+                                  IProviderSearchCategoryTypeIds,
+                                  IUserLibraryTypeIds,
+                                  IUserLibraryProvidable,
+                                  IUserLibraryNavigationProvidable,
+                                  IProviderSpecialContainerTypeIds,
+                                  IResourceQualityTagProvidable
 {
     public readonly NeteaseCloudMusicApiHandler Handler = new();
 
     public void ConfigureAdditionalParameters(AdditionalParameters additionalParameters)
     {
         Handler.Option.AdditionalParameters = additionalParameters;
+    }
+
+    public bool HasAdditionalConfiguration => Handler.Option.AdditionalParameters.HasValue();
+
+    public string ExportAdditionalConfiguration()
+    {
+        return JsonSerializer.Serialize(Handler.Option.AdditionalParameters, Handler.Option.JsonSerializerOptions);
+    }
+
+    public void ImportAdditionalConfiguration(string configurationJson)
+    {
+        Handler.Option.AdditionalParameters = string.IsNullOrWhiteSpace(configurationJson)
+            ? new AdditionalParameters()
+            : JsonSerializer.Deserialize<AdditionalParameters>(configurationJson, Handler.Option.JsonSerializerOptions) ?? new AdditionalParameters();
     }
 
     public void ConfigureFakeCheckToken(bool enabled)
@@ -66,6 +94,12 @@ public partial class NeteaseProvider : ProviderBase,
         Handler.Option.DegradeHttp = enabled;
     }
 
+    public void ConfigureClientNetwork(string? clientIp, bool useInsecureHttp)
+    {
+        ConfigureXRealIP(clientIp);
+        ConfigureDegradeHttp(useInsecureHttp);
+    }
+
     public HttpClient ConfigureHttpClient(bool useProxy)
     {
         var handler = NeteaseCloudMusicApiHandler.HttpClientHandler;
@@ -79,7 +113,16 @@ public partial class NeteaseProvider : ProviderBase,
 
     public Dictionary<string, string> GetRuntimeCookiesSnapshot()
     {
-        return Handler.Option.Cookies.ToDictionary();
+        var cookies = Handler.Option.Cookies.ToDictionary(pair => pair.Key, pair => pair.Value);
+        foreach (var pair in Handler.Option.AdditionalParameters.Cookies)
+        {
+            if (pair.Value is null)
+                cookies.Remove(pair.Key);
+            else
+                cookies[pair.Key] = pair.Value;
+        }
+
+        return cookies;
     }
 
     public void ClearRuntimeCookies()
@@ -98,9 +141,144 @@ public partial class NeteaseProvider : ProviderBase,
 
     public NeteaseUser? LoginedUser { get; set; }
 
+    public string SingleSongTypeId => NeteaseTypeIds.SingleSong;
+    public string PlaylistTypeId => NeteaseTypeIds.Playlist;
+    public string ArtistTypeId => NeteaseTypeIds.Artist;
+    public string AlbumTypeId => NeteaseTypeIds.Album;
+    public string UserTypeId => NeteaseTypeIds.User;
+    public string? RadioChannelTypeId => NeteaseTypeIds.RadioChannel;
+    public string? RichMediaTypeId => NeteaseTypeIds.Mv;
+    public string SingleSongSearchTypeId => NeteaseTypeIds.SingleSong;
+    public string AlbumSearchTypeId => NeteaseTypeIds.Album;
+    public string ArtistSearchTypeId => NeteaseTypeIds.Artist;
+    public string PlaylistSearchTypeId => NeteaseTypeIds.Playlist;
+    public string UserSearchTypeId => NeteaseTypeIds.User;
+    public string? RadioChannelSearchTypeId => NeteaseTypeIds.RadioChannel;
+    public string? RichMediaSearchTypeId => NeteaseTypeIds.Mv;
+    public string? ShortVideoSearchTypeId => NeteaseTypeIds.MBlog;
+    public string? LyricSearchTypeId => NeteaseTypeIds.Lyric;
+    public string CloudLibraryTypeId => NeteaseUserLibrarySubContainer.CloudKind;
+    public string LikedSongsTypeId => NeteaseUserLibrarySubContainer.LikedSongsKind;
+    public string RecentListeningHistoryTypeId => NeteaseUserLibrarySubContainer.ListeningHistoryRecentKind;
+    public string AllListeningHistoryTypeId => NeteaseUserLibrarySubContainer.ListeningHistoryAllKind;
+    public IReadOnlyDictionary<SpecialContainerType, string> SpecialContainerTypeIds { get; } =
+        new Dictionary<SpecialContainerType, string>
+        {
+            [SpecialContainerType.RecommendedSongs] = NeteaseTypeIds.RecommendedSongs,
+            [SpecialContainerType.RecommendedPlaylists] = NeteaseTypeIds.RecommendedPlaylists,
+            [SpecialContainerType.Toplists] = NeteaseTypeIds.Chart,
+            [SpecialContainerType.PlaylistCategory] = NeteaseTypeIds.PlaylistCategory,
+            [SpecialContainerType.PersonalRadio] = NeteaseTypeIds.PersonalFm,
+            [SpecialContainerType.ContextRecommendation] = NeteaseTypeIds.ContextRecommendation
+        };
+
     public NeteaseProvider()
     {
         Instance = this;
+    }
+
+    public Task MovePersonalRadioItemToTrashAsync(string itemId, CancellationToken ctk = default)
+    {
+        return new NeteasePersonalFMContainer { ActualId = string.Empty, Name = "私人FM" }
+            .MoveItemToTrashAsync(itemId, ctk);
+    }
+
+    public Task<IReadOnlyDictionary<string, ResourceQualityTag>> GetAvailableQualityTagsAsync(ResourceType type, CancellationToken ctk = default)
+    {
+        if (type != ResourceType.Audio)
+            return Task.FromResult<IReadOnlyDictionary<string, ResourceQualityTag>>(new Dictionary<string, ResourceQualityTag>());
+
+        IReadOnlyDictionary<string, ResourceQualityTag> tags = new Dictionary<string, ResourceQualityTag>
+        {
+            ["standard"] = new NeteaseMusicQualityTag("standard"),
+            ["exhigh"] = new NeteaseMusicQualityTag("exhigh"),
+            ["lossless"] = new NeteaseMusicQualityTag("lossless"),
+            ["hires"] = new NeteaseMusicQualityTag("hires"),
+            ["jyeffect"] = new NeteaseMusicQualityTag("jyeffect"),
+            ["sky"] = new NeteaseMusicQualityTag("sky"),
+            ["jymaster"] = new NeteaseMusicQualityTag("jymaster")
+        };
+        return Task.FromResult(tags);
+    }
+
+    public Task RemoveItemFromContainerAsync(string containerId, string itemId, CancellationToken ctk = default)
+    {
+        if (containerId == NeteaseUserLibrarySubContainer.CloudKind)
+            return NeteaseUserLibrarySubContainer.DeleteCloudLibraryItemAsync(itemId, ctk);
+
+        return NeteaseItemActions.RemoveSongFromPlaylistAsync(containerId, itemId, ctk);
+    }
+
+    public Task<ContainerBase?> GetCurrentUserLibraryContainerAsync(string libraryTypeId, CancellationToken ctk = default)
+    {
+        return Task.FromResult<ContainerBase?>(CreateUserLibraryContainer(libraryTypeId, LoginedUser?.ActualId));
+    }
+
+    public Task<ContainerBase?> GetUserLibraryContainerAsync(string userId, string libraryTypeId, CancellationToken ctk = default)
+    {
+        return Task.FromResult<ContainerBase?>(CreateUserLibraryContainer(libraryTypeId, userId));
+    }
+
+    public async Task<IReadOnlyList<ProviderLibraryNavigationGroup>> GetCurrentUserLibraryNavigationGroupsAsync(CancellationToken ctk = default)
+    {
+        if (LoginedUser is null)
+            return [];
+
+        var containers = await LoginedUser.GetSubContainerAsync(ctk);
+        var groups = new List<ProviderLibraryNavigationGroup>();
+        foreach (var container in containers.OfType<NeteaseUserPlaylistSubContainer>())
+        {
+            var items = await container.GetAllItemsAsync(ctk);
+            var playlists = items.OfType<ContainerBase>().ToList();
+            if (playlists.Count == 0)
+                continue;
+
+            if (container.Kind == NeteaseUserPlaylistSubContainer.CreatedKind)
+            {
+                groups.Add(new ProviderLibraryNavigationGroup
+                {
+                    Id = NeteaseUserLibrarySubContainer.LikedSongsKind,
+                    Title = "我喜欢的音乐",
+                    Items = [playlists[0]],
+                    DisplayOrder = 0,
+                    IsPinned = true
+                });
+
+                if (playlists.Count > 1)
+                {
+                    groups.Add(new ProviderLibraryNavigationGroup
+                    {
+                        Id = NeteaseUserPlaylistSubContainer.CreatedKind,
+                        Title = "我创建的歌单",
+                        Items = playlists.Skip(1).ToList(),
+                        DisplayOrder = 10
+                    });
+                }
+            }
+            else if (container.Kind == NeteaseUserPlaylistSubContainer.SubscribedKind)
+            {
+                groups.Add(new ProviderLibraryNavigationGroup
+                {
+                    Id = NeteaseUserPlaylistSubContainer.SubscribedKind,
+                    Title = "我收藏的歌单",
+                    Items = playlists,
+                    DisplayOrder = 20
+                });
+            }
+        }
+
+        return groups.OrderBy(group => group.DisplayOrder).ToList();
+    }
+
+    private static NeteaseUserLibrarySubContainer CreateUserLibraryContainer(string libraryTypeId, string? userId)
+    {
+        return new NeteaseUserLibrarySubContainer
+        {
+            ActualId = $"library-{libraryTypeId}{userId}",
+            Name = "用户资料库",
+            Kind = libraryTypeId,
+            UserId = userId
+        };
     }
 
     public override List<ProvidableTypeId> ProvidableTypeIds =>
@@ -326,11 +504,7 @@ public partial class NeteaseProvider : ProviderBase,
             case NeteaseTypeIds.Artist:
                 return await GetArtistById(actualId, ctk);
             case NeteaseTypeIds.User:
-                return new NeteaseUser
-                {
-                    ActualId = actualId,
-                    Name = actualId
-                };
+                return await GetUserById(actualId, ctk);
             case NeteaseTypeIds.RadioChannel:
                 return await GetRadioChannelById(actualId, ctk);
             case NeteaseTypeIds.PersonalFm:
@@ -338,6 +512,26 @@ public partial class NeteaseProvider : ProviderBase,
                 {
                     ActualId = actualId,
                     Name = "私人 FM"
+                };
+            case NeteaseTypeIds.RecommendedSongs:
+                return new NeteaseRecommendSongContainer { ActualId = actualId, Name = "推荐歌曲" };
+            case NeteaseTypeIds.RecommendedPlaylists:
+                return new NeteaseRecommendPlaylistContainer { ActualId = actualId, Name = "推荐歌单" };
+            case NeteaseTypeIds.Chart:
+                return new NeteaseToplistContainer { ActualId = actualId, Name = "排行榜" };
+            case NeteaseTypeIds.PlaylistCategory:
+                return new NeteasePlaylistCategoryContainer
+                {
+                    ActualId = actualId,
+                    Category = string.IsNullOrWhiteSpace(actualId) ? "官方" : actualId,
+                    Name = string.IsNullOrWhiteSpace(actualId) ? "官方推荐歌单" : $"{actualId}歌单"
+                };
+            case NeteaseTypeIds.ContextRecommendation:
+                return new NeteaseContextRecommendationContainer
+                {
+                    ActualId = actualId,
+                    Name = "上下文推荐",
+                    SeedItemId = actualId
                 };
         }
 
@@ -391,7 +585,7 @@ public partial class NeteaseProvider : ProviderBase,
                                                 Id = id
                                             }, cancellationToken);
         return songResult.Match(
-            success => success.Songs?[0].MapToNeteaseMusic(),
+            success => success.Songs?.FirstOrDefault()?.MapToNeteaseMusic(),
             _ => null
         );
     }
@@ -404,7 +598,7 @@ public partial class NeteaseProvider : ProviderBase,
                                                 Id = id
                                             }, cancellationToken);
         return songResult.Match(
-            success => success.Playlists?[0].MapToNeteasePlaylist(),
+            success => success.Playlists?.FirstOrDefault()?.MapToNeteasePlaylist(),
             _ => null
         );
     }
@@ -417,7 +611,19 @@ public partial class NeteaseProvider : ProviderBase,
                                                  Id = id
                                              }, cancellationToken);
         return albumResult.Match(
-            success => success.Album.MapToNeteaseAlbum(),
+            success =>
+            {
+                var album = success.Album.MapToNeteaseAlbum();
+                if (album is not null)
+                {
+                    album.Songs = success.Songs?
+                                      .Select(song => (ProvidableItemBase)song.MapToNeteaseMusic())
+                                      .ToList()
+                                  ?? [];
+                }
+
+                return album;
+            },
             _ => null
         );
     }
@@ -450,6 +656,19 @@ public partial class NeteaseProvider : ProviderBase,
                                              }, cancellationToken);
         return radioResult.Match(
             success => success.RadioData?.MapToNeteaseRadioChannel(),
+            _ => null
+        );
+    }
+
+    public async Task<NeteaseUser?> GetUserById(string id, CancellationToken cancellationToken = default)
+    {
+        var userResult = await RequestAsync(NeteaseApis.UserDetailApi,
+                                            new UserDetailRequest
+                                            {
+                                                UserId = id
+                                            }, cancellationToken);
+        return userResult.Match(
+            success => success.Profile?.MapToNeteaseUser(),
             _ => null
         );
     }

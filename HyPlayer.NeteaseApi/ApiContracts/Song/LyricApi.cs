@@ -41,13 +41,13 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Song
     {
         [JsonPropertyName("id")] public required string Id { get; set; }
         [JsonPropertyName("cp")] public bool Cp => false;
-        [JsonPropertyName("tv")] public int Tv => 0;
-        [JsonPropertyName("lv")] public int Lv => 0;
-        [JsonPropertyName("rv")] public int Rv => 0;
-        [JsonPropertyName("kv")] public int Kv => 0;
-        [JsonPropertyName("yv")] public int Yv => 0;
-        [JsonPropertyName("ytv")] public int Ytv => 0;
-        [JsonPropertyName("yrv")] public int Yrv => 0;
+        [JsonPropertyName("tv")] public int Tv => -1;
+        [JsonPropertyName("lv")] public int Lv => -1;
+        [JsonPropertyName("rv")] public int Rv => -1;
+        [JsonPropertyName("kv")] public int Kv => -1;
+        [JsonPropertyName("yv")] public int Yv => -1;
+        [JsonPropertyName("ytv")] public int Ytv => -1;
+        [JsonPropertyName("yrv")] public int Yrv => -1;
     }
 
     public class LyricRequest : RequestBase

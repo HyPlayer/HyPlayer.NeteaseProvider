@@ -66,7 +66,8 @@ public class AdditionalParameters
         if (Cookies.Count > 0 ||
             Headers.Count > 0 ||
             EApiHeaders.Count > 0 ||
-            DataTokens.Count > 0) return true;
+            DataTokens.Count > 0 ||
+            OpenAPIConfig is not null) return true;
         return false;
     }
 

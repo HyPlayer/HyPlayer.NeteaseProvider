@@ -43,6 +43,7 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
                     {
                         ActualId = $"created{ActualId}",
                         Name = "创建的歌单",
+                        Kind = NeteaseUserPlaylistSubContainer.CreatedKind,
                         Playlists = created
                     });
 
@@ -51,6 +52,7 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
                     {
                         ActualId = $"subscribed{ActualId}",
                         Name = "收藏的歌单",
+                        Kind = NeteaseUserPlaylistSubContainer.SubscribedKind,
                         Playlists = subscribed
                     });
 

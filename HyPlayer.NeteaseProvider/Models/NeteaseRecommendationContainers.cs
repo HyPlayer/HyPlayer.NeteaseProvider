@@ -69,7 +69,9 @@ public sealed class NeteasePlaylistCategoryContainer : LinerContainerBase, IProg
 
     public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = default)
     {
-        return (true, (await NeteaseProvider.Instance.RequestAsync(
+        if (start > 0) return (false, []);
+
+        return (false, (await NeteaseProvider.Instance.RequestAsync(
                     NeteaseApis.PlaylistCategoryListApi,
                     new PlaylistCategoryListRequest
                     {

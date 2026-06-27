@@ -4,7 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ output extension="g.cs" #>
+<#@ output extension=".g.cs" #>
 <#
     var templateDirectory = Path.GetDirectoryName(Host.TemplateFile)!;
     var folderPath = Path.GetFullPath(Path.Combine(templateDirectory, "../../ApiContracts"));
@@ -24,7 +24,7 @@
     types.Add("HyPlayer.NeteaseApi.Bases.RawApiContractBases.RawApiActualRequestBase");
     types.Add("HyPlayer.NeteaseApi.Bases.WeApiContractBases.WeApiActualRequestBase");
     types.Add("HyPlayer.NeteaseApi.Bases.OpenApiContractBases.OpenApiActualRequestBase");
-    types.Add("HyPlayer.NeteaseApi.AdditionalParameters.OpenAPIConfigData.DeviceInfoData");
+    types.Add("HyPlayer.NeteaseApi.AdditionalParameters");
     
     
 

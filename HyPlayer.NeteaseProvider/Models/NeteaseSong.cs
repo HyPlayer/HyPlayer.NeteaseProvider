@@ -7,15 +7,18 @@ using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
 
 namespace HyPlayer.NeteaseProvider.Models;
 
-public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover
+public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover, IHasAliases, IHasTrackMetadata, IHasRichMediaReference
 {
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.SingleSong;
 
     public string[]? Alias { get; set; }
+    public IReadOnlyList<string>? Aliases => Alias;
     public bool HasCopyright { get; set; }
     public string? MvId { get; set; }
+    public string? RichMediaId => MvId;
     public string? CdName { get; set; }
+    public string? DiscName => CdName;
     public int TrackNumber { get; set; }
     public string? CoverUrl { get; set; }
 

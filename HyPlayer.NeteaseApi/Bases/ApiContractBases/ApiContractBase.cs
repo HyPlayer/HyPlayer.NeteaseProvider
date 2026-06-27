@@ -2,6 +2,7 @@
 using HyPlayer.NeteaseApi.Extensions;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace HyPlayer.NeteaseApi.Bases;
 
@@ -94,6 +95,33 @@ public abstract class ApiContractBase<TRequest, TResponse, TError, TActualReques
                 requestMessage.Headers.TryAddWithoutValidation(additionalParametersHeader.Key,
                     additionalParametersHeader.Value);
         }
+    }
+
+    protected static string ApplyAdditionalDataTokens(string json, ApiHandlerOption option)
+    {
+        if (option.AdditionalParameters.DataTokens.Count == 0)
+            return json;
+
+        return ApplyDataTokens(json, option, option.AdditionalParameters.DataTokens);
+    }
+
+    protected static string ApplyDataToken(string json, ApiHandlerOption option, string key, string? value)
+    {
+        return ApplyDataTokens(json, option, new Dictionary<string, string?> { [key] = value });
+    }
+
+    private static string ApplyDataTokens(string json, ApiHandlerOption option, IReadOnlyDictionary<string, string?> dataTokens)
+    {
+        var node = JsonNode.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json) as JsonObject ?? new JsonObject();
+        foreach (var dataToken in dataTokens)
+        {
+            if (dataToken.Value is null)
+                node.Remove(dataToken.Key);
+            else
+                node[dataToken.Key] = dataToken.Value;
+        }
+
+        return node.ToJsonString(option.JsonSerializerOptions);
     }
 
     protected static ErrorResultBase? TryCreateHttpStatusError(HttpResponseMessage response)

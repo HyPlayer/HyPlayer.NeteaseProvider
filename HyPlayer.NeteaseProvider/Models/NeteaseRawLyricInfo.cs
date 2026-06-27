@@ -26,6 +26,11 @@ public class NeteaseRawLyricInfo : RawLyricInfo
 
     public override Task<ResourceResultBase> GetResourceAsync(ResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
-        throw new NotImplementedException();
+        return Task.FromResult<ResourceResultBase>(new TextResourceResult
+        {
+            ResourceStatus = ResourceStatus.Success,
+            ExternalException = null,
+            Content = LyricText
+        });
     }
 }

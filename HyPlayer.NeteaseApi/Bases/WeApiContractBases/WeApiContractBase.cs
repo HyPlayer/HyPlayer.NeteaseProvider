@@ -42,10 +42,11 @@ public abstract class WeApiContractBase<TRequest, TResponse, TError, TActualRequ
             json = JsonSerializer.Serialize(ar, option.JsonSerializerOptions);
         else
             json = JsonSerializer.Serialize(req, option.JsonSerializerOptions);
+        json = ApplyAdditionalDataTokens(json, option);
 
         if (actualRequest is IFakeCheckTokenApi && option.BypassCheckTokenApi)
         {
-            json = json.Substring(0, json.Length - 1) + ",\"checkToken\":\"\"}";
+            json = ApplyDataToken(json, option, "checkToken", string.Empty);
         }
 
         byte[] secretKey = new Random().RandomBytes(16);

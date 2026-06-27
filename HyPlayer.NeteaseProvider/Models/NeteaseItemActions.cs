@@ -39,7 +39,12 @@ public static class NeteaseItemActions
 
     public static Task RemoveSongAsync(this NeteasePlaylist playlist, string songId, CancellationToken ctk = default)
     {
-        return EditPlaylistTracksAsync(playlist.ActualId, songId, false, ctk);
+        return RemoveSongFromPlaylistAsync(playlist.ActualId, songId, ctk);
+    }
+
+    public static Task RemoveSongFromPlaylistAsync(string? playlistId, string songId, CancellationToken ctk = default)
+    {
+        return EditPlaylistTracksAsync(playlistId, songId, false, ctk);
     }
 
     public static Task SubscribeAsync(this NeteasePlaylist playlist, CancellationToken ctk = default)
@@ -152,7 +157,7 @@ public static class NeteaseItemActions
         {
             IsAdd = isAdd,
             PlaylistId = playlistId,
-            Id = songId.StartsWith(NeteaseTypeIds.SingleSong) ? songId[2..] : songId
+            Id = songId.StartsWith(NeteaseTypeIds.SingleSong) ? songId.Substring(2) : songId
         }, ctk);
     }
 }

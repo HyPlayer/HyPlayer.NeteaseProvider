@@ -21,7 +21,17 @@ public abstract class RawApiContractBase<TRequest, TResponse, TError, TActualReq
         ApplyCookieHeader(requestMessage, BuildRequestCookies(option));
 
         if (actualRequest is RawApiActualRequestBase rr)
+        {
+            foreach (var dataToken in option.AdditionalParameters.DataTokens)
+            {
+                if (dataToken.Value is null)
+                    rr.Remove(dataToken.Key);
+                else
+                    rr[dataToken.Key] = dataToken.Value;
+            }
+
             requestMessage.Content = new FormUrlEncodedContent(rr);
+        }
 
         ApplyAdditionalHeaders(requestMessage, option);
         return Task.FromResult(requestMessage);

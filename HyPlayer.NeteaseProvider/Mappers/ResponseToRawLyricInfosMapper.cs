@@ -10,11 +10,12 @@ public static class ResponseToRawLyricInfosMapper
     public static NeteaseSongLyricInfos Map(this LyricResponse response)
     {
         var ret = new NeteaseSongLyricInfos();
-        if (string.IsNullOrEmpty(response.Lyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.Lyric?.Lyric))
         {
             ret.Add(new NeteaseRawLyricInfo
             {
                 LyricText = response.Lyric?.Lyric!,
+                Source = "netease:lrc",
                 LyricTypeActual = LyricType.Original,
                 Author = new()
                 {
@@ -24,12 +25,13 @@ public static class ResponseToRawLyricInfosMapper
             });
         }
 
-        if (string.IsNullOrEmpty(response.TranslationLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.TranslationLyric?.Lyric))
         {
             ret.HasTranslation = true;
             ret.Add(new NeteaseRawLyricInfo
             {
                 LyricText = response.TranslationLyric?.Lyric!,
+                Source = "netease:lrc",
                 LyricTypeActual = LyricType.Translation,
                 Author = new()
                 {
@@ -40,11 +42,12 @@ public static class ResponseToRawLyricInfosMapper
             );
         }
 
-        if (string.IsNullOrEmpty(response.RomajiLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.RomajiLyric?.Lyric))
         {
             ret.Add(new NeteaseRawLyricInfo
             {
                 LyricText = response.RomajiLyric?.Lyric!,
+                Source = "netease:lrc",
                 LyricTypeActual = LyricType.Romaji,
                 Author = new()
                 {
@@ -55,12 +58,13 @@ public static class ResponseToRawLyricInfosMapper
             );
         }
 
-        if (string.IsNullOrEmpty(response.YunLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.YunLyric?.Lyric))
         {
             ret.HasWordLyric = true;
             ret.Add(new NeteaseRawLyricInfo
             {
                 LyricText = response.YunLyric?.Lyric!,
+                Source = "netease:yrc",
                 IsWord = true,
                 LyricTypeActual = LyricType.Original,
                 Author = new()
@@ -71,12 +75,13 @@ public static class ResponseToRawLyricInfosMapper
             });
         }
 
-        if (string.IsNullOrEmpty(response.YunTranslationLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.YunTranslationLyric?.Lyric))
         {
             ret.HasTranslation = true;
             ret.Add(new NeteaseRawLyricInfo
             {
                 LyricText = response.YunTranslationLyric?.Lyric!,
+                Source = "netease:yrc",
                 IsWord = true,
                 LyricTypeActual = LyricType.Translation,
                 Author = new()
@@ -88,11 +93,13 @@ public static class ResponseToRawLyricInfosMapper
         }
 
 
-        if (string.IsNullOrEmpty(response.YunRomajiLyric?.Lyric))
+        if (!string.IsNullOrEmpty(response.YunRomajiLyric?.Lyric))
         {
             ret.Add(new NeteaseRawLyricInfo
             {
                 LyricText = response.YunRomajiLyric?.Lyric!,
+                Source = "netease:yrc",
+                IsWord = true,
                 LyricTypeActual = LyricType.Romaji,
                 Author = new()
                 {

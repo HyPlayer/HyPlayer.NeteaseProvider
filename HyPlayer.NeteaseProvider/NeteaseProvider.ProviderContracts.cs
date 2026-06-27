@@ -35,6 +35,16 @@ public partial class NeteaseProvider
     private const string CloudCoverBucket = "yyimgs";
     private static readonly HttpClient CloudUploadHttpClient = new();
 
+    private static string ComputeMd5Hex(byte[] bytes)
+    {
+        using var md5 = MD5.Create();
+        var hash = md5.ComputeHash(bytes);
+        var builder = new StringBuilder(hash.Length * 2);
+        foreach (var value in hash)
+            builder.Append(value.ToString("x2"));
+        return builder.ToString();
+    }
+
     public async Task<ProviderSessionInfo> LoginAsync(string accountId, string secret, CancellationToken ctk = default)
     {
         var loggedIn = accountId.Contains('@')
@@ -151,7 +161,7 @@ public partial class NeteaseProvider
         return Task.FromResult<ContainerBase?>(null);
     }
 
-    public async Task<ProviderPageResult<CommentBase>> GetCommentsAsync(string itemId, string typeId, int offset, int count, CancellationToken ctk = default)
+    public async Task<ProviderPageResult<CommentBase>> GetCommentsAsync(string itemId, string typeId, int offset, int count, int sortType = 1, CancellationToken ctk = default)
     {
         var pageNo = count <= 0 ? 1 : (offset / count) + 1;
         var result = await RequestAsync(NeteaseApis.CommentsApi,
@@ -161,7 +171,12 @@ public partial class NeteaseProvider
                 ResourceType = TypeIdToSearchIdMapper.MapToResourceId(typeId),
                 PageNo = pageNo,
                 PageSize = count,
-                CommentSortType = CommentSortType.Recommend
+                CommentSortType = sortType switch
+                {
+                    2 => CommentSortType.Hot,
+                    3 => CommentSortType.Time,
+                    _ => CommentSortType.Recommend
+                }
             }, ctk);
 
         return result.Match(success => new ProviderPageResult<CommentBase>
@@ -191,6 +206,46 @@ public partial class NeteaseProvider
             }, ctk);
     }
 
+    public async Task LikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = default)
+    {
+        await SetProvidableItemLikeStateAsync(inProviderId, targetId, true, ctk);
+    }
+
+    public async Task UnlikeProvidableItemAsync(string inProviderId, string? targetId, CancellationToken ctk = default)
+    {
+        await SetProvidableItemLikeStateAsync(inProviderId, targetId, false, ctk);
+    }
+
+    public async Task<List<string>> GetLikedProvidableIdsAsync(string typeId, CancellationToken ctk = default)
+    {
+        if (typeId != NeteaseTypeIds.SingleSong)
+            return [];
+
+        var result = await RequestAsync(NeteaseApis.LikelistApi, new LikelistRequest
+        {
+            Uid = LoginedUser?.ActualId!
+        }, ctk);
+
+        return result.Match(
+            success => success.TrackIds?.Select(id => NeteaseTypeIds.SingleSong + id).ToList() ?? [],
+            _ => []);
+    }
+
+    private async Task SetProvidableItemLikeStateAsync(string inProviderId, string? targetId, bool like, CancellationToken ctk)
+    {
+        var typeId = inProviderId.Length >= 2 ? inProviderId.Substring(0, 2) : string.Empty;
+        var itemId = targetId ?? (inProviderId.Length > 2 ? inProviderId.Substring(2) : inProviderId);
+        if (typeId != NeteaseTypeIds.SingleSong)
+            throw new NotSupportedException("NetEase item like is currently supported for single songs only.");
+
+        await RequestAsync(NeteaseApis.LikeApi, new LikeRequest
+        {
+            TrackId = itemId,
+            Like = like,
+            UserId = LoginedUser?.ActualId!
+        }, ctk);
+    }
+
     public async Task<ProviderPageResult<CommentBase>> GetThreadedCommentsAsync(string itemId, string typeId, string commentId, int offset, int count, CancellationToken ctk = default)
     {
         var result = await RequestAsync(NeteaseApis.CommentFloorApi,
@@ -199,6 +254,7 @@ public partial class NeteaseProvider
                 ResourceId = itemId,
                 ResourceType = TypeIdToSearchIdMapper.MapToResourceId(typeId),
                 ParentCommentId = commentId,
+                Time = offset,
                 Limit = count
             }, ctk);
 
@@ -236,6 +292,22 @@ public partial class NeteaseProvider
 
     public async Task<ProviderPageResult<ProvidableItemBase>> GetContainerItemsPageAsync(string containerId, int offset, int count, CancellationToken ctk = default)
     {
+        if (containerId.StartsWith("hot", StringComparison.Ordinal)
+            || containerId.StartsWith(NeteaseTypeIds.Artist, StringComparison.Ordinal))
+        {
+            var actualId = containerId.StartsWith("hot", StringComparison.Ordinal)
+                ? containerId
+                : $"hot{containerId.Substring(NeteaseTypeIds.Artist.Length)}";
+            var artistContainer = new NeteaseArtistSubContainer { ActualId = actualId, Name = actualId };
+            var (hasMore, items) = await artistContainer.GetProgressiveItemsListAsync(offset, count, ctk);
+            return new ProviderPageResult<ProvidableItemBase>
+            {
+                Items = items,
+                HasMore = hasMore,
+                NextOffset = hasMore ? offset + count : null
+            };
+        }
+
         var playlist = await GetPlaylistById(containerId, ctk);
         if (playlist is null)
             return EmptyPage<ProvidableItemBase>();
@@ -259,12 +331,12 @@ public partial class NeteaseProvider
         if (streamResult is not IResourceResultOf<Stream> streamResource)
             throw new InvalidOperationException("Cloud upload requires a stream resource.");
 
-        await using var stream = await streamResource.GetResourceAsync(ctk)
+        using var stream = await streamResource.GetResourceAsync(ctk)
             ?? throw new InvalidOperationException("Cloud upload stream is empty.");
         using var memoryStream = new MemoryStream();
-        await stream.CopyToAsync(memoryStream, ctk);
+        await stream.CopyToAsync(memoryStream);
         var bytes = memoryStream.ToArray();
-        var md5 = Convert.ToHexString(MD5.HashData(bytes)).ToLowerInvariant();
+        var md5 = ComputeMd5Hex(bytes);
 
         var extension = GetMetadata(metadata, "extension", resource.ExtensionName ?? string.Empty).TrimStart('.');
         var bitrate = int.TryParse(GetMetadata(metadata, "bitrate", "0"), out var parsedBitrate) ? parsedBitrate : 0;
@@ -402,7 +474,9 @@ public partial class NeteaseProvider
                 new MlogUrlRequest { Id = mediaId, Resolution = qualityId ?? "1080" }, ctk);
             return result.Match(success =>
                 {
-                    var url = success.Data?.GetValueOrDefault(mediaId)?.UrlInfo?.Url;
+                    MlogUrlResponse.MlogUrlItem? item = null;
+                    success.Data?.TryGetValue(mediaId, out item);
+                    var url = item?.UrlInfo?.Url;
                     return string.IsNullOrWhiteSpace(url)
                         ? null
                         : new NeteaseRichMediaResource { ResourceName = mediaId, Url = url } as ResourceBase;
@@ -415,7 +489,7 @@ public partial class NeteaseProvider
 
     public async Task<ProviderPageResult<RichMediaBase>> GetRichMediaFeedAsync(string? typeId, int offset, int count, CancellationToken ctk = default)
     {
-        var itemId = typeId?.Length > 2 ? typeId[2..] : string.Empty;
+        var itemId = typeId?.Length > 2 ? typeId.Substring(2) : string.Empty;
         var songId = typeId?.StartsWith("song:", StringComparison.OrdinalIgnoreCase) is true ? itemId : null;
         var result = await RequestAsync(NeteaseApis.MlogRcmdFeedListApi,
             new MlogRcmdFeedListRequest { Id = itemId, SongId = songId, Limit = count }, ctk);
@@ -594,7 +668,7 @@ public partial class NeteaseProvider
 
     private async Task<string> UploadCloudCoverAsync(string fileName, byte[] coverBytes, CancellationToken ctk)
     {
-        var coverMd5 = Convert.ToHexString(MD5.HashData(coverBytes)).ToLowerInvariant();
+        var coverMd5 = ComputeMd5Hex(coverBytes);
         var coverAllocResult = await RequestAsync(NeteaseApis.CloudUploadCoverTokenAllocApi,
             new CloudUploadCoverTokenAllocRequest
             {
@@ -652,11 +726,11 @@ public partial class NeteaseProvider
             using var response = await CloudUploadHttpClient.SendAsync(request, ctk);
             if (!response.IsSuccessStatusCode)
             {
-                var errorContent = await response.Content.ReadAsStringAsync(ctk);
+                var errorContent = await response.Content.ReadAsStringAsync();
                 throw new HttpRequestException($"Upload failed with status {response.StatusCode}: {errorContent}");
             }
 
-            var responseText = await response.Content.ReadAsStringAsync(ctk);
+            var responseText = await response.Content.ReadAsStringAsync();
             var match = System.Text.RegularExpressions.Regex.Match(responseText, "\"context\"\\s*:\\s*\"([^\"]*)\"");
             if (match.Success) context = match.Groups[1].Value;
             offset++;

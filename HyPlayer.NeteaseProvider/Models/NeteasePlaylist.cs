@@ -11,15 +11,19 @@ using HyPlayer.PlayCore.Abstraction.Models.Resources;
 namespace HyPlayer.NeteaseProvider.Models;
 
 public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer, IHasCover, IHasDescription,
-                               IHasCreators
+                               IHasCreators, IHasLibraryState
 {
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.Playlist;
 
     private PlaylistTracksGetResponse.PlaylistWithTracksInfoDto.TrackIdItem[]? _trackIds;
+    private List<ProvidableItemBase>? _allTrackDetails;
+    private readonly Dictionary<(int Start, int Count), (bool HasMore, List<ProvidableItemBase> Items)> _trackPageCache = [];
     public string? CoverUrl;
     public NeteaseUser? Creator;
     public bool Subscribed { get; set; }
+    public bool IsOwnedByCurrentUser => !Subscribed;
+    public bool IsInCurrentUserLibrary => Subscribed;
     public long UpdateTime { get; set; }
     public int TrackCount { get; set; }
     public long PlayCount { get; set; }
@@ -39,21 +43,25 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
         results.Match(
             success =>
             {
-                CoverUrl = success.Playlists?[0].CoverUrl;
-                Description = success.Playlists?[0].Description;
-                if (!string.IsNullOrEmpty(success.Playlists?[0].Name))
-                    Name = success.Playlists?[0].Name!;
-                Creator = success.Playlists?[0].Creator?.MapToNeteaseUser();
+                var playlist = success.Playlists?.FirstOrDefault();
+                if (playlist is null)
+                    return false;
+
+                CoverUrl = playlist.CoverUrl;
+                Description = playlist.Description;
+                if (!string.IsNullOrEmpty(playlist.Name))
+                    Name = playlist.Name!;
+                Creator = playlist.Creator?.MapToNeteaseUser();
                 CreatorList?.Clear();
                 CreatorList?.Add(Creator?.Name!);
-                Subscribed = success.Playlists?[0].Subscribed is true;
-                UpdateTime = success.Playlists?[0].UpdateTime ?? 0;
-                TrackCount = success.Playlists?[0].TrackCount ?? 0;
-                PlayCount = success.Playlists?[0].PlayCount ?? 0;
-                SubscribedCount = success.Playlists?[0].SubscribedCount ?? 0;
-                CommentCount = success.Playlists?[0].CommentCount ?? 0;
-                ShareCount = success.Playlists?[0].ShareCount ?? 0;
-                IsNewImported = success.Playlists?[0].IsNewImported ?? false;
+                Subscribed = playlist.Subscribed is true;
+                UpdateTime = playlist.UpdateTime;
+                TrackCount = playlist.TrackCount;
+                PlayCount = playlist.PlayCount;
+                SubscribedCount = playlist.SubscribedCount;
+                CommentCount = playlist.CommentCount;
+                ShareCount = playlist.ShareCount;
+                IsNewImported = playlist.IsNewImported;
 
                 return true;
             }, error => false);
@@ -73,24 +81,46 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
 
     public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
+        if (_allTrackDetails is not null)
+            return _allTrackDetails;
+
         if (_trackIds is null)
             await UpdateTrackListAsync(ctk);
         if (_trackIds is { Length: > 0 })
-            return (await NeteaseProvider.Instance.GetSingleSongRangeByIds(_trackIds.Select(t => t.Id).ToList(), ctk))
+        {
+            _allTrackDetails = (await NeteaseProvider.Instance.GetSingleSongRangeByIds(_trackIds.Select(t => t.Id).ToList(), ctk))
                    .Select(t => (ProvidableItemBase)t).ToList();
+            return _allTrackDetails;
+        }
         return new List<ProvidableItemBase>();
     }
 
     public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(
         int start, int count, CancellationToken ctk = default)
     {
+        var cacheKey = (start, count);
+        if (_trackPageCache.TryGetValue(cacheKey, out var cached))
+            return (cached.HasMore, cached.Items);
+
         if (_trackIds is null)
             await UpdateTrackListAsync(ctk);
         if (_trackIds is not null)
-            return (start + count < _trackIds.Length,
-                    (await NeteaseProvider.Instance.GetSingleSongRangeByIds(
-                        _trackIds.Skip(start).Take(count).Select(t => t.Id).ToList(), ctk))
-                    .Select(t => (ProvidableItemBase)t).ToList());
+        {
+            if (_allTrackDetails is not null)
+            {
+                var cachedPage = (start + count < _allTrackDetails.Count,
+                    _allTrackDetails.Skip(start).Take(count).ToList());
+                _trackPageCache[cacheKey] = cachedPage;
+                return cachedPage;
+            }
+
+            var page = (start + count < _trackIds.Length,
+                (await NeteaseProvider.Instance.GetSingleSongRangeByIds(
+                    _trackIds.Skip(start).Take(count).Select(t => t.Id).ToList(), ctk))
+                .Select(t => (ProvidableItemBase)t).ToList());
+            _trackPageCache[cacheKey] = page;
+            return page;
+        }
         return (false, new List<ProvidableItemBase>());
     }
 

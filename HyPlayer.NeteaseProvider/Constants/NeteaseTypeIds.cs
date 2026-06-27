@@ -81,4 +81,24 @@ public static class NeteaseTypeIds
     /// 私人 FM
     /// </summary>
     public const string PersonalFm = "fm";
+
+    /// <summary>
+    /// 推荐歌曲
+    /// </summary>
+    public const string RecommendedSongs = "rs";
+
+    /// <summary>
+    /// 推荐歌单
+    /// </summary>
+    public const string RecommendedPlaylists = "rp";
+
+    /// <summary>
+    /// 上下文推荐
+    /// </summary>
+    public const string ContextRecommendation = "cr";
+
+    /// <summary>
+    /// 评论
+    /// </summary>
+    public const string Comment = "cm";
 }

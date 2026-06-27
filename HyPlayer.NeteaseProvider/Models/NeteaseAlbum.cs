@@ -24,6 +24,7 @@ public class NeteaseAlbum : AlbumBase, IProgressiveLoadingContainer, IHasCover, 
     public string? AlbumType { get; set; }
     public bool IsSubscribed { get; set; }
     public List<NeteaseArtist>? Artists { get; set; }
+    public List<ProvidableItemBase>? Songs { get; set; }
 
 
     public Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
@@ -60,12 +61,17 @@ public class NeteaseAlbum : AlbumBase, IProgressiveLoadingContainer, IHasCover, 
 
     public async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
-        return (await GetProgressiveItemsListAsync(0, MaxProgressiveCount, ctk)).Item2;
+        if (Songs is not null) return Songs;
+
+        var (_, items) = await GetProgressiveItemsListAsync(0, MaxProgressiveCount, ctk);
+        return Songs ?? items;
     }
 
     public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = default)
     {
         if (ActualId is null) return (false, new List<ProvidableItemBase>());
+        if (Songs is not null)
+            return (Songs.Count > start + count, Songs.Skip(start).Take(count).ToList());
 
         var result = await NeteaseProvider.Instance.RequestAsync(
             NeteaseApis.AlbumApi,
@@ -77,9 +83,9 @@ public class NeteaseAlbum : AlbumBase, IProgressiveLoadingContainer, IHasCover, 
         return result.Match(
             success =>
             {
-                var songs = success.Songs?.Skip(start).Take(count).Select(t => (ProvidableItemBase)t.MapToNeteaseMusic()).ToList()
-                            ?? new List<ProvidableItemBase>();
-                return (success.Songs?.Length > start + count, songs);
+                Songs = success.Songs?.Select(t => (ProvidableItemBase)t.MapToNeteaseMusic()).ToList()
+                        ?? new List<ProvidableItemBase>();
+                return (Songs.Count > start + count, Songs.Skip(start).Take(count).ToList());
             },
             _ => (false, new List<ProvidableItemBase>()));
     }

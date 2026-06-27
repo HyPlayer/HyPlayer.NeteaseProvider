@@ -31,6 +31,7 @@ public abstract class LinuxApiContractBase<TRequest, TResponse, TError, TActualR
         var json = actualRequest is LinuxApiActualRequestBase la
             ? JsonSerializer.Serialize(la, option.JsonSerializerOptions)
             : string.Empty;
+        json = ApplyAdditionalDataTokens(json, option);
         var preData = JsonSerializer.Serialize(
             new Dictionary<string, string>()
             {

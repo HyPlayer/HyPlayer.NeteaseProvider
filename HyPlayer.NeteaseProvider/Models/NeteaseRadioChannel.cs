@@ -15,6 +15,8 @@ IHasCreators
 {
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.RadioChannel;
+    private readonly Dictionary<(int Start, int Count), (bool HasMore, List<ProvidableItemBase> Items)> _programPageCache = [];
+    private Task<List<ProvidableItemBase>>? _allProgramsTask;
 
     /// <summary>
     /// 电台节目数量
@@ -126,6 +128,15 @@ IHasCreators
     /// </summary>
     public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
+        if (_allProgramsTask is not null)
+            return await _allProgramsTask;
+
+        _allProgramsTask = LoadAllItemsCoreAsync(ctk);
+        return await _allProgramsTask;
+    }
+
+    private async Task<List<ProvidableItemBase>> LoadAllItemsCoreAsync(CancellationToken ctk)
+    {
         var programs = new List<NeteaseRadioProgram>();
         int offset = 0;
         const int pageSize = 100;
@@ -149,6 +160,10 @@ IHasCreators
 
     public async Task<(bool, List<ProvidableItemBase>)> GetProgressiveItemsListAsync(int start, int count, CancellationToken ctk = default)
     {
+        var cacheKey = (start, count);
+        if (_programPageCache.TryGetValue(cacheKey, out var cached))
+            return (cached.HasMore, cached.Items);
+
         var result = await NeteaseProvider.Instance.RequestAsync(
             NeteaseApis.DjChannelProgramsApi,
             new DjChannelProgramsRequest
@@ -159,7 +174,7 @@ IHasCreators
                 Asc = false
             }, ctk);
 
-        return result.Match(
+        var page = result.Match(
             success =>
             {
                 var programs = success.Data?.Programs?
@@ -169,6 +184,8 @@ IHasCreators
                 return (hasMore, programs);
             },
             error => (false, new List<ProvidableItemBase>()));
+        _programPageCache[cacheKey] = page;
+        return page;
     }
 
     /// <summary>

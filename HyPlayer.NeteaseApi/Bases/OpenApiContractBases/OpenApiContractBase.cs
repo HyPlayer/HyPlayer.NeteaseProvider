@@ -85,6 +85,7 @@ public abstract class OpenApiContractBase<TRequest, TResponse, TError, TActualRe
             return string.Empty;
 
         var json = JsonSerializer.Serialize(actualRequest, option.JsonSerializerOptions);
+        json = ApplyAdditionalDataTokens(json, option);
         return json == "{}" ? string.Empty : json;
     }
 

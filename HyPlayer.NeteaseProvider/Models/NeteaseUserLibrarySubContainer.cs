@@ -40,7 +40,7 @@ public class NeteaseUserLibrarySubContainer : LinerContainerBase, IProgressiveLo
         return Kind switch
         {
             CloudKind => await GetCloudItemsAsync(start, count, ctk),
-            NeteaseTypeIds.RadioChannel => await GetSubscribedRadioChannelsAsync(count, ctk),
+            NeteaseTypeIds.RadioChannel => await GetSubscribedRadioChannelsAsync(start, count, ctk),
             NeteaseTypeIds.Artist => await GetSubscribedArtistsAsync(start, count, ctk),
             NeteaseTypeIds.Album => await GetSubscribedAlbumsAsync(start, count, ctk),
             ListeningHistoryRecentKind => (false, await GetListeningHistoryAsync(UserRecordType.WeekData, ctk)),
@@ -55,6 +55,11 @@ public class NeteaseUserLibrarySubContainer : LinerContainerBase, IProgressiveLo
         if (Kind != CloudKind)
             throw new InvalidOperationException("Only cloud library containers can delete cloud items.");
 
+        await DeleteCloudLibraryItemAsync(itemId, ctk);
+    }
+
+    public static async Task DeleteCloudLibraryItemAsync(string itemId, CancellationToken ctk = default)
+    {
         await NeteaseProvider.Instance.RequestAsync(NeteaseApis.CloudDeleteApi, new CloudDeleteRequest { Id = itemId }, ctk);
     }
 
@@ -84,13 +89,15 @@ public class NeteaseUserLibrarySubContainer : LinerContainerBase, IProgressiveLo
             _ => (false, []));
     }
 
-    private static async Task<(bool HasMore, List<ProvidableItemBase> Items)> GetSubscribedRadioChannelsAsync(int count, CancellationToken ctk)
+    private static async Task<(bool HasMore, List<ProvidableItemBase> Items)> GetSubscribedRadioChannelsAsync(int offset, int count, CancellationToken ctk)
     {
+        if (offset > 0) return (false, []);
+
         var result = await NeteaseProvider.Instance.RequestAsync(NeteaseApis.DjChannelSubscribedApi,
             new DjChannelSubscribedRequest { Limit = count }, ctk);
 
         return result.Match(success =>
-            (success.Data?.HasMore ?? false,
+            (false,
              success.Data?.Data?.Select(channel => (ProvidableItemBase)new NeteaseRadioChannel
              {
                  ActualId = channel.Id,
