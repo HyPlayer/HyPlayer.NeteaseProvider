@@ -9,57 +9,79 @@ public static class PlaylistItemToNeteasePlaylistMapper
 {
     public static NeteasePlaylist MapToNeteasePlaylist(this PlaylistDto item)
     {
-        return new NeteasePlaylist
-        {
-            Name = item.Name ?? "未知歌单",
-            ActualId = item.Id!,
-            Description = item.Description,
-            CreatorList = new List<string>() { item.Creator?.Nickname! },
-            Creator = item.Creator?.MapToNeteaseUser(),
-            Subscribed = item.Subscribed is true,
-            UpdateTime = item.UpdateTime,
-            TrackCount = item.TrackCount,
-            PlayCount = item.PlayCount,
-            SubscribedCount = item.SubscribedCount,
-            CoverUrl = item.CoverUrl
-        };
+        return CreatePlaylist(
+            item.Name,
+            item.Id,
+            item.Description,
+            item.Creator,
+            item.Subscribed is true,
+            item.UpdateTime,
+            item.TrackCount,
+            item.PlayCount,
+            item.SubscribedCount,
+            item.CoverUrl);
     }
 
     public static NeteasePlaylist MapToNeteasePlaylist(this RecommendPlaylistDto dto)
     {
-        return new NeteasePlaylist
-        {
-            Name = dto.Name ?? "未知歌单",
-            ActualId = dto.Id!,
-            CoverUrl = dto.CoverUrl,
-            Creator = dto.Creator?.MapToNeteaseUser(),
-            Subscribed = false,
-            UpdateTime = 0,
-            TrackCount = dto.TrackCount,
-            PlayCount = dto.PlayCount,
-            SubscribedCount = 0,
-            CreatorList = new List<string>() { dto.Creator?.Nickname! },
-        };
+        return CreatePlaylist(
+            dto.Name,
+            dto.Id,
+            null,
+            dto.Creator,
+            false,
+            0,
+            dto.TrackCount,
+            dto.PlayCount,
+            0,
+            dto.CoverUrl);
     }
 
     public static NeteasePlaylist MapToNeteasePlaylist(this PlaylistDetailResponse.PlayListData data)
     {
+        var playlist = CreatePlaylist(
+            data.Name,
+            data.Id,
+            data.Description,
+            data.Creator,
+            data.Subscribed is true,
+            data.UpdateTime,
+            data.TrackCount,
+            data.PlayCount,
+            data.SubscribedCount,
+            data.CoverUrl);
+        playlist.CommentCount = data.CommentCount;
+        playlist.ShareCount = data.ShareCount;
+        playlist.IsNewImported = data.IsNewImported;
+        return playlist;
+    }
+
+    private static NeteasePlaylist CreatePlaylist(
+        string? name,
+        string? id,
+        string? description,
+        UserInfoDto? creator,
+        bool subscribed,
+        long updateTime,
+        int trackCount,
+        long playCount,
+        long subscribedCount,
+        string? coverUrl)
+    {
+        var creatorName = creator?.Nickname;
         return new NeteasePlaylist
         {
-            Name = data.Name ?? "未知歌单",
-            ActualId = data.Id,
-            Description = data.Description,
-            CreatorList = new List<string>()
-                                 {
-                                     data.Creator?.Nickname!
-                                 },
-            Creator = data.Creator?.MapToNeteaseUser(),
-            Subscribed = data.Subscribed is true,
-            UpdateTime = data.UpdateTime,
-            TrackCount = data.TrackCount,
-            PlayCount = data.PlayCount,
-            SubscribedCount = data.SubscribedCount,
-            CoverUrl = data.CoverUrl,
+            Name = name ?? "未知歌单",
+            ActualId = id!,
+            Description = description,
+            CreatorList = string.IsNullOrWhiteSpace(creatorName) ? [] : [creatorName],
+            Creator = creator?.MapToNeteaseUser(),
+            Subscribed = subscribed,
+            UpdateTime = updateTime,
+            TrackCount = trackCount,
+            PlayCount = playCount,
+            SubscribedCount = subscribedCount,
+            CoverUrl = coverUrl
         };
     }
 }

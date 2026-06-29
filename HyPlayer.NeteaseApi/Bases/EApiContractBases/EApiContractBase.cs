@@ -1,4 +1,5 @@
 ﻿using HyPlayer.NeteaseApi.Extensions;
+using System.Diagnostics;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,7 +27,6 @@ public abstract class
         var url = Regex.Replace(Url, @"\w*api", "eapi");
         url = ApplyHttpDegrade(url, option);
         var requestMessage = new HttpRequestMessage(Method, url);
-        Console.WriteLine($"[EAPI] Request URL: {url}");
         ApplyMusic163Referrer(requestMessage);
         ApplyXRealIp(requestMessage, option);
         ApplyUserAgent(requestMessage, option);
