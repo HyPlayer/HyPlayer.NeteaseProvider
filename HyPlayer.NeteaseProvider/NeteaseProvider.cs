@@ -468,16 +468,20 @@ public partial class NeteaseProvider : ProviderBase,
         {
             if (response.Code is not 200) return null;
             if (response.SongUrls is not { Length: > 0 }) return null;
+            var songUrl = response.SongUrls[0];
+            var uri = CreateAbsoluteUriOrNull(songUrl.Url);
+            if (uri is null) return null;
+
             return new NeteaseMusicResource
             {
-                Md5 = response.SongUrls[0].Md5,
-                Size = response.SongUrls[0].Size,
-                BitRate = response.SongUrls[0].BitRate,
-                EncodeType = response.SongUrls[0].EncodeType,
-                Time = response.SongUrls[0].Time,
-                MusicType = response.SongUrls[0].Type,
-                Level = response.SongUrls[0].Level,
-                Uri = new Uri(response.SongUrls[0].Url ?? string.Empty)
+                Md5 = songUrl.Md5,
+                Size = songUrl.Size,
+                BitRate = songUrl.BitRate,
+                EncodeType = songUrl.EncodeType,
+                Time = songUrl.Time,
+                MusicType = songUrl.Type,
+                Level = songUrl.Level,
+                Uri = uri
             };
         }
 
@@ -486,6 +490,12 @@ public partial class NeteaseProvider : ProviderBase,
             MatchSuccess,
             _ => null
         );
+    }
+
+    private static Uri? CreateAbsoluteUriOrNull(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url)) return null;
+        return Uri.TryCreate(url, UriKind.Absolute, out var uri) ? uri : null;
     }
 
     public async Task<ProvidableItemBase?> GetProvidableItemByIdAsync(string inProviderId,
