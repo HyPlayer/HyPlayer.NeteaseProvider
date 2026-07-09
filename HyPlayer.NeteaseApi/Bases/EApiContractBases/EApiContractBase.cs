@@ -141,7 +141,7 @@ public abstract class
                     }
                 }
 
-                if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code != 200)
+                if (ret is CodedResponseBase codedResponseBase && codedResponseBase.Code is not (200 or 800 or 801 or 803 or 802))
                     return Results<TResponseModel, ErrorResultBase>
                         .CreateError(new ErrorResultBase(codedResponseBase.Code,
                             $"返回不成功({codedResponseBase.Code}): {codedResponseBase.Message}")).WithValue(ret);
