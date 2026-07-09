@@ -27,6 +27,10 @@
 
     </ItemGroup>
 
+    <ItemGroup Condition="!Exists('..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj') And !Exists('..\..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj')">
+        <PackageReference Include="HyPlayer.PlayCore.Abstraction" Version="0.1.5" />
+    </ItemGroup>
+
 
     <ItemGroup>
       <ProjectReference Include="..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj"

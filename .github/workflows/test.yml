@@ -20,6 +20,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Clone PlayCore sibling
+        run: git clone --depth 1 https://github.com/HyPlayer/HyPlayer.PlayCore.git ../HyPlayer.PlayCore
       
       - name: Setup .NET ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v4
