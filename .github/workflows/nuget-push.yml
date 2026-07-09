@@ -51,6 +51,9 @@ jobs:
           dotnet nuget push "Packages/*.nupkg" -k ${{ secrets.NUGET_APIKEY }} -s 'https://api.nuget.org/v3/index.json' --skip-duplicate
 
       - name: Publish To Github Package
+        shell: pwsh
         run: |
           dotnet nuget add source --username kengwang --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/HyPlayer/index.json"
-          dotnet nuget push "Packages/*.nupkg" --source "github" --skip-duplicate
+          Get-ChildItem -Path Packages -Filter *.nupkg | ForEach-Object {
+            dotnet nuget push $_.FullName --source "github" --api-key "${{ secrets.GITHUB_TOKEN }}" --skip-duplicate
+          }
