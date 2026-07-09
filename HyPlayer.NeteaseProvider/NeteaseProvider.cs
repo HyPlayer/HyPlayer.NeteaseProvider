@@ -537,12 +537,7 @@ public partial class NeteaseProvider : ProviderBase,
                     Name = string.IsNullOrWhiteSpace(actualId) ? "官方推荐歌单" : $"{actualId}歌单"
                 };
             case NeteaseTypeIds.ContextRecommendation:
-                return new NeteaseContextRecommendationContainer
-                {
-                    ActualId = actualId,
-                    Name = "上下文推荐",
-                    SeedItemId = actualId
-                };
+                return NeteaseContextRecommendationContainer.CreateFromActualId(actualId);
         }
 
         return null;
