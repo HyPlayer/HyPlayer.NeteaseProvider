@@ -17,11 +17,7 @@ public static class ResponseToRawLyricInfosMapper
                 LyricText = response.Lyric?.Lyric!,
                 Source = "netease:lrc",
                 LyricTypeActual = LyricType.Original,
-                Author = new()
-                {
-                    ActualId = response.LyricUser?.UserId!,
-                    Name = response.LyricUser?.Nickname ?? "未知贡献者"
-                }
+                Author = MapAuthor(response.LyricUser)
             });
         }
 
@@ -33,11 +29,7 @@ public static class ResponseToRawLyricInfosMapper
                 LyricText = response.TranslationLyric?.Lyric!,
                 Source = "netease:lrc",
                 LyricTypeActual = LyricType.Translation,
-                Author = new()
-                {
-                    ActualId = response.TranslationUser?.UserId!,
-                    Name = response.TranslationUser?.Nickname ?? "未知贡献者"
-                }
+                Author = MapAuthor(response.TranslationUser)
             }
             );
         }
@@ -67,11 +59,7 @@ public static class ResponseToRawLyricInfosMapper
                 Source = "netease:yrc",
                 IsWord = true,
                 LyricTypeActual = LyricType.Original,
-                Author = new()
-                {
-                    ActualId = response.LyricUser?.UserId!,
-                    Name = response.LyricUser?.Nickname ?? "未知贡献者"
-                }
+                Author = MapAuthor(response.LyricUser)
             });
         }
 
@@ -84,11 +72,7 @@ public static class ResponseToRawLyricInfosMapper
                 Source = "netease:yrc",
                 IsWord = true,
                 LyricTypeActual = LyricType.Translation,
-                Author = new()
-                {
-                    ActualId = response.TranslationUser?.UserId!,
-                    Name = response.TranslationUser?.Nickname ?? "未知贡献者"
-                }
+                Author = MapAuthor(response.TranslationUser)
             });
         }
 
@@ -111,5 +95,17 @@ public static class ResponseToRawLyricInfosMapper
         }
 
         return ret;
+    }
+
+    private static NeteaseRawLyricInfo.LyricAuthorInfo? MapAuthor(LyricResponse.LyricUserInfo? user)
+    {
+        if (string.IsNullOrWhiteSpace(user?.UserId) && string.IsNullOrWhiteSpace(user?.Nickname))
+            return null;
+
+        return new NeteaseRawLyricInfo.LyricAuthorInfo
+        {
+            ActualId = user?.UserId,
+            Name = user?.Nickname ?? "未知贡献者"
+        };
     }
 }
