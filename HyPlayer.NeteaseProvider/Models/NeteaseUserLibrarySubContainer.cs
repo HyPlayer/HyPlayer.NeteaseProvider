@@ -114,7 +114,7 @@ public class NeteaseUserLibrarySubContainer : LinerContainerBase, IProgressiveLo
                  Category = channel.Category,
                  SecondCategoryId = channel.SecondCategoryId,
                  SecondCategory = channel.SecondCategory,
-                 CreatorList = string.IsNullOrWhiteSpace(channel.UserName) ? [] : [channel.UserName]
+                 CreatorList = string.IsNullOrWhiteSpace(channel.UserName) ? [] : [channel.UserName!]
              }).ToList() ?? []),
             _ => (false, []));
     }

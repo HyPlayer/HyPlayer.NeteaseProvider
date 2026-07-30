@@ -48,14 +48,12 @@ public static class The163KeyHelper
             return false;
         try
         {
-            TryGetTrackId(the163Key, out trackId);
+            return TryGetTrackId(the163Key, out trackId);
         }
         catch
         {
             return false;
         }
-
-        return true;
     }
 
 
@@ -73,7 +71,10 @@ public static class The163KeyHelper
                 byt163Key = cryptoTransform.TransformFinalBlock(byt163Key, 0, byt163Key.Length);
             }
             var key = JsonSerializer.Deserialize<The163KeyClass>(Encoding.UTF8.GetString(byt163Key).Substring(6));
-            trackId = (ulong)key.musicId;
+            if (key is null || key.MusicId < 0)
+                return false;
+
+            trackId = (ulong)key.MusicId;
         }
         catch
         {
@@ -96,14 +97,12 @@ public static class The163KeyHelper
             return false;
         try
         {
-            TryGetMusicInfo(the163Key, out KeyStruct);
+            return TryGetMusicInfo(the163Key, out KeyStruct);
         }
         catch
         {
             return false;
         }
-
-        return true;
     }
 
     public static bool TryGetMusicInfo(string the163Key, out The163KeyClass KeyStruct)
@@ -120,8 +119,12 @@ public static class The163KeyHelper
                 byt163Key = cryptoTransform.TransformFinalBlock(byt163Key, 0, byt163Key.Length);
             }
 
-            KeyStruct = JsonSerializer.Deserialize<The163KeyClass>(Encoding.UTF8.GetString(byt163Key)
+            var deserialized = JsonSerializer.Deserialize<The163KeyClass>(Encoding.UTF8.GetString(byt163Key)
                 .Substring(6));
+            if (deserialized is null)
+                return false;
+
+            KeyStruct = deserialized;
         }
         catch
         {
@@ -161,17 +164,16 @@ public static class The163KeyHelper
         {
             var key = new The163KeyClass
             {
-                album = song.Album?.Name,
-                albumId = ulong.TryParse(song.Album?.ActualId, out var albumId) ? albumId : 0,
-                albumPic = GetCover(song),
-                bitrate = bitrate,
-                duration = song.Duration,
-                musicId = long.TryParse(song.ActualId, out var musicId) ? musicId : 0,
-                musicName = song.Name,
-                format = format.ToLowerInvariant()
+                Album = song.Album?.Name ?? string.Empty,
+                AlbumId = ulong.TryParse(song.Album?.ActualId, out var albumId) ? albumId : 0,
+                AlbumPic = GetCover(song) ?? string.Empty,
+                Bitrate = bitrate,
+                Duration = song.Duration,
+                MusicId = long.TryParse(song.ActualId, out var musicId) ? musicId : 0,
+                MusicName = song.Name ?? string.Empty,
+                Format = format.ToLowerInvariant(),
+                Artist = GetArtistKey(song)
             };
-
-            key.artist = GetArtistKey(song);
             return TrySetMusicInfo(tag, key);
         }
         catch
@@ -197,7 +199,7 @@ public static class The163KeyHelper
             : null;
     }
 
-    public static string Get163Key(Tag tag)
+    public static string? Get163Key(Tag tag)
     {
         var the163Key = tag.Comment;
         if (!Is163KeyCandidate(the163Key))
@@ -207,8 +209,10 @@ public static class The163KeyHelper
         return the163Key;
     }
 
-    private static bool Is163KeyCandidate(string s)
+    private static bool Is163KeyCandidate(string? s)
     {
-        return !string.IsNullOrEmpty(s) && s.StartsWith("163 key(Don't modify):", StringComparison.Ordinal);
+        return s is not null
+               && s.Length > 0
+               && s.StartsWith("163 key(Don't modify):", StringComparison.Ordinal);
     }
 }

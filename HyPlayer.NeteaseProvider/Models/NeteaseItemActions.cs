@@ -16,9 +16,9 @@ public static class NeteaseItemActions
     {
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.LikeApi, new LikeRequest
         {
-            TrackId = song.ActualId,
+            TrackId = RequireId(song.ActualId, "Song"),
             Like = true,
-            UserId = NeteaseProvider.Instance.LoginedUser?.ActualId!
+            UserId = RequireId(NeteaseProvider.Instance.LoginedUser?.ActualId, "Logged-in user")
         }, ctk);
     }
 
@@ -26,9 +26,9 @@ public static class NeteaseItemActions
     {
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.LikeApi, new LikeRequest
         {
-            TrackId = song.ActualId,
+            TrackId = RequireId(song.ActualId, "Song"),
             Like = false,
-            UserId = NeteaseProvider.Instance.LoginedUser?.ActualId!
+            UserId = RequireId(NeteaseProvider.Instance.LoginedUser?.ActualId, "Logged-in user")
         }, ctk);
     }
 
@@ -52,7 +52,7 @@ public static class NeteaseItemActions
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.PlaylistSubscribeApi, new PlaylistSubscribeRequest
         {
             IsSubscribe = true,
-            PlaylistId = playlist.ActualId
+            PlaylistId = RequireId(playlist.ActualId, "Playlist")
         }, ctk);
     }
 
@@ -61,7 +61,7 @@ public static class NeteaseItemActions
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.PlaylistSubscribeApi, new PlaylistSubscribeRequest
         {
             IsSubscribe = false,
-            PlaylistId = playlist.ActualId
+            PlaylistId = RequireId(playlist.ActualId, "Playlist")
         }, ctk);
     }
 
@@ -69,7 +69,7 @@ public static class NeteaseItemActions
     {
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.AlbumSubscribeApi, new AlbumSubscribeRequest
         {
-            Id = album.ActualId,
+            Id = RequireId(album.ActualId, "Album"),
             IsSubscribe = true
         }, ctk);
     }
@@ -78,7 +78,7 @@ public static class NeteaseItemActions
     {
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.AlbumSubscribeApi, new AlbumSubscribeRequest
         {
-            Id = album.ActualId,
+            Id = RequireId(album.ActualId, "Album"),
             IsSubscribe = false
         }, ctk);
     }
@@ -87,7 +87,7 @@ public static class NeteaseItemActions
     {
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.ArtistSubscribeApi, new ArtistSubscribeRequest
         {
-            ArtistId = artist.ActualId
+            ArtistId = RequireId(artist.ActualId, "Artist")
         }, ctk);
     }
 
@@ -105,7 +105,7 @@ public static class NeteaseItemActions
     {
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.DjChannelSubscribeApi, new DjChannelSubscribeRequest
         {
-            Id = channel.ActualId,
+            Id = RequireId(channel.ActualId, "Radio channel"),
             IsSubscribe = true
         }, ctk);
     }
@@ -114,7 +114,7 @@ public static class NeteaseItemActions
     {
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.DjChannelSubscribeApi, new DjChannelSubscribeRequest
         {
-            Id = channel.ActualId,
+            Id = RequireId(channel.ActualId, "Radio channel"),
             IsSubscribe = false
         }, ctk);
     }
@@ -123,7 +123,7 @@ public static class NeteaseItemActions
     {
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.UserFollowApi, new UserFollowRequest
         {
-            Id = user.ActualId
+            Id = RequireId(user.ActualId, "User")
         }, ctk);
     }
 
@@ -131,7 +131,7 @@ public static class NeteaseItemActions
     {
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.UserUnfollowApi, new UserUnfollowRequest
         {
-            Id = user.ActualId
+            Id = RequireId(user.ActualId, "User")
         }, ctk);
     }
 
@@ -156,8 +156,16 @@ public static class NeteaseItemActions
         return NeteaseProvider.Instance.RequestAsync(NeteaseApis.PlaylistTracksEditApi, new PlaylistTracksEditRequest
         {
             IsAdd = isAdd,
-            PlaylistId = playlistId,
+            PlaylistId = RequireId(playlistId, "Playlist"),
             Id = songId.StartsWith(NeteaseTypeIds.SingleSong) ? songId.Substring(2) : songId
         }, ctk);
+    }
+
+    private static string RequireId(string? id, string itemName)
+    {
+        if (id is null || string.IsNullOrWhiteSpace(id))
+            throw new InvalidOperationException($"{itemName} does not have a valid NetEase ID.");
+
+        return id;
     }
 }

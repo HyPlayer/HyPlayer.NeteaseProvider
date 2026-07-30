@@ -462,9 +462,13 @@ public partial class NeteaseProvider
         {
             var result = await RequestAsync(NeteaseApis.VideoUrlApi,
                 new VideoUrlRequest { Id = mediaId, Resolution = qualityId ?? "1080" }, ctk);
-            return result.Match(success => string.IsNullOrWhiteSpace(success.Data?.Url)
-                    ? null
-                    : new NeteaseRichMediaResource { ResourceName = mediaId, Url = success.Data.Url } as ResourceBase,
+            return result.Match(success =>
+                {
+                    var url = success.Data?.Url;
+                    return url is null || string.IsNullOrWhiteSpace(url)
+                        ? null
+                        : new NeteaseRichMediaResource { ResourceName = mediaId, Url = url } as ResourceBase;
+                },
                 _ => null);
         }
 
@@ -477,7 +481,7 @@ public partial class NeteaseProvider
                     MlogUrlResponse.MlogUrlItem? item = null;
                     success.Data?.TryGetValue(mediaId, out item);
                     var url = item?.UrlInfo?.Url;
-                    return string.IsNullOrWhiteSpace(url)
+                    return url is null || string.IsNullOrWhiteSpace(url)
                         ? null
                         : new NeteaseRichMediaResource { ResourceName = mediaId, Url = url } as ResourceBase;
                 },

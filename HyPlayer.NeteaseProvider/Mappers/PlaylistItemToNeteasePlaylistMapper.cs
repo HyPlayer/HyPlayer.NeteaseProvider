@@ -74,7 +74,7 @@ public static class PlaylistItemToNeteasePlaylistMapper
             Name = name ?? "未知歌单",
             ActualId = id!,
             Description = description,
-            CreatorList = string.IsNullOrWhiteSpace(creatorName) ? [] : [creatorName],
+            CreatorList = string.IsNullOrWhiteSpace(creatorName) ? [] : [creatorName!],
             Creator = creator?.MapToNeteaseUser(),
             Subscribed = subscribed,
             UpdateTime = updateTime,
