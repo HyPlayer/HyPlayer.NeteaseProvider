@@ -14,7 +14,8 @@
         <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
 		<NoWarn>IL2026;IL3050</NoWarn>
         <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
-        <Platforms>AnyCPU;x64</Platforms>
+        <Platforms>ARM64;x64</Platforms>
+        <Configurations>Debug;Release</Configurations>
     </PropertyGroup>
 
     <ItemGroup>

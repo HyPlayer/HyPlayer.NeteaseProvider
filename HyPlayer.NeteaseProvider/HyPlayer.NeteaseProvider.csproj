@@ -15,8 +15,9 @@
         <AssemblyVersion>0.0.12</AssemblyVersion>
         <FileVersion>0.0.12</FileVersion>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
-        <Platforms>AnyCPU;x64</Platforms>
         <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
+		<Platforms>ARM64;x64</Platforms>
+		<Configurations>Debug;Release</Configurations>
     </PropertyGroup>
 
 
@@ -33,10 +34,8 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj"
-                        Condition="Exists('..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj')" />
-      <ProjectReference Include="..\..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj"
-                        Condition="!Exists('..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj') And Exists('..\..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj')" />
+      <ProjectReference Include="..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj" Condition="Exists('..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj')" />
+      <ProjectReference Include="..\..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj" Condition="!Exists('..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj') And Exists('..\..\..\HyPlayer.PlayCore\HyPlayer.PlayCore.Abstraction\HyPlayer.PlayCore.Abstraction.csproj')" />
       <ProjectReference Include="..\HyPlayer.NeteaseApi\HyPlayer.NeteaseApi.csproj" />
     </ItemGroup>
 
