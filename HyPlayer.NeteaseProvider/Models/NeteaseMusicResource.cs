@@ -3,7 +3,7 @@ using HyPlayer.PlayCore.Abstraction.Models.Resources;
 
 namespace HyPlayer.NeteaseProvider.Models;
 
-public class NeteaseMusicResource : MusicResourceBase
+public class NeteaseMusicResource : MusicResourceBase, IAudioGainMetadata
 {
     public string? Md5 { get; set; }
     public long Size { get; set; }
@@ -12,6 +12,11 @@ public class NeteaseMusicResource : MusicResourceBase
     public long? Time { get; set; }
     public string? MusicType { get; set; }
     public string? Level { get; set; }
+    public double? GainDb { get; set; }
+    public double? Peak { get; set; }
+
+    public bool SupportsAudioGain => Level?.ToLowerInvariant() is
+        "standard" or "higher" or "exhigh" or "lossless" or "hires" or "jymaster";
 
     public override Task<ResourceResultBase> GetResourceAsync(ResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {

@@ -76,6 +76,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Song
             [JsonPropertyName("time")] public long Time { get; set; }
             [JsonPropertyName("freeTrialInfo")] public FreeTrialInfoData? FreeTrialInfo { get; set; }
             [JsonPropertyName("gain")] public float? Gain { get; set; }
+            [JsonPropertyName("peak")] public float? Peak { get; set; }
 
 
 

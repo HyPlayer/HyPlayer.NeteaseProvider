@@ -481,6 +481,8 @@ public partial class NeteaseProvider : ProviderBase,
                 Time = songUrl.Time,
                 MusicType = songUrl.Type,
                 Level = songUrl.Level,
+                GainDb = songUrl.Gain,
+                Peak = songUrl.Peak,
                 Uri = uri
             };
         }
