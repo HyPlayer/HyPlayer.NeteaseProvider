@@ -237,13 +237,24 @@ public partial class NeteaseProvider
         var itemId = targetId ?? (inProviderId.Length > 2 ? inProviderId.Substring(2) : inProviderId);
         if (typeId != NeteaseTypeIds.SingleSong)
             throw new NotSupportedException("NetEase item like is currently supported for single songs only.");
-
-        await RequestAsync(NeteaseApis.LikeApi, new LikeRequest
+        if(targetId != null)
         {
-            TrackId = itemId,
-            Like = like,
-            UserId = LoginedUser?.ActualId!
-        }, ctk);
+            await RequestAsync(NeteaseApis.PlaylistTracksEditApi, new PlaylistTracksEditRequest()
+            {
+                PlaylistId = targetId,
+                Id = itemId,
+                IsAdd = like
+            }, ctk);
+        }
+        else
+        {
+            await RequestAsync(NeteaseApis.LikeApi, new LikeRequest
+            {
+                TrackId = itemId,
+                Like = like,
+                UserId = LoginedUser?.ActualId!
+            }, ctk);
+        }
     }
 
     public async Task<ProviderPageResult<CommentBase>> GetThreadedCommentsAsync(string itemId, string typeId, string commentId, int offset, int count, CancellationToken ctk = default)
