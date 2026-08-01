@@ -150,6 +150,4 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
             return Task.FromResult(result as ResourceResultBase);
         }
     }
-
-    public string? Description { get; set; }
 }

@@ -648,7 +648,9 @@ public partial class NeteaseProvider : ProviderBase,
                 : new NeteaseArtist
                 {
                     ActualId = success.Artist.Id,
-                    Name = success.Artist.Name ?? "未知歌手"
+                    Name = success.Artist.Name ?? "未知歌手",
+                    CoverUrl = success.Artist.PicUrl,
+                    Description = success.Artist.BriefDesc ?? "暂无简介"
                 },
             _ => null
         );
