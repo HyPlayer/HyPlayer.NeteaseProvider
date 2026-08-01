@@ -234,7 +234,7 @@ public partial class NeteaseProvider
     private async Task SetProvidableItemLikeStateAsync(string inProviderId, string? targetId, bool like, CancellationToken ctk)
     {
         var typeId = inProviderId.Length >= 2 ? inProviderId.Substring(0, 2) : string.Empty;
-        var itemId = targetId ?? (inProviderId.Length > 2 ? inProviderId.Substring(2) : inProviderId);
+        var itemId = inProviderId.Length > 2 ? inProviderId.Substring(2) : inProviderId;
         if (typeId != NeteaseTypeIds.SingleSong)
             throw new NotSupportedException("NetEase item like is currently supported for single songs only.");
         if(targetId != null)
