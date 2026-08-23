@@ -10,7 +10,8 @@ using HyPlayer.PlayCore.Abstraction.Models.Resources;
 
 namespace HyPlayer.NeteaseProvider.Models;
 
-public class NeteaseAlbum : AlbumBase, IProgressiveLoadingContainer, IHasCover, IHasTranslation, IHasDescription, IHasCreators
+public class NeteaseAlbum : AlbumBase, IProgressiveLoadingContainer, IHasCover, IHasTranslation, IHasDescription,
+    IHasCreators, IHasPublishTime
 {
     public override string ProviderId => "ncm";
     public override string TypeId => NeteaseTypeIds.Album;
@@ -23,6 +24,7 @@ public class NeteaseAlbum : AlbumBase, IProgressiveLoadingContainer, IHasCover, 
     public string? SubType { get; set; }
     public string? AlbumType { get; set; }
     public bool IsSubscribed { get; set; }
+    public long PublishTime { get; set; }
     public List<NeteaseArtist>? Artists { get; set; }
     public List<ProvidableItemBase>? Songs { get; set; }
 

@@ -16,6 +16,7 @@ public static class AlbumDataToNeteaseAlbumMapper
             Alias = data.Alias?.ToList(),
             Company = data.Company,
             BriefDescription = data.BriefDescription,
+            PublishTime = data.PublishTime,
             SubType = data.SubType,
             Artists = data.Artists?.Select(t => t.MapToNeteaseArtist()).ToList(),
             Translation = data.Translation,

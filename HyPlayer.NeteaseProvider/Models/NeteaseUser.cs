@@ -129,25 +129,27 @@ public class NeteaseUser : PersonBase, IHasCover, IHasDescription
 
     public Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
+        if (!Uri.TryCreate(AvatarUrl, UriKind.Absolute, out var avatarUri))
+        {
+            return Task.FromResult<ResourceResultBase>(new NeteaseImageResourceResult
+            {
+                ExternalException = null,
+                ResourceStatus = ResourceStatus.Fail,
+                Uri = null
+            });
+        }
+
         if (qualityTag is NeteaseImageResourceQualityTag neteaseImageResourceQualityTag)
         {
-            var result = new NeteaseImageResourceResult()
-            {
-                ExternalException = null,
-                ResourceStatus = ResourceStatus.Success,
-                Uri = new Uri($"{AvatarUrl}?{neteaseImageResourceQualityTag.ToString()}")
-            };
-            return Task.FromResult(result as ResourceResultBase);
+            var separator = string.IsNullOrEmpty(avatarUri.Query) ? '?' : '&';
+            avatarUri = new Uri($"{avatarUri}{separator}{neteaseImageResourceQualityTag}");
         }
-        else
+
+        return Task.FromResult<ResourceResultBase>(new NeteaseImageResourceResult
         {
-            var result = new NeteaseImageResourceResult()
-            {
-                ExternalException = null,
-                ResourceStatus = ResourceStatus.Success,
-                Uri = new Uri($"{AvatarUrl}")
-            };
-            return Task.FromResult(result as ResourceResultBase);
-        }
+            ExternalException = null,
+            ResourceStatus = ResourceStatus.Success,
+            Uri = avatarUri
+        });
     }
 }
