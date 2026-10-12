@@ -487,6 +487,7 @@ public partial class NeteaseProvider : ProviderBase,
                 Level = songUrl.Level,
                 GainDb = songUrl.Gain,
                 Peak = songUrl.Peak,
+                IsTrial = songUrl.FreeTrialInfo is not null,
                 Uri = uri
             };
         }
