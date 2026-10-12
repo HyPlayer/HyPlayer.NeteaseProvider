@@ -444,8 +444,14 @@ public partial class NeteaseProvider : ProviderBase,
 
     public async Task<List<RawLyricInfo>> GetLyricInfoAsync(SingleSongBase song, CancellationToken ctk = default)
     {
-        if (song.ActualId == null) throw new ArgumentNullException();
-        var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = song.ActualId }, ctk);
+        var songId = GetTrackId(song);
+        if (songId == null)
+        {
+            if (song is NeteaseRadioProgram) return new List<RawLyricInfo>();
+            throw new ArgumentNullException();
+        }
+
+        var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = songId }, ctk);
         return results.Match(
             success => success.Map(),
             _ => new()

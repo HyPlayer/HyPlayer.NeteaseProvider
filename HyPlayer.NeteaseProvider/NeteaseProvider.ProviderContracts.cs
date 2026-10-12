@@ -626,7 +626,7 @@ public partial class NeteaseProvider
                 ClientSeq = report.ClientSeq,
                 AnchorPosition = report.AnchorPosition,
                 AnchorSongId = report.AnchorItemId ?? string.Empty,
-                DisplaySongList = report.Queue.Select(song => song.ActualId ?? string.Empty).Where(id => !string.IsNullOrWhiteSpace(id)).ToArray()
+                DisplaySongList = report.Queue.Select(song => GetTrackId(song) ?? string.Empty).Where(id => !string.IsNullOrWhiteSpace(id)).ToArray()
             }, ctk);
     }
 
