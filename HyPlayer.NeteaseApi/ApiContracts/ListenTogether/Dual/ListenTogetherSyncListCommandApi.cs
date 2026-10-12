@@ -125,6 +125,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
         [JsonPropertyName("playlistParam")] public required string PlaylistParam { get; set; }
         [JsonPropertyName("roomId")] public required string RoomId { get; set; }
 
+        [JsonContextSerializable(typeof(HyPlayer.NeteaseApi.ApiContracts.ListenTogether.ListenTogetherSyncListReportActualRequest.ListenTogetherSyncListReportActualRequestPlaylistParam))]
         public class ListenTogetherSyncListReportActualRequestPlaylistParam
         {
             [JsonPropertyName("anchorPosition")] public int AnchorPosition { get; set; } = -1;
