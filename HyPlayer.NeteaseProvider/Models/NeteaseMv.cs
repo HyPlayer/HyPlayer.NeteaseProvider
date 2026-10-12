@@ -17,28 +17,9 @@ public class NeteaseMv : RichMediaBase, IHasCover
     public long LikedCount { get; set; }
     public long SubCount { get; set; }
     public List<int> AvailableQualities { get; set; } = [];
-    public async Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
+    public Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
-        if (qualityTag is NeteaseImageResourceQualityTag neteaseImageResourceQualityTag)
-        {
-            var result = new NeteaseImageResourceResult()
-            {
-                ExternalException = null,
-                ResourceStatus = ResourceStatus.Success,
-                Uri = new Uri($"{CoverUrl}?{neteaseImageResourceQualityTag.ToString()}")
-            };
-            return result;
-        }
-        else
-        {
-            var result = new NeteaseImageResourceResult()
-            {
-                ExternalException = null,
-                ResourceStatus = ResourceStatus.Success,
-                Uri = new Uri($"{CoverUrl}")
-            };
-            return result;
-        }
+        return Task.FromResult<ResourceResultBase>(NeteaseImageResourceResult.FromUrl(CoverUrl, qualityTag));
     }
 }
 
