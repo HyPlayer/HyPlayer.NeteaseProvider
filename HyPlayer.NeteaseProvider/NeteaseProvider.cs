@@ -454,13 +454,15 @@ public partial class NeteaseProvider : ProviderBase,
     public async Task<MusicResourceBase?> GetMusicResourceAsync(SingleSongBase song, ResourceQualityTag? qualityTag = null,
                                                                 CancellationToken ctk = default)
     {
+        var songId = GetTrackId(song);
+        if (string.IsNullOrEmpty(songId)) return null;
         var quality = "exhigh";
         if (qualityTag is NeteaseMusicQualityTag neteaseMusicQualityTag)
             quality = neteaseMusicQualityTag.Quality;
         var results = await RequestAsync(NeteaseApis.SongUrlApi,
                                          new SongUrlRequest
                                          {
-                                             Id = song.ActualId,
+                                             Id = songId,
                                              Level = quality
                                          }, ctk);
 
@@ -493,6 +495,11 @@ public partial class NeteaseProvider : ProviderBase,
             MatchSuccess,
             _ => null
         );
+    }
+
+    public static string? GetTrackId(SingleSongBase song)
+    {
+        return song is NeteaseRadioProgram program ? program.MainSong?.ActualId : song.ActualId;
     }
 
     private static Uri? CreateAbsoluteUriOrNull(string? url)
