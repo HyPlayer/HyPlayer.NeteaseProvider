@@ -79,13 +79,22 @@ public static class ProviderContractModelMappers
         {
             ActualId = comment.CommentId,
             Name = comment.Content ?? comment.CommentId ?? string.Empty,
-            Content = comment.RichContent ?? comment.Content,
+            Content = GetDisplayContent(comment),
             SendDate = comment.Time,
             LikedCount = comment.LikedCount,
             ReplyCount = comment.ReplyCount,
             HasLiked = comment.Liked,
             Sender = comment.User?.MapToNeteaseUser()
         };
+    }
+
+    private static string GetDisplayContent(CommentDto comment)
+    {
+        if (!string.IsNullOrWhiteSpace(comment.RichContent))
+            return comment.RichContent;
+        if (!string.IsNullOrWhiteSpace(comment.Content))
+            return comment.Content;
+        return string.IsNullOrWhiteSpace(comment.ExpressionUrl) ? "[此评论没有文字内容]" : "[表情]";
     }
 
     public static NeteaseCloudLibraryItem MapToNeteaseCloudLibraryItem(this CloudMusicDto cloudSong)

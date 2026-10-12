@@ -7,6 +7,7 @@ public class CommentDto
     [JsonPropertyName("user")] public UserInfoDto? User { get; set; }
     [JsonPropertyName("content")] public string? Content { get; set; }
     [JsonPropertyName("richContent")] public string? RichContent { get; set; }
+    [JsonPropertyName("expressionUrl")] public string? ExpressionUrl { get; set; }
     [JsonPropertyName("commentId")] public string? CommentId { get; set; }
     [JsonPropertyName("likedCount")] public int LikedCount { get; set; }
     [JsonPropertyName("replyCount")] public int ReplyCount { get; set; }
