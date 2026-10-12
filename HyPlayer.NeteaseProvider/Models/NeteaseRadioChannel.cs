@@ -145,9 +145,12 @@ IHasCreators
         while (hasMore)
         {
             var (more, items) = await GetProgressiveItemsListAsync(offset, pageSize, ctk);
+            if (items.Count == 0)
+                break;
+
             programs.AddRange(items.Cast<NeteaseRadioProgram>());
             hasMore = more;
-            offset += pageSize;
+            offset += items.Count;
         }
 
         return programs.Cast<ProvidableItemBase>().ToList();
