@@ -19,6 +19,7 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
     private PlaylistTracksGetResponse.PlaylistWithTracksInfoDto.TrackIdItem[]? _trackIds;
     private List<ProvidableItemBase>? _allTrackDetails;
     private readonly Dictionary<(int Start, int Count), (bool HasMore, List<ProvidableItemBase> Items)> _trackPageCache = [];
+    private readonly Dictionary<int, int> _trackIdOffsets = [];
     public string? CoverUrl;
     public NeteaseUser? Creator;
     public bool Subscribed { get; set; }
@@ -114,10 +115,18 @@ public class NeteasePlaylist : LinerContainerBase, IProgressiveLoadingContainer,
                 return cachedPage;
             }
 
-            var page = (start + count < _trackIds.Length,
-                (await NeteaseProvider.Instance.GetSingleSongRangeByIds(
-                    _trackIds.Skip(start).Take(count).Select(t => t.Id).ToList(), ctk))
-                .Select(t => (ProvidableItemBase)t).ToList());
+            var idStart = _trackIdOffsets.TryGetValue(start, out var mappedStart) ? mappedStart : start;
+            var ids = _trackIds.Skip(idStart).Take(count).Select(t => t.Id).ToList();
+            if (ids.Count == 0)
+                return (false, new List<ProvidableItemBase>());
+
+            var songs = (await NeteaseProvider.Instance.GetSingleSongRangeByIds(ids, ctk))
+                .Select(t => (ProvidableItemBase)t).ToList();
+            var idEnd = idStart + ids.Count;
+            if (songs.Count > 0)
+                _trackIdOffsets[start + songs.Count] = idEnd;
+
+            var page = (idEnd < _trackIds.Length, songs);
             _trackPageCache[cacheKey] = page;
             return page;
         }
