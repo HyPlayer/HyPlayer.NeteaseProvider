@@ -23,6 +23,7 @@ using HyPlayer.PlayCore.Abstraction.Models;
 using HyPlayer.PlayCore.Abstraction.Models.Containers;
 using HyPlayer.PlayCore.Abstraction.Models.Resources;
 using HyPlayer.PlayCore.Abstraction.Models.SingleItems;
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
@@ -161,9 +162,26 @@ public partial class NeteaseProvider
         return Task.FromResult<ContainerBase?>(null);
     }
 
-    public async Task<ProviderPageResult<CommentBase>> GetCommentsAsync(string itemId, string typeId, int offset, int count, int sortType = 1, CancellationToken ctk = default)
+    public Task<ProviderPageResult<CommentBase>> GetCommentsAsync(string itemId, string typeId, int offset, int count, int sortType = 1, CancellationToken ctk = default)
     {
         var pageNo = count <= 0 ? 1 : (offset / count) + 1;
+        return RequestCommentsPageAsync(itemId, typeId, pageNo, null, count, sortType, ctk);
+    }
+
+    public Task<ProviderPageResult<CommentBase>> GetCommentsPageAsync(string itemId, string typeId, string? pageToken, int count, int sortType = 1, CancellationToken ctk = default)
+    {
+        var (pageNo, cursor) = ParseCommentPageToken(pageToken);
+        return RequestCommentsPageAsync(itemId, typeId, pageNo, cursor, count, sortType, ctk);
+    }
+
+    private async Task<ProviderPageResult<CommentBase>> RequestCommentsPageAsync(string itemId, string typeId, int pageNo, string? cursor, int count, int sortType, CancellationToken ctk)
+    {
+        var commentSortType = sortType switch
+        {
+            2 => CommentSortType.Hot,
+            3 => CommentSortType.Time,
+            _ => CommentSortType.Recommend
+        };
         var result = await RequestAsync(NeteaseApis.CommentsApi,
             new CommentsRequest
             {
@@ -171,22 +189,44 @@ public partial class NeteaseProvider
                 ResourceType = TypeIdToSearchIdMapper.MapToResourceId(typeId),
                 PageNo = pageNo,
                 PageSize = count,
-                CommentSortType = sortType switch
-                {
-                    2 => CommentSortType.Hot,
-                    3 => CommentSortType.Time,
-                    _ => CommentSortType.Recommend
-                }
+                CommentSortType = commentSortType,
+                Cursor = cursor
             }, ctk);
 
-        return result.Match(success => new ProviderPageResult<CommentBase>
+        return result.Match(success =>
             {
-                Items = success.Data?.Comments?.Select(comment => (CommentBase)comment.MapToNeteaseComment()).ToList() ?? new List<CommentBase>(),
-                HasMore = success.Data?.HasMore is true,
-                NextOffset = success.Data?.HasMore is true ? offset + count : null,
-                TotalCount = success.Data is null ? null : (int?)success.Data.TotalCount
+                var hasMore = success.Data?.HasMore is true;
+                var nextCursor = commentSortType == CommentSortType.Time ? success.Data?.Cursor : null;
+                var canContinue = hasMore && (commentSortType != CommentSortType.Time || !string.IsNullOrEmpty(nextCursor));
+                return new ProviderPageResult<CommentBase>
+                {
+                    Items = success.Data?.Comments?.Select(comment => (CommentBase)comment.MapToNeteaseComment()).ToList() ?? new List<CommentBase>(),
+                    HasMore = hasMore,
+                    NextOffset = hasMore && commentSortType != CommentSortType.Time ? pageNo * count : null,
+                    NextPageToken = canContinue ? CreateCommentPageToken(pageNo + 1, nextCursor) : null,
+                    TotalCount = success.Data is null ? null : (int?)success.Data.TotalCount
+                };
             },
             _ => EmptyPage<CommentBase>());
+    }
+
+    private static string CreateCommentPageToken(int pageNo, string? cursor)
+    {
+        var page = pageNo.ToString(CultureInfo.InvariantCulture);
+        return string.IsNullOrEmpty(cursor) ? page : $"{page}:{cursor}";
+    }
+
+    private static (int PageNo, string? Cursor) ParseCommentPageToken(string? pageToken)
+    {
+        if (pageToken is null || pageToken.Length == 0)
+            return (1, null);
+
+        var separator = pageToken.IndexOf(':');
+        var page = separator < 0 ? pageToken : pageToken.Substring(0, separator);
+        if (!int.TryParse(page, NumberStyles.None, CultureInfo.InvariantCulture, out var pageNo) || pageNo < 1)
+            throw new ArgumentException("The comment page token is not valid.", nameof(pageToken));
+
+        return (pageNo, separator < 0 ? null : pageToken.Substring(separator + 1));
     }
 
     public Task<CommentBase?> PostCommentAsync(string itemId, string typeId, string content, string? replyToCommentId = null, CancellationToken ctk = default)
@@ -257,15 +297,27 @@ public partial class NeteaseProvider
         }
     }
 
-    public async Task<ProviderPageResult<CommentBase>> GetThreadedCommentsAsync(string itemId, string typeId, string commentId, int offset, int count, CancellationToken ctk = default)
+    public Task<ProviderPageResult<CommentBase>> GetThreadedCommentsAsync(string itemId, string typeId, string commentId, int offset, int count, CancellationToken ctk = default)
     {
+        return offset > 0
+            ? Task.FromResult(EmptyPage<CommentBase>())
+            : GetThreadedCommentsPageAsync(itemId, typeId, commentId, null, count, ctk);
+    }
+
+    public async Task<ProviderPageResult<CommentBase>> GetThreadedCommentsPageAsync(string itemId, string typeId, string commentId, string? pageToken, int count, CancellationToken ctk = default)
+    {
+        long time = 0;
+        if (pageToken is { Length: > 0 }
+            && !long.TryParse(pageToken, NumberStyles.None, CultureInfo.InvariantCulture, out time))
+            throw new ArgumentException("The reply page token is not valid.", nameof(pageToken));
+
         var result = await RequestAsync(NeteaseApis.CommentFloorApi,
             new CommentFloorRequest
             {
                 ResourceId = itemId,
                 ResourceType = TypeIdToSearchIdMapper.MapToResourceId(typeId),
                 ParentCommentId = commentId,
-                Time = offset,
+                Time = time,
                 Limit = count
             }, ctk);
 
@@ -273,7 +325,9 @@ public partial class NeteaseProvider
             {
                 Items = success.Data?.Comments?.Select(comment => (CommentBase)comment.MapToNeteaseComment()).ToList() ?? new List<CommentBase>(),
                 HasMore = success.Data?.HasMore is true,
-                NextOffset = success.Data?.HasMore is true ? offset + count : null,
+                NextPageToken = success.Data?.HasMore is true
+                    ? success.Data.Time.ToString(CultureInfo.InvariantCulture)
+                    : null,
                 TotalCount = success.Data?.TotalCount
             },
             _ => EmptyPage<CommentBase>());
