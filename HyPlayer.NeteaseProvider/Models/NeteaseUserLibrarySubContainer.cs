@@ -31,7 +31,15 @@ public class NeteaseUserLibrarySubContainer : LinerContainerBase, IProgressiveLo
 
     public override async Task<List<ProvidableItemBase>> GetAllItemsAsync(CancellationToken ctk = default)
     {
-        var (_, items) = await GetProgressiveItemsListAsync(0, MaxProgressiveCount, ctk);
+        var items = new List<ProvidableItemBase>();
+        var hasMore = true;
+        while (hasMore)
+        {
+            var (more, page) = await GetProgressiveItemsListAsync(items.Count, MaxProgressiveCount, ctk);
+            items.AddRange(page);
+            hasMore = more && page.Count > 0;
+        }
+
         return items;
     }
 

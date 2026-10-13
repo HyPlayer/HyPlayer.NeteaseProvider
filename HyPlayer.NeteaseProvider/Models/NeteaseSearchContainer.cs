@@ -54,7 +54,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                 page = result.Match(success => (success.Result?.Count > start + count, success.Result?.Items
                                                     ?.Select(t => (ProvidableItemBase)t.MapToNeteaseMusic())
                                                     .ToList() ?? new()),
-                                    _ => (false, new()));
+                                    error => throw error);
                 break;
             case NeteaseResourceType.MV:
                 var mvResult = await NeteaseProvider.Instance
@@ -71,7 +71,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                 page = mvResult.Match(success => (success.Result?.Count > start + count, success.Result?.Items
                                                      ?.Select(t => (ProvidableItemBase)t.MapToNeteaseMV())
                                                      .ToList() ?? new()),
-                                     _ => (false, new()));
+                                     error => throw error);
                 break;
             case NeteaseResourceType.Playlist:
                 var playlistResult = await NeteaseProvider.Instance
@@ -88,7 +88,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                 page = playlistResult.Match(success => (success.Result?.Count > start + count, success.Result?.Items
                                                           ?.Select(t => (ProvidableItemBase)t.MapToNeteasePlaylist())
                                                           .ToList() ?? new()),
-                                          _ => (false, new()));
+                                          error => throw error);
                 break;
             case NeteaseResourceType.Album:
                 var albumResult = await NeteaseProvider.Instance
@@ -105,7 +105,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                 page = albumResult.Match(success => (success.Result?.Count > start + count, success.Result?.Items
                                                     ?.Select(ProvidableItemBase (t) => t.MapToNeteaseAlbum()!)
                                                     .ToList() ?? new()),
-                                    _ => (false, new()));
+                                    error => throw error);
                 break;
             case NeteaseResourceType.Artist:
                 var artistResult = await NeteaseProvider.Instance
@@ -122,7 +122,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                 page = artistResult.Match(success => (success.Result?.Count > start + count, success.Result?.Items
                                                      ?.Select(t => (ProvidableItemBase)t.MapToNeteaseArtist())
                                                      .ToList() ?? new()),
-                                     _ => (false, new()));
+                                     error => throw error);
                 break;
 
             case NeteaseResourceType.RadioChannel:
@@ -140,7 +140,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                 page = radioResult.Match(success => (success.Result?.Count > start + count, success.Result?.Items
                                                     ?.Select(t => (ProvidableItemBase)t.MapToNeteaseRadioChannel())
                                                     .ToList() ?? new()),
-                                    _ => (false, new()));
+                                    error => throw error);
                 break;
             case NeteaseResourceType.Video:
             case NeteaseResourceType.MLog:
@@ -158,7 +158,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                 page = videoResult.Match(success => (success.Result?.Count > start + count, success.Result?.Items
                                                     ?.Select(t => (ProvidableItemBase)t.MapToNeteaseVideo())
                                                     .ToList() ?? new()),
-                                    _ => (false, new()));
+                                    error => throw error);
                 break;
 
             case NeteaseResourceType.User:
@@ -176,7 +176,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                 page = userResult.Match(success => (success.Result?.Count > start + count, success.Result?.Items
                                                    ?.Select(t => (ProvidableItemBase)t.MapToNeteaseUser())
                                                    .ToList() ?? new()),
-                                       _ => (false, new()));
+                                       error => throw error);
                 break;
             case NeteaseResourceType.Lyric:
                  var lyricResult = await NeteaseProvider.Instance
@@ -191,9 +191,9 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                                                                Offset = start
                                                            }, ctk);
                 page = lyricResult.Match(success => (success.Result?.Count > start + count, success.Result?.Items
-                                                    ?.Select(t => (ProvidableItemBase)t.MapNeteaseLyricSearchItem())
+                                                    ?.Select(t => (ProvidableItemBase)t.MapNeteaseLyricSearchItem(SearchKeyword))
                                                     .ToList() ?? new()),
-                                    _ => (false, new()));
+                                    error => throw error);
                 break;
             default:
                 throw new NotImplementedException();

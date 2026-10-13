@@ -1,10 +1,6 @@
-﻿using HyPlayer.NeteaseProvider.Constants;
-using HyPlayer.PlayCore.Abstraction.Models;
+﻿namespace HyPlayer.NeteaseProvider.Models;
 
-namespace HyPlayer.NeteaseProvider.Models;
-
-public class NeteaseLyricSearchItem : ProvidableItemBase
+public class NeteaseLyricSearchItem : NeteaseSong
 {
-    public override string ProviderId => "ncm";
-    public override string TypeId => NeteaseTypeIds.Lyric;
+    public IReadOnlyList<string> MatchedLyrics { get; init; } = [];
 }
