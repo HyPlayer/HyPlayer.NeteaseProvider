@@ -43,6 +43,7 @@ public partial class NeteaseProvider : ProviderBase,
                                  IQrAuthenticationProvidable,
                                  ICommentProvidable,
                                   IProvidableItemCommentProvidable,
+                                  IProvidableItemCommentPageTokenProvidable,
                                    IListenTogetherProvidable,
                                   ICloudUploadProvidable,
                                   IRichMediaProvidable,
@@ -443,8 +444,14 @@ public partial class NeteaseProvider : ProviderBase,
 
     public async Task<List<RawLyricInfo>> GetLyricInfoAsync(SingleSongBase song, CancellationToken ctk = default)
     {
-        if (song.ActualId == null) throw new ArgumentNullException();
-        var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = song.ActualId }, ctk);
+        var songId = GetTrackId(song);
+        if (songId == null)
+        {
+            if (song is NeteaseRadioProgram) return new List<RawLyricInfo>();
+            throw new ArgumentNullException();
+        }
+
+        var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = songId }, ctk);
         return results.Match(
             success => success.Map(),
             _ => new()
@@ -454,13 +461,15 @@ public partial class NeteaseProvider : ProviderBase,
     public async Task<MusicResourceBase?> GetMusicResourceAsync(SingleSongBase song, ResourceQualityTag? qualityTag = null,
                                                                 CancellationToken ctk = default)
     {
+        var songId = GetTrackId(song);
+        if (string.IsNullOrEmpty(songId)) return null;
         var quality = "exhigh";
         if (qualityTag is NeteaseMusicQualityTag neteaseMusicQualityTag)
             quality = neteaseMusicQualityTag.Quality;
         var results = await RequestAsync(NeteaseApis.SongUrlApi,
                                          new SongUrlRequest
                                          {
-                                             Id = song.ActualId,
+                                             Id = songId,
                                              Level = quality
                                          }, ctk);
 
@@ -484,6 +493,7 @@ public partial class NeteaseProvider : ProviderBase,
                 Level = songUrl.Level,
                 GainDb = songUrl.Gain,
                 Peak = songUrl.Peak,
+                IsTrial = songUrl.FreeTrialInfo is not null,
                 Uri = uri
             };
         }
@@ -493,6 +503,11 @@ public partial class NeteaseProvider : ProviderBase,
             MatchSuccess,
             _ => null
         );
+    }
+
+    public static string? GetTrackId(SingleSongBase song)
+    {
+        return song is NeteaseRadioProgram program ? program.MainSong?.ActualId : song.ActualId;
     }
 
     private static Uri? CreateAbsoluteUriOrNull(string? url)

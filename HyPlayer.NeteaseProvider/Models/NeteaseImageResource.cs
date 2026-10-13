@@ -24,4 +24,30 @@ public class NeteaseImageResourceResult : ResourceResultBase, IResourceResultOf<
     {
         return Task.FromResult(Uri);
     }
+
+    public static NeteaseImageResourceResult FromUrl(string? url, ImageResourceQualityTag? qualityTag = null)
+    {
+        if (!System.Uri.TryCreate(url, UriKind.Absolute, out var uri))
+        {
+            return new NeteaseImageResourceResult
+            {
+                ExternalException = null,
+                ResourceStatus = ResourceStatus.Fail,
+                Uri = null
+            };
+        }
+
+        if (qualityTag is NeteaseImageResourceQualityTag neteaseImageResourceQualityTag)
+        {
+            var separator = string.IsNullOrEmpty(uri.Query) ? '?' : '&';
+            uri = new Uri($"{url}{separator}{neteaseImageResourceQualityTag}");
+        }
+
+        return new NeteaseImageResourceResult
+        {
+            ExternalException = null,
+            ResourceStatus = ResourceStatus.Success,
+            Uri = uri
+        };
+    }
 }

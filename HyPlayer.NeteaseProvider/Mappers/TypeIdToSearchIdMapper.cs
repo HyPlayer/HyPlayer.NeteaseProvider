@@ -15,6 +15,7 @@ public static class TypeIdToSearchIdMapper
             { NeteaseTypeIds.Artist, NeteaseResourceType.Artist },
             { NeteaseTypeIds.User, NeteaseResourceType.User },
             { NeteaseTypeIds.RadioChannel, NeteaseResourceType.RadioChannel },
+            { NeteaseTypeIds.RadioProgram, NeteaseResourceType.RadioProgram },
             { NeteaseTypeIds.MBlog, NeteaseResourceType.MLog },
             { NeteaseTypeIds.Mv, NeteaseResourceType.MV },
             { NeteaseTypeIds.Lyric, NeteaseResourceType.Lyric },

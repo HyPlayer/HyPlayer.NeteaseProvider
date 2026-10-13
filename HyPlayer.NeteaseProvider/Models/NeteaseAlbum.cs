@@ -31,26 +31,7 @@ public class NeteaseAlbum : AlbumBase, IProgressiveLoadingContainer, IHasCover, 
 
     public Task<ResourceResultBase> GetCoverAsync(ImageResourceQualityTag? qualityTag = null, CancellationToken ctk = default)
     {
-        if(qualityTag is NeteaseImageResourceQualityTag neteaseImageResourceQualityTag)
-        {
-            var result = new NeteaseImageResourceResult()
-            {
-                ExternalException = null,
-                ResourceStatus = ResourceStatus.Success,
-                Uri = new Uri($"{PictureUrl}?{neteaseImageResourceQualityTag.ToString()}")
-            };
-            return Task.FromResult(result as ResourceResultBase);
-        }
-        else
-        {
-            var result = new NeteaseImageResourceResult()
-            {
-                ExternalException = null,
-                ResourceStatus = ResourceStatus.Success,
-                Uri = new Uri($"{PictureUrl}")
-            };
-            return Task.FromResult(result as ResourceResultBase);
-        }
+        return Task.FromResult<ResourceResultBase>(NeteaseImageResourceResult.FromUrl(PictureUrl, qualityTag));
     }
 
     public string? Translation { get; set; }

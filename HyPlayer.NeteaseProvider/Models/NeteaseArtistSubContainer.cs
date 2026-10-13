@@ -25,9 +25,9 @@ public class NeteaseArtistSubContainer : LinerContainerBase, IProgressiveLoading
             do
             {
                 var result = await GetProgressiveItemsListAsync(start, MaxProgressiveCount, ctk);
-                hasMore = result.Item1;
+                hasMore = result.Item1 && result.Item2.Count > 0;
                 items.AddRange(result.Item2);
-                start += MaxProgressiveCount;
+                start += result.Item2.Count;
             } while (hasMore);
 
             return items;
