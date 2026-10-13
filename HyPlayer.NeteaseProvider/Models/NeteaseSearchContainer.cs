@@ -191,7 +191,7 @@ public class NeteaseSearchContainer : LinerContainerBase, IProgressiveLoadingCon
                                                                Offset = start
                                                            }, ctk);
                 page = lyricResult.Match(success => (success.Result?.Count > start + count, success.Result?.Items
-                                                    ?.Select(t => (ProvidableItemBase)t.MapNeteaseLyricSearchItem())
+                                                    ?.Select(t => (ProvidableItemBase)t.MapNeteaseLyricSearchItem(SearchKeyword))
                                                     .ToList() ?? new()),
                                     error => throw error);
                 break;
