@@ -584,6 +584,18 @@ public partial class NeteaseProvider
         return result.Match(success => success.Data?.RoomInfo?.RoomId ?? string.Empty, _ => string.Empty);
     }
 
+    public async Task<Uri?> GetDynamicCoverAsync(string itemId, CancellationToken ctk = default)
+    {
+        var result = await RequestAsync(NeteaseApis.SongDynamicCoverApi, new SongDynamicCoverRequest { SongId = itemId }, ctk);
+        return result.Match(success =>
+            {
+                if (success.Code != 200)
+                    throw new InvalidOperationException(success.Message ?? $"NetEase dynamic cover request failed with code {success.Code}.");
+                return Uri.TryCreate(success.Data?.VideoPlayUrl, UriKind.Absolute, out var uri) ? uri : null;
+            },
+            error => throw error);
+    }
+
     public async Task<bool> CanJoinListenTogetherRoomAsync(string roomId, CancellationToken ctk = default)
     {
         var result = await RequestAsync(NeteaseApis.ListenTogetherRoomCheckApi,

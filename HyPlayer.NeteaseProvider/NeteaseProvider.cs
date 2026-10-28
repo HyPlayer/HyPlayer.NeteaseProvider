@@ -57,7 +57,8 @@ public partial class NeteaseProvider : ProviderBase,
                                   IUserLibraryProvidable,
                                   IUserLibraryNavigationProvidable,
                                   IProviderSpecialContainerTypeIds,
-                                  IResourceQualityTagProvidable
+                                  IResourceQualityTagProvidable,
+                                  IDynamicCoverProvidable
 {
     public readonly NeteaseCloudMusicApiHandler Handler = new();
 
