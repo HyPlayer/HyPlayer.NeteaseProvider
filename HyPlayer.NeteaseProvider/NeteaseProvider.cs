@@ -44,7 +44,7 @@ public partial class NeteaseProvider : ProviderBase,
                                  ICommentProvidable,
                                   IProvidableItemCommentProvidable,
                                   IProvidableItemCommentPageTokenProvidable,
-                                   IListenTogetherProvidable,
+                                   IListenTogetherSyncProvidable,
                                   ICloudUploadProvidable,
                                   IRichMediaProvidable,
                                   IProvidableItemDynamicMetadataProvidable,
@@ -58,9 +58,11 @@ public partial class NeteaseProvider : ProviderBase,
                                   IUserLibraryNavigationProvidable,
                                   IProviderSpecialContainerTypeIds,
                                   IResourceQualityTagProvidable,
-                                  IDynamicCoverProvidable
+                                  IDynamicCoverProvidable,
+                                  IMultiListenTogetherProvidable
 {
     public readonly NeteaseCloudMusicApiHandler Handler = new();
+    private int _desktopClientVersionResolved;
 
     public void ConfigureAdditionalParameters(AdditionalParameters additionalParameters)
     {

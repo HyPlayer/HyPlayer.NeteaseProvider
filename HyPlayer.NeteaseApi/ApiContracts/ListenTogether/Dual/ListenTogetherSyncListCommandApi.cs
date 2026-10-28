@@ -15,7 +15,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 {
-    public class ListenTogetherSyncListReportApi : EApiContractBase<ListenTogetherSyncListReportRequest,
+    public class ListenTogetherSyncListReportApi : DesktopEApiContractBase<ListenTogetherSyncListReportRequest,
         ListenTogetherSyncListReportResponse, ErrorResultBase, ListenTogetherSyncListReportActualRequest>
     {
         public override string IdentifyRoute => "/listentogether/sync/list/command";
@@ -115,7 +115,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 
         public class ListenTogetherSyncListReportResponseData
         {
-            [JsonPropertyName("result")] public required bool Result { get; set; }
+            [JsonPropertyName("result")] public bool? Result { get; set; }
         }
     }
 
