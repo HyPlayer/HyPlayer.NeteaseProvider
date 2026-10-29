@@ -16,7 +16,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 {
 
-    public class ListenTogetherHeartBeatApi : EApiContractBase<ListenTogetherHeartBeatRequest, ListenTogetherHeartBeatResponse, ErrorResultBase, ListenTogetherHeartBeatActualRequest>
+    public class ListenTogetherHeartBeatApi : DesktopEApiContractBase<ListenTogetherHeartBeatRequest, ListenTogetherHeartBeatResponse, ErrorResultBase, ListenTogetherHeartBeatActualRequest>
     {
         public override string IdentifyRoute => "/listentogether/heatbeat";
         public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/listen/together/heartbeat";
@@ -29,7 +29,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
                 {
                     PlayStatus = Request.PlayStatus switch
                     {
-                        ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus.Pause => "PAUSED",
+                        ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus.Pause => "PAUSE",
                         _ => "PLAY"
                     },
                     RoomId = Request.RoomId,
@@ -66,7 +66,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
         public class ListenTogetherHeartBeatResponseData
         {
             [JsonPropertyName("result")] public bool Result { get; set; }
-            [JsonPropertyName("timeSpan")] public int NextHeartbeat { get; set; }
+            [JsonPropertyName("timeSpan")] public int? NextHeartbeat { get; set; }
         }
     }
 

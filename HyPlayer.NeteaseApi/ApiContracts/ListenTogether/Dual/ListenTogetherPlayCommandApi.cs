@@ -16,7 +16,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 {
-    public class ListenTogetherPlayCommandApi : EApiContractBase<ListenTogetherPlayCommandRequest,
+    public class ListenTogetherPlayCommandApi : DesktopEApiContractBase<ListenTogetherPlayCommandRequest,
         ListenTogetherPlayCommandResponse, ErrorResultBase, ListenTogetherPlayCommandActualRequest>
     {
         public override string IdentifyRoute => "/listentogether/play/command";
@@ -48,11 +48,13 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
                                 ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType
                                     .Goto => "GOTO",
                                 ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType
-                                    .Progress => "PROGRESS",
+                                    .Progress => "seek",
                                 _ => throw new ArgumentOutOfRangeException()
                             },
                             Progress = Request.Progress,
-                            PlayStatus = Request.PlayStatus,
+                            PlayStatus = Request.PlayStatus == ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus.Pause
+                                ? "PAUSE"
+                                : "PLAY",
                             FormerSongId = Request.FormerSongId,
                             TargetSongId = Request.TargetSongId,
                             ClientSeq = Request.ClientSeq
@@ -91,7 +93,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 
         public class ListenTogetherPlayCommandResponseData
         {
-            [JsonPropertyName("result")] public required bool Result { get; set; }
+            [JsonPropertyName("result")] public bool? Result { get; set; }
         }
     }
 
@@ -100,13 +102,13 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
         [JsonPropertyName("roomId")] public required string RoomId { get; set; }
         [JsonPropertyName("commandInfo")] public required string CommandInfo { get; set; } = string.Empty;
 
+        [JsonContextSerializable(typeof(HyPlayer.NeteaseApi.ApiContracts.ListenTogether.ListenTogetherPlayCommandActualRequest.ListenTogetherPlayCommandActualRequestCommandInfo))]
         public class ListenTogetherPlayCommandActualRequestCommandInfo
         {
             [JsonPropertyName("commandType")] public required string CommandType { get; set; }
             [JsonPropertyName("progress")] public required long Progress { get; set; } = 0;
 
-            [JsonPropertyName("playStatus")]
-            public required ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus PlayStatus { get; set; }
+            [JsonPropertyName("playStatus")] public required string PlayStatus { get; set; }
 
             [JsonPropertyName("formerSongId")] public required string FormerSongId { get; set; }
             [JsonPropertyName("targetSongId")] public required string TargetSongId { get; set; }

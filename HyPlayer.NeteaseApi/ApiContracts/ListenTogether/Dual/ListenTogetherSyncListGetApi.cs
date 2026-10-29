@@ -16,7 +16,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 {
 
-    public class ListenTogetherSyncListGetApi : EApiContractBase<ListenTogetherSyncListGetRequest, ListenTogetherSyncListGetResponse, ErrorResultBase, ListenTogetherSyncListGetActualRequest>
+    public class ListenTogetherSyncListGetApi : DesktopEApiContractBase<ListenTogetherSyncListGetRequest, ListenTogetherSyncListGetResponse, ErrorResultBase, ListenTogetherSyncListGetActualRequest>
     {
         public override string IdentifyRoute => "/listentogether/sync/list/get";
         public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/listen/together/sync/playlist/get";
@@ -61,15 +61,15 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 
             public class ListenTogetherSyncListGetResponseListInfo
             {
-                [JsonPropertyName("changed")] public required bool Changed { get; set; }
-                [JsonPropertyName("result")] public required string[]? Result { get; set; }
-                [JsonPropertyName("rcmdSongIds")] public required string[]? RcmdSongIds { get; set; }
+                [JsonPropertyName("changed")] public bool? Changed { get; set; }
+                [JsonPropertyName("result")] public string[]? Result { get; set; }
+                [JsonPropertyName("rcmdSongIds")] public string[]? RcmdSongIds { get; set; }
             }
 
             public class ListenTogetherSyncListGetResponseVersion
             {
                 [JsonPropertyName("userId")] public string? UserId { get; set; }
-                [JsonPropertyName("version")] public int Version { get; set; }
+                [JsonPropertyName("version")] public long? Version { get; set; }
             }
 
             public class ListenTogetherSyncListGetResponsePlayCommand
@@ -80,11 +80,11 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
                 [JsonPropertyName("formerSongId")] public string? FormerSongId { get; set; }
                 [JsonPropertyName("targetSongId")] public string? TargetSongId { get; set; }
                 [JsonPropertyName("triggerType")] public string? TriggerType { get; set; }
-                [JsonPropertyName("progress")] public int Progress { get; set; }
+                [JsonPropertyName("progress")] public long? Progress { get; set; }
                 [JsonPropertyName("playStatus")] public string? PlayStatus { get; set; }
-                [JsonPropertyName("clientSeq")] public int ClientSeq { get; set; }
-                [JsonPropertyName("serverSeq")] public long ServerSeq { get; set; }
-                [JsonPropertyName("anotherUid")] public long AnotherUid { get; set; }
+                [JsonPropertyName("clientSeq")] public long? ClientSeq { get; set; }
+                [JsonPropertyName("serverSeq")] public long? ServerSeq { get; set; }
+                [JsonPropertyName("anotherUid")] public long? AnotherUid { get; set; }
                 [JsonPropertyName("anotherOuterId")] public string? AnotherOuterId { get; set; }
             }
         }

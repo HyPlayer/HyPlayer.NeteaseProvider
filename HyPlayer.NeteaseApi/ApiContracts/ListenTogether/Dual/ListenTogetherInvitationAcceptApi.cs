@@ -15,7 +15,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 {
-    public class ListenTogetherInvitationAcceptApi : EApiContractBase<ListenTogetherInvitationAcceptRequest,
+    public class ListenTogetherInvitationAcceptApi : DesktopEApiContractBase<ListenTogetherInvitationAcceptRequest,
         ListenTogetherInvitationAcceptResponse, ErrorResultBase, ListenTogetherInvitationAcceptActualRequest>
     {
         public override string IdentifyRoute => "/listentogether/invitation/accept";
@@ -27,6 +27,13 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 
         public override Task MapRequest(ApiHandlerOption option)
         {
+            if (Request is not null)
+                ActualRequest = new ListenTogetherInvitationAcceptActualRequest
+                {
+                    RoomId = Request.RoomId,
+                    InviterId = Request.InviterId,
+                    Refer = Request.Refer
+                };
             return Task.CompletedTask;
         }
 
@@ -37,7 +44,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
     {
         public required string RoomId { get; set; }
         public required string InviterId { get; set; }
-        public string Refer { get; set; } = "third_party_invite";
+        public string Refer { get; set; } = "inbox_invite";
     }
 
     public class ListenTogetherInvitationAcceptResponse : CodedResponseBase
@@ -50,6 +57,6 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
     {
         [JsonPropertyName("roomId")] public required string RoomId { get; set; }
         [JsonPropertyName("inviterId")] public required string InviterId { get; set; }
-        [JsonPropertyName("refer")] public string Refer { get; set; } = "third_party_invite";
+        [JsonPropertyName("refer")] public string Refer { get; set; } = "inbox_invite";
     }
 }
