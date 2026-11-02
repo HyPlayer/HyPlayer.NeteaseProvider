@@ -16,7 +16,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 {
 
-    public class ListenTogetherRoomCreateApi : EApiContractBase<ListenTogetherRoomCreateRequest, ListenTogetherRoomCreateResponse, ErrorResultBase, ListenTogetherRoomCreateActualRequest>
+    public class ListenTogetherRoomCreateApi : DesktopEApiContractBase<ListenTogetherRoomCreateRequest, ListenTogetherRoomCreateResponse, ErrorResultBase, ListenTogetherRoomCreateActualRequest>
     {
         public override string IdentifyRoute => "/listentogether/room/create";
         public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/listen/together/room/create";
@@ -24,6 +24,10 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 
         public override Task MapRequest(ApiHandlerOption option)
         {
+            ActualRequest = new ListenTogetherRoomCreateActualRequest
+            {
+                Refer = Request?.Refer ?? "songplay_more"
+            };
             return Task.CompletedTask;
         }
 
@@ -32,7 +36,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 
     public class ListenTogetherRoomCreateRequest : RequestBase
     {
-
+        public string Refer { get; set; } = "songplay_more";
     }
 
 
@@ -51,9 +55,9 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
         {
             [JsonPropertyName("creatorId")] public string? CreatorId { get; set; }
             [JsonPropertyName("roomId")] public string? RoomId { get; set; }
-            [JsonPropertyName("effectiveDurationMs")] public long EffectiveDurationMs { get; set; }
-            [JsonPropertyName("waitMs")] public long WaitMs { get; set; }
-            [JsonPropertyName("roomCreateTime")] public long RoomCreateTime { get; set; }
+            [JsonPropertyName("effectiveDurationMs")] public long? EffectiveDurationMs { get; set; }
+            [JsonPropertyName("waitMs")] public long? WaitMs { get; set; }
+            [JsonPropertyName("roomCreateTime")] public long? RoomCreateTime { get; set; }
             [JsonPropertyName("chatRoomId")] public string? ChatRoomId { get; set; }
             [JsonPropertyName("agoraChannelId")] public string? AgoraChannelId { get; set; }
 
@@ -74,6 +78,6 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 
     public class ListenTogetherRoomCreateActualRequest : EApiActualRequestBase
     {
-
+        [JsonPropertyName("refer")] public string Refer { get; set; } = "songplay_more";
     }
 }

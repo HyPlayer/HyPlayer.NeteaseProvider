@@ -14,7 +14,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 
 namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 {
-    public class ListenTogetherEndApi : EApiContractBase<ListenTogetherEndRequest, ListenTogetherEndResponse,
+    public class ListenTogetherEndApi : DesktopEApiContractBase<ListenTogetherEndRequest, ListenTogetherEndResponse,
         ErrorResultBase, ListenTogetherEndActualRequest>
     {
         public override string IdentifyRoute => "/listentogether/end";
@@ -44,7 +44,12 @@ namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether.Dual
 
     public class ListenTogetherEndResponse : CodedResponseBase
     {
+        [JsonPropertyName("data")] public ListenTogetherEndResponseData? Data { get; set; }
 
+        public class ListenTogetherEndResponseData
+        {
+            [JsonPropertyName("success")] public bool Success { get; set; }
+        }
     }
 
     public class ListenTogetherEndActualRequest : EApiActualRequestBase

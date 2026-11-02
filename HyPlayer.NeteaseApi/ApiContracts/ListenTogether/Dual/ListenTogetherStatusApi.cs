@@ -17,7 +17,7 @@ namespace HyPlayer.NeteaseApi.ApiContracts
 namespace HyPlayer.NeteaseApi.ApiContracts.ListenTogether
 {
 
-    public class ListenTogetherStatusApi : EApiContractBase<ListenTogetherStatusRequest, ListenTogetherStatusResponse, ErrorResultBase, ListenTogetherStatusActualRequest>
+    public class ListenTogetherStatusApi : DesktopEApiContractBase<ListenTogetherStatusRequest, ListenTogetherStatusResponse, ErrorResultBase, ListenTogetherStatusActualRequest>
     {
         public override string IdentifyRoute => "/listentogether/status/get";
         public override string Url { get; protected set; } = "https://interface3.music.163.com/eapi/listen/together/status/get";

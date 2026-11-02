@@ -21,6 +21,7 @@ public class NeteaseSong : SingleSongBase, IHasTranslation, IHasCover, IHasAlias
     public string? DiscName => CdName;
     public int TrackNumber { get; set; }
     public string? CoverUrl { get; set; }
+    public bool IsCloudSong { get; set; }
 
     public required List<PersonBase>? Artists { get; init; }
 

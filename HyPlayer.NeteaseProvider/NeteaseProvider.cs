@@ -4,6 +4,7 @@ using HyPlayer.NeteaseApi.ApiContracts.Login;
 using HyPlayer.NeteaseApi.ApiContracts.Playlist;
 using HyPlayer.NeteaseApi.ApiContracts.Artist;
 using HyPlayer.NeteaseApi.ApiContracts.Album;
+using HyPlayer.NeteaseApi.ApiContracts.Cloud;
 using HyPlayer.NeteaseApi.ApiContracts.Video;
 using HyPlayer.NeteaseApi.ApiContracts.User;
 using HyPlayer.NeteaseApi.ApiContracts.Recommend;
@@ -44,7 +45,7 @@ public partial class NeteaseProvider : ProviderBase,
                                  ICommentProvidable,
                                   IProvidableItemCommentProvidable,
                                   IProvidableItemCommentPageTokenProvidable,
-                                   IListenTogetherProvidable,
+                                   IListenTogetherSyncProvidable,
                                   ICloudUploadProvidable,
                                   IRichMediaProvidable,
                                   IProvidableItemDynamicMetadataProvidable,
@@ -58,9 +59,11 @@ public partial class NeteaseProvider : ProviderBase,
                                   IUserLibraryNavigationProvidable,
                                   IProviderSpecialContainerTypeIds,
                                   IResourceQualityTagProvidable,
-                                  IDynamicCoverProvidable
+                                  IDynamicCoverProvidable,
+                                  IMultiListenTogetherProvidable
 {
     public readonly NeteaseCloudMusicApiHandler Handler = new();
+    private int _desktopClientVersionResolved;
 
     public void ConfigureAdditionalParameters(AdditionalParameters additionalParameters)
     {
@@ -452,11 +455,27 @@ public partial class NeteaseProvider : ProviderBase,
             throw new ArgumentNullException();
         }
 
+        var cloudSong = song is NeteaseCloudLibraryItem or NeteaseSong { IsCloudSong: true };
+        if (cloudSong && await GetCloudLyricAsync(songId, ctk) is { } uploaded) return uploaded;
         var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = songId }, ctk);
+        var missing = results.IsSuccess && results.Value is { Uncollected: true } or { NoLyric: true };
+        if (missing && !cloudSong && await GetCloudLyricAsync(songId, ctk) is { } fallback)
+            return fallback;
+        if (missing) return new List<RawLyricInfo>();
         return results.Match(
             success => success.Map(),
             _ => new()
         ).Select(t => (RawLyricInfo)t).ToList();
+    }
+
+    private async Task<List<RawLyricInfo>?> GetCloudLyricAsync(string songId, CancellationToken ctk)
+    {
+        if (LoginedUser?.ActualId is not { Length: > 0 } userId) return null;
+        var result = await RequestAsync(NeteaseApis.CloudLyricApi,
+            new CloudLyricRequest { UserId = userId, SongId = songId }, ctk);
+        return result.IsSuccess && result.Value is { Code: 200, Lyric: { Length: > 0 } lyric }
+            ? [new NeteaseRawLyricInfo { LyricText = lyric, Source = "netease:cloud", LyricTypeActual = LyricType.Original }]
+            : null;
     }
 
     public async Task<MusicResourceBase?> GetMusicResourceAsync(SingleSongBase song, ResourceQualityTag? qualityTag = null,

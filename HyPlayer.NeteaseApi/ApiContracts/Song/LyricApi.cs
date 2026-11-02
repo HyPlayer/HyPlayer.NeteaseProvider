@@ -60,6 +60,8 @@ namespace HyPlayer.NeteaseApi.ApiContracts.Song
 
     public class LyricResponse : CodedResponseBase
     {
+        [JsonPropertyName("uncollected")] public bool? Uncollected { get; set; }
+        [JsonPropertyName("nolyric")] public bool? NoLyric { get; set; }
         [JsonPropertyName("transUser")] public LyricUserInfo? TranslationUser { get; set; }
         [JsonPropertyName("lyricUser")] public LyricUserInfo? LyricUser { get; set; }
         [JsonPropertyName("lrc")] public LyricInfo? Lyric { get; set; }

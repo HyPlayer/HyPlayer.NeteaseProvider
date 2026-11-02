@@ -14,6 +14,7 @@ using HyPlayer.NeteaseApi.ApiContracts.User;
 using HyPlayer.NeteaseApi.ApiContracts.Utils;
 using HyPlayer.NeteaseApi.ApiContracts.Video;
 using HyPlayer.NeteaseApi.Bases;
+using HyPlayer.NeteaseApi.Bases.EApiContractBases;
 using HyPlayer.NeteaseApi.Models;
 using HyPlayer.NeteaseApi.Models.ResponseModels;
 using HyPlayer.NeteaseProvider.Constants;
@@ -578,12 +579,6 @@ public partial class NeteaseProvider
             _ => EmptyPage<RichMediaBase>());
     }
 
-    public async Task<string> CreateListenTogetherRoomAsync(List<SingleSongBase> queue, CancellationToken ctk = default)
-    {
-        var result = await RequestAsync(NeteaseApis.ListenTogetherRoomCreateApi, new ListenTogetherRoomCreateRequest(), ctk);
-        return result.Match(success => success.Data?.RoomInfo?.RoomId ?? string.Empty, _ => string.Empty);
-    }
-
     public async Task<Uri?> GetDynamicCoverAsync(string itemId, CancellationToken ctk = default)
     {
         var result = await RequestAsync(NeteaseApis.SongDynamicCoverApi, new SongDynamicCoverRequest { SongId = itemId }, ctk);
@@ -596,19 +591,34 @@ public partial class NeteaseProvider
             error => throw error);
     }
 
-    public async Task<bool> CanJoinListenTogetherRoomAsync(string roomId, CancellationToken ctk = default)
+    public async Task<string> CreateListenTogetherRoomAsync(List<SingleSongBase> queue, CancellationToken ctk = default)
     {
-        var result = await RequestAsync(NeteaseApis.ListenTogetherRoomCheckApi,
-            new ListenTogetherRoomCheckRequest { RoomId = roomId }, ctk);
-        return result.Match(success => success.Data?.Joinable is true, _ => false);
+        await EnsureDesktopClientVersionAsync(ctk);
+        var result = await RequestAsync(NeteaseApis.ListenTogetherRoomCreateApi, new ListenTogetherRoomCreateRequest(), ctk);
+        return result.Match(success =>
+            {
+                EnsureListenTogetherSuccess(success.Code, success.Message);
+                return success.Data?.RoomInfo?.RoomId is { Length: > 0 } roomId
+                    ? roomId
+                    : throw new InvalidOperationException("NetEase did not return a listen-together room id.");
+            },
+            error => throw error);
     }
 
-    public Task SendListenTogetherPlaybackCommandAsync(
+    public async Task<bool> CanJoinListenTogetherRoomAsync(string roomId, CancellationToken ctk = default)
+    {
+        await EnsureDesktopClientVersionAsync(ctk);
+        var result = await RequestAsync(NeteaseApis.ListenTogetherRoomCheckApi,
+            new ListenTogetherRoomCheckRequest { RoomId = roomId }, ctk);
+        return result.Match(success => success.Code == 200 && success.Data?.Joinable is true, error => throw error);
+    }
+
+    public async Task SendListenTogetherPlaybackCommandAsync(
         string roomId,
         ProviderListenTogetherPlaybackCommand command,
         CancellationToken ctk = default)
     {
-        return RequestAsync(NeteaseApis.ListenTogetherPlayCommandApi,
+        var result = await RequestAsync(NeteaseApis.ListenTogetherPlayCommandApi,
             new ListenTogetherPlayCommandRequest
             {
                 RoomId = roomId,
@@ -616,30 +626,49 @@ public partial class NeteaseProvider
                 PlayStatus = command.IsPlaying
                     ? ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus.Play
                     : ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus.Pause,
-                FormerSongId = command.FormerItemId ?? string.Empty,
+                FormerSongId = command.FormerItemId ?? "-1",
                 TargetSongId = command.TargetItemId ?? string.Empty,
                 ClientSeq = command.ClientSeq,
-                Progress = (long)command.Position.TotalMilliseconds
+                Progress = (long)Math.Max(0, command.Position.TotalMilliseconds)
             }, ctk);
+        _ = result.Match(success =>
+            {
+                EnsureListenTogetherSuccess(success.Code, success.Message);
+                return success.Data?.Result is false
+                    ? throw new InvalidOperationException("NetEase rejected the listen-together playback command.")
+                    : true;
+            },
+            error => throw error);
     }
 
-    public Task ReportListenTogetherQueueAsync(
+    public async Task ReportListenTogetherQueueAsync(
         string roomId,
         ProviderListenTogetherQueueReport report,
         CancellationToken ctk = default)
     {
-        return RequestAsync(NeteaseApis.ListenTogetherSyncListReportApi,
+        var display = report.Queue.Select(GetTrackId).OfType<string>().Where(id => id.Length > 0).ToArray();
+        var random = report.RandomQueue?.Select(GetTrackId).OfType<string>().Where(id => id.Length > 0).ToArray();
+        var result = await RequestAsync(NeteaseApis.ListenTogetherSyncListReportApi,
             new ListenTogetherSyncListReportRequest
             {
                 RoomId = roomId,
-                CommandType = ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportCommandType.PlayModeChange,
+                CommandType = ListenTogetherSyncListReportRequest.ListenTogetherSyncListReportCommandType.Replace,
                 PlayMode = MapListenTogetherPlayMode(report.PlayModeId),
                 UserId = report.UserId ?? LoginedUser?.ActualId ?? string.Empty,
                 ClientSeq = report.ClientSeq,
                 AnchorPosition = report.AnchorPosition,
                 AnchorSongId = report.AnchorItemId ?? string.Empty,
-                DisplaySongList = report.Queue.Select(song => GetTrackId(song) ?? string.Empty).Where(id => !string.IsNullOrWhiteSpace(id)).ToArray()
+                DisplaySongList = display,
+                RandomSongList = random is { Length: > 0 } ? random : display
             }, ctk);
+        _ = result.Match(success =>
+            {
+                EnsureListenTogetherSuccess(success.Code, success.Message);
+                return success.Data?.Result is false
+                    ? throw new InvalidOperationException("NetEase rejected the listen-together queue report.")
+                    : true;
+            },
+            error => throw error);
     }
 
     public async Task<ProviderListenTogetherStatus?> GetListenTogetherStatusAsync(string roomId, CancellationToken ctk = default)
@@ -647,20 +676,193 @@ public partial class NeteaseProvider
         var result = await RequestAsync(NeteaseApis.ListenTogetherStatusApi, new ListenTogetherStatusRequest(), ctk);
         return result.Match(success =>
             {
+                EnsureListenTogetherSuccess(success.Code, success.Message);
                 var roomInfo = success.Data?.RoomInfo;
                 return new ProviderListenTogetherStatus
                 {
                     IsInRoom = success.Data?.IsInRoom is true,
                     RoomId = roomInfo?.RoomId,
-                    Users = roomInfo?.RoomUsers?.Select(user => new ProviderListenTogetherUser
-                    {
-                        UserId = user.UserId ?? string.Empty,
-                        Nickname = user.Nickname ?? string.Empty,
-                        AvatarUrl = user.AvatarUrl ?? string.Empty
-                    }).ToList() ?? []
+                    CreatorId = roomInfo?.CreatorId,
+                    IsMultiRoom = roomInfo?.RoomType?.StartsWith("MULTI", StringComparison.OrdinalIgnoreCase) is true,
+                    Users = MapListenTogetherUsers(roomInfo?.RoomUsers)
                 };
             },
-            _ => (ProviderListenTogetherStatus?)null);
+            error => throw error);
+    }
+
+    public async Task<ProviderListenTogetherStatus> JoinListenTogetherRoomAsync(
+        string roomId,
+        string inviterId,
+        CancellationToken ctk = default)
+    {
+        await EnsureDesktopClientVersionAsync(ctk);
+        var result = await RequestAsync(NeteaseApis.ListenTogetherInvitationAcceptApi,
+            new ListenTogetherInvitationAcceptRequest { RoomId = roomId, InviterId = inviterId }, ctk);
+        return result.Match(success =>
+            {
+                EnsureListenTogetherSuccess(success.Code, success.Message);
+                var roomInfo = success.Data?.RoomInfo;
+                return new ProviderListenTogetherStatus
+                {
+                    IsInRoom = true,
+                    RoomId = roomInfo?.RoomId ?? roomId,
+                    CreatorId = roomInfo?.CreatorId ?? inviterId,
+                    Users = MapListenTogetherUsers(roomInfo?.RoomUsers)
+                };
+            },
+            error => throw error);
+    }
+
+    public async Task<TimeSpan?> SendListenTogetherHeartbeatAsync(
+        string roomId,
+        ProviderListenTogetherHeartbeat heartbeat,
+        CancellationToken ctk = default)
+    {
+        var result = await RequestAsync(NeteaseApis.ListenTogetherHeartBeatApi,
+            new ListenTogetherHeartBeatRequest
+            {
+                RoomId = roomId,
+                SongId = heartbeat.ItemId,
+                PlayStatus = heartbeat.IsPlaying
+                    ? ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus.Play
+                    : ListenTogetherHeartBeatRequest.ListenTogetherPlayStatus.Pause,
+                Progress = (long)Math.Max(0, heartbeat.Position.TotalMilliseconds),
+                PlaylistVersion = (int)Math.Min(Math.Max(heartbeat.PlaylistVersion, 0), int.MaxValue),
+                UserId = heartbeat.UserId ?? LoginedUser?.ActualId ?? "0"
+            }, ctk);
+        return result.Match(success =>
+            {
+                EnsureListenTogetherSuccess(success.Code, success.Message);
+                return success.Data?.NextHeartbeat is int seconds && seconds > 0
+                    ? TimeSpan.FromSeconds(seconds)
+                    : (TimeSpan?)null;
+            },
+            error => throw error);
+    }
+
+    public async Task<ProviderListenTogetherRoomState> GetListenTogetherRoomStateAsync(
+        string roomId,
+        CancellationToken ctk = default)
+    {
+        var result = await RequestAsync(NeteaseApis.ListenTogetherSyncListGetApi,
+            new ListenTogetherSyncListGetRequest { RoomId = roomId }, ctk);
+        return result.Match(success =>
+            {
+                EnsureListenTogetherSuccess(success.Code, success.Message);
+                var playlist = success.Data?.Playlist;
+                var command = success.Data?.PlayCommand;
+                var display = CleanListenTogetherIds(playlist?.DisplayList?.Result);
+                var random = CleanListenTogetherIds(playlist?.RandomList?.Result);
+                return new ProviderListenTogetherRoomState
+                {
+                    DisplayItemIds = display,
+                    RandomItemIds = random.Count > 0 ? random : display,
+                    PlayModeId = playlist?.PlayMode switch
+                    {
+                        "ORDER_LOOP" => "seq",
+                        "RANDOM" => "shn",
+                        "SINGLE_LOOP" => "sgl",
+                        _ => null
+                    },
+                    Versions = playlist?.Version?
+                        .Where(version => !string.IsNullOrEmpty(version.UserId))
+                        .Select(version => new ProviderListenTogetherQueueVersion
+                        {
+                            UserId = version.UserId!,
+                            Version = version.Version ?? 0
+                        })
+                        .ToList() ?? [],
+                    LastCommand = command?.CommandType is { Length: > 0 } commandType
+                        ? new ProviderListenTogetherRemoteCommand
+                        {
+                            CommandId = MapListenTogetherRemoteCommand(commandType),
+                            UserId = command.UserId,
+                            FormerItemId = command.FormerSongId,
+                            TargetItemId = command.TargetSongId,
+                            Position = TimeSpan.FromMilliseconds(Math.Max(0, command.Progress ?? 0)),
+                            IsPlaying = string.Equals(command.PlayStatus, "PLAY", StringComparison.OrdinalIgnoreCase),
+                            ClientSeq = command.ClientSeq ?? 0,
+                            ServerSeq = command.ServerSeq ?? 0
+                        }
+                        : null
+                };
+            },
+            error => throw error);
+    }
+
+    public async Task<List<SingleSongBase>> GetListenTogetherQueueSongsAsync(
+        IReadOnlyList<string> itemIds,
+        CancellationToken ctk = default)
+    {
+        if (itemIds.Count == 0) return [];
+        var songs = await GetSingleSongRangeByIds(itemIds.Distinct().ToList(), ctk);
+        var byId = songs
+            .Where(song => !string.IsNullOrEmpty(song.ActualId))
+            .GroupBy(song => song.ActualId!)
+            .ToDictionary(group => group.Key, group => (SingleSongBase)group.First());
+        return itemIds.Select(id => byId.TryGetValue(id, out var song) ? song : null).OfType<SingleSongBase>().ToList();
+    }
+
+    public async Task EndListenTogetherRoomAsync(string roomId, CancellationToken ctk = default)
+    {
+        var result = await RequestAsync(NeteaseApis.ListenTogetherEndApi, new ListenTogetherEndRequest { RoomId = roomId }, ctk);
+        _ = result.Match(success =>
+            {
+                EnsureListenTogetherSuccess(success.Code, success.Message);
+                return success.Data?.Success is true
+                    ? true
+                    : throw new InvalidOperationException("NetEase did not confirm ending the listen-together room.");
+            },
+            error => throw error);
+    }
+
+    private async Task EnsureDesktopClientVersionAsync(CancellationToken ctk)
+    {
+        if (Interlocked.Exchange(ref _desktopClientVersionResolved, 1) != 0) return;
+        var result = await RequestAsync(NeteaseApis.PcClientLatestVersionApi, new PcClientLatestVersionRequest(), ctk);
+        if (result.IsSuccess &&
+            result.Value?.Data is { AppVer: { Length: > 0 } appVer, BuildVer: { Length: > 0 } buildVer })
+            DesktopClientVersion.Current = $"{appVer}.{buildVer}";
+        else
+            Interlocked.Exchange(ref _desktopClientVersionResolved, 0);
+    }
+
+    private static void EnsureListenTogetherSuccess(int code, string? message)
+    {
+        if (code != 200)
+            throw new InvalidOperationException(string.IsNullOrWhiteSpace(message)
+                ? $"NetEase listen-together request failed with code {code}."
+                : message);
+    }
+
+    private static List<ProviderListenTogetherUser> MapListenTogetherUsers(
+        List<ListenTogetherRoomCreateResponse.ListenTogetherRoomInfo.RoomUser>? users)
+    {
+        return users?.Select(user => new ProviderListenTogetherUser
+        {
+            UserId = user.UserId ?? string.Empty,
+            Nickname = user.Nickname ?? string.Empty,
+            AvatarUrl = user.AvatarUrl ?? string.Empty
+        }).ToList() ?? [];
+    }
+
+    private static List<string> CleanListenTogetherIds(IEnumerable<string>? ids)
+    {
+        return ids?.Where(id => !string.IsNullOrWhiteSpace(id) && id != "-1").ToList() ?? [];
+    }
+
+    private static string MapListenTogetherRemoteCommand(string commandType)
+    {
+        return commandType.ToUpperInvariant() switch
+        {
+            "GOTO" => "goto",
+            "PLAY" => "play",
+            "PAUSE" => "pause",
+            "SEEK" or "PROGRESS" => "seek",
+            "NEXT" => "next",
+            "PREV" => "previous",
+            _ => commandType.ToLowerInvariant()
+        };
     }
 
     public async Task<ProvidableItemDynamicMetadata> GetDynamicMetadataAsync(string itemId, string typeId, CancellationToken ctk = default)
@@ -732,7 +934,7 @@ public partial class NeteaseProvider
             "previous" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Previous,
             "next" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Next,
             "goto" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Goto,
-            "progress" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Progress,
+            "progress" or "seek" => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Progress,
             _ => ListenTogetherPlayCommandRequest.ListenTogetherPlayCommandRequestCommandType.Play
         };
     }
