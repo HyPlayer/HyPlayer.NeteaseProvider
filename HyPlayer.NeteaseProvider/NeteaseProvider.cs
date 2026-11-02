@@ -455,12 +455,13 @@ public partial class NeteaseProvider : ProviderBase,
             throw new ArgumentNullException();
         }
 
-        var cloudSong = song is NeteaseCloudLibraryItem;
+        var cloudSong = song is NeteaseCloudLibraryItem or NeteaseSong { IsCloudSong: true };
         if (cloudSong && await GetCloudLyricAsync(songId, ctk) is { } uploaded) return uploaded;
         var results = await RequestAsync(NeteaseApis.LyricApi, new LyricRequest() { Id = songId }, ctk);
-        if (!cloudSong && results.IsSuccess && results.Value is { Uncollected: true } or { NoLyric: true } &&
-            await GetCloudLyricAsync(songId, ctk) is { } fallback)
+        var missing = results.IsSuccess && results.Value is { Uncollected: true } or { NoLyric: true };
+        if (missing && !cloudSong && await GetCloudLyricAsync(songId, ctk) is { } fallback)
             return fallback;
+        if (missing) return new List<RawLyricInfo>();
         return results.Match(
             success => success.Map(),
             _ => new()

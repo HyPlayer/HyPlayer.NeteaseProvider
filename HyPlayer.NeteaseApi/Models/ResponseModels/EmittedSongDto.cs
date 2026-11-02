@@ -16,4 +16,9 @@ public class EmittedSongDto
     [JsonPropertyName("no")] public int TrackNumber { get; set; }
     [JsonPropertyName("al")] public AlbumDto? Album { get; set; }
     [JsonPropertyName("ar")] public ArtistDto[]? Artists { get; set; }
+    [JsonPropertyName("pc")] public EmittedPrivateCloudDto? PrivateCloud { get; set; }
+
+    public class EmittedPrivateCloudDto
+    {
+    }
 }

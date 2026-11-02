@@ -8,7 +8,7 @@ public static class SongDetailItemToNeteaseMusicMapper
 {
     public static NeteaseSong MapToNeteaseMusic(this EmittedSongDto item)
     {
-        return CreateSong(
+        var song = CreateSong(
             item.Name,
             item.Id,
             item.Album,
@@ -20,11 +20,13 @@ public static class SongDetailItemToNeteaseMusicMapper
             item.MvId,
             item.CdName,
             item.TrackNumber);
+        song.IsCloudSong = item.PrivateCloud is not null;
+        return song;
     }
 
     public static NeteaseSong MapToNeteaseMusic(this EmittedSongDtoWithPrivilege item)
     {
-        return CreateSong(
+        var song = CreateSong(
             item.Name,
             item.Id,
             item.Album,
@@ -36,6 +38,8 @@ public static class SongDetailItemToNeteaseMusicMapper
             item.MvId,
             item.CdName,
             item.TrackNumber);
+        song.IsCloudSong = item.PrivateCloud is not null;
+        return song;
     }
 
     public static NeteaseSong MapToNeteaseMusic(this SongDto item)
